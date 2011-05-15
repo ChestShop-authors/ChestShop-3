@@ -1,0 +1,32 @@
+name: iConomyChestShop
+
+main: com.Acrobot.iConomyChestShop.iConomyChestShop
+
+database: true
+version: 3.00
+
+
+author: Acrobot
+description: >
+             A chest shop for iConomy.
+commands:
+  buy:
+    aliases: chBuy
+    description: Toggles mode to buying
+    usage: |
+           /<command>
+  sell:
+    aliases: chSell
+    description: Toggles mode to selling
+    usage: |
+           /<command>
+  iteminfo:
+    aliases:
+    description: Lists item id and names
+    usage: |
+           /<command> <partial item name or id>
+  icsVersion:
+    aliases:
+    description: Shows the iConomyChestShop's version
+    usage: |
+           /<command>
