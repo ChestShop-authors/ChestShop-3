@@ -1,6 +1,6 @@
-name: iConomyChestShop
+name: ChestShop
 
-main: com.Acrobot.iConomyChestShop.iConomyChestShop
+main: com.Acrobot.ChestShop.ChestShop
 
 database: true
 version: 3.00
