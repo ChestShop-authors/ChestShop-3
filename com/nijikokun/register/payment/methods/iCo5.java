@@ -5,16 +5,13 @@ import com.iConomy.system.Account;
 import com.iConomy.system.BankAccount;
 import com.iConomy.system.Holdings;
 import com.iConomy.util.Constants;
+
 import com.nijikokun.register.payment.Method;
-import com.nijikokun.register.payment.MethodFactory;
+
 import org.bukkit.plugin.Plugin;
 
 public class iCo5 implements Method {
     private iConomy iConomy;
-
-    static {
-        MethodFactory.addMethod("iConomy", new iCo5());
-    }
 
     public iConomy getPlugin() {
         return this.iConomy;
@@ -37,7 +34,7 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBank(String bank) {
-        return (hasBanks()) && this.iConomy.Banks.exists(bank);
+        return (!hasBanks()) ? false : this.iConomy.Banks.exists(bank);
     }
 
     public boolean hasAccount(String name) {
@@ -45,7 +42,7 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBankAccount(String bank, String name) {
-        return (!hasBank(bank)) && this.iConomy.getBank(name).hasAccount(name);
+        return (hasBank(bank)) ? false : this.iConomy.getBank(name).hasAccount(name);
     }
 
     public MethodAccount getAccount(String name) {
@@ -57,7 +54,7 @@ public class iCo5 implements Method {
     }
 	
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {

@@ -44,7 +44,6 @@ public class playerInteract extends PlayerListener{
         }
 
         Action buy = (Config.getBoolean("reverse_buttons") ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
-
         
         if(action == buy){
             player.sendMessage("You are buying!");

@@ -1,12 +1,12 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Odd;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.LWCplugin;
 import com.Acrobot.ChestShop.Protection.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
-import com.Acrobot.ChestShop.ChestShop;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.Methods;
@@ -22,12 +22,15 @@ import org.yi.acru.bukkit.Lockette.Lockette;
  */
 public class pluginEnable extends ServerListener{
 
-    private Methods Methods = new Methods();
-    public void onPluginEnable(PluginEnableEvent event){
+    private Methods methods = new Methods();
 
-        if(!this.Methods.hasMethod()){
-            if(this.Methods.setMethod(event.getPlugin())){
-                Economy.economy = this.Methods.getMethod();
+    
+    public void onPluginEnable(PluginEnableEvent event){
+        
+        //Economy plugins
+        if(!this.methods.hasMethod()){
+            if(methods.setMethod(event.getPlugin())){
+                Economy.economy = methods.getMethod();
                 System.out.println("[ChestShop] " + Economy.economy.getName() + " " + Economy.economy.getVersion() + " loaded.");
             }
         }
