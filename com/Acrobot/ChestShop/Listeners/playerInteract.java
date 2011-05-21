@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Messaging.Message;
 import com.Acrobot.ChestShop.Protection.Security;
+import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Utils.Config;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import org.bukkit.Material;
@@ -42,13 +43,15 @@ public class playerInteract extends PlayerListener{
         if(!SignUtil.isValid(sign)){
             return;
         }
-
+        
         Action buy = (Config.getBoolean("reverse_buttons") ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
+
+
         
         if(action == buy){
-            player.sendMessage("You are buying!");
+            ShopManagement.buy(sign, player);
         } else{
-            player.sendMessage("You are selling!");
+            ShopManagement.sell(sign, player);
         }
     }
 }

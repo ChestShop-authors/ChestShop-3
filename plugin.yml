@@ -8,7 +8,7 @@ version: 3.00
 
 author: Acrobot
 description: >
-             A chest shop for iConomy.
+             A chest shop for economy mods.
 commands:
   buy:
     aliases: chBuy
@@ -25,8 +25,8 @@ commands:
     description: Lists item id and names
     usage: |
            /<command> <partial item name or id>
-  icsVersion:
+  csVersion:
     aliases:
-    description: Shows the iConomyChestShop's version
+    description: Shows the ChestShop's version
     usage: |
            /<command>

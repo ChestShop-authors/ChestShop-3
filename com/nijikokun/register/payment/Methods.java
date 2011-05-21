@@ -57,7 +57,7 @@ public class Methods {
         PluginManager manager = method.getServer().getPluginManager();
         Plugin plugin = null;
 
-        for(String name: this.getDependencies()) {
+        for(String name: this.Dependencies) {
             if(hasMethod()) break;
             if(method.getDescription().getName().equals(name)) plugin = method; else  plugin = manager.getPlugin(name);
             if(plugin == null) continue;

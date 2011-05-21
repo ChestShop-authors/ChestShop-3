@@ -1,8 +1,9 @@
 package com.Acrobot.ChestShop;
 
-import com.Acrobot.ChestShop.Items.ItemName;
+import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Utils.Config;
+import com.Acrobot.ChestShop.Utils.Defaults;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,12 +42,13 @@ public class ChestShop extends JavaPlugin {
         server = getServer();
 
         Config.setUp();
+        Defaults.set();
 
-        System.out.println("[" + desc.getName() + "] version " + desc.getVersion() + " initialized!");
+        System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " initialized!");
     }
 
     public void onDisable() {
-        System.out.println("[" + desc.getName() + "] version " + desc.getVersion() + " shutting down!");
+        System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " shutting down!");
     }
 
     public static Server getBukkitServer() {
@@ -71,11 +73,11 @@ public class ChestShop extends JavaPlugin {
         //ItemInfo
         if(commandName.equals("iteminfo")){
             if(argCount == 0){
-                p.sendMessage(ItemName.getItemID(p.getItemInHand().getType().name()) + " " + ItemName.getItemName(p.getItemInHand()));
+                p.sendMessage(Items.getItemID(p.getItemInHand().getType().name()) + " " + Items.getItemName(p.getItemInHand()));
                 return true;
             }
             if(argCount == 1){
-                String itemName = ItemName.getItemID(ItemName.getItemName(args[0])) + " " + ItemName.getItemName(args[0]);
+                String itemName = Items.getItemID(Items.getItemName(args[0])) + " " + Items.getItemName(args[0]);
                 p.sendMessage(itemName);
                 return true;
             }

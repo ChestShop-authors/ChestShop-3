@@ -10,7 +10,7 @@ import com.Acrobot.ChestShop.Protection.Security;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.Methods;
-import info.somethingodd.bukkit.odd.item.OddItem;
+import info.somethingodd.bukkit.OddItem.OddItem;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -31,7 +31,7 @@ public class pluginEnable extends ServerListener{
         if(!this.methods.hasMethod()){
             if(methods.setMethod(event.getPlugin())){
                 Economy.economy = methods.getMethod();
-                System.out.println("[ChestShop] " + Economy.economy.getName() + " " + Economy.economy.getVersion() + " loaded.");
+                System.out.println("[ChestShop] " + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
             }
         }
 

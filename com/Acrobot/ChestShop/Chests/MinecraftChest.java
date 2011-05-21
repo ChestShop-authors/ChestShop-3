@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Chests;
 
+import com.Acrobot.ChestShop.Utils.InventoryUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -72,7 +73,8 @@ public class MinecraftChest implements ChestObject{
     }
 
     public boolean fits(ItemStack item, int amount, short durability) {
-        return fits(item, amount, durability, main) && (neighbor == null || fits(item, amount, durability, neighbor));
+        int firstChest = fits(item, amount, durability, main);
+        return (firstChest > 0 && neighbor != null ? fits(item, amount, durability, neighbor) <= 0 : firstChest <= 0);
     }
 
     public int getSize() {
@@ -91,131 +93,22 @@ public class MinecraftChest implements ChestObject{
         return null; //Shame, we didn't find double chest :/
     }
 
-    private int amount(ItemStack item, short durability, Chest chest){
-        ItemStack[] contents = chest.getInventory().getContents();
-        int amount = 0;
-
-        for(ItemStack i : contents){
-            if(i != null){
-                if(i.getType() == item.getType() && (durability == -1 || i.getDurability() == durability || (durability == 0 && i.getDurability() == -1))){
-                    amount += i.getAmount();
-                }
-            }
-        }
-        return amount;
+    private static int amount(ItemStack item, short durability, Chest chest){
+        return InventoryUtil.amount(chest.getInventory(), item, durability);
     }
 
-    private boolean fits(ItemStack item, int amount, short durability, Chest chest){
+    private static int fits(ItemStack item, int amount, short durability, Chest chest){
         Inventory inv = chest.getInventory();
-        Material itemMaterial = item.getType();
-        int maxStackSize = item.getMaxStackSize();
-
-        int amountLeft = amount;
-
-        for(int slot = 0; slot < inv.getSize(); slot++){
-
-            if(amountLeft <= 0){
-                return true;
-            }
-
-            ItemStack currentItem = inv.getItem(slot);
-
-            if(currentItem == null || currentItem.getType() == Material.AIR){
-                amountLeft -= maxStackSize;
-                continue;
-            }
-
-            if(currentItem.getType() == itemMaterial && (currentItem.getDurability() == durability)){
-                int currentAmount = currentItem.getAmount();
-                if(amountLeft == currentAmount){
-                    amountLeft = 0;
-                } else if(amountLeft < currentAmount){
-                    amountLeft = 0;
-                } else{
-                    amountLeft -= currentAmount;
-                }
-            }
-        }
-
-        return amountLeft <= 0;
+        return InventoryUtil.fits(inv, item, amount, durability);
     }
 
-    private int addItem(ItemStack item, short durability, int amount, Chest chest){
+    private static int addItem(ItemStack item, short durability, int amount, Chest chest){
         Inventory inv = chest.getInventory();
-        ItemStack[] contents = inv.getContents();
-        Material itemMaterial = item.getType();
-
-        int amountLeft = amount;
-        int maxStackSize = item.getMaxStackSize();
-        ItemStack baseItem = item.clone();
-
-        for(int slot = 0; slot < inv.getSize(); slot++){
-            ItemStack itemStack = contents[slot];
-            if(amountLeft <= 0){
-                return 0;
-            }
-            if(itemStack != null && itemStack.getType() != Material.AIR){ //Our slot is not free
-                int currentAmount = itemStack.getAmount();
-                Material currentMaterial = itemStack.getType();
-                short currentDurability = itemStack.getDurability();
-                if(currentMaterial == itemMaterial && (currentDurability == durability)){
-                    if((currentAmount + amountLeft) <= maxStackSize){
-                        baseItem.setAmount(currentAmount + amountLeft);
-                        amountLeft = 0;
-                    } else{
-                        baseItem.setAmount(maxStackSize);
-                        amountLeft -= (maxStackSize - currentAmount);
-                    }
-                    inv.setItem(slot, baseItem);
-                }
-            }else{ //Free slot
-                if(amountLeft <= maxStackSize){ //There is less to add than whole stack
-                    baseItem.setAmount(amountLeft);
-                    inv.setItem(slot, baseItem);
-                    amountLeft = 0;
-                } else{ //We add whole stack
-                    baseItem.setAmount(maxStackSize);
-                    inv.setItem(slot, baseItem);
-                    amountLeft -= maxStackSize;
-                }
-            }
-        }
-        return amountLeft;
+        return InventoryUtil.add(inv, item, amount);
     }
 
-    private int removeItem(ItemStack item, short durability, int amount, Chest chest){
+    private static int removeItem(ItemStack item, short durability, int amount, Chest chest){
         Inventory inv = chest.getInventory();
-        Material itemMaterial = item.getType();
-
-        int amountLeft = amount;
-
-        for(int slot = 0; slot < inv.getSize(); slot++){
-
-            if(amountLeft <= 0){
-                return 0;
-            }
-            
-            ItemStack currentItem = inv.getItem(slot);
-
-            if(currentItem == null || currentItem.getType() == Material.AIR){
-                continue;
-            }
-            if(currentItem.getType() == itemMaterial && (currentItem.getDurability() == durability)){
-                int currentAmount = currentItem.getAmount();
-                if(amountLeft == currentAmount){
-                    currentItem = null;
-                    amountLeft = 0;
-                } else if(amountLeft < currentAmount){
-                    currentItem.setAmount(currentAmount - amountLeft);
-                    amountLeft = 0;
-                } else{
-                    currentItem = null;
-                    amountLeft -= currentAmount;
-                }
-                inv.setItem(slot, currentItem);
-            }
-        }
-
-        return amountLeft;
+        return InventoryUtil.remove(inv, item, amount, durability);
     }
 }
