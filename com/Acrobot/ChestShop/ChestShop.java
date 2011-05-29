@@ -1,20 +1,29 @@
 package com.Acrobot.ChestShop;
 
-import com.Acrobot.ChestShop.Items.Items;
+import com.Acrobot.ChestShop.Commands.ItemInfo;
+import com.Acrobot.ChestShop.Commands.Options;
+import com.Acrobot.ChestShop.Commands.Version;
+import com.Acrobot.ChestShop.DB.Queue;
+import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
+import com.Acrobot.ChestShop.Logging.FileWriterQueue;
+import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Utils.Config;
-import com.Acrobot.ChestShop.Utils.Defaults;
+import com.avaje.ebean.EbeanServer;
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.persistence.PersistenceException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Main file of the plugin
+ *
  * @author Acrobot
  */
 public class ChestShop extends JavaPlugin {
@@ -25,24 +34,42 @@ public class ChestShop extends JavaPlugin {
     private final signChange signChange = new signChange();
     private final playerInteract playerInteract = new playerInteract();
 
-    private PluginDescriptionFile desc;
+    private static PluginDescriptionFile desc;
     private static Server server;
 
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
 
+        //Register our events
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, blockPlace, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, signChange, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, playerInteract, Event.Priority.Highest, this);
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginEnable, Event.Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, playerInteract, Event.Priority.Monitor, this);
 
         desc = this.getDescription();
         server = getServer();
 
+        //Set up our config file!
         Config.setUp();
-        Defaults.set();
+
+        //Now set up our database for storing transactions!
+        setupDBfile();
+        if(Config.getBoolean("useDB")){
+            setupDB();
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
+        }
+
+        //Now set up our logging to file!
+        if(Config.getBoolean("logToFile")){
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new FileWriterQueue(), 201L, 201L);
+        }
+        
+
+        //Register our commands!
+        getCommand("iteminfo").setExecutor(new ItemInfo());
+        getCommand("chestOptions").setExecutor(new Options());
+        getCommand("csVersion").setExecutor(new Version());
 
         System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " initialized!");
     }
@@ -51,48 +78,49 @@ public class ChestShop extends JavaPlugin {
         System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " shutting down!");
     }
 
+    /////////////////////   DATABASE    STUFF      ////////////////////////////////
+    private void setupDB() {
+        try {
+            getDatabase().find(Transaction.class).findRowCount();
+        } catch (PersistenceException pe) {
+            Logging.log("Installing database for " + getPluginName());
+            installDDL();
+        }
+    }
+
+    private static void setupDBfile() {
+        File file = new File("ebean.properties");
+
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            } catch (Exception e){
+                Logging.log("Failed to create ebean.properties file!");
+            }
+        }
+    }
+
+    @Override
+    public List<Class<?>> getDatabaseClasses() {
+        List<Class<?>> list = new ArrayList<Class<?>>();
+        list.add(Transaction.class);
+        return list;
+    }
+    ///////////////////////////////////////////////////////////////////////////////
+
     public static Server getBukkitServer() {
         return server;
     }
 
-    public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args){
-        String commandName = cmd.getName().toLowerCase();
-        int argCount = args.length;
+    public static String getVersion() {
+        return desc.getVersion();
+    }
 
-        //iCSversion
-        if(commandName.equals("icsversion")){
-            sender.sendMessage("ChestShop's version is: " + desc.getVersion());
-            return true;
-        }
+    public static String getPluginName() {
+        return desc.getName();
+    }
 
-        if(!(sender instanceof Player)){
-            return false;
-        }
-        Player p = (Player) sender;
-
-        //ItemInfo
-        if(commandName.equals("iteminfo")){
-            if(argCount == 0){
-                p.sendMessage(Items.getItemID(p.getItemInHand().getType().name()) + " " + Items.getItemName(p.getItemInHand()));
-                return true;
-            }
-            if(argCount == 1){
-                String itemName = Items.getItemID(Items.getItemName(args[0])) + " " + Items.getItemName(args[0]);
-                p.sendMessage(itemName);
-                return true;
-            }
-        }
-
-        //Silly :)
-        if(commandName.equals("buy")){
-            p.sendMessage("Hey, there is no buy command! Just right click the sign!");
-            return true;
-        }
-        if(commandName.equals("sell")){
-            p.sendMessage("Hey, there is no sell command! Just left click the sign!");
-            return true;
-        }
-        
-        return false;
+    public static EbeanServer getDB(){
+        return new ChestShop().getDatabase();
     }
 }

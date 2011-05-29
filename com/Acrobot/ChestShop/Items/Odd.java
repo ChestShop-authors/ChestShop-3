@@ -9,13 +9,15 @@ import org.bukkit.inventory.ItemStack;
 public class Odd {
     public static OddItem oddItem;
 
-    public static boolean isInitialized(){
+    public static boolean isInitialized() {
         return oddItem != null;
     }
 
-    public static ItemStack returnItemStack(String name){
-        try{
+    public static ItemStack returnItemStack(String name) {
+        try {
             return oddItem.getItemStack(name);
-        } catch (Exception ignored){return null;}
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }

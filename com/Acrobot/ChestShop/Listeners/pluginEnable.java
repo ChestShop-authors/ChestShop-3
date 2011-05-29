@@ -20,16 +20,16 @@ import org.yi.acru.bukkit.Lockette.Lockette;
 /**
  * @author Acrobot
  */
-public class pluginEnable extends ServerListener{
+public class pluginEnable extends ServerListener {
 
     private Methods methods = new Methods();
 
-    
-    public void onPluginEnable(PluginEnableEvent event){
-        
+
+    public void onPluginEnable(PluginEnableEvent event) {
+
         //Economy plugins
-        if(!this.methods.hasMethod()){
-            if(methods.setMethod(event.getPlugin())){
+        if (!this.methods.hasMethod()) {
+            if (methods.setMethod(event.getPlugin())) {
                 Economy.economy = methods.getMethod();
                 System.out.println("[ChestShop] " + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
             }

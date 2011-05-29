@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
  */
 public interface Protection {
     public boolean isProtected(Block block);
+
     public boolean canAccess(Player player, Block block);
+
     public boolean protect(String name, Block block);
 }

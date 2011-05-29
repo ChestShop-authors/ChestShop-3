@@ -7,7 +7,7 @@ import org.yi.acru.bukkit.Lockette.Lockette;
 /**
  * @author Acrobot
  */
-public class LockettePlugin implements Protection{
+public class LockettePlugin implements Protection {
     public static Lockette lockette;
 
     public boolean isProtected(Block block) {

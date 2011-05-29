@@ -17,7 +17,7 @@ public class EE17 implements Method {
     }
 
     public String getName() {
-        return "EssentialsEco";
+        return "Essentials";
     }
 
     public String getVersion() {
@@ -56,6 +56,7 @@ public class EE17 implements Method {
     public boolean isCompatible(Plugin plugin) {
         try { Class.forName("com.earth2me.essentials.api.Economy"); }
         catch(Exception e) { return false; }
+
         return plugin.getDescription().getName().equalsIgnoreCase("essentials") && plugin instanceof Essentials;
     }
 
@@ -63,7 +64,7 @@ public class EE17 implements Method {
         Essentials = (Essentials)plugin;
     }
 
-    public class EEcoAccount implements MethodAccount {
+    public static class EEcoAccount implements MethodAccount {
         private String name;
 
         public EEcoAccount(String name) {

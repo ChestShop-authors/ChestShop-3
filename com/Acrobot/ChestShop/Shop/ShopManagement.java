@@ -11,19 +11,17 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class ShopManagement {
-    public static boolean buy(Sign sign, Player player){
+    public static boolean buy(Sign sign, Player player) {
         Chest chestMc = SearchForBlock.findChest(sign);
         Shop shop = new Shop(chestMc != null ? new MinecraftChest(chestMc) : null, sign, Items.getItemStack(sign.getLine(3)));
 
-        shop.buy(player);
-        return true;
+        return shop.buy(player);
     }
 
-    public static boolean sell(Sign sign, Player player){
+    public static boolean sell(Sign sign, Player player) {
         Chest chestMc = SearchForBlock.findChest(sign);
         Shop shop = new Shop(chestMc != null ? new MinecraftChest(chestMc) : null, sign, Items.getItemStack(sign.getLine(3)));
 
-        shop.sell(player);
-        return true;
+        return shop.sell(player);
     }
 }

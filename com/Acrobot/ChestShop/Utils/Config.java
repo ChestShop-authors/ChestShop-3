@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Config {
     private static File configFile = new File("plugins/ChestShop/config.yml");
     private static File langFile = new File("plugins/ChestShop/local.yml");
-    
+
     private static Configuration config = new Configuration(configFile);
     private static Configuration language = new Configuration(langFile);
 
@@ -21,9 +21,8 @@ public class Config {
     private static String langChar = Character.toString((char) 167);
 
 
-
-    public static void setUp(){
-        if(!configFile.exists()){
+    public static void setUp() {
+        if (!configFile.exists()) {
             try {
                 configFile.createNewFile();
                 Logging.log("Successfully created blank configuration file");
@@ -33,54 +32,56 @@ public class Config {
         }
         config.load();
         language.load();
+
+        Defaults.set();
     }
 
-    public static boolean getBoolean(String node){
-        return config.getBoolean(node, (Boolean) getDefaultValue(node));
+    public static boolean getBoolean(String node) {
+        return (Boolean) getValue(node);
     }
 
-    public static String getString(String node){
-        return getColored(config.getString(node, (String) getDefaultValue(node)));
+    public static String getString(String node) {
+        return getColored((String) getValue(node));
     }
 
-    public static int getInteger(String node){
-        return config.getInt(node, Integer.parseInt(getDefaultValue(node).toString()));
+    public static int getInteger(String node) {
+        return Integer.parseInt(getValue(node).toString());
     }
 
-    public static double getDouble(String node){
+    public static double getDouble(String node) {
         return config.getDouble(node, -1);
     }
 
-    public static Object getDefaultValue(String node, Configuration configuration, File file){
-        if(configuration.getProperty(node) == null){
-            try{
+    private static Object getValue(String node, Configuration configuration, File file) {
+        if (configuration.getProperty(node) == null) {
+            try {
                 Object defaultValue = defaultValues.get(node);
-                if(defaultValue != null){
+                if (defaultValue != null) {
                     FileWriter fw = new FileWriter(file, true);
-                    fw.write('\n' + node+": " + defaultValue);
+                    fw.write('\n' + node + ": " + defaultValue);
                     fw.close();
                 }
-            } catch (Exception e){
+                configuration.load();
+            } catch (Exception e) {
                 Logging.log("Failed to update config file!");
             }
         }
-        configuration.load();
         return configuration.getProperty(node);
     }
 
-    public static String getColored(String msg){
+    public static String getColored(String msg) {
         return msg.replaceAll("&", langChar);
     }
 
-    public static String getLocal(String node){
-        return getColored(language.getString("prefix",(String) getDefaultLocal("prefix")) + language.getString(node, (String) getDefaultLocal(node)));
+    public static String getLocal(String node) {
+        return getColored(getDefaultLocal("prefix") + (String) getDefaultLocal(node));
     }
 
-    public static Object getDefaultValue(String node){
-        return getDefaultValue(node, config, configFile);
+    private static Object getValue(String node) {
+        return getValue(node, config, configFile);
     }
 
-    public static Object getDefaultLocal(String node){
-        return getDefaultValue(node, language, langFile);
+    private static Object getDefaultLocal(String node) {
+        return getValue(node, language, langFile);
     }
 }

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Acrobot
  */
-public class LWCplugin implements Protection{
+public class LWCplugin implements Protection {
     public static LWC lwc;
 
 

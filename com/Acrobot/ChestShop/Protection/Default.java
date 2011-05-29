@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Acrobot
  */
-public class Default implements Protection{
+public class Default implements Protection {
     public boolean isProtected(Block block) {
         return (block != null) && SignUtil.isSign(block) && SignUtil.isValid((Sign) block.getState());
     }

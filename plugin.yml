@@ -10,23 +10,20 @@ author: Acrobot
 description: >
              A chest shop for economy mods.
 commands:
-  buy:
-    aliases: chBuy
-    description: Toggles mode to buying
-    usage: |
-           /<command>
-  sell:
-    aliases: chSell
-    description: Toggles mode to selling
-    usage: |
-           /<command>
   iteminfo:
-    aliases:
+    aliases: [ii,iinfo]
     description: Lists item id and names
     usage: |
-           /<command> <partial item name or id>
+           /<command> (item name/item ID/alias)
+           () - optional
   csVersion:
-    aliases:
+    aliases: cv
     description: Shows the ChestShop's version
     usage: |
            /<command>
+  chestOptions:
+    aliases: [coptions,cop,cpref]
+    description: Sets ChestShop's preferences - Not implemented yet
+    usage: |
+           /<command> (option) (value)
+           () - optional
