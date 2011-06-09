@@ -25,7 +25,7 @@ public class blockBreak extends BlockListener {
         Sign sign = SearchForBlock.findSign(block);
 
         if (sign != null) {
-            if (!player.getName().startsWith(sign.getLine(0))) {
+            if (!player.getName().equals(sign.getLine(0))) {
                 event.setCancelled(true);
             }
         }
