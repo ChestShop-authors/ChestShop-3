@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Utils;
+package com.Acrobot.ChestShop.Config;
 
 import com.Acrobot.ChestShop.Logging.Logging;
 import org.bukkit.util.config.Configuration;
@@ -22,18 +22,33 @@ public class Config {
 
 
     public static void setUp() {
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-                Logging.log("Successfully created blank configuration file");
-            } catch (Exception e) {
-                Logging.log("Couldn't create configuration file!");
+        config.load();
+        for (DefaultValue def : DefaultValue.values()){
+            if(config.getProperty(def.name()) == null){
+                writeToFile(def.name() + ": " + def.getValue() + "               #" + def.getComment(), configFile);
             }
         }
         config.load();
+
+        language.load();
+        for (DefaultLanguage def : DefaultLanguage.values()) {
+            if (language.getProperty(def.name()) == null) {
+                writeToFile(def.name() + ": \"" + def.toString() + "\"", langFile);
+            }
+        }
         language.load();
 
-        Defaults.set();
+
+    }
+
+    public static void writeToFile(String string, File file) {
+        try {
+            FileWriter fw = new FileWriter(file, true);
+            fw.write('\n' + string);
+            fw.close();
+        } catch (Exception e) {
+            Logging.log("Couldn't write to file - " + file.getName());
+        }
     }
 
     public static boolean getBoolean(String node) {
@@ -54,17 +69,8 @@ public class Config {
 
     private static Object getValue(String node, Configuration configuration, File file) {
         if (configuration.getProperty(node) == null) {
-            try {
-                Object defaultValue = defaultValues.get(node);
-                if (defaultValue != null) {
-                    FileWriter fw = new FileWriter(file, true);
-                    fw.write('\n' + node + ": " + defaultValue);
-                    fw.close();
-                }
-                configuration.load();
-            } catch (Exception e) {
-                Logging.log("Failed to update config file!");
-            }
+            writeToFile(DefaultLanguage.lookup(node).toString(), file);
+            configuration.load();
         }
         return configuration.getProperty(node);
     }
@@ -82,6 +88,10 @@ public class Config {
     }
 
     private static Object getDefaultLocal(String node) {
-        return getValue(node, language, langFile);
+        if (language.getProperty(node) == null) {
+            writeToFile(DefaultLanguage.lookup(node).toString(), langFile);
+            language.load();
+        }
+        return language.getString(node);
     }
 }

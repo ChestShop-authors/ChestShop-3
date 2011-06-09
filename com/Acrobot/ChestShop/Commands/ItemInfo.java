@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Commands;
 
+import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Items.Items;
-import com.Acrobot.ChestShop.Utils.Config;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

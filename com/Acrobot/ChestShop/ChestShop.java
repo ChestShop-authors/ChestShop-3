@@ -3,12 +3,13 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Options;
 import com.Acrobot.ChestShop.Commands.Version;
+import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.Acrobot.ChestShop.Logging.Logging;
-import com.Acrobot.ChestShop.Utils.Config;
 import com.avaje.ebean.EbeanServer;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
@@ -32,7 +33,10 @@ public class ChestShop extends JavaPlugin {
     private final blockBreak blockBreak = new blockBreak();
     private final blockPlace blockPlace = new blockPlace();
     private final signChange signChange = new signChange();
+
     private final playerInteract playerInteract = new playerInteract();
+    public static File folder;
+    public static EbeanServer db;
 
     private static PluginDescriptionFile desc;
     private static Server server;
@@ -53,18 +57,26 @@ public class ChestShop extends JavaPlugin {
         //Set up our config file!
         Config.setUp();
 
+        //Yep, set up our folder!
+        folder = getDataFolder();
+
         //Now set up our database for storing transactions!
         setupDBfile();
-        if(Config.getBoolean("useDB")){
+        if (Config.getBoolean("useDB")) {
             setupDB();
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
+
+            if (Config.getBoolean("generateStatisticsPage")) {
+                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, 300L);
+            }
+            db = getDatabase();
         }
 
         //Now set up our logging to file!
-        if(Config.getBoolean("logToFile")){
+        if (Config.getBoolean("logToFile")) {
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new FileWriterQueue(), 201L, 201L);
         }
-        
+
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
@@ -91,10 +103,10 @@ public class ChestShop extends JavaPlugin {
     private static void setupDBfile() {
         File file = new File("ebean.properties");
 
-        if(!file.exists()){
-            try{
+        if (!file.exists()) {
+            try {
                 file.createNewFile();
-            } catch (Exception e){
+            } catch (Exception e) {
                 Logging.log("Failed to create ebean.properties file!");
             }
         }
@@ -120,7 +132,7 @@ public class ChestShop extends JavaPlugin {
         return desc.getName();
     }
 
-    public static EbeanServer getDB(){
-        return new ChestShop().getDatabase();
+    public static EbeanServer getDB() {
+        return db;
     }
 }

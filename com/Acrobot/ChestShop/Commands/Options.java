@@ -1,73 +1,29 @@
 package com.Acrobot.ChestShop.Commands;
 
-import com.Acrobot.ChestShop.Utils.Config;
+import com.Acrobot.ChestShop.Options.Option;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.HashMap;
 
 /**
  * @author Acrobot
  */
 public class Options implements CommandExecutor {
-    public boolean balance;
-    public boolean outOfStock;
-    public boolean someoneBought;
-
-    public Options() {
-        this.balance = true;
-        this.outOfStock = true;
-        this.someoneBought = true;
-    }
 
     public static boolean exists(String name) {
         name = name.toLowerCase();
-        return name.equals("balance") || name.equals("outofstock") || name.equals("someonebought");
+        return Option.getOption(name) != null;
     }
-
-    public boolean getOption(String name) {
-        name = name.toLowerCase();
-
-        if (name.equals("balance")) {
-            return balance;
-        }
-        if (name.equals("outofstock")) {
-            return outOfStock;
-        }
-        if (name.equals("someonebought")) {
-            return someoneBought;
-        }
-        return false;
-    }
-
-    public boolean setOption(String name, boolean value) {
-        if (name.equals("balance")) {
-            balance = value;
-            return true;
-        }
-        if (name.equals("outofstock")) {
-            outOfStock = value;
-            return true;
-        }
-        if (name.equals("someonebought")) {
-            someoneBought = value;
-            return true;
-        }
-        return false;
-    }
-
-    public static HashMap<Player, Options> playerPreferences = new HashMap<Player, Options>();
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        return false;
+        /*if (!(sender instanceof Player)) {
             return false;
         }
         Player player = (Player) sender;
 
-        if (!playerPreferences.containsKey(player)) {
-            playerPreferences.put(player, new Options());
+        if (!playerpref.containsKey(player)) {
+            setDefault(player);
         }
 
         if (args.length == 0) {
@@ -82,21 +38,20 @@ public class Options implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            Options options = playerPreferences.get(player);
             Boolean exists = exists(args[0]);
 
             if (!exists) {
                 return false;
             }
 
-            player.sendMessage(Config.getColored("&a" + args[0] + " is set to: " + options.getOption(args[0])));
+            player.sendMessage(Config.getColored("&a" + args[0] + " is set to: " + playerpref.get(player).getOption(args[0])));
             return true;
         }
 
         if (args.length == 2) {
             try {
                 Boolean option = Boolean.parseBoolean(args[1]);
-                Options options = playerPreferences.get(player);
+                Options options = playerpref.get(player);
                 Boolean exists = exists(args[0]);
 
                 if (!exists) {
@@ -107,6 +62,7 @@ public class Options implements CommandExecutor {
                 if (!success) {
                     return false;
                 }
+                playerpref.put(player, Option.va)
                 player.sendMessage(Config.getColored("&aSuccessfully set " + args[0] + " to " + args[1]));
 
                 return true;
@@ -115,7 +71,7 @@ public class Options implements CommandExecutor {
             }
         }
 
-        return false;
+        return false;*/
     }
 
     private static String[] optionList() {

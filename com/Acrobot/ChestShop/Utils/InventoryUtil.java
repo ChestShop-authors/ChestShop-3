@@ -4,6 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 /**
  * @author Acrobot
  */
@@ -43,46 +45,35 @@ public class InventoryUtil {
     }
 
     public static int add(Inventory inv, ItemStack item, int amount) {
-        ItemStack[] contents = inv.getContents();
         Material itemMaterial = item.getType();
-        short durability = item.getDurability();
-
-        int amountLeft = amount;
         int maxStackSize = itemMaterial.getMaxStackSize();
-        ItemStack baseItem = item.clone();
 
-        for (int slot = 0; slot < contents.length; slot++) {
-            ItemStack itemStack = contents[slot];
-            if (amountLeft <= 0) {
+        if (amount <= maxStackSize) {
+            item.setAmount(amount);
+            inv.addItem(item);
+            return 0;
+        }
+
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        for (int i = 0; i < Math.ceil(amount / maxStackSize); i++) {
+            if (amount <= maxStackSize) {
+                item.setAmount(amount);
+                items.add(item);
                 return 0;
-            }
-            if (itemStack != null && itemStack.getType() != Material.AIR) { //Our slot is not free
-                int currentAmount = itemStack.getAmount();
-                Material currentMaterial = itemStack.getType();
-                short currentDurability = itemStack.getDurability();
-                if (currentMaterial == itemMaterial && (currentDurability == durability)) {
-                    if ((currentAmount + amountLeft) <= maxStackSize) {
-                        baseItem.setAmount(currentAmount + amountLeft);
-                        amountLeft = 0;
-                    } else {
-                        baseItem.setAmount(maxStackSize);
-                        amountLeft -= (maxStackSize - currentAmount);
-                    }
-                    inv.setItem(slot, baseItem);
-                }
-            } else { //Free slot
-                if (amountLeft <= maxStackSize) { //There is less to add than whole stack
-                    baseItem.setAmount(amountLeft);
-                    inv.setItem(slot, baseItem);
-                    amountLeft = 0;
-                } else { //We add whole stack
-                    baseItem.setAmount(maxStackSize);
-                    inv.setItem(slot, baseItem);
-                    amountLeft -= maxStackSize;
-                }
+            } else {
+                item.setAmount(maxStackSize);
+                items.add(item);
             }
         }
-        return amountLeft;
+        Object[] iArray = items.toArray();
+
+        amount = 0;
+        for (Object o : iArray) {
+            ItemStack itemToAdd = (ItemStack) o;
+            amount += (!inv.addItem(itemToAdd).isEmpty() ? itemToAdd.getAmount() : 0);
+        }
+
+        return amount;
     }
 
     public static int amount(Inventory inv, ItemStack item, short durability) {
@@ -90,7 +81,7 @@ public class InventoryUtil {
         ItemStack[] contents = inv.getContents();
         for (ItemStack i : contents) {
             if (i != null) {
-                if (i.getType() == item.getType() && (durability == -1 || i.getDurability() == durability || (durability == 0 && i.getDurability() == -1))) {
+                if (i.getType() == item.getType() && (durability == -1 || i.getDurability() == durability)) {
                     amount += i.getAmount();
                 }
             }
@@ -115,13 +106,9 @@ public class InventoryUtil {
             }
 
             int currentAmount = currentItem.getAmount();
-            if (currentAmount == itemMaterial.getMaxStackSize()) {
-                continue;
-            }
 
-            if (currentItem.getType() == itemMaterial && (durability == -1 || currentItem.getDurability() == durability)) {
-                currentAmount = currentAmount < 1 ? 1 : currentAmount;
-                amountLeft = (amountLeft <= currentAmount ? 0 : currentAmount);
+            if (currentAmount != maxStackSize && currentItem.getType() == itemMaterial && (durability == -1 || currentItem.getDurability() == durability)) {
+                amountLeft = ((currentAmount + amountLeft) <= maxStackSize ? 0 : amountLeft - (maxStackSize - currentAmount));
             }
         }
 

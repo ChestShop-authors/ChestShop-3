@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
-import com.Acrobot.ChestShop.Utils.Config;
 import com.Acrobot.ChestShop.Utils.Numerical;
 import com.Acrobot.ChestShop.Utils.SearchForBlock;
 import com.Acrobot.ChestShop.Utils.SignUtil;
@@ -34,20 +34,18 @@ public class signChange extends BlockListener {
 
         boolean playerIsAdmin = Permission.has(player, Permission.ADMIN);
 
-        Permission shopCreation = Permission.SHOP_CREATION;
-
-        if (mat == null) {
-            player.sendMessage(Config.getLocal("INCORRECT_ITEM_ID"));
-            dropSign(event);
-            return;
-        }
 
         if (isAlmostReady) {
-            if (!playerIsAdmin && !(Permission.has(player, shopCreation)
-                    || ((Permission.has(player, shopCreation.getPermission() + '.' + mat.getId())
-                    || !Permission.has(player, Permission.EXCLUDE_ITEM.getPermission() + '.' + mat.getId()))))) {
+            if (!playerIsAdmin && !(Permission.has(player, Permission.SHOP_CREATION)
+                    || ((Permission.has(player, Permission.SHOP_CREATION + "." + mat.getId())
+                    || !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId()))))) {
 
                 player.sendMessage(Config.getLocal("YOU_CAN'T_CREATE_SHOP"));
+                dropSign(event);
+                return;
+            }
+            if (mat == null) {
+                player.sendMessage(Config.getLocal("INCORRECT_ITEM_ID"));
                 dropSign(event);
                 return;
             }

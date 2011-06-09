@@ -72,7 +72,7 @@ public class MinecraftChest implements ChestObject {
 
     public boolean fits(ItemStack item, int amount, short durability) {
         int firstChest = fits(item, amount, durability, main);
-        return (firstChest > 0 && neighbor != null ? fits(item, amount, durability, neighbor) <= 0 : firstChest <= 0);
+        return (firstChest > 0 && neighbor != null ? fits(item, firstChest, durability, neighbor) <= 0 : firstChest <= 0);
     }
 
     public int getSize() {

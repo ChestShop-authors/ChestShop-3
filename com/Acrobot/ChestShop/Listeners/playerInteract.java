@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Listeners;
 
-import com.Acrobot.ChestShop.Messaging.Message;
+import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
-import com.Acrobot.ChestShop.Utils.Config;
 import com.Acrobot.ChestShop.Utils.SearchForBlock;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import net.minecraft.server.IInventory;
@@ -41,8 +41,8 @@ public class playerInteract extends PlayerListener {
         Block block = event.getClickedBlock();
 
         if (block.getType() == Material.CHEST) {
-            if (Security.isProtected(block) && !Security.canAccess(player, block)) {
-                Message.sendMsg(player, "ACCESS_DENIED");
+            if (!Permission.has(player, Permission.ADMIN) && Security.isProtected(block) && !Security.canAccess(player, block)) {
+                player.sendMessage(Config.getLocal("ACCESS_DENIED"));
                 event.setCancelled(true);
                 return;
             }
@@ -62,30 +62,34 @@ public class playerInteract extends PlayerListener {
 
         time.put(player, System.currentTimeMillis());
 
-        if(player.isSneaking()){
+        if (player.isSneaking()) {
             return;
         }
 
-        if(player.getName().startsWith(sign.getLine(0))){
+        if (player.getName().equals(sign.getLine(0))) {
             Chest chest1 = SearchForBlock.findChest(sign);
+
+            if (chest1 == null) {
+                player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
+                return;
+            }
+
             Inventory inv1 = chest1.getInventory();
             IInventory iInv1 = ((CraftInventory) inv1).getInventory();
 
             Chest chest2 = SearchForBlock.findNeighbor(chest1);
-            if(chest2 != null){
+
+            if (chest2 != null) {
                 Inventory inv2 = chest2.getInventory();
                 IInventory iInv2 = ((CraftInventory) inv2).getInventory();
-                IInventory largeChest = new InventoryLargeChest("Shop", iInv1, iInv2);
+                IInventory largeChest = new InventoryLargeChest(player.getName() + "'s Shop", iInv1, iInv2);
                 ((CraftPlayer) player).getHandle().a(largeChest);
-                return;
-            } else if(chest1 != null){
-                ((CraftPlayer) player).getHandle().a(iInv1);
-                return;
             } else {
-                player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
-                return;
+                ((CraftPlayer) player).getHandle().a(iInv1);
             }
+            return;
         }
+
 
         Action buy = (Config.getBoolean("reverse_buttons") ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 

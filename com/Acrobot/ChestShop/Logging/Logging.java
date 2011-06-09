@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Logging;
 
+import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Shop.Shop;
-import com.Acrobot.ChestShop.Utils.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,15 +21,17 @@ public class Logging {
         Date date = new Date();
         return dateFormat.format(date);
     }
-    
+
     public static void log(String string) {
-        System.out.println("[ChestShop] " + string);
+        if (Config.getBoolean("logToConsole")) {
+            System.out.println("[ChestShop] " + string);
+        }
         FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
     }
 
-    public static void logTransaction(boolean isBuying, Shop shop, Player player){
+    public static void logTransaction(boolean isBuying, Shop shop, Player player) {
         log(player.getName() + (isBuying ? " bought " : " sold ") + shop.stockAmount + ' ' + shop.stock.getType() + " for " + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ") + shop.owner);
-        if(!Config.getBoolean("useDB")){
+        if (!Config.getBoolean("useDB")) {
             return;
         }
         Transaction transaction = new Transaction();
@@ -42,7 +44,7 @@ public class Logging {
         transaction.setItemDurability(stock.getDurability());
         transaction.setItemID(stock.getTypeId());
         transaction.setPrice((isBuying ? shop.buyPrice : shop.sellPrice));
-        transaction.setSec(System.currentTimeMillis()/1000);
+        transaction.setSec(System.currentTimeMillis() / 1000);
         transaction.setShopOwner(shop.owner);
         transaction.setShopUser(player.getName());
 

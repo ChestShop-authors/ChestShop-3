@@ -38,8 +38,8 @@ public class SearchForBlock {
         }
         return null;
     }
-    
-    public static Chest findNeighbor(Chest chest){
+
+    public static Chest findNeighbor(Chest chest) {
         BlockFace[] bf = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
         Block chestBlock = chest.getBlock();
         for (BlockFace blockFace : bf) {

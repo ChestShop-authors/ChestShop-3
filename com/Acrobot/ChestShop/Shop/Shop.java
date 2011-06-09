@@ -2,14 +2,12 @@ package com.Acrobot.ChestShop.Shop;
 
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Chests.ChestObject;
+import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
-import com.Acrobot.ChestShop.Utils.Config;
 import com.Acrobot.ChestShop.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Utils.SignUtil;
-import net.minecraft.server.EntityPlayer;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,7 +32,7 @@ public class Shop {
     }
 
     public boolean buy(Player player) {
-        if(chest == null && !isAdminShop()){
+        if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
             return false;
         }
@@ -42,8 +40,12 @@ public class Shop {
             player.sendMessage(Config.getLocal("NO_BUYING_HERE"));
             return false;
         }
-
-        if (!fits(stock, player)) {
+        String playerName = player.getName();
+        if (!Economy.hasEnough(playerName, buyPrice)) {
+            player.sendMessage(Config.getLocal("NOT_ENOUGH_MONEY"));
+            return false;
+        }
+        if (!stockFitsPlayer(player)) {
             player.sendMessage(Config.getLocal("NOT_ENOUGH_SPACE_IN_INVENTORY"));
             return false;
         }
@@ -56,15 +58,15 @@ public class Shop {
             return false;
         }
 
-        if (!getOwner().isEmpty() && Economy.hasAccount(getOwner())) {
-            Economy.add(getOwner(), buyPrice);
+        String account = getOwnerAccount();
+        if (!account.isEmpty() && Economy.hasAccount(account)) {
+            Economy.add(account, buyPrice);
         }
-        Economy.substract(player.getName(), buyPrice);
+        Economy.substract(playerName, buyPrice);
 
         if (!isAdminShop()) {
             chest.removeItem(stock, stock.getDurability(), stockAmount);
         }
-
         String formatedPrice = Economy.formatBalance(buyPrice);
         player.sendMessage(Config.getLocal("YOU_BOUGHT_FROM_SHOP")
                 .replace("%amount", String.valueOf(stockAmount))
@@ -72,22 +74,20 @@ public class Shop {
                 .replace("%owner", owner)
                 .replace("%price", formatedPrice));
 
+        InventoryUtil.add(player.getInventory(), stock, stockAmount);
+        Logging.logTransaction(true, this, player);
+        player.updateInventory();
+
         sendMessageToOwner(Config.getLocal("SOMEBODY_BOUGHT_FROM_YOUR_SHOP")
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
-                .replace("%buyer", player.getName())
+                .replace("%buyer", playerName)
                 .replace("%price", formatedPrice));
-
-        InventoryUtil.add(player.getInventory(), stock, stockAmount);
-
-        Logging.logTransaction(true, this, player);
-
-        updateInventory(player);
         return true;
     }
 
     public boolean sell(Player player) {
-        if(chest == null && !isAdminShop()){
+        if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
             return false;
         }
@@ -95,8 +95,16 @@ public class Shop {
             player.sendMessage(Config.getLocal("NO_SELLING_HERE"));
             return false;
         }
+        String account = getOwnerAccount();
+        boolean accountExists = !account.isEmpty() && Economy.hasAccount(account);
 
-        if (!isAdminShop() && !fits(stock, chest)) {
+        if (accountExists) {
+            if (!Economy.hasEnough(account, sellPrice)) {
+                player.sendMessage(Config.getLocal("NOT_ENOUGH_MONEY_SHOP"));
+                return false;
+            }
+        }
+        if (!isAdminShop() && !stockFitsChest(chest)) {
             player.sendMessage(Config.getLocal("NOT_ENOUGH_SPACE_IN_CHEST"));
             return false;
         }
@@ -106,8 +114,9 @@ public class Shop {
             return false;
         }
 
-        if (!getOwner().isEmpty() && Economy.hasAccount(getOwner())) {
-            Economy.substract(getOwner(), sellPrice);
+
+        if (accountExists) {
+            Economy.substract(account, sellPrice);
         }
 
         if (!isAdminShop()) {
@@ -125,23 +134,23 @@ public class Shop {
                 .replace("%buyer", owner)
                 .replace("%price", formatedBalance));
 
+        InventoryUtil.remove(player.getInventory(), stock, stockAmount, stock.getDurability());
+        Logging.logTransaction(false, this, player);
+        player.updateInventory();
+
         sendMessageToOwner(Config.getLocal("SOMEBODY_SOLD_TO_YOUR_SHOP")
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
                 .replace("%seller", player.getName())
                 .replace("%price", formatedBalance));
 
-        InventoryUtil.remove(player.getInventory(), stock, stockAmount, stock.getDurability());
 
-        Logging.logTransaction(false, this, player);
-
-        updateInventory(player);
         return true;
     }
 
-    private String getOwner() {
+    private String getOwnerAccount() {
         if (SignUtil.isAdminShop(owner)) {
-            return Config.getString("shopEconomyAccount");
+            return Config.getString("serverEconomyAccount");
         } else {
             return owner;
         }
@@ -155,17 +164,12 @@ public class Shop {
         return chest.hasEnough(stock, stockAmount, stock.getDurability());
     }
 
-    private void updateInventory(Player player){
-        EntityPlayer p = ((CraftPlayer) player).getHandle();
-        p.a(p.activeContainer);
+    private boolean stockFitsPlayer(Player player) {
+        return InventoryUtil.fits(player.getInventory(), stock, stockAmount, stock.getDurability()) <= 0;
     }
 
-    private static boolean fits(ItemStack item, Player player) {
-        return InventoryUtil.fits(player.getInventory(), item, item.getAmount(), item.getDurability()) <= 0;
-    }
-
-    private static boolean fits(ItemStack item, ChestObject chest) {
-        return chest.fits(item, item.getAmount(), item.getDurability());
+    private boolean stockFitsChest(ChestObject chest) {
+        return chest.fits(stock, stockAmount, stock.getDurability());
     }
 
     private void sendMessageToOwner(String msg) {
