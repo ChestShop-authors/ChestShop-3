@@ -1,6 +1,8 @@
 package com.Acrobot.ChestShop.DB;
 
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Logging.Logging;
 import org.bukkit.Material;
 
@@ -11,7 +13,7 @@ import java.util.List;
  * @author Acrobot
  */
 public class Generator implements Runnable {
-    private static String filePath = ChestShop.folder + "/website.html";
+    private static String filePath = Config.getString(Property.STATISTICS_PAGE_PATH);
 
     private static double generationTime;
 

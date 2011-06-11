@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Items.Items;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class ItemInfo implements CommandExecutor {
                 return false;
             }
 
-            player.sendMessage(Config.getLocal("iteminfo"));
+            player.sendMessage(Config.getLocal(Language.iteminfo));
             player.sendMessage(itemInHand.getTypeId() + ":" + itemInHand.getDurability() + " - " + itemInHand.getType().name());
 
             return true;
@@ -39,7 +40,7 @@ public class ItemInfo implements CommandExecutor {
                 return false;
             }
 
-            sender.sendMessage(Config.getLocal("iteminfo"));
+            sender.sendMessage(Config.getLocal(Language.iteminfo));
             sender.sendMessage(item.getTypeId() + ":" + item.getDurability() + " - " + item.getType().name());
 
             return true;

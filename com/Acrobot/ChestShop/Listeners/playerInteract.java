@@ -1,6 +1,8 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
@@ -40,9 +42,9 @@ public class playerInteract extends PlayerListener {
 
         Block block = event.getClickedBlock();
 
-        if (block.getType() == Material.CHEST) {
+        if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
             if (!Permission.has(player, Permission.ADMIN) && Security.isProtected(block) && !Security.canAccess(player, block)) {
-                player.sendMessage(Config.getLocal("ACCESS_DENIED"));
+                player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
             }
@@ -70,7 +72,7 @@ public class playerInteract extends PlayerListener {
             Chest chest1 = SearchForBlock.findChest(sign);
 
             if (chest1 == null) {
-                player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
+                player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
                 return;
             }
 
@@ -91,7 +93,7 @@ public class playerInteract extends PlayerListener {
         }
 
 
-        Action buy = (Config.getBoolean("reverse_buttons") ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
+        Action buy = (Config.getBoolean(Property.REVERSE_BUTTONS) ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 
         if (action == buy) {
             ShopManagement.buy(sign, player);

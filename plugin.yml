@@ -8,16 +8,16 @@ version: 3.00
 
 author: Acrobot
 description: >
-             A chest shop for economy mods.
+             A chest shop for economy plugins.
 commands:
   iteminfo:
-    aliases: [ii,iinfo]
+    aliases: [iinfo]
     description: Lists item id and names
     usage: |
            /<command> (item name/item ID/alias)
            () - optional
   csVersion:
-    aliases: cv
+    aliases: [cv]
     description: Shows the ChestShop's version
     usage: |
            /<command>

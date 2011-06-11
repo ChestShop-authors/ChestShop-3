@@ -1,8 +1,11 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.Numerical;
 import com.Acrobot.ChestShop.Utils.SearchForBlock;
@@ -30,22 +33,23 @@ public class signChange extends BlockListener {
 
         ItemStack stock = Items.getItemStack(line[3]);
 
+
         Material mat = stock == null ? null : stock.getType();
 
         boolean playerIsAdmin = Permission.has(player, Permission.ADMIN);
 
 
         if (isAlmostReady) {
+            if (mat == null) {
+                player.sendMessage(Config.getLocal(Language.INCORRECT_ITEM_ID));
+                dropSign(event);
+                return;
+            }
             if (!playerIsAdmin && !(Permission.has(player, Permission.SHOP_CREATION)
                     || ((Permission.has(player, Permission.SHOP_CREATION + "." + mat.getId())
                     || !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId()))))) {
 
-                player.sendMessage(Config.getLocal("YOU_CAN'T_CREATE_SHOP"));
-                dropSign(event);
-                return;
-            }
-            if (mat == null) {
-                player.sendMessage(Config.getLocal("INCORRECT_ITEM_ID"));
+                player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
                 dropSign(event);
                 return;
             }
@@ -92,25 +96,39 @@ public class signChange extends BlockListener {
 
         if (!isAdminShop) {
             if (chest == null) {
-                player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
+                player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
                 dropSign(event);
                 return;
             } else if (!playerIsAdmin) {
                 boolean canPlaceSign = Security.canPlaceSign(player, signBlock);
 
                 if (!canPlaceSign) {
-                    player.sendMessage(Config.getLocal("ANOTHER_SHOP_DETECTED"));
+                    player.sendMessage(Config.getLocal(Language.ANOTHER_SHOP_DETECTED));
                     dropSign(event);
                     return;
+                }
+
+                Default protection = new Default();
+                Block chestBlock = chest.getBlock();
+
+                if(Security.isProtected(chestBlock) || protection.isProtected(chestBlock)){
+                    if(!Security.canAccess(player, chestBlock) || !protection.canAccess(player, chestBlock)){
+                        player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
+                        dropSign(event);
+                        return;
+                    }
                 }
             }
         }
 
-        if (Security.protect(player.getName(), chest.getBlock())) {
-            player.sendMessage(Config.getLocal("PROTECTED_SHOP"));
+        if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && Security.protect(player.getName(), chest.getBlock())) {
+            if(Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)){
+                Security.protect(player.getName(), signBlock);
+            }
+            player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));
         }
 
-        player.sendMessage(Config.getLocal("SHOP_CREATED"));
+        player.sendMessage(Config.getLocal(Language.SHOP_CREATED));
     }
 
     public static void dropSign(SignChangeEvent event) {

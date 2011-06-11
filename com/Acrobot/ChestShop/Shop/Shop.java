@@ -3,6 +3,8 @@ package com.Acrobot.ChestShop.Shop;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Chests.ChestObject;
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Utils.InventoryUtil;
@@ -33,28 +35,28 @@ public class Shop {
 
     public boolean buy(Player player) {
         if (chest == null && !isAdminShop()) {
-            player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
+            player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return false;
         }
         if (buyPrice == -1) {
-            player.sendMessage(Config.getLocal("NO_BUYING_HERE"));
+            player.sendMessage(Config.getLocal(Language.NO_BUYING_HERE));
             return false;
         }
         String playerName = player.getName();
         if (!Economy.hasEnough(playerName, buyPrice)) {
-            player.sendMessage(Config.getLocal("NOT_ENOUGH_MONEY"));
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
             return false;
         }
         if (!stockFitsPlayer(player)) {
-            player.sendMessage(Config.getLocal("NOT_ENOUGH_SPACE_IN_INVENTORY"));
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_INVENTORY));
             return false;
         }
 
         String materialName = stock.getType().name();
 
         if (!isAdminShop() && !hasEnoughStock()) {
-            player.sendMessage(Config.getLocal("NOT_ENOUGH_STOCK"));
-            sendMessageToOwner(Config.getLocal("NOT_ENOUGH_STOCK_IN_YOUR_SHOP").replace("%material", materialName));
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_STOCK));
+            sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
             return false;
         }
 
@@ -68,7 +70,7 @@ public class Shop {
             chest.removeItem(stock, stock.getDurability(), stockAmount);
         }
         String formatedPrice = Economy.formatBalance(buyPrice);
-        player.sendMessage(Config.getLocal("YOU_BOUGHT_FROM_SHOP")
+        player.sendMessage(Config.getLocal(Language.YOU_BOUGHT_FROM_SHOP)
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
                 .replace("%owner", owner)
@@ -78,7 +80,7 @@ public class Shop {
         Logging.logTransaction(true, this, player);
         player.updateInventory();
 
-        sendMessageToOwner(Config.getLocal("SOMEBODY_BOUGHT_FROM_YOUR_SHOP")
+        sendMessageToOwner(Config.getLocal(Language.SOMEBODY_BOUGHT_FROM_YOUR_SHOP)
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
                 .replace("%buyer", playerName)
@@ -88,11 +90,11 @@ public class Shop {
 
     public boolean sell(Player player) {
         if (chest == null && !isAdminShop()) {
-            player.sendMessage(Config.getLocal("NO_CHEST_DETECTED"));
+            player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return false;
         }
         if (sellPrice == -1) {
-            player.sendMessage(Config.getLocal("NO_SELLING_HERE"));
+            player.sendMessage(Config.getLocal(Language.NO_SELLING_HERE));
             return false;
         }
         String account = getOwnerAccount();
@@ -100,17 +102,17 @@ public class Shop {
 
         if (accountExists) {
             if (!Economy.hasEnough(account, sellPrice)) {
-                player.sendMessage(Config.getLocal("NOT_ENOUGH_MONEY_SHOP"));
+                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
                 return false;
             }
         }
         if (!isAdminShop() && !stockFitsChest(chest)) {
-            player.sendMessage(Config.getLocal("NOT_ENOUGH_SPACE_IN_CHEST"));
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_CHEST));
             return false;
         }
 
         if (InventoryUtil.amount(player.getInventory(), stock, stock.getDurability()) < stockAmount) {
-            player.sendMessage(Config.getLocal("NOT_ENOUGH_ITEMS_TO_SELL"));
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
             return false;
         }
 
@@ -128,7 +130,7 @@ public class Shop {
         String materialName = stock.getType().name();
         String formatedBalance = Economy.formatBalance(sellPrice);
 
-        player.sendMessage(Config.getLocal("YOU_SOLD_TO_SHOP")
+        player.sendMessage(Config.getLocal(Language.YOU_SOLD_TO_SHOP)
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
                 .replace("%buyer", owner)
@@ -138,7 +140,7 @@ public class Shop {
         Logging.logTransaction(false, this, player);
         player.updateInventory();
 
-        sendMessageToOwner(Config.getLocal("SOMEBODY_SOLD_TO_YOUR_SHOP")
+        sendMessageToOwner(Config.getLocal(Language.SOMEBODY_SOLD_TO_YOUR_SHOP)
                 .replace("%amount", String.valueOf(stockAmount))
                 .replace("%item", materialName)
                 .replace("%seller", player.getName())
@@ -150,7 +152,7 @@ public class Shop {
 
     private String getOwnerAccount() {
         if (SignUtil.isAdminShop(owner)) {
-            return Config.getString("serverEconomyAccount");
+            return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
         } else {
             return owner;
         }

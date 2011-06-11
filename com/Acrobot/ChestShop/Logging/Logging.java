@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Logging;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Shop.Shop;
@@ -23,7 +24,7 @@ public class Logging {
     }
 
     public static void log(String string) {
-        if (Config.getBoolean("logToConsole")) {
+        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) {
             System.out.println("[ChestShop] " + string);
         }
         FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
@@ -31,7 +32,7 @@ public class Logging {
 
     public static void logTransaction(boolean isBuying, Shop shop, Player player) {
         log(player.getName() + (isBuying ? " bought " : " sold ") + shop.stockAmount + ' ' + shop.stock.getType() + " for " + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ") + shop.owner);
-        if (!Config.getBoolean("useDB")) {
+        if (!Config.getBoolean(Property.USE_DATABASE)) {
             return;
         }
         Transaction transaction = new Transaction();

@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Options;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
@@ -33,8 +34,9 @@ public class ChestShop extends JavaPlugin {
     private final blockBreak blockBreak = new blockBreak();
     private final blockPlace blockPlace = new blockPlace();
     private final signChange signChange = new signChange();
-
+    private final pluginDisable pluginDisable = new pluginDisable();
     private final playerInteract playerInteract = new playerInteract();
+
     public static File folder;
     public static EbeanServer db;
 
@@ -50,6 +52,7 @@ public class ChestShop extends JavaPlugin {
         pm.registerEvent(Event.Type.SIGN_CHANGE, signChange, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, playerInteract, Event.Priority.Highest, this);
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginEnable, Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginDisable, Event.Priority.Monitor, this);
 
         desc = this.getDescription();
         server = getServer();
@@ -62,18 +65,18 @@ public class ChestShop extends JavaPlugin {
 
         //Now set up our database for storing transactions!
         setupDBfile();
-        if (Config.getBoolean("useDB")) {
+        if (Config.getBoolean(Property.USE_DATABASE)) {
             setupDB();
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
 
-            if (Config.getBoolean("generateStatisticsPage")) {
+            if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
                 getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, 300L);
             }
             db = getDatabase();
         }
 
         //Now set up our logging to file!
-        if (Config.getBoolean("logToFile")) {
+        if (Config.getBoolean(Property.LOG_TO_FILE)) {
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new FileWriterQueue(), 201L, 201L);
         }
 

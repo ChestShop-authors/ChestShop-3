@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author Acrobot
  */
-public enum DefaultLanguage {
+public enum Language {
     prefix("&a[Shop] &f"),
     iteminfo("&aItem Information:&f"),
     options("&aCustomizable options: "),
@@ -35,17 +35,18 @@ public enum DefaultLanguage {
     YOU_CANNOT_CREATE_SHOP("You can't create this type of shop!"),
     NO_CHEST_DETECTED("Couldn't find a chest!"),
     ANOTHER_SHOP_DETECTED("Another player's shop detected!"),
+    CANNOT_ACCESS_THE_CHEST("You don't have permissions to access this chest!"),
 
-    PROTECTED_SHOP("Successfully protected the shop!"),
+    PROTECTED_SHOP("Successfully protected the shop with LWC!"),
     SHOP_CREATED("Shop successfully created!"),
 
     INCORRECT_ITEM_ID("You have specified invalid item id!");
 
 
     private String text;
-    private static final Map<String, DefaultLanguage> names = new HashMap<String, DefaultLanguage>();
+    private static final Map<String, Language> names = new HashMap<String, Language>();
 
-    private DefaultLanguage(String def) {
+    private Language(String def) {
         text = def;
     }
 
@@ -53,12 +54,12 @@ public enum DefaultLanguage {
         return text;
     }
 
-    public static DefaultLanguage lookup(String name) {
+    public static Language lookup(String name) {
         return names.get(name);
     }
 
     static {
-        for (DefaultLanguage def : values()) {
+        for (Language def : values()) {
             names.put(def.name(), def);
         }
     }

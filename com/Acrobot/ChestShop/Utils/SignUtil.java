@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -15,7 +16,7 @@ public class SignUtil {
     }
 
     public static boolean isAdminShop(String owner) {
-        return owner.toLowerCase().replace(" ", "").equals(Config.getString("adminShopName").toLowerCase().replace(" ", ""));
+        return owner.toLowerCase().replace(" ", "").equals(Config.getString(Property.ADMIN_SHOP_NAME).toLowerCase().replace(" ", ""));
     }
 
     public static boolean isValid(Sign sign) {

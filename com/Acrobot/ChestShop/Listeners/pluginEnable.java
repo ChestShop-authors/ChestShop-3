@@ -22,13 +22,13 @@ import org.yi.acru.bukkit.Lockette.Lockette;
  */
 public class pluginEnable extends ServerListener {
 
-    private Methods methods = new Methods();
+    public static Methods methods = new Methods();
 
 
     public void onPluginEnable(PluginEnableEvent event) {
 
         //Economy plugins
-        if (!this.methods.hasMethod()) {
+        if (!methods.hasMethod()) {
             if (methods.setMethod(event.getPlugin())) {
                 Economy.economy = methods.getMethod();
                 System.out.println("[ChestShop] " + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
@@ -54,6 +54,7 @@ public class pluginEnable extends ServerListener {
                 PluginDescriptionFile pDesc = lwcPlugin.getDescription();
                 LWCplugin.lwc = ((LWCPlugin) lwcPlugin).getLWC();
                 Security.protection = new LWCplugin();
+                
                 System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
             }
         }

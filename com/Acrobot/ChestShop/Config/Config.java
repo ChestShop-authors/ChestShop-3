@@ -18,12 +18,11 @@ public class Config {
     private static Configuration language = new Configuration(langFile);
 
     public static HashMap<String, Object> defaultValues = new HashMap<String, Object>();
-    private static String langChar = Character.toString((char) 167);
 
 
     public static void setUp() {
         config.load();
-        for (DefaultValue def : DefaultValue.values()){
+        for (Property def : com.Acrobot.ChestShop.Config.Property.values()){
             if(config.getProperty(def.name()) == null){
                 writeToFile(def.name() + ": " + def.getValue() + "               #" + def.getComment(), configFile);
             }
@@ -31,14 +30,12 @@ public class Config {
         config.load();
 
         language.load();
-        for (DefaultLanguage def : DefaultLanguage.values()) {
+        for (Language def : Language.values()) {
             if (language.getProperty(def.name()) == null) {
-                writeToFile(def.name() + ": \"" + def.toString() + "\"", langFile);
+                writeToFile(def.name() + ": \"" + def.toString() + '\"', langFile);
             }
         }
         language.load();
-
-
     }
 
     public static void writeToFile(String string, File file) {
@@ -51,47 +48,31 @@ public class Config {
         }
     }
 
-    public static boolean getBoolean(String node) {
-        return (Boolean) getValue(node);
+    public static boolean getBoolean(Property value){
+        return (Boolean) getValue(value.name());
     }
 
-    public static String getString(String node) {
-        return getColored((String) getValue(node));
+    public static String getString(Property value){
+        return getColored((String) getValue(value.name()));
     }
 
-    public static int getInteger(String node) {
-        return Integer.parseInt(getValue(node).toString());
+    public static int getInteger(Property value){
+        return Integer.parseInt(getValue(value.name()).toString());
     }
 
-    public static double getDouble(String node) {
-        return config.getDouble(node, -1);
-    }
-
-    private static Object getValue(String node, Configuration configuration, File file) {
-        if (configuration.getProperty(node) == null) {
-            writeToFile(DefaultLanguage.lookup(node).toString(), file);
-            configuration.load();
-        }
-        return configuration.getProperty(node);
+    public static double getDouble(Property value){
+        return config.getDouble(value.name(), -1);
     }
 
     public static String getColored(String msg) {
-        return msg.replaceAll("&", langChar);
+        return msg.replaceAll("&([0-9a-f])", "\u00A7$1");
     }
 
-    public static String getLocal(String node) {
-        return getColored(getDefaultLocal("prefix") + (String) getDefaultLocal(node));
+    public static String getLocal(Language lang) {
+        return getColored(language.getString(Language.prefix.name()) + language.getString(lang.name()));
     }
 
     private static Object getValue(String node) {
-        return getValue(node, config, configFile);
-    }
-
-    private static Object getDefaultLocal(String node) {
-        if (language.getProperty(node) == null) {
-            writeToFile(DefaultLanguage.lookup(node).toString(), langFile);
-            language.load();
-        }
-        return language.getString(node);
+        return config.getProperty(node);
     }
 }
