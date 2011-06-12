@@ -53,7 +53,7 @@ public class Config {
     }
 
     public static String getString(Property value){
-        return getColored((String) getValue(value.name()));
+        return (String) getValue(value.name());
     }
 
     public static int getInteger(Property value){

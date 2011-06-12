@@ -10,15 +10,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Items {
 
-    public static String getItemName(ItemStack itemStack) {
-        return getItemName(itemStack.getType().name());
-    }
-
-    public static String getItemName(String itemName) {
-        return getMat(itemName).name();
-    }
-
     public static Material getMat(String itemName) {
+        if (Numerical.isInteger(itemName)) {
+            return Material.getMaterial(Integer.parseInt(itemName));
+        }
         int length = 256;
         Material finalMat = null;
         itemName = itemName.toLowerCase().replace("_", "").replace(" ", "");
@@ -32,10 +27,6 @@ public class Items {
         return finalMat;
     }
 
-    public static int getItemID(String itemName) {
-        return getMat(itemName).getId();
-    }
-
     public static ItemStack getItemStack(String itemName) {
         if (Odd.isInitialized()) {
             ItemStack odd = Odd.returnItemStack(itemName.replace(":", ";"));
@@ -47,18 +38,20 @@ public class Items {
         itemName = split[0];
         short dataValue = (short) (split.length > 1 && Numerical.isInteger(split[1]) ? Integer.parseInt(split[1]) : 0);
 
-        if (Numerical.isInteger(itemName)) {
-            Material mat = Material.getMaterial(Integer.parseInt(itemName));
-            return mat == null ? null : new ItemStack(mat, 1, dataValue);
+        Material mat;
+
+        String[] data = itemName.split(" ");
+        if(data.length >= 2){
+            mat = getMat(itemName.substring(itemName.indexOf(' ')));
+            byte argData = DataValue.get(data[0], mat);
+
+            if(argData != 0){
+                dataValue = argData;
+            }
+        } else{
+            mat = getMat(itemName);
         }
 
-        Material mat = getMat(itemName);
-
         return (mat != null ? new ItemStack(mat, 1, dataValue) : null);
-    }
-
-    public static Material getMaterial(String name) {
-        ItemStack is = getItemStack(name);
-        return is != null ? is.getType() : null;
     }
 }

@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Utils.SearchForBlock;
@@ -43,7 +44,8 @@ public class playerInteract extends PlayerListener {
         Block block = event.getClickedBlock();
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
-            if (!Permission.has(player, Permission.ADMIN) && Security.isProtected(block) && !Security.canAccess(player, block)) {
+            Default defProtection = new Default();
+            if (!Permission.has(player, Permission.ADMIN) && (defProtection.isProtected(block) && !defProtection.canAccess(player, block)) || (Security.isProtected(block) && !Security.canAccess(player, block))) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
