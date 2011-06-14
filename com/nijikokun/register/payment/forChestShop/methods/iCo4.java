@@ -1,8 +1,8 @@
-package com.nijikokun.register.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
-import com.nijikokun.register.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 import org.bukkit.plugin.Plugin;
 
 public class iCo4 implements Method {

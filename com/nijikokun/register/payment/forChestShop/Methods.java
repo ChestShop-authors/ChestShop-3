@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.nijikokun.register.payment.forChestShop;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -40,10 +40,10 @@ public class Methods {
     }
 
     private void _init() {
-        this.addMethod("iConomy", new com.nijikokun.register.payment.methods.iCo4());
-        this.addMethod("iConomy", new com.nijikokun.register.payment.methods.iCo5());
-        this.addMethod("BOSEconomy", new com.nijikokun.register.payment.methods.BOSE());
-        this.addMethod("Essentials", new com.nijikokun.register.payment.methods.EE17());
+        this.addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
+        this.addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
+        this.addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE());
+        this.addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
     }
 
     public Set<String> getDependencies() {

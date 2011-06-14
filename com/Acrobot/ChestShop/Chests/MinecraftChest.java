@@ -48,7 +48,7 @@ public class MinecraftChest implements ChestObject {
         }
     }
 
-    public void addItem(ItemStack item, short durability, int amount) {
+    public void addItem(ItemStack item, int amount) {
         int left = addItem(item, amount, main);
         if (neighbor != null) {
             addItem(item, left, neighbor);

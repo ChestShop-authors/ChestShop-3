@@ -122,7 +122,7 @@ public class Shop {
         }
 
         if (!isAdminShop()) {
-            chest.addItem(stock, stock.getDurability(), stockAmount);
+            chest.addItem(stock, stockAmount);
         }
 
         Economy.add(player.getName(), sellPrice);

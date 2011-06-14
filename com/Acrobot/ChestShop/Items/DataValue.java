@@ -11,6 +11,10 @@ import org.bukkit.material.*;
  */
 public class DataValue {
     public static byte get(String arg, Material material){
+        if(material == null){
+            return 0;
+        }
+        
         arg = arg.toUpperCase().replace(" ", "_");
 
 

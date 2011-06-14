@@ -1,6 +1,6 @@
-package com.nijikokun.register.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 

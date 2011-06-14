@@ -1,8 +1,5 @@
 package com.Acrobot.ChestShop.Config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Acrobot
  */
@@ -21,12 +18,8 @@ public enum Property {
     PROTECT_SIGN_WITH_LWC(false, "Do you want to protect shop signs with LWC?");
 
     
-
-
     private Object value;
     private String comment;
-
-    private static final Map<String, Property> names = new HashMap<String, Property>();
 
     private Property(Object value, String comment) {
         this.value = value;
@@ -43,15 +36,5 @@ public enum Property {
 
     public String toString() {
         return name();
-    }
-
-    public static Property lookup(String name) {
-        return names.get(name);
-    }
-
-    static {
-        for (Property def : values()) {
-            names.put(def.name(), def);
-        }
     }
 }

@@ -9,7 +9,7 @@ import com.Acrobot.ChestShop.Protection.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.nijikokun.register.payment.Methods;
+import com.nijikokun.register.payment.forChestShop.Methods;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;

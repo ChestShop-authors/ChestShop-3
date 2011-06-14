@@ -1,10 +1,10 @@
-package com.nijikokun.register.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
-import com.nijikokun.register.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 import org.bukkit.plugin.Plugin;
 
 public class EE17 implements Method {

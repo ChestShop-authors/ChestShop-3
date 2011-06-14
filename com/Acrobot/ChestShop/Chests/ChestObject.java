@@ -12,7 +12,7 @@ public interface ChestObject {
 
     public void clearSlot(int slot);
 
-    public void addItem(ItemStack item, short durability, int amount);
+    public void addItem(ItemStack item, int amount);
 
     public void removeItem(ItemStack item, short durability, int amount);
 

@@ -78,6 +78,10 @@ public class InventoryUtil {
 
     public static int amount(Inventory inv, ItemStack item, short durability) {
         int amount = 0;
+        if(!inv.contains(item.getType())){
+            return amount;
+        }
+
         ItemStack[] contents = inv.getContents();
         for (ItemStack i : contents) {
             if (i != null) {

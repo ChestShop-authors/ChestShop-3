@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment;
+package com.nijikokun.register.payment.forChestShop;
 
 import org.bukkit.plugin.Plugin;
 
