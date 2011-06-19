@@ -39,15 +39,18 @@ public class SearchForBlock {
         return null;
     }
 
-    public static Chest findNeighbor(Chest chest) {
+    public static Chest findNeighbor(Block block) {
         BlockFace[] bf = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
-        Block chestBlock = chest.getBlock();
         for (BlockFace blockFace : bf) {
-            Block neighborBlock = chestBlock.getFace(blockFace);
+            Block neighborBlock = block.getFace(blockFace);
             if (neighborBlock.getType() == Material.CHEST) {
                 return (Chest) neighborBlock.getState();
             }
         }
         return null; //Shame, we didn't find double chest :/
+    }
+
+    public static Chest findNeighbor(Chest chest){
+        return findNeighbor(chest.getBlock());
     }
 }

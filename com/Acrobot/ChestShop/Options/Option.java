@@ -8,15 +8,17 @@ import java.util.Map;
  * @author Acrobot
  */
 public enum Option {
-    BALANCE(true),
-    OUT_OF_STOCK(true),
-    SOMEONE_BOUGHT(true);
+    BALANCE("balance", true),
+    OUT_OF_STOCK("outOfStock", true),
+    SOMEONE_BOUGHT("someoneBought", true);
 
     private boolean enabled;
+    private String name;
     private static final Map<String, Option> names = new HashMap<String, Option>();
 
-    private Option(boolean enabled) {
+    private Option(String name, boolean enabled) {
         this.enabled = enabled;
+        this.name = name;
     }
 
     public boolean isEnabled() {

@@ -121,7 +121,7 @@ public class signChange extends BlockListener {
             }
         }
 
-        if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && Security.protect(player.getName(), chest.getBlock())) {
+        if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && chest != null && Security.protect(player.getName(), chest.getBlock())) {
             if(Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)){
                 Security.protect(player.getName(), signBlock);
             }

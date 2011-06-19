@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Shop {
     public ItemStack stock;
+    public short durability;
     public int stockAmount;
     public ChestObject chest;
     public float buyPrice;
@@ -26,6 +27,7 @@ public class Shop {
 
     public Shop(ChestObject chest, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
+        this.durability = stock.getDurability();
         this.chest = chest;
         this.buyPrice = SignUtil.buyPrice(sign.getLine(2));
         this.sellPrice = SignUtil.sellPrice(sign.getLine(2));
@@ -67,7 +69,7 @@ public class Shop {
         Economy.substract(playerName, buyPrice);
 
         if (!isAdminShop()) {
-            chest.removeItem(stock, stock.getDurability(), stockAmount);
+            chest.removeItem(stock, durability, stockAmount);
         }
         String formatedPrice = Economy.formatBalance(buyPrice);
         player.sendMessage(Config.getLocal(Language.YOU_BOUGHT_FROM_SHOP)
@@ -111,7 +113,7 @@ public class Shop {
             return false;
         }
 
-        if (InventoryUtil.amount(player.getInventory(), stock, stock.getDurability()) < stockAmount) {
+        if (InventoryUtil.amount(player.getInventory(), stock, durability) < stockAmount) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
             return false;
         }
@@ -136,7 +138,7 @@ public class Shop {
                 .replace("%buyer", owner)
                 .replace("%price", formatedBalance));
 
-        InventoryUtil.remove(player.getInventory(), stock, stockAmount, stock.getDurability());
+        InventoryUtil.remove(player.getInventory(), stock, stockAmount, durability);
         Logging.logTransaction(false, this, player);
         player.updateInventory();
 
@@ -163,15 +165,15 @@ public class Shop {
     }
 
     private boolean hasEnoughStock() {
-        return chest.hasEnough(stock, stockAmount, stock.getDurability());
+        return chest.hasEnough(stock, stockAmount, durability);
     }
 
     private boolean stockFitsPlayer(Player player) {
-        return InventoryUtil.fits(player.getInventory(), stock, stockAmount, stock.getDurability()) <= 0;
+        return InventoryUtil.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
     }
 
     private boolean stockFitsChest(ChestObject chest) {
-        return chest.fits(stock, stockAmount, stock.getDurability());
+        return chest.fits(stock, stockAmount, durability);
     }
 
     private void sendMessageToOwner(String msg) {

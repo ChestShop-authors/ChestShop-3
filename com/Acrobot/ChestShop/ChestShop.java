@@ -43,6 +43,8 @@ public class ChestShop extends JavaPlugin {
     private static PluginDescriptionFile desc;
     private static Server server;
 
+    public static String mainWorldName;
+
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
 
@@ -56,12 +58,14 @@ public class ChestShop extends JavaPlugin {
 
         desc = this.getDescription();
         server = getServer();
+        mainWorldName = server.getWorlds().get(0).getName();
+
+        //Yep, set up our folder!
+        folder = getDataFolder();
 
         //Set up our config file!
         Config.setUp();
 
-        //Yep, set up our folder!
-        folder = getDataFolder();
 
         //Now set up our database for storing transactions!
         setupDBfile();

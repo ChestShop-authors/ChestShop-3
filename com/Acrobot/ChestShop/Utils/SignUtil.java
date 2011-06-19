@@ -80,9 +80,10 @@ public class SignUtil {
 
     public static int itemAmount(String text) {
         if (Numerical.isInteger(text)) {
-            return Integer.parseInt(text);
+            int amount = Integer.parseInt(text);
+            return (amount >= 1 ? amount : 1);
         } else {
-            return 0;
+            return 1;
         }
     }
 }

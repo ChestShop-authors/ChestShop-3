@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Config;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Logging.Logging;
 import org.bukkit.util.config.Configuration;
 
@@ -11,8 +12,8 @@ import java.util.HashMap;
  * @author Acrobot
  */
 public class Config {
-    private static File configFile = new File("plugins/ChestShop/config.yml");
-    private static File langFile = new File("plugins/ChestShop/local.yml");
+    private static File configFile = new File(ChestShop.folder, "config.yml");
+    private static File langFile = new File(ChestShop.folder, "local.yml");
 
     private static Configuration config = new Configuration(configFile);
     private static Configuration language = new Configuration(langFile);
