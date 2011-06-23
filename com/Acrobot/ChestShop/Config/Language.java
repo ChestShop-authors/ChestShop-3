@@ -13,7 +13,7 @@ public enum Language {
 
     ACCESS_DENIED("You don't have permission to do that!"),
 
-    NOT_ENOUGH_MONEY("You have got not enough money!"),
+    NOT_ENOUGH_MONEY("You don't have enough money!"),
     NOT_ENOUGH_MONEY_SHOP("Shop owner doesn't have enough money!"),
 
     NO_BUYING_HERE("You can't buy here!"),
@@ -21,9 +21,9 @@ public enum Language {
 
     NOT_ENOUGH_SPACE_IN_INVENTORY("You haven't got enough space in inventory!"),
     NOT_ENOUGH_SPACE_IN_CHEST("There isn't enough space in chest!"),
-    NOT_ENOUGH_ITEMS_TO_SELL("You have got not enough items to sell!"),
+    NOT_ENOUGH_ITEMS_TO_SELL("You don't have enough items to sell!"),
 
-    NOT_ENOUGH_STOCK("This shop has not enough stock."),
+    NOT_ENOUGH_STOCK("This shop is out of stock."),
     NOT_ENOUGH_STOCK_IN_YOUR_SHOP("Your %material shop is out of stock!"),
 
     YOU_BOUGHT_FROM_SHOP("You bought %amount %item from %owner for %price."),
@@ -40,6 +40,8 @@ public enum Language {
     PROTECTED_SHOP("Successfully protected the shop with LWC!"),
     SHOP_CREATED("Shop successfully created!"),
 
+    NO_PERMISSION("You don't have permissions to do that!"),
+    NAME_TOO_LONG ("Unfortunately, your name is too long :( Please wait for newer shop version!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!");
 
 

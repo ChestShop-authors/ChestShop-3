@@ -9,7 +9,10 @@ import org.bukkit.block.Sign;
 /**
  * @author Acrobot
  */
-public class SearchForBlock {
+public class BlockSearch {
+
+    static BlockFace[] chestFaces = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
+    static BlockFace[] shopFaces = {BlockFace.DOWN, BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH, BlockFace.SELF};
 
     public static Chest findChest(Sign sign) {
         Block block = sign.getBlock();
@@ -17,7 +20,7 @@ public class SearchForBlock {
     }
 
     public static Chest findChest(Block block) {
-        for (BlockFace bf : BlockFace.values()) {
+        for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getFace(bf);
             if (faceBlock.getType() == Material.CHEST) {
                 return (Chest) faceBlock.getState();
@@ -27,7 +30,7 @@ public class SearchForBlock {
     }
 
     public static Sign findSign(Block block) {
-        for (BlockFace bf : BlockFace.values()) {
+        for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getFace(bf);
             if (SignUtil.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
@@ -40,8 +43,7 @@ public class SearchForBlock {
     }
 
     public static Chest findNeighbor(Block block) {
-        BlockFace[] bf = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
-        for (BlockFace blockFace : bf) {
+        for (BlockFace blockFace : chestFaces) {
             Block neighborBlock = block.getFace(blockFace);
             if (neighborBlock.getType() == Material.CHEST) {
                 return (Chest) neighborBlock.getState();

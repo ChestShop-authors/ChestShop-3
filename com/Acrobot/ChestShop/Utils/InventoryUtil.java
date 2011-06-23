@@ -5,6 +5,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Acrobot
@@ -12,11 +13,16 @@ import java.util.ArrayList;
 public class InventoryUtil {
 
     public static int remove(Inventory inv, ItemStack item, int amount, short durability) {
+        amount = (amount > 0 ? amount : 1);
         Material itemMaterial = item.getType();
-        int amountLeft = amount;
 
-        for (int slot = 0; slot < inv.getSize(); slot++) {
-            if (amountLeft <= 0) {
+        int first = inv.first(itemMaterial);
+        if(first == -1){
+            return amount;
+        }
+
+        for (int slot = first; slot < inv.getSize(); slot++) {
+            if (amount <= 0) {
                 return 0;
             }
 
@@ -27,31 +33,33 @@ public class InventoryUtil {
 
             if (currentItem.getType() == itemMaterial && (durability == -1 || currentItem.getDurability() == durability)) {
                 int currentAmount = currentItem.getAmount();
-                if (amountLeft == currentAmount) {
+                if (amount == currentAmount) {
                     currentItem = null;
-                    amountLeft = 0;
-                } else if (amountLeft < currentAmount) {
-                    currentItem.setAmount(currentAmount - amountLeft);
-                    amountLeft = 0;
+                    amount = 0;
+                } else if (amount < currentAmount) {
+                    currentItem.setAmount(currentAmount - amount);
+                    amount = 0;
                 } else {
                     currentItem = null;
-                    amountLeft -= currentAmount;
+                    amount -= currentAmount;
                 }
                 inv.setItem(slot, currentItem);
             }
         }
 
-        return amountLeft;
+        return amount;
     }
 
     public static int add(Inventory inv, ItemStack item, int amount) {
+        amount = (amount > 0 ? amount : 1);
+        
         Material itemMaterial = item.getType();
         int maxStackSize = itemMaterial.getMaxStackSize();
 
         if (amount <= maxStackSize) {
             item.setAmount(amount);
-            inv.addItem(item);
-            return 0;
+            HashMap<Integer, ItemStack> left = inv.addItem(item);
+            return (left.isEmpty() ? 0 : left.get(0).getAmount());
         }
 
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
@@ -65,11 +73,9 @@ public class InventoryUtil {
                 items.add(item);
             }
         }
-        Object[] iArray = items.toArray();
 
         amount = 0;
-        for (Object o : iArray) {
-            ItemStack itemToAdd = (ItemStack) o;
+        for (ItemStack itemToAdd : items) {
             amount += (!inv.addItem(itemToAdd).isEmpty() ? itemToAdd.getAmount() : 0);
         }
 

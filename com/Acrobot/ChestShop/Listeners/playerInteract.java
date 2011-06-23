@@ -5,8 +5,9 @@ import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
+import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
-import com.Acrobot.ChestShop.Utils.SearchForBlock;
+import com.Acrobot.ChestShop.Utils.BlockSearch;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
@@ -70,7 +71,7 @@ public class playerInteract extends PlayerListener {
         }
 
         if (player.getName().equals(sign.getLine(0))) {
-            Chest chest1 = SearchForBlock.findChest(sign);
+            Chest chest1 = BlockSearch.findChest(sign);
             if (chest1 == null) {
                 player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
                 return;
@@ -79,7 +80,7 @@ public class playerInteract extends PlayerListener {
             Inventory inv1 = chest1.getInventory();
             IInventory iInv1 = ((CraftInventory) inv1).getInventory();
 
-            Chest chest2 = SearchForBlock.findNeighbor(chest1);
+            Chest chest2 = BlockSearch.findNeighbor(chest1);
 
             if (chest2 != null) {
                 Inventory inv2 = chest2.getInventory();
@@ -92,6 +93,12 @@ public class playerInteract extends PlayerListener {
             return;
         }
 
+        if(RestrictedSign.isRestricted(sign)){
+            if(!RestrictedSign.canAccess(sign, player)){
+                player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
+                return;
+            }
+        }
 
         Action buy = (Config.getBoolean(Property.REVERSE_BUTTONS) ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 

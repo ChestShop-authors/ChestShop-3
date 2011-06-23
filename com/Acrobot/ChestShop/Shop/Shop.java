@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import org.bukkit.block.Sign;
@@ -42,6 +43,10 @@ public class Shop {
         }
         if (buyPrice == -1) {
             player.sendMessage(Config.getLocal(Language.NO_BUYING_HERE));
+            return false;
+        }
+        if(!Permission.has(player, Permission.BUY)){
+            player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return false;
         }
         String playerName = player.getName();
@@ -97,6 +102,10 @@ public class Shop {
         }
         if (sellPrice == -1) {
             player.sendMessage(Config.getLocal(Language.NO_SELLING_HERE));
+            return false;
+        }
+        if(!Permission.has(player, Permission.SELL)){
+            player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return false;
         }
         String account = getOwnerAccount();

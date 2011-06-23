@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 public enum Permission {
     SHOP_CREATION("ChestShop.shop.create"),
     EXCLUDE_ITEM("ChestShop.shop.exclude"),
+    BUY("ChestShop.shop.buy"),
+    SELL("ChestShop.shop.sell"),
     ADMIN("ChestShop.admin");
 
     private final String permission;

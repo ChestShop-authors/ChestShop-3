@@ -7,12 +7,15 @@ import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
+import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
 import com.Acrobot.ChestShop.Utils.Numerical;
-import com.Acrobot.ChestShop.Utils.SearchForBlock;
+import com.Acrobot.ChestShop.Utils.BlockSearch;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -40,6 +43,11 @@ public class signChange extends BlockListener {
 
 
         if (isAlmostReady) {
+            if(player.getName().length() > 15){
+                player.sendMessage(Config.getLocal(Language.NAME_TOO_LONG));
+                dropSign(event);
+                return;
+            }
             if (mat == null) {
                 player.sendMessage(Config.getLocal(Language.INCORRECT_ITEM_ID));
                 dropSign(event);
@@ -54,6 +62,17 @@ public class signChange extends BlockListener {
                 return;
             }
         } else {
+            if(RestrictedSign.isRestricted(event.getLines())){
+                if(!playerIsAdmin){
+                    player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
+                    dropSign(event);
+                    return;
+                }
+                Block secondSign = signBlock.getFace(BlockFace.DOWN);
+                if(!SignUtil.isSign(secondSign) || !SignUtil.isValid((Sign) secondSign.getState())){
+                    dropSign(event);
+                }
+            }
             return;
         }
 
@@ -92,7 +111,7 @@ public class signChange extends BlockListener {
             }
         }
 
-        Chest chest = SearchForBlock.findChest(signBlock);
+        Chest chest = BlockSearch.findChest(signBlock);
 
         if (!isAdminShop) {
             if (chest == null) {

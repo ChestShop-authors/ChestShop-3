@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Chests;
 
 import com.Acrobot.ChestShop.Utils.InventoryUtil;
-import com.Acrobot.ChestShop.Utils.SearchForBlock;
+import com.Acrobot.ChestShop.Utils.BlockSearch;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -50,14 +50,14 @@ public class MinecraftChest implements ChestObject {
 
     public void addItem(ItemStack item, int amount) {
         int left = addItem(item, amount, main);
-        if (neighbor != null) {
+        if (neighbor != null && left > 0) {
             addItem(item, left, neighbor);
         }
     }
 
     public void removeItem(ItemStack item, short durability, int amount) {
         int left = removeItem(item, durability, amount, main);
-        if (neighbor != null) {
+        if (neighbor != null && left > 0) {
             removeItem(item, durability, left, neighbor);
         }
     }
@@ -80,7 +80,7 @@ public class MinecraftChest implements ChestObject {
     }
 
     private Chest getNeighbor() {
-        return SearchForBlock.findNeighbor(main);
+        return BlockSearch.findNeighbor(main);
     }
 
     private static int amount(ItemStack item, short durability, Chest chest) {

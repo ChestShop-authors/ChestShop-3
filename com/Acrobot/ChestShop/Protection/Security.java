@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Protection;
 
-import com.Acrobot.ChestShop.Utils.SearchForBlock;
+import com.Acrobot.ChestShop.Utils.BlockSearch;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -25,9 +25,9 @@ public class Security {
     }
 
     public static boolean canPlaceSign(Player p, Block block) {
-        Chest chest = SearchForBlock.findChest(block);
-        Sign sign1 = SearchForBlock.findSign(chest.getBlock());
-        Sign sign2 = SearchForBlock.findSign(block);
+        Chest chest = BlockSearch.findChest(block);
+        Sign sign1 = BlockSearch.findSign(chest.getBlock());
+        Sign sign2 = BlockSearch.findSign(block);
 
         return (sign1 == null || sign1.getLine(0).startsWith(p.getName())) && (sign2 == null || sign2.getLine(0).startsWith(p.getName()));
     }
