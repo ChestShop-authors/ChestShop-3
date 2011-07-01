@@ -2,7 +2,9 @@ package com.nijikokun.register.payment.forChestShop.methods;
 
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
+
 import com.nijikokun.register.payment.forChestShop.Method;
+
 import org.bukkit.plugin.Plugin;
 
 public class iCo4 implements Method {
@@ -21,7 +23,7 @@ public class iCo4 implements Method {
     }
 
     public String format(double amount) {
-        return iConomy.getBank().format(amount);
+        return this.iConomy.getBank().format(amount);
     }
 
     public boolean hasBanks() {
@@ -33,7 +35,7 @@ public class iCo4 implements Method {
     }
 
     public boolean hasAccount(String name) {
-        return iConomy.getBank().hasAccount(name);
+        return this.iConomy.getBank().hasAccount(name);
     }
 
     public boolean hasBankAccount(String bank, String name) {
@@ -41,22 +43,22 @@ public class iCo4 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        return new iCoAccount(iConomy.getBank().getAccount(name));
+        return new iCoAccount(this.iConomy.getBank().getAccount(name));
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
         return null;
     }
-
+	
     public boolean isCompatible(Plugin plugin) {
         return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && !plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {
-        iConomy = (iConomy) plugin;
+        iConomy = (iConomy)plugin;
     }
-
-    public static class iCoAccount implements MethodAccount {
+	
+    public class iCoAccount implements MethodAccount {
         private Account account;
 
         public iCoAccount(Account account) {
@@ -72,31 +74,31 @@ public class iCo4 implements Method {
         }
 
         public boolean set(double amount) {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.setBalance(amount);
             return true;
         }
 
         public boolean add(double amount) {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.add(amount);
             return true;
         }
 
         public boolean subtract(double amount) {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.subtract(amount);
             return true;
         }
 
         public boolean multiply(double amount) {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.multiply(amount);
             return true;
         }
 
         public boolean divide(double amount) {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.divide(amount);
             return true;
         }
@@ -118,7 +120,7 @@ public class iCo4 implements Method {
         }
 
         public boolean remove() {
-            if (this.account == null) return false;
+            if(this.account == null) return false;
             this.account.remove();
             return true;
         }

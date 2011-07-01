@@ -8,8 +8,8 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
-import com.Acrobot.ChestShop.Utils.Numerical;
 import com.Acrobot.ChestShop.Utils.BlockSearch;
+import com.Acrobot.ChestShop.Utils.Numerical;
 import com.Acrobot.ChestShop.Utils.SignUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -53,9 +53,11 @@ public class signChange extends BlockListener {
                 dropSign(event);
                 return;
             }
-            if (!playerIsAdmin && !(Permission.has(player, Permission.SHOP_CREATION)
-                    || ((Permission.has(player, Permission.SHOP_CREATION + "." + mat.getId())
-                    || !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId()))))) {
+            if (!(playerIsAdmin ||
+                 Permission.has(player, Permission.SHOP_CREATION) ||
+                    (Permission.has(player, Permission.SHOP_CREATION + "." + mat.getId()) &&
+                    !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId()))))
+            {
 
                 player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
                 dropSign(event);

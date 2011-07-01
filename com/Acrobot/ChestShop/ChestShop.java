@@ -56,9 +56,9 @@ public class ChestShop extends JavaPlugin {
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginEnable, Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginDisable, Event.Priority.Monitor, this);
 
-        desc = this.getDescription();
-        server = getServer();
-        mainWorldName = server.getWorlds().get(0).getName();
+        desc = this.getDescription();  //Description of the plugin
+        server = getServer();          //Setting out server variable
+        mainWorldName = server.getWorlds().get(0).getName(); //Set up our main world's name - currently not used
 
         //Yep, set up our folder!
         folder = getDataFolder();

@@ -11,7 +11,8 @@ public enum Permission {
     EXCLUDE_ITEM("ChestShop.shop.exclude"),
     BUY("ChestShop.shop.buy"),
     SELL("ChestShop.shop.sell"),
-    ADMIN("ChestShop.admin");
+    ADMIN("ChestShop.admin"),
+    MOD("ChestShop.mod");
 
     private final String permission;
 
@@ -30,7 +31,7 @@ public enum Permission {
         if (permissions != null) {
             return permissions.has(player, node);
         } else {
-            return !node.contains("exclude") && (!node.contains("admin") || player.isOp());
+            return !node.contains("exclude") && ((!node.contains("admin") && !node.contains("mod")) || player.isOp());
         }
     }
 

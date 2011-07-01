@@ -45,7 +45,7 @@ public class playerInteract extends PlayerListener {
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
             Default defProtection = new Default();
-            if (!Permission.has(player, Permission.ADMIN) && (defProtection.isProtected(block) && !defProtection.canAccess(player, block))) {
+            if (!Permission.has(player, Permission.ADMIN) && !Permission.has(player, Permission.MOD) && (defProtection.isProtected(block) && !defProtection.canAccess(player, block))) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;

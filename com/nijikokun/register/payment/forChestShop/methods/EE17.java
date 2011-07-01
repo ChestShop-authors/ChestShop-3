@@ -4,7 +4,9 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+
 import com.nijikokun.register.payment.forChestShop.Method;
+
 import org.bukkit.plugin.Plugin;
 
 public class EE17 implements Method {
@@ -43,29 +45,26 @@ public class EE17 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        if (!hasAccount(name)) return null;
+        if(!hasAccount(name)) return null;
         return new EEcoAccount(name);
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
         return null;
     }
-
+	
     public boolean isCompatible(Plugin plugin) {
-        try {
-            Class.forName("com.earth2me.essentials.api.Economy");
-        } catch (Exception e) {
-            return false;
-        }
+        try { Class.forName("com.earth2me.essentials.api.Economy"); }
+        catch(Exception e) { return false; }
 
         return plugin.getDescription().getName().equalsIgnoreCase("essentials") && plugin instanceof Essentials;
     }
 
     public void setPlugin(Plugin plugin) {
-        Essentials = (Essentials) plugin;
+        Essentials = (Essentials)plugin;
     }
 
-    public static class EEcoAccount implements MethodAccount {
+    public class EEcoAccount implements MethodAccount {
         private String name;
 
         public EEcoAccount(String name) {
