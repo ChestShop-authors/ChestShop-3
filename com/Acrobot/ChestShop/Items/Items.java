@@ -41,14 +41,14 @@ public class Items {
         Material mat;
 
         String[] data = itemName.split(" ");
-        if(data.length >= 2){
+        if (data.length >= 2) {
             mat = getMat(itemName.substring(itemName.indexOf(' ')));
             byte argData = DataValue.get(data[0], mat);
 
-            if(argData != 0){
+            if (argData != 0) {
                 dataValue = argData;
             }
-        } else{
+        } else {
             mat = getMat(itemName);
         }
 

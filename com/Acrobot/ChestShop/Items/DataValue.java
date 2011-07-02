@@ -10,17 +10,17 @@ import org.bukkit.material.*;
  * @author Acrobot
  */
 public class DataValue {
-    public static byte get(String arg, Material material){
-        if(material == null){
+    public static byte get(String arg, Material material) {
+        if (material == null) {
             return 0;
         }
-        
+
         arg = arg.toUpperCase().replace(" ", "_");
 
 
         MaterialData materialData = null;
 
-        switch (material){
+        switch (material) {
             case SAPLING:
             case LOG:
                 materialData = new Tree(TreeSpecies.valueOf(arg));

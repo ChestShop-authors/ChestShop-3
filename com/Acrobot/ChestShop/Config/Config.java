@@ -23,8 +23,8 @@ public class Config {
 
     public static void setUp() {
         config.load();
-        for (Property def : com.Acrobot.ChestShop.Config.Property.values()){
-            if(config.getProperty(def.name()) == null){
+        for (Property def : com.Acrobot.ChestShop.Config.Property.values()) {
+            if (config.getProperty(def.name()) == null) {
                 writeToFile(def.name() + ": " + def.getValue() + "               #" + def.getComment(), configFile);
             }
         }
@@ -49,19 +49,19 @@ public class Config {
         }
     }
 
-    public static boolean getBoolean(Property value){
+    public static boolean getBoolean(Property value) {
         return (Boolean) getValue(value.name());
     }
 
-    public static String getString(Property value){
+    public static String getString(Property value) {
         return (String) getValue(value.name());
     }
 
-    public static int getInteger(Property value){
+    public static int getInteger(Property value) {
         return Integer.parseInt(getValue(value.name()).toString());
     }
 
-    public static double getDouble(Property value){
+    public static double getDouble(Property value) {
         return config.getDouble(value.name(), -1);
     }
 

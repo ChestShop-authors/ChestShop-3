@@ -41,7 +41,7 @@ public enum Language {
     SHOP_CREATED("Shop successfully created!"),
 
     NO_PERMISSION("You don't have permissions to do that!"),
-    NAME_TOO_LONG ("Unfortunately, your name is too long :( Please wait for newer shop version!"),
+    NAME_TOO_LONG("Unfortunately, your name is too long :( Please wait for newer shop version!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!");
 
 

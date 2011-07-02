@@ -7,12 +7,12 @@ import org.bukkit.event.server.ServerListener;
 /**
  * @author Acrobot
  */
-public class pluginDisable extends ServerListener{
-    public void onPluginDisable(PluginDisableEvent event){
-        if(Economy.economy != null && pluginEnable.methods.hasMethod()){
+public class pluginDisable extends ServerListener {
+    public void onPluginDisable(PluginDisableEvent event) {
+        if (Economy.economy != null && pluginEnable.methods.hasMethod()) {
             boolean check = pluginEnable.methods.checkDisabled(event.getPlugin());
 
-            if(check){
+            if (check) {
                 Economy.economy = null;
                 System.out.println("[ChestShop] Economy plugin disabled!");
             }

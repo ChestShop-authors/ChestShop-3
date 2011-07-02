@@ -12,17 +12,17 @@ import org.bukkit.entity.Player;
  */
 public class Default implements Protection {
     public boolean isProtected(Block block) {
-        if((SignUtil.isSign(block) && SignUtil.isValid((Sign) block.getState())) || BlockSearch.findSign(block) != null){
+        if ((SignUtil.isSign(block) && SignUtil.isValid((Sign) block.getState())) || BlockSearch.findSign(block) != null) {
             return true;
         } else {
-            if(!(block.getState() instanceof Chest)){
+            if (!(block.getState() instanceof Chest)) {
                 return false;
             }
-            if(BlockSearch.findSign(block) != null){
+            if (BlockSearch.findSign(block) != null) {
                 return true;
             }
             Chest neighbor = BlockSearch.findNeighbor(block);
-            if(neighbor != null && BlockSearch.findSign(neighbor.getBlock()) != null){
+            if (neighbor != null && BlockSearch.findSign(neighbor.getBlock()) != null) {
                 return true;
             }
         }

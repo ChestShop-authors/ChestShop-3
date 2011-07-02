@@ -16,7 +16,7 @@ public class ShopManagement {
     public static boolean buy(Sign sign, Player player) {
         Chest chestMc = BlockSearch.findChest(sign);
         ItemStack item = Items.getItemStack(sign.getLine(3));
-        if(item == null){
+        if (item == null) {
             player.sendMessage(ChatColor.RED + "[Shop] The item is not recognised!");
             return false;
         }
@@ -28,7 +28,7 @@ public class ShopManagement {
     public static boolean sell(Sign sign, Player player) {
         Chest chestMc = BlockSearch.findChest(sign);
         ItemStack item = Items.getItemStack(sign.getLine(3));
-        if(item == null){
+        if (item == null) {
             player.sendMessage(ChatColor.RED + "[Shop] The item is not recognised!");
             return false;
         }

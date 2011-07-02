@@ -45,7 +45,7 @@ public class Shop {
             player.sendMessage(Config.getLocal(Language.NO_BUYING_HERE));
             return false;
         }
-        if(!Permission.has(player, Permission.BUY)){
+        if (!Permission.has(player, Permission.BUY)) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return false;
         }
@@ -104,7 +104,7 @@ public class Shop {
             player.sendMessage(Config.getLocal(Language.NO_SELLING_HERE));
             return false;
         }
-        if(!Permission.has(player, Permission.SELL)){
+        if (!Permission.has(player, Permission.SELL)) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return false;
         }

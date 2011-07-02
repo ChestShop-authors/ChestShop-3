@@ -24,14 +24,14 @@ public class blockBreak extends BlockListener {
             return;
         }
 
-        if(SignUtil.isSign(block)){
+        if (SignUtil.isSign(block)) {
             Sign currentSign = (Sign) block.getState();
-            if(RestrictedSign.isRestricted(currentSign)){
+            if (RestrictedSign.isRestricted(currentSign)) {
                 event.setCancelled(true);
             }
             currentSign.update(true);
         }
-        
+
         Sign sign = BlockSearch.findSign(block);
 
         if (sign != null) {

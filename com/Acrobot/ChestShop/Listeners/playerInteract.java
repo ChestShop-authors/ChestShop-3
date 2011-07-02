@@ -44,8 +44,8 @@ public class playerInteract extends PlayerListener {
         Block block = event.getClickedBlock();
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
-            Default defProtection = new Default();
-            if (!Permission.has(player, Permission.ADMIN) && !Permission.has(player, Permission.MOD) && (defProtection.isProtected(block) && !defProtection.canAccess(player, block))) {
+            Default protection = new Default();
+            if (!Permission.has(player, Permission.ADMIN) && !Permission.has(player, Permission.MOD) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
@@ -93,8 +93,8 @@ public class playerInteract extends PlayerListener {
             return;
         }
 
-        if(RestrictedSign.isRestricted(sign)){
-            if(!RestrictedSign.canAccess(sign, player)){
+        if (RestrictedSign.isRestricted(sign)) {
+            if (!RestrictedSign.canAccess(sign, player)) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 return;
             }

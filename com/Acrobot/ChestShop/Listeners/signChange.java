@@ -43,7 +43,7 @@ public class signChange extends BlockListener {
 
 
         if (isAlmostReady) {
-            if(player.getName().length() > 15){
+            if (player.getName().length() > 15) {
                 player.sendMessage(Config.getLocal(Language.NAME_TOO_LONG));
                 dropSign(event);
                 return;
@@ -54,24 +54,23 @@ public class signChange extends BlockListener {
                 return;
             }
             if (!(playerIsAdmin ||
-                 Permission.has(player, Permission.SHOP_CREATION) ||
+                    Permission.has(player, Permission.SHOP_CREATION) ||
                     (Permission.has(player, Permission.SHOP_CREATION + "." + mat.getId()) &&
-                    !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId()))))
-            {
+                            !Permission.has(player, Permission.EXCLUDE_ITEM + "." + mat.getId())))) {
 
                 player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
                 dropSign(event);
                 return;
             }
         } else {
-            if(RestrictedSign.isRestricted(event.getLines())){
-                if(!playerIsAdmin){
+            if (RestrictedSign.isRestricted(event.getLines())) {
+                if (!playerIsAdmin) {
                     player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                     dropSign(event);
                     return;
                 }
                 Block secondSign = signBlock.getFace(BlockFace.DOWN);
-                if(!SignUtil.isSign(secondSign) || !SignUtil.isValid((Sign) secondSign.getState())){
+                if (!SignUtil.isSign(secondSign) || !SignUtil.isValid((Sign) secondSign.getState())) {
                     dropSign(event);
                 }
             }
@@ -121,29 +120,36 @@ public class signChange extends BlockListener {
                 dropSign(event);
                 return;
             } else if (!playerIsAdmin) {
-                boolean canPlaceSign = Security.canPlaceSign(player, signBlock);
-
-                if (!canPlaceSign) {
+                if (!Security.canPlaceSign(player, signBlock)) {
                     player.sendMessage(Config.getLocal(Language.ANOTHER_SHOP_DETECTED));
                     dropSign(event);
                     return;
                 }
 
-                Default protection = new Default();
+                boolean canAccess = true;
                 Block chestBlock = chest.getBlock();
 
-                if(Security.isProtected(chestBlock) || protection.isProtected(chestBlock)){
-                    if(!Security.canAccess(player, chestBlock) || !protection.canAccess(player, chestBlock)){
-                        player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
-                        dropSign(event);
-                        return;
+                if (Security.isProtected(chestBlock) && !Security.canAccess(player, chestBlock)) {
+                    canAccess = false;
+                }
+
+                if (!(Security.protection instanceof Default)) {
+                    Default protection = new Default();
+                    if (protection.isProtected(chestBlock) && !protection.canAccess(player, chestBlock)) {
+                        canAccess = false;
                     }
+                }
+
+                if (!canAccess) {
+                    player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
+                    dropSign(event);
+                    return;
                 }
             }
         }
 
         if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && chest != null && Security.protect(player.getName(), chest.getBlock())) {
-            if(Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)){
+            if (Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)) {
                 Security.protect(player.getName(), signBlock);
             }
             player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));

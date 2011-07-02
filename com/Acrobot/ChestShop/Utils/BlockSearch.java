@@ -52,7 +52,7 @@ public class BlockSearch {
         return null; //Shame, we didn't find double chest :/
     }
 
-    public static Chest findNeighbor(Chest chest){
+    public static Chest findNeighbor(Chest chest) {
         return findNeighbor(chest.getBlock());
     }
 }

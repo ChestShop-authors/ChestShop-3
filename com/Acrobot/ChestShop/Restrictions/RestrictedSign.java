@@ -11,18 +11,18 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class RestrictedSign {
-    public static boolean isRestricted(Sign sign){
+    public static boolean isRestricted(Sign sign) {
         Block blockUp = sign.getBlock().getFace(BlockFace.UP);
         return SignUtil.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
     }
 
-    public static boolean isRestricted(String[] lines){
+    public static boolean isRestricted(String[] lines) {
         return lines[0].equalsIgnoreCase("[restricted]");
     }
 
-    public static boolean canAccess(Sign sign, Player player){
+    public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getFace(BlockFace.UP);
-        if(Permission.permissions == null || !SignUtil.isSign(blockUp) || Permission.has(player, Permission.ADMIN)){
+        if (Permission.permissions == null || !SignUtil.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) {
             return true;
         }
         String world = blockUp.getWorld().getName();
@@ -31,7 +31,7 @@ public class RestrictedSign {
         sign = (Sign) blockUp.getState();
 
         boolean result = false;
-        for(int i = 1; i <= 3; i++){
+        for (int i = 1; i <= 3; i++) {
             result = result || Permission.permissions.inGroup(world, playerName, sign.getLine(i));
         }
         return result;

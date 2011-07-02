@@ -54,7 +54,7 @@ public class pluginEnable extends ServerListener {
                 PluginDescriptionFile pDesc = lwcPlugin.getDescription();
                 LWCplugin.lwc = ((LWCPlugin) lwcPlugin).getLWC();
                 Security.protection = new LWCplugin();
-                
+
                 System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
             }
         }

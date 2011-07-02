@@ -17,7 +17,7 @@ public class InventoryUtil {
         Material itemMaterial = item.getType();
 
         int first = inv.first(itemMaterial);
-        if(first == -1){
+        if (first == -1) {
             return amount;
         }
 
@@ -52,7 +52,7 @@ public class InventoryUtil {
 
     public static int add(Inventory inv, ItemStack item, int amount) {
         amount = (amount > 0 ? amount : 1);
-        
+
         Material itemMaterial = item.getType();
         int maxStackSize = itemMaterial.getMaxStackSize();
 
@@ -84,10 +84,9 @@ public class InventoryUtil {
 
     public static int amount(Inventory inv, ItemStack item, short durability) {
         int amount = 0;
-        if(!inv.contains(item.getType())){
+        if (!inv.contains(item.getType())) {
             return amount;
         }
-
         ItemStack[] contents = inv.getContents();
         for (ItemStack i : contents) {
             if (i != null) {
