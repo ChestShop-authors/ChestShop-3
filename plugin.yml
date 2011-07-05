@@ -3,7 +3,7 @@ name: ChestShop
 main: com.Acrobot.ChestShop.ChestShop
 
 database: true
-version: 3.00 BETA 7
+version: 3.00 BETA 8
 
 
 author: Acrobot

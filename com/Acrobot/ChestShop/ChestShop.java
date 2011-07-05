@@ -11,6 +11,7 @@ import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.Acrobot.ChestShop.Logging.Logging;
+import com.Acrobot.ChestShop.Protection.MaskChest;
 import com.avaje.ebean.EbeanServer;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
@@ -43,8 +44,6 @@ public class ChestShop extends JavaPlugin {
     private static PluginDescriptionFile desc;
     private static Server server;
 
-    public static String mainWorldName;
-
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
 
@@ -58,7 +57,6 @@ public class ChestShop extends JavaPlugin {
 
         desc = this.getDescription();  //Description of the plugin
         server = getServer();          //Setting out server variable
-        mainWorldName = server.getWorlds().get(0).getName(); //Set up our main world's name - currently not used
 
         //Yep, set up our folder!
         folder = getDataFolder();
@@ -69,7 +67,7 @@ public class ChestShop extends JavaPlugin {
 
         //Now set up our database for storing transactions!
         setupDBfile();
-        if (Config.getBoolean(Property.USE_DATABASE)) {
+        if (Config.getBoolean(Property.LOG_TO_DATABASE)) {
             setupDB();
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
 
@@ -84,17 +82,22 @@ public class ChestShop extends JavaPlugin {
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new FileWriterQueue(), 201L, 201L);
         }
 
+        //And now for the chest masking
+        if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) {
+            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new MaskChest(), 40L, 40L);
+        }
+
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("chestOptions").setExecutor(new Options());
         getCommand("csVersion").setExecutor(new Version());
 
-        System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " initialized!");
+        System.out.println('[' + getPluginName() + "] version " + getVersion() + " initialized!");
     }
 
     public void onDisable() {
-        System.out.println('[' + desc.getName() + "] version " + desc.getVersion() + " shutting down!");
+        System.out.println('[' + getPluginName() + "] version " + getVersion() + " shutting down!");
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////

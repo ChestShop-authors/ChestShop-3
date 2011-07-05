@@ -10,7 +10,7 @@ import java.util.HashMap;
 /**
  * @author Acrobot
  */
-public class InventoryUtil {
+public class uInventory {
 
     public static int remove(Inventory inv, ItemStack item, int amount, short durability) {
         amount = (amount > 0 ? amount : 1);

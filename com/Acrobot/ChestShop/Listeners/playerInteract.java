@@ -7,8 +7,8 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
-import com.Acrobot.ChestShop.Utils.BlockSearch;
-import com.Acrobot.ChestShop.Utils.SignUtil;
+import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uSign;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
 import org.bukkit.Material;
@@ -52,15 +52,12 @@ public class playerInteract extends PlayerListener {
             }
         }
 
-        if (!SignUtil.isSign(block)) {
-            return;
-        }
-        Sign sign = (Sign) block.getState();
-        if (!SignUtil.isValid(sign)) {
+        if (!uSign.isSign(block)) {
             return;
         }
 
-        if (time.containsKey(player) && (System.currentTimeMillis() - time.get(player)) < interval) {
+        Sign sign = (Sign) block.getState();
+        if (!uSign.isValid(sign) || time.containsKey(player) && (System.currentTimeMillis() - time.get(player)) < interval) {
             return;
         }
 
@@ -71,7 +68,7 @@ public class playerInteract extends PlayerListener {
         }
 
         if (player.getName().equals(sign.getLine(0))) {
-            Chest chest1 = BlockSearch.findChest(sign);
+            Chest chest1 = uBlock.findChest(sign);
             if (chest1 == null) {
                 player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
                 return;
@@ -80,7 +77,7 @@ public class playerInteract extends PlayerListener {
             Inventory inv1 = chest1.getInventory();
             IInventory iInv1 = ((CraftInventory) inv1).getInventory();
 
-            Chest chest2 = BlockSearch.findNeighbor(chest1);
+            Chest chest2 = uBlock.findNeighbor(chest1);
 
             if (chest2 != null) {
                 Inventory inv2 = chest2.getInventory();

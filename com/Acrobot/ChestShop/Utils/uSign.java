@@ -9,7 +9,7 @@ import org.bukkit.block.Sign;
 /**
  * @author Acrobot
  */
-public class SignUtil {
+public class uSign {
 
     public static boolean isSign(Block block) {
         return (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN);
@@ -33,7 +33,7 @@ public class SignUtil {
 
     public static boolean isValidPreparedSign(String[] line) {
         try {
-            return !line[0].contains("[") && !line[0].contains("]") && !line[3].isEmpty() && !line[3].split(":")[0].isEmpty() && Numerical.isInteger(line[1]) && line[2].split(":").length <= 2;
+            return !line[0].startsWith("[") && !line[0].endsWith("]") && !line[0].startsWith(":") && !line[3].split(":")[0].isEmpty() && uNumber.isInteger(line[1]) && line[2].split(":").length <= 2;
         } catch (Exception e) {
             return false;
         }
@@ -48,7 +48,7 @@ public class SignUtil {
         }
         text = text.replace("b", "").replace("s", "");
         String[] split = text.split(":");
-        if (Numerical.isFloat(split[0])) {
+        if (uNumber.isFloat(split[0])) {
             float buyPrice = Float.parseFloat(split[0]);
             return (buyPrice != 0 ? buyPrice : -1);
         } else if (split[0].equals("free")) {
@@ -69,7 +69,7 @@ public class SignUtil {
             return -1;
         }
 
-        if (Numerical.isFloat(split[sellPart])) {
+        if (uNumber.isFloat(split[sellPart])) {
             Float sellPrice = Float.parseFloat(split[sellPart]);
             return (sellPrice != 0 ? sellPrice : -1);
         } else if (split[sellPart].equals("free")) {
@@ -79,7 +79,7 @@ public class SignUtil {
     }
 
     public static int itemAmount(String text) {
-        if (Numerical.isInteger(text)) {
+        if (uNumber.isInteger(text)) {
             int amount = Integer.parseInt(text);
             return (amount >= 1 ? amount : 1);
         } else {

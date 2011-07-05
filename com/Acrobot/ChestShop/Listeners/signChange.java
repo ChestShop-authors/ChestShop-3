@@ -8,9 +8,9 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
-import com.Acrobot.ChestShop.Utils.BlockSearch;
-import com.Acrobot.ChestShop.Utils.Numerical;
-import com.Acrobot.ChestShop.Utils.SignUtil;
+import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uNumber;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -30,7 +30,7 @@ public class signChange extends BlockListener {
         Block signBlock = event.getBlock();
         String[] line = event.getLines();
 
-        Boolean isAlmostReady = SignUtil.isValidPreparedSign(event.getLines());
+        Boolean isAlmostReady = uSign.isValidPreparedSign(event.getLines());
 
         Player player = event.getPlayer();
 
@@ -70,14 +70,14 @@ public class signChange extends BlockListener {
                     return;
                 }
                 Block secondSign = signBlock.getFace(BlockFace.DOWN);
-                if (!SignUtil.isSign(secondSign) || !SignUtil.isValid((Sign) secondSign.getState())) {
+                if (!uSign.isSign(secondSign) || !uSign.isValid((Sign) secondSign.getState())) {
                     dropSign(event);
                 }
             }
             return;
         }
 
-        Boolean isReady = SignUtil.isValid(line);
+        Boolean isReady = uSign.isValid(line);
 
         if (line[0].isEmpty() || (!line[0].startsWith(player.getName()) && !Permission.has(player, Permission.ADMIN))) {
             event.setLine(0, player.getName());
@@ -85,7 +85,7 @@ public class signChange extends BlockListener {
 
         line = event.getLines();
 
-        boolean isAdminShop = SignUtil.isAdminShop(line[0]);
+        boolean isAdminShop = uSign.isAdminShop(line[0]);
 
         if (!isReady) {
             int prices = line[2].split(":").length;
@@ -98,7 +98,7 @@ public class signChange extends BlockListener {
         }
 
         String[] split = line[3].split(":");
-        if (Numerical.isInteger(split[0])) {
+        if (uNumber.isInteger(split[0])) {
             String matName = mat.name();
             if (split.length == 2) {
                 int length = matName.length();
@@ -112,7 +112,7 @@ public class signChange extends BlockListener {
             }
         }
 
-        Chest chest = BlockSearch.findChest(signBlock);
+        Chest chest = uBlock.findChest(signBlock);
 
         if (!isAdminShop) {
             if (chest == null) {

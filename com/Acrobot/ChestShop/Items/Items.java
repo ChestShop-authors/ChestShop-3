@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Items;
 
-import com.Acrobot.ChestShop.Utils.Numerical;
+import com.Acrobot.ChestShop.Utils.uNumber;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 public class Items {
 
     public static Material getMat(String itemName) {
-        if (Numerical.isInteger(itemName)) {
+        if (uNumber.isInteger(itemName)) {
             return Material.getMaterial(Integer.parseInt(itemName));
         }
         int length = 256;
@@ -36,7 +36,7 @@ public class Items {
         }
         String[] split = itemName.split(":");
         itemName = split[0];
-        short dataValue = (short) (split.length > 1 && Numerical.isInteger(split[1]) ? Integer.parseInt(split[1]) : 0);
+        short dataValue = (short) (split.length > 1 && uNumber.isInteger(split[1]) ? Integer.parseInt(split[1]) : 0);
 
         Material mat;
 

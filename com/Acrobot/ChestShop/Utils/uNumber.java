@@ -5,7 +5,7 @@ package com.Acrobot.ChestShop.Utils;
  *
  * @author Acrobot
  */
-public class Numerical {
+public class uNumber {
     public static boolean isInteger(String string) {
         try {
             Integer.parseInt(string);

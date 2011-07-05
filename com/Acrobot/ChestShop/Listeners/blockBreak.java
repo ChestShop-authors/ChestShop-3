@@ -2,8 +2,8 @@ package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
-import com.Acrobot.ChestShop.Utils.BlockSearch;
-import com.Acrobot.ChestShop.Utils.SignUtil;
+import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ public class blockBreak extends BlockListener {
             return;
         }
 
-        if (SignUtil.isSign(block)) {
+        if (uSign.isSign(block)) {
             Sign currentSign = (Sign) block.getState();
             if (RestrictedSign.isRestricted(currentSign)) {
                 event.setCancelled(true);
@@ -32,7 +32,7 @@ public class blockBreak extends BlockListener {
             currentSign.update(true);
         }
 
-        Sign sign = BlockSearch.findSign(block);
+        Sign sign = uBlock.findSign(block);
 
         if (sign != null) {
             if (!player.getName().equals(sign.getLine(0))) {

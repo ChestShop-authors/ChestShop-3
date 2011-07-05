@@ -9,7 +9,7 @@ import org.bukkit.block.Sign;
 /**
  * @author Acrobot
  */
-public class BlockSearch {
+public class uBlock {
 
     static BlockFace[] chestFaces = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
     static BlockFace[] shopFaces = {BlockFace.DOWN, BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH, BlockFace.SELF};
@@ -32,9 +32,9 @@ public class BlockSearch {
     public static Sign findSign(Block block) {
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getFace(bf);
-            if (SignUtil.isSign(faceBlock)) {
+            if (uSign.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
-                if (SignUtil.isValid(sign)) {
+                if (uSign.isValid(sign)) {
                     return sign;
                 }
             }

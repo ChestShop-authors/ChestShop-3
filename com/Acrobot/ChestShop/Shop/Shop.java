@@ -8,8 +8,8 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Utils.InventoryUtil;
-import com.Acrobot.ChestShop.Utils.SignUtil;
+import com.Acrobot.ChestShop.Utils.uInventory;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,10 +30,10 @@ public class Shop {
         this.stock = itemStacks[0];
         this.durability = stock.getDurability();
         this.chest = chest;
-        this.buyPrice = SignUtil.buyPrice(sign.getLine(2));
-        this.sellPrice = SignUtil.sellPrice(sign.getLine(2));
+        this.buyPrice = uSign.buyPrice(sign.getLine(2));
+        this.sellPrice = uSign.sellPrice(sign.getLine(2));
         this.owner = sign.getLine(0);
-        this.stockAmount = SignUtil.itemAmount(sign.getLine(1));
+        this.stockAmount = uSign.itemAmount(sign.getLine(1));
     }
 
     public boolean buy(Player player) {
@@ -83,7 +83,7 @@ public class Shop {
                 .replace("%owner", owner)
                 .replace("%price", formatedPrice));
 
-        InventoryUtil.add(player.getInventory(), stock, stockAmount);
+        uInventory.add(player.getInventory(), stock, stockAmount);
         Logging.logTransaction(true, this, player);
         player.updateInventory();
 
@@ -122,7 +122,7 @@ public class Shop {
             return false;
         }
 
-        if (InventoryUtil.amount(player.getInventory(), stock, durability) < stockAmount) {
+        if (uInventory.amount(player.getInventory(), stock, durability) < stockAmount) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
             return false;
         }
@@ -147,7 +147,7 @@ public class Shop {
                 .replace("%buyer", owner)
                 .replace("%price", formatedBalance));
 
-        InventoryUtil.remove(player.getInventory(), stock, stockAmount, durability);
+        uInventory.remove(player.getInventory(), stock, stockAmount, durability);
         Logging.logTransaction(false, this, player);
         player.updateInventory();
 
@@ -162,7 +162,7 @@ public class Shop {
     }
 
     private String getOwnerAccount() {
-        if (SignUtil.isAdminShop(owner)) {
+        if (uSign.isAdminShop(owner)) {
             return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
         } else {
             return owner;
@@ -170,7 +170,7 @@ public class Shop {
     }
 
     private boolean isAdminShop() {
-        return SignUtil.isAdminShop(owner);
+        return uSign.isAdminShop(owner);
     }
 
     private boolean hasEnoughStock() {
@@ -178,7 +178,7 @@ public class Shop {
     }
 
     private boolean stockFitsPlayer(Player player) {
-        return InventoryUtil.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
+        return uInventory.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
     }
 
     private boolean stockFitsChest(ChestObject chest) {

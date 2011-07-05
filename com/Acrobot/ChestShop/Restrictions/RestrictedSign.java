@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Restrictions;
 
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Utils.SignUtil;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class RestrictedSign {
     public static boolean isRestricted(Sign sign) {
         Block blockUp = sign.getBlock().getFace(BlockFace.UP);
-        return SignUtil.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
+        return uSign.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
     }
 
     public static boolean isRestricted(String[] lines) {
@@ -22,7 +22,7 @@ public class RestrictedSign {
 
     public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getFace(BlockFace.UP);
-        if (Permission.permissions == null || !SignUtil.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) {
+        if (Permission.permissions == null || !uSign.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) {
             return true;
         }
         String world = blockUp.getWorld().getName();

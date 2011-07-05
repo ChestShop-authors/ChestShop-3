@@ -32,7 +32,7 @@ public class Logging {
 
     public static void logTransaction(boolean isBuying, Shop shop, Player player) {
         log(player.getName() + (isBuying ? " bought " : " sold ") + shop.stockAmount + ' ' + shop.stock.getType() + " for " + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ") + shop.owner);
-        if (!Config.getBoolean(Property.USE_DATABASE)) {
+        if (!Config.getBoolean(Property.LOG_TO_DATABASE)) {
             return;
         }
         Transaction transaction = new Transaction();
