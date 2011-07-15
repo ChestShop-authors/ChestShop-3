@@ -1,10 +1,12 @@
 package com.nijikokun.register.payment.forChestShop;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.nijikokun.register.payment.forChestShop.methods.BOSE6;
+import com.nijikokun.register.payment.forChestShop.methods.BOSE7;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Methods.java
@@ -29,7 +31,7 @@ public class Methods {
     /**
      * Allows you to set which economy plugin is most preferred.
      * 
-     * @param preferred
+     * @param preferred - preferred economy plugin
      */
     public Methods(String preferred) {
         this._init();
@@ -42,7 +44,8 @@ public class Methods {
     private void _init() {
         this.addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
         this.addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
-        this.addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE());
+        this.addMethod("BOSEconomy", new BOSE6());
+        this.addMethod("BOSEconomy", new BOSE7());
         this.addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
     }
 
@@ -76,7 +79,7 @@ public class Methods {
 
         int count = 0;
         boolean match = false;
-        Plugin plugin = null;
+        Plugin plugin;
         PluginManager manager = method.getServer().getPluginManager();
 
         for(String name: this.getDependencies()) {

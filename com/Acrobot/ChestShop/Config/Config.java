@@ -1,31 +1,27 @@
 package com.Acrobot.ChestShop.Config;
 
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Logging.Logging;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
 
 /**
  * @author Acrobot
  */
 public class Config {
-    private static File configFile = new File(ChestShop.folder, "config.yml");
-    private static File langFile = new File(ChestShop.folder, "local.yml");
+    private static File configFile = new File("plugins/ChestShop", "config.yml");
+    private static File langFile = new File("plugins/ChestShop", "local.yml");
 
     private static Configuration config = new Configuration(configFile);
     private static Configuration language = new Configuration(langFile);
 
-    public static HashMap<String, Object> defaultValues = new HashMap<String, Object>();
-
 
     public static void setUp() {
         config.load();
-        for (Property def : com.Acrobot.ChestShop.Config.Property.values()) {
+        for (Property def : Property.values()) {
             if (config.getProperty(def.name()) == null) {
-                writeToFile(def.name() + ": " + def.getValue() + "               #" + def.getComment(), configFile);
+                writeToFile(def.name() + ": " + def.getValue() + "\n#" + def.getComment(), configFile);
             }
         }
         config.load();
@@ -75,5 +71,10 @@ public class Config {
 
     private static Object getValue(String node) {
         return config.getProperty(node);
+    }
+
+    public static String getPreferred() {
+        config.load();
+        return getString(Property.PREFERRED_ECONOMY_PLUGIN);
     }
 }

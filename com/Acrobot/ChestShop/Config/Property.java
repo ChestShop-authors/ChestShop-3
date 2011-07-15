@@ -4,6 +4,7 @@ package com.Acrobot.ChestShop.Config;
  * @author Acrobot
  */
 public enum Property {
+    PREFERRED_ECONOMY_PLUGIN("", "Preferred economy plugin (iConomy, BOSEconomy, Essentials). If you do not want to specify this, leave it blank."),
     REVERSE_BUTTONS(false, "If true, people will buy with left-click and sell with right-click."),
     SERVER_ECONOMY_ACCOUNT("", "Economy account's name you want Admin Shops to be assigned to"),
     ADMIN_SHOP_NAME("Admin Shop", "First line of your admin shop should look like this"),

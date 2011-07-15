@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Odd;
 import com.Acrobot.ChestShop.Permission;
@@ -22,7 +23,7 @@ import org.yi.acru.bukkit.Lockette.Lockette;
  */
 public class pluginEnable extends ServerListener {
 
-    public static Methods methods = new Methods();
+    public static Methods methods = new Methods(Config.getPreferred());
 
 
     public void onPluginEnable(PluginEnableEvent event) {

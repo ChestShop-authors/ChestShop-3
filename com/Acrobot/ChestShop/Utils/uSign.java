@@ -2,17 +2,27 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+
+import java.util.regex.Pattern;
 
 /**
  * @author Acrobot
  */
 public class uSign {
 
+    //static Pattern firstLine = Pattern.compile("^[A-Za-z0-9].+$");
+
+    static Pattern[] patterns = {
+            Pattern.compile("^$|^\\w.+$"),
+            Pattern.compile("[0-9]+"),
+            Pattern.compile(".+"),
+            Pattern.compile("[\\w :]+")
+    };
+    
     public static boolean isSign(Block block) {
-        return (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN);
+        return block.getState() instanceof Sign;
     }
 
     public static boolean isAdminShop(String owner) {
@@ -31,10 +41,14 @@ public class uSign {
         }
     }
 
-    public static boolean isValidPreparedSign(String[] line) {
-        try {
-            return !line[0].startsWith("[") && !line[0].endsWith("]") && !line[0].startsWith(":") && !line[3].split(":")[0].isEmpty() && uNumber.isInteger(line[1]) && line[2].split(":").length <= 2;
-        } catch (Exception e) {
+    public static boolean isValidPreparedSign(String[] lines){
+        try{
+            boolean toReturn = true;
+            for(int i = 0; i < 4; i++){
+                toReturn = toReturn && patterns[i].matcher(lines[i]).matches();
+            }
+            return toReturn;
+        } catch (Exception e){
             return false;
         }
     }

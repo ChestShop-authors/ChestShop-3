@@ -20,22 +20,26 @@ public class DataValue {
 
         MaterialData materialData = null;
 
-        switch (material) {
-            case SAPLING:
-            case LOG:
-                materialData = new Tree(TreeSpecies.valueOf(arg));
-                break;
-            case STEP:
-            case DOUBLE_STEP:
-                materialData = new Step(Items.getMat(arg));
-                break;
-            case WOOL:
-            case INK_SACK:
-                materialData = new Wool(DyeColor.valueOf(arg));
-                break;
-            case COAL:
-                materialData = new Coal(CoalType.valueOf(arg));
-                break;
+        try {
+            switch (material) {
+                case SAPLING:
+                case LOG:
+                    materialData = new Tree(TreeSpecies.valueOf(arg));
+                    break;
+                case STEP:
+                case DOUBLE_STEP:
+                    materialData = new Step(Items.getMaterial(arg));
+                    break;
+                case WOOL:
+                case INK_SACK:
+                    materialData = new Wool(DyeColor.valueOf(arg));
+                    break;
+                case COAL:
+                    materialData = new Coal(CoalType.valueOf(arg));
+                    break;
+            }
+        } catch (Exception e) {
+            return 0;
         }
 
         return (materialData == null ? 0 : materialData.getData());

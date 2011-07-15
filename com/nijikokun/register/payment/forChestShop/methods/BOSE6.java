@@ -4,7 +4,7 @@ import com.nijikokun.register.payment.forChestShop.Method;
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
-public class BOSE implements Method {
+public class BOSE6 implements Method {
     private BOSEconomy BOSEconomy;
 
     public BOSEconomy getPlugin() {
@@ -38,7 +38,7 @@ public class BOSE implements Method {
     }
 
     public boolean hasBankAccount(String bank, String name) {
-        return this.BOSEconomy.isBankOwner(bank, name);
+        return this.BOSEconomy.isBankOwner(bank, name) || this.BOSEconomy.isBankMember(bank, name);
     }
 
     public MethodAccount getAccount(String name) {
@@ -47,11 +47,12 @@ public class BOSE implements Method {
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
-        return new BOSEBankAccount(bank, name, BOSEconomy);
+        if(!hasBankAccount(bank, name)) return null;
+        return new BOSEBankAccount(bank, BOSEconomy);
     }
 
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("boseconomy") && plugin instanceof BOSEconomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("boseconomy") && plugin instanceof BOSEconomy && plugin.getDescription().getVersion().equals("0.6.2");
     }
 
     public void setPlugin(Plugin plugin) {
@@ -122,11 +123,9 @@ public class BOSE implements Method {
 
     public class BOSEBankAccount implements MethodBankAccount {
         private String bank;
-        private String name;
         private BOSEconomy BOSEconomy;
 
-        public BOSEBankAccount(String bank, String name, BOSEconomy bOSEconomy) {
-            this.name = name;
+        public BOSEBankAccount(String bank, BOSEconomy bOSEconomy) {
             this.bank = bank;
             this.BOSEconomy = bOSEconomy;
         }
@@ -140,36 +139,36 @@ public class BOSE implements Method {
         }
 
         public double balance() {
-            return Double.valueOf(this.BOSEconomy.getBankMoney(name));
+            return Double.valueOf(this.BOSEconomy.getBankMoney(bank));
         }
 
         public boolean set(double amount) {
             int IntAmount = (int)Math.ceil(amount);
-            return this.BOSEconomy.setBankMoney(name, IntAmount, true);
+            return this.BOSEconomy.setBankMoney(bank, IntAmount, true);
         }
 
         public boolean add(double amount) {
             int IntAmount = (int)Math.ceil(amount);
             int balance = (int)this.balance();
-            return this.BOSEconomy.setBankMoney(this.name, (balance + IntAmount), false);
+            return this.BOSEconomy.setBankMoney(bank, (balance + IntAmount), false);
         }
 
         public boolean subtract(double amount) {
             int IntAmount = (int)Math.ceil(amount);
             int balance = (int)this.balance();
-            return this.BOSEconomy.setBankMoney(this.name, (balance - IntAmount), false);
+            return this.BOSEconomy.setBankMoney(bank, (balance - IntAmount), false);
         }
 
         public boolean multiply(double amount) {
             int IntAmount = (int)Math.ceil(amount);
             int balance = (int)this.balance();
-            return this.BOSEconomy.setBankMoney(this.name, (balance * IntAmount), false);
+            return this.BOSEconomy.setBankMoney(bank, (balance * IntAmount), false);
         }
 
         public boolean divide(double amount) {
             int IntAmount = (int)Math.ceil(amount);
             int balance = (int)this.balance();
-            return this.BOSEconomy.setBankMoney(this.name, (balance / IntAmount), false);
+            return this.BOSEconomy.setBankMoney(bank, (balance / IntAmount), false);
         }
 
         public boolean hasEnough(double amount) {
