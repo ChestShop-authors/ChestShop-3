@@ -13,13 +13,13 @@ import java.util.List;
  * @author Acrobot
  */
 public class Generator implements Runnable {
-    private static String filePath = Config.getString(Property.STATISTICS_PAGE_PATH);
+    private static final String filePath = Config.getString(Property.STATISTICS_PAGE_PATH);
 
     private static double generationTime;
 
-    private static String header = fileToString("header");
-    private static String row = fileToString("row");
-    private static String footer = fileToString("footer");
+    private static final String header = fileToString("header");
+    private static final String row = fileToString("row");
+    private static final String footer = fileToString("footer");
 
     private static BufferedWriter buf;
 
@@ -27,19 +27,19 @@ public class Generator implements Runnable {
         generateStats();
     }
 
-    public static void fileStart() throws IOException {
+    private static void fileStart() throws IOException {
         FileWriter fw = new FileWriter(filePath);
         fw.write(header);
         fw.close();
     }
 
-    public static void fileEnd() throws IOException {
+    private static void fileEnd() throws IOException {
         FileWriter fw = new FileWriter(filePath, true);
         fw.write(footer.replace("%time", String.valueOf(generationTime)));
         fw.close();
     }
 
-    public static String fileToString(String fileName) {
+    private static String fileToString(String fileName) {
         try {
             File f = new File(ChestShop.folder + "/HTML/" + fileName + ".html");
             FileReader rd = new FileReader(f);
@@ -51,58 +51,46 @@ public class Generator implements Runnable {
         }
     }
 
-    public static double generateItemTotal(int itemID, boolean bought, boolean sold) {
+    private static double generateItemTotal(int itemID, boolean bought, boolean sold) {
         double amount = 0;
         List<Transaction> list;
-        if (bought) {
-            list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 1).eq("itemID", itemID).findList();
-        } else if (sold) {
-            list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 0).eq("itemID", itemID).findList();
-        } else {
-            list = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).findList();
-        }
-        for (Transaction t : list) {
-            amount += t.getAmount();
-        }
+        if (bought)
+        list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 1).eq("itemID", itemID).findList();
+        else if (sold) list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 0).eq("itemID", itemID).findList();
+        else list = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).findList();
+        
+        for (Transaction t : list) amount += t.getAmount();
         return amount;
     }
 
-    public static double generateTotalBought(int itemID) {
+    private static double generateTotalBought(int itemID) {
         return generateItemTotal(itemID, true, false);
     }
 
-    public static double generateTotalSold(int itemID) {
+    private static double generateTotalSold(int itemID) {
         return generateItemTotal(itemID, false, true);
     }
 
-    public static double generateItemTotal(int itemID) {
+    private static double generateItemTotal(int itemID) {
         return generateItemTotal(itemID, false, false);
     }
 
-    public static float generateAveragePrice(int itemID, boolean buy) {
+    private static float generateAveragePrice(int itemID) {
         float price = 0;
-        List<Transaction> prices = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).eq("buy", buy).findList();
-        for (Transaction t : prices) {
-            price += t.getAveragePricePerItem();
-        }
+        List<Transaction> prices = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).eq("buy", true).findList();
+        for (Transaction t : prices) price += t.getAveragePricePerItem();
         float toReturn = price / prices.size();
         return (!Float.isNaN(toReturn) ? toReturn : 0);
     }
 
-    /*public static float generateAverageSellPrice(int itemID){
-        return generateAveragePrice(itemID, false);
-    }*/
-
-    public static float generateAverageBuyPrice(int itemID) {
-        return generateAveragePrice(itemID, true);
+    private static float generateAverageBuyPrice(int itemID) {
+        return generateAveragePrice(itemID);
     }
 
-    public static void generateItemStats(int itemID) throws IOException {
+    private static void generateItemStats(int itemID) throws IOException {
         double total = generateItemTotal(itemID);
 
-        if (total == 0) {
-            return;
-        }
+        if (total == 0) return;
 
         double bought = generateTotalBought(itemID);
         double sold = generateTotalSold(itemID);
@@ -123,17 +111,14 @@ public class Generator implements Runnable {
                 .replace("%pricePerItem", String.valueOf(buyPrice)));
     }
 
-    public static void generateStats() {
+    private static void generateStats() {
         try {
             fileStart();
 
             buf = new BufferedWriter(new FileWriter(filePath, true));
-
             long genTime = System.currentTimeMillis();
-
-            for (Material m : Material.values()) {
-                generateItemStats(m.getId());
-            }
+            for (Material m : Material.values()) generateItemStats(m.getId());
+            
             buf.close();
 
             generationTime = (System.currentTimeMillis() - genTime) / 1000;

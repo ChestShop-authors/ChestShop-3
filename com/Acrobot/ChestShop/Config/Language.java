@@ -1,15 +1,11 @@
 package com.Acrobot.ChestShop.Config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Acrobot
  */
-public enum Language {
+public enum Language{
     prefix("&a[Shop] &f"),
     iteminfo("&aItem Information:&f"),
-    options("&aCustomizable options: "),
 
     ACCESS_DENIED("You don't have permission to do that!"),
 
@@ -41,12 +37,10 @@ public enum Language {
     SHOP_CREATED("Shop successfully created!"),
 
     NO_PERMISSION("You don't have permissions to do that!"),
-    NAME_TOO_LONG("Unfortunately, your name is too long :( Please wait for newer shop version!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!");
 
 
-    private String text;
-    private static final Map<String, Language> names = new HashMap<String, Language>();
+    private final String text;
 
     private Language(String def) {
         text = def;
@@ -54,15 +48,5 @@ public enum Language {
 
     public String toString() {
         return text;
-    }
-
-    public static Language lookup(String name) {
-        return names.get(name);
-    }
-
-    static {
-        for (Language def : values()) {
-            names.put(def.name(), def);
-        }
     }
 }

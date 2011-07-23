@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.ChestShop.Commands.ItemInfo;
-import com.Acrobot.ChestShop.Commands.Options;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
@@ -10,18 +9,18 @@ import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
-import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Protection.MaskChest;
 import com.avaje.ebean.EbeanServer;
+import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.config.Configuration;
 
-import javax.persistence.PersistenceException;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,32 +30,14 @@ import java.util.List;
  */
 public class ChestShop extends JavaPlugin {
 
-    private final pluginEnable pluginEnable = new pluginEnable();
-    private final blockBreak blockBreak = new blockBreak();
-    private final blockPlace blockPlace = new blockPlace();
-    private final signChange signChange = new signChange();
-    private final pluginDisable pluginDisable = new pluginDisable();
-    private final playerInteract playerInteract = new playerInteract();
+    public static File folder = new File("plugins/ChestShop"); //In case Bukkit fails
+    private static EbeanServer DB;
 
-    public static File folder;
-    public static EbeanServer db;
-
-    private static PluginDescriptionFile desc;
+    private static PluginDescriptionFile description;
     private static Server server;
 
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
-
-        //Register our events
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_PLACE, blockPlace, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.SIGN_CHANGE, signChange, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerInteract, Event.Priority.Highest, this);
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginEnable, Event.Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginDisable, Event.Priority.Monitor, this);
-
-        desc = this.getDescription();  //Description of the plugin
-        server = getServer();          //Setting out server variable
 
         //Yep, set up our folder!
         folder = getDataFolder();
@@ -64,17 +45,27 @@ public class ChestShop extends JavaPlugin {
         //Set up our config file!
         Config.setUp();
 
+        //Register our events
+        pm.registerEvent(Event.Type.BLOCK_BREAK, new blockBreak(), Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_PLACE, new blockPlace(), Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.SIGN_CHANGE, new signChange(), Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest, this);
+        pm.registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable(), Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLUGIN_DISABLE, new pluginDisable(), Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, new blockBreak(), Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, new blockBreak(), Event.Priority.Normal, this);
 
-        //Now set up our database for storing transactions!
-        setupDBfile();
-        if (Config.getBoolean(Property.LOG_TO_DATABASE)) {
+        description = this.getDescription();  //Description of the plugin
+        server = getServer();          //Setting out server variable
+
+        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) { //Now set up our database for storing transactions!
             setupDB();
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
 
             if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
-                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, 300L);
+                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
             }
-            db = getDatabase();
+            DB = database.getDatabase();
         }
 
         //Now set up our logging to file!
@@ -90,7 +81,6 @@ public class ChestShop extends JavaPlugin {
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
-        getCommand("chestOptions").setExecutor(new Options());
         getCommand("csVersion").setExecutor(new Version());
 
         System.out.println('[' + getPluginName() + "] version " + getVersion() + " initialized!");
@@ -101,32 +91,39 @@ public class ChestShop extends JavaPlugin {
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
-    private void setupDB() {
-        try {
-            getDatabase().find(Transaction.class).findRowCount();
-        } catch (PersistenceException pe) {
-            Logging.log("Installing database for " + getPluginName());
-            installDDL();
-        }
+    private static Configuration getBukkitConfig() {
+        Configuration config = new Configuration(new File("bukkit.yml"));
+        config.load();
+        return config;
     }
 
-    private static void setupDBfile() {
-        File file = new File("ebean.properties");
+    private Database database;
 
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (Exception e) {
-                Logging.log("Failed to create ebean.properties file!");
+    private void setupDB() {
+        database = new Database(this) {
+            protected java.util.List<Class<?>> getDatabaseClasses() {
+                List<Class<?>> list = new LinkedList<Class<?>>();
+                list.add(Transaction.class);
+                return list;
             }
-        }
+        };
+
+        Configuration config = getBukkitConfig();
+
+        database.initializeDatabase(
+                config.getString("database.driver"),
+                config.getString("database.url"),
+                config.getString("database.username"),
+                config.getString("database.password"),
+                config.getString("database.isolation"),
+                false,
+                false
+        );
     }
 
     @Override
-    public List<Class<?>> getDatabaseClasses() {
-        List<Class<?>> list = new ArrayList<Class<?>>();
-        list.add(Transaction.class);
-        return list;
+    public EbeanServer getDatabase() {
+        return database.getDatabase();
     }
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -135,14 +132,14 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static String getVersion() {
-        return desc.getVersion();
+        return description.getVersion();
     }
 
     public static String getPluginName() {
-        return desc.getName();
+        return description.getName();
     }
 
     public static EbeanServer getDB() {
-        return db;
+        return DB;
     }
 }

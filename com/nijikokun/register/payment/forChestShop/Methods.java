@@ -53,7 +53,7 @@ public class Methods {
         return Dependencies;
     }
 
-    public Method createMethod(Plugin plugin) {
+    Method createMethod(Plugin plugin) {
         for (Method method: Methods) {
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
@@ -82,7 +82,7 @@ public class Methods {
         Plugin plugin;
         PluginManager manager = method.getServer().getPluginManager();
 
-        for(String name: this.getDependencies()) {
+        for(String name: this.Dependencies) {
             if(hasMethod()) break;
             if(method.getDescription().getName().equals(name)) plugin = method; else  plugin = manager.getPlugin(name);
             if(plugin == null) continue;

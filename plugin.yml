@@ -2,8 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-database: true
-version: 3.00 BETA 9
+version: 3.00 BETA 10
 
 
 author: Acrobot
@@ -21,9 +20,33 @@ commands:
     description: Shows the ChestShop's version
     usage: |
            /<command>
-  chestOptions:
-    aliases: [coptions,cop,cpref]
-    description: Sets ChestShop's preferences - Not implemented yet
-    usage: |
-           /<command> (option) (value)
-           () - optional
+
+permissions:
+  ChestShop.*:
+    description: Gives access to all ChestShop permissions
+    default: op
+    children:
+        ChestShop.shop.*: true
+        ChestShop.admin: true
+  ChestShop.shop.*:
+    description: Gives access to all user ChestShop permissions
+    children:
+        ChestShop.shop.create: true
+        ChestShop.shop.buy: true
+        ChestShop.shop.sell: true
+    default: true
+  ChestShop.shop.create.(itemID):
+    description: Allows user to create a shop that sells item with itemID like in the permission node (replace (itemID) with NUMERICAL item ID)
+  ChestShop.shop.exclude.(itemID):
+    description: Denies creation of a shop that sells item with itemID like in the permission node (replace (itemID) with NUMERICAL item ID)
+  ChestShop.shop.create:
+    description: Allows user to create a shop that sells any item
+  ChestShop.shop.buy:
+    description: Allows user to buy from a shop
+  ChestShop.shop.sell:
+    description: Allows user to sell to a shop
+  ChestShop.admin:
+    description: Allows user to modify/destroy other stores and create an Admin Shops
+    default: op
+  ChestShop.mod:
+    description: Allows user only to view other store chests, he can't destroy them or create an Admin Shop

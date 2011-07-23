@@ -11,7 +11,7 @@ import java.util.List;
  * @author Acrobot
  */
 public class Queue implements Runnable {
-    private static List<Transaction> queue = new LinkedList<Transaction>();
+    private static final List<Transaction> queue = new LinkedList<Transaction>();
 
     public static void addToQueue(Transaction t) {
         queue.add(t);

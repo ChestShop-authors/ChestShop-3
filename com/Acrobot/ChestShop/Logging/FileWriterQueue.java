@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Logging;
 import com.Acrobot.ChestShop.ChestShop;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
  * @author Acrobot
  */
 public class FileWriterQueue implements Runnable {
-    private static List<String> queue = new LinkedList<String>();
-    public static String filePath = ChestShop.folder + "/ChestShop.log";
+    private static final List<String> queue = new LinkedList<String>();
+    private static final String filePath = new File(ChestShop.folder, "ChestShop.log").getPath();
 
     public static void addToQueue(String message) {
         queue.add(message);

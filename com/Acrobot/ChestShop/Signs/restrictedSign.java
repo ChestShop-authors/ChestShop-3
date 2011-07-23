@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Restrictions;
+package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.uSign;
@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 /**
  * @author Acrobot
  */
-public class RestrictedSign {
-    public static boolean isRestricted(Sign sign) {
-        Block blockUp = sign.getBlock().getFace(BlockFace.UP);
+public class restrictedSign {
+    public static boolean isRestrictedShop(Sign sign) {
+        Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
         return uSign.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
     }
 
@@ -20,20 +20,22 @@ public class RestrictedSign {
         return lines[0].equalsIgnoreCase("[restricted]");
     }
 
+    public static boolean isRestricted(Sign sign) {
+        return sign.getLine(0).equalsIgnoreCase("[restricted]");
+    }
+
     public static boolean canAccess(Sign sign, Player player) {
-        Block blockUp = sign.getBlock().getFace(BlockFace.UP);
-        if (Permission.permissions == null || !uSign.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) {
-            return true;
-        }
+        Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
+        if (Permission.permissions == null || !uSign.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) return true;
+        
         String world = blockUp.getWorld().getName();
         String playerName = player.getName();
 
         sign = (Sign) blockUp.getState();
 
-        boolean result = false;
         for (int i = 1; i <= 3; i++) {
-            result = result || Permission.permissions.inGroup(world, playerName, sign.getLine(i));
+            if(Permission.permissions.inGroup(world, playerName, sign.getLine(i))) return true;
         }
-        return result;
+        return false;
     }
 }

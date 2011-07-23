@@ -1,6 +1,8 @@
 package com.Acrobot.ChestShop.Config;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Logging.Logging;
+import com.Acrobot.ChestShop.Utils.uLongName;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
@@ -10,32 +12,51 @@ import java.io.FileWriter;
  * @author Acrobot
  */
 public class Config {
-    private static File configFile = new File("plugins/ChestShop", "config.yml");
-    private static File langFile = new File("plugins/ChestShop", "local.yml");
-
-    private static Configuration config = new Configuration(configFile);
-    private static Configuration language = new Configuration(langFile);
-
+    private static File configFile;
+    private static File langFile;
+    private static Configuration config = new Configuration(new File(ChestShop.folder, "config.yml"));
+    private static Configuration language;
 
     public static void setUp() {
+        setUpConfigurations();
+
+        reloadConfig();
+        config.load();
+
+        reloadLanguage();
+        language.load();
+
+        uLongName.config = new Configuration(new File(ChestShop.folder, "longName.storage"));
+        uLongName.config.load();
+    }
+
+    private static void reloadConfig(){
         config.load();
         for (Property def : Property.values()) {
             if (config.getProperty(def.name()) == null) {
                 writeToFile(def.name() + ": " + def.getValue() + "\n#" + def.getComment(), configFile);
             }
         }
-        config.load();
+    }
 
+    private static void reloadLanguage(){
         language.load();
         for (Language def : Language.values()) {
             if (language.getProperty(def.name()) == null) {
                 writeToFile(def.name() + ": \"" + def.toString() + '\"', langFile);
             }
         }
-        language.load();
     }
 
-    public static void writeToFile(String string, File file) {
+    private static void setUpConfigurations(){
+        configFile = new File(ChestShop.folder, "config.yml");
+        langFile = new File(ChestShop.folder, "local.yml");
+
+        config = new Configuration(configFile);
+        language = new Configuration(langFile);
+    }
+
+    private static void writeToFile(String string, File file) {
         try {
             FileWriter fw = new FileWriter(file, true);
             fw.write('\n' + string);
@@ -61,7 +82,7 @@ public class Config {
         return config.getDouble(value.name(), -1);
     }
 
-    public static String getColored(String msg) {
+    private static String getColored(String msg) {
         return msg.replaceAll("&([0-9a-f])", "\u00A7$1");
     }
 
@@ -74,7 +95,9 @@ public class Config {
     }
 
     public static String getPreferred() {
+        config = new Configuration(new File("plugins/ChestShop", "config.yml"));
         config.load();
+        
         return getString(Property.PREFERRED_ECONOMY_PLUGIN);
     }
 }

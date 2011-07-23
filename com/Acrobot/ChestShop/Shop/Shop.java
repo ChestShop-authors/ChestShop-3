@@ -18,45 +18,45 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class Shop {
-    public ItemStack stock;
-    public short durability;
-    public int stockAmount;
-    public ChestObject chest;
-    public float buyPrice;
-    public float sellPrice;
-    public String owner;
+    public final ItemStack stock;
+    private final short durability;
+    public final int stockAmount;
+    private final ChestObject chest;
+    public final float buyPrice;
+    public final float sellPrice;
+    public final String owner;
 
-    public Shop(ChestObject chest, Sign sign, ItemStack... itemStacks) {
+    public Shop(ChestObject chest, boolean buy, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
         this.durability = stock.getDurability();
         this.chest = chest;
-        this.buyPrice = uSign.buyPrice(sign.getLine(2));
-        this.sellPrice = uSign.sellPrice(sign.getLine(2));
+        this.buyPrice = (buy ? uSign.buyPrice(sign.getLine(2)) : -1);
+        this.sellPrice = (!buy ? uSign.sellPrice(sign.getLine(2)) : -1);
         this.owner = sign.getLine(0);
         this.stockAmount = uSign.itemAmount(sign.getLine(1));
     }
 
-    public boolean buy(Player player) {
+    public void buy(Player player) {
         if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
-            return false;
+            return;
         }
         if (buyPrice == -1) {
             player.sendMessage(Config.getLocal(Language.NO_BUYING_HERE));
-            return false;
+            return;
         }
         if (!Permission.has(player, Permission.BUY)) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
-            return false;
+            return;
         }
         String playerName = player.getName();
         if (!Economy.hasEnough(playerName, buyPrice)) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
-            return false;
+            return;
         }
         if (!stockFitsPlayer(player)) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_INVENTORY));
-            return false;
+            return;
         }
 
         String materialName = stock.getType().name();
@@ -64,18 +64,16 @@ public class Shop {
         if (!isAdminShop() && !hasEnoughStock()) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_STOCK));
             sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
-            return false;
+            return;
         }
 
         String account = getOwnerAccount();
-        if (!account.isEmpty() && Economy.hasAccount(account)) {
-            Economy.add(account, buyPrice);
-        }
+        if (!account.isEmpty() && Economy.hasAccount(account)) Economy.add(account, buyPrice);
+
         Economy.substract(playerName, buyPrice);
 
-        if (!isAdminShop()) {
-            chest.removeItem(stock, durability, stockAmount);
-        }
+        if (!isAdminShop()) chest.removeItem(stock, durability, stockAmount);
+
         String formatedPrice = Economy.formatBalance(buyPrice);
         player.sendMessage(Config.getLocal(Language.YOU_BOUGHT_FROM_SHOP)
                 .replace("%amount", String.valueOf(stockAmount))
@@ -92,49 +90,42 @@ public class Shop {
                 .replace("%item", materialName)
                 .replace("%buyer", playerName)
                 .replace("%price", formatedPrice));
-        return true;
     }
 
-    public boolean sell(Player player) {
+    public void sell(Player player) {
         if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
-            return false;
+            return;
         }
         if (sellPrice == -1) {
             player.sendMessage(Config.getLocal(Language.NO_SELLING_HERE));
-            return false;
+            return;
         }
         if (!Permission.has(player, Permission.SELL)) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
-            return false;
+            return;
         }
+        
         String account = getOwnerAccount();
         boolean accountExists = !account.isEmpty() && Economy.hasAccount(account);
 
-        if (accountExists) {
-            if (!Economy.hasEnough(account, sellPrice)) {
-                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
-                return false;
-            }
+        if (accountExists && !Economy.hasEnough(account, sellPrice)) {
+            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
+            return;
         }
         if (!isAdminShop() && !stockFitsChest(chest)) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_CHEST));
-            return false;
+            return;
         }
 
         if (uInventory.amount(player.getInventory(), stock, durability) < stockAmount) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
-            return false;
+            return;
         }
 
 
-        if (accountExists) {
-            Economy.substract(account, sellPrice);
-        }
-
-        if (!isAdminShop()) {
-            chest.addItem(stock, stockAmount);
-        }
+        if (accountExists) Economy.substract(account, sellPrice);
+        if (!isAdminShop()) chest.addItem(stock, stockAmount);
 
         Economy.add(player.getName(), sellPrice);
 
@@ -156,17 +147,10 @@ public class Shop {
                 .replace("%item", materialName)
                 .replace("%seller", player.getName())
                 .replace("%price", formatedBalance));
-
-
-        return true;
     }
 
     private String getOwnerAccount() {
-        if (uSign.isAdminShop(owner)) {
-            return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
-        } else {
-            return owner;
-        }
+        return uSign.isAdminShop(owner) ? Config.getString(Property.SERVER_ECONOMY_ACCOUNT) : owner;
     }
 
     private boolean isAdminShop() {

@@ -9,11 +9,9 @@ import org.bukkit.material.*;
 /**
  * @author Acrobot
  */
-public class DataValue {
+class DataValue {
     public static byte get(String arg, Material material) {
-        if (material == null) {
-            return 0;
-        }
+        if (material == null) return 0;
 
         arg = arg.toUpperCase().replace(" ", "_");
 

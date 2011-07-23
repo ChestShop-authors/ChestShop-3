@@ -14,14 +14,15 @@ public enum Property {
     GENERATE_STATISTICS_PAGE(false, "If true, plugin will generate shop statistics webpage."),
     STATISTICS_PAGE_PATH("plugins/ChestShop/website.html", "Where should your generated website be saved?"),
     RECORD_TIME_TO_LIVE(600, "How long should transaction information be stored?"),
+    STATISTICS_PAGE_GENERATION_INTERVAL(60, "How often should the website be generated?"),
     USE_BUILT_IN_PROTECTION(true, "Do you want to use built-in protection against chest destruction?"),
     PROTECT_CHEST_WITH_LWC(false, "Do you want to protect shop chests with LWC?"),
     PROTECT_SIGN_WITH_LWC(false, "Do you want to protect shop signs with LWC?"),
     MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!");
 
 
-    private Object value;
-    private String comment;
+    private final Object value;
+    private final String comment;
 
     private Property(Object value, String comment) {
         this.value = value;

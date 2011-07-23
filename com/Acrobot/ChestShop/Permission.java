@@ -23,16 +23,13 @@ public enum Permission {
     public static PermissionHandler permissions;
 
     public static boolean has(Player player, Permission permission) {
-        String node = permission.permission;
-        return has(player, node);
+        return has(player, permission.permission);
     }
 
     public static boolean has(Player player, String node) {
-        if (permissions != null) {
-            return permissions.has(player, node);
-        } else {
-            return !node.contains("exclude") && ((!node.contains("admin") && !node.contains("mod")) || player.isOp());
-        }
+        //return !node.contains("exclude") && !node.contains ("create.") && ((!node.contains("admin") && !node.contains("mod")) || player.isOp());
+        if (permissions != null) return permissions.has(player, node);
+        return player.hasPermission(node);
     }
 
     public String toString() {

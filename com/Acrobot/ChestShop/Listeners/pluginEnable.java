@@ -23,8 +23,7 @@ import org.yi.acru.bukkit.Lockette.Lockette;
  */
 public class pluginEnable extends ServerListener {
 
-    public static Methods methods = new Methods(Config.getPreferred());
-
+    public static final Methods methods = new Methods(Config.getPreferred());
 
     public void onPluginEnable(PluginEnableEvent event) {
 

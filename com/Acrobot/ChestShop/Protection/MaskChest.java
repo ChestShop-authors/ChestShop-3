@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -14,12 +15,13 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class MaskChest implements Runnable {
-    BlockFace[] bf = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+    private final BlockFace[] bf = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 
     public void run() {
         Player[] players = ChestShop.getBukkitServer().getOnlinePlayers();
 
         for (Player player : players) {
+            World world = player.getWorld();
             Location location = player.getLocation();
 
             int pX = location.getBlockX();
@@ -31,7 +33,7 @@ public class MaskChest implements Runnable {
             for (int x = -radius; x < radius; x++) {
                 for (int y = -radius; y < radius; y++) {
                     for (int z = -radius; z < radius; z++) {
-                        Block block = player.getWorld().getBlockAt(x + pX, y + pY, z + pZ);
+                        Block block = world.getBlockAt(x + pX, y + pY, z + pZ);
 
                         if (block.getType() == Material.CHEST) {
                             if (uBlock.findSign(block) != null) {
@@ -49,13 +51,11 @@ public class MaskChest implements Runnable {
         }
     }
 
-    Material returnNearestMat(Block block) {
+    private Material returnNearestMat(Block block) {
         for (BlockFace face : bf) {
-            Block faceBlock = block.getFace(face);
+            Block faceBlock = block.getRelative(face);
             Material type = faceBlock.getType();
-            if (type != Material.AIR && !uSign.isSign(faceBlock) && type != Material.CHEST) {
-                return type;
-            }
+            if (type != Material.AIR && !uSign.isSign(faceBlock) && type != Material.CHEST) return type;
         }
         return Material.CHEST;
     }

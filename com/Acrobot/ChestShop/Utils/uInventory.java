@@ -17,19 +17,13 @@ public class uInventory {
         Material itemMaterial = item.getType();
 
         int first = inv.first(itemMaterial);
-        if (first == -1) {
-            return amount;
-        }
+        if (first == -1) return amount;
 
         for (int slot = first; slot < inv.getSize(); slot++) {
-            if (amount <= 0) {
-                return 0;
-            }
+            if (amount <= 0) return 0;
 
             ItemStack currentItem = inv.getItem(slot);
-            if (currentItem == null || currentItem.getType() == Material.AIR) {
-                continue;
-            }
+            if (currentItem == null || currentItem.getType() == Material.AIR) continue;
 
             if (currentItem.getType() == itemMaterial && (durability == -1 || currentItem.getDurability() == durability)) {
                 int currentAmount = currentItem.getAmount();
@@ -53,8 +47,7 @@ public class uInventory {
     public static int add(Inventory inv, ItemStack item, int amount) {
         amount = (amount > 0 ? amount : 1);
 
-        Material itemMaterial = item.getType();
-        int maxStackSize = itemMaterial.getMaxStackSize();
+        int maxStackSize = item.getType().getMaxStackSize();
 
         if (amount <= maxStackSize) {
             item.setAmount(amount);
@@ -66,7 +59,6 @@ public class uInventory {
         for (int i = 0; i < Math.ceil(amount / maxStackSize); i++) {
             if (amount <= maxStackSize) {
                 item.setAmount(amount);
-                items.add(item);
                 return 0;
             } else {
                 item.setAmount(maxStackSize);
@@ -75,25 +67,17 @@ public class uInventory {
         }
 
         amount = 0;
-        for (ItemStack itemToAdd : items) {
-            amount += (!inv.addItem(itemToAdd).isEmpty() ? itemToAdd.getAmount() : 0);
-        }
+        for (ItemStack itemToAdd : items) amount += (!inv.addItem(itemToAdd).isEmpty() ? itemToAdd.getAmount() : 0);
 
         return amount;
     }
 
     public static int amount(Inventory inv, ItemStack item, short durability) {
+        if (!inv.contains(item.getType())) return 0;
+
         int amount = 0;
-        if (!inv.contains(item.getType())) {
-            return amount;
-        }
-        ItemStack[] contents = inv.getContents();
-        for (ItemStack i : contents) {
-            if (i != null) {
-                if (i.getType() == item.getType() && (durability == -1 || i.getDurability() == durability)) {
-                    amount += i.getAmount();
-                }
-            }
+        for (ItemStack i : inv.getContents()) {
+            if (i != null && i.getType() == item.getType() && (durability == -1 || i.getDurability() == durability)) amount += i.getAmount();
         }
         return amount;
     }
@@ -101,13 +85,10 @@ public class uInventory {
     public static int fits(Inventory inv, ItemStack item, int amount, short durability) {
         Material itemMaterial = item.getType();
         int maxStackSize = itemMaterial.getMaxStackSize();
-
         int amountLeft = amount;
 
         for (ItemStack currentItem : inv.getContents()) {
-            if (amountLeft <= 0) {
-                return 0;
-            }
+            if (amountLeft <= 0) return 0;
 
             if (currentItem == null || currentItem.getType() == Material.AIR) {
                 amountLeft -= maxStackSize;

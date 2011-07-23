@@ -3,15 +3,14 @@ package com.Acrobot.ChestShop.Chests;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uInventory;
 import org.bukkit.block.Chest;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Acrobot
  */
 public class MinecraftChest implements ChestObject {
-    Chest main;
-    Chest neighbor;
+    private final Chest main;
+    private final Chest neighbor;
 
     public MinecraftChest(Chest chest) {
         this.main = chest;
@@ -50,16 +49,12 @@ public class MinecraftChest implements ChestObject {
 
     public void addItem(ItemStack item, int amount) {
         int left = addItem(item, amount, main);
-        if (neighbor != null && left > 0) {
-            addItem(item, left, neighbor);
-        }
+        if (neighbor != null && left > 0) addItem(item, left, neighbor);
     }
 
     public void removeItem(ItemStack item, short durability, int amount) {
         int left = removeItem(item, durability, amount, main);
-        if (neighbor != null && left > 0) {
-            removeItem(item, durability, left, neighbor);
-        }
+        if (neighbor != null && left > 0) removeItem(item, durability, left, neighbor);
     }
 
     public int amount(ItemStack item, short durability) {
@@ -88,17 +83,14 @@ public class MinecraftChest implements ChestObject {
     }
 
     private static int fits(ItemStack item, int amount, short durability, Chest chest) {
-        Inventory inv = chest.getInventory();
-        return uInventory.fits(inv, item, amount, durability);
+        return uInventory.fits(chest.getInventory(), item, amount, durability);
     }
 
     private static int addItem(ItemStack item, int amount, Chest chest) {
-        Inventory inv = chest.getInventory();
-        return uInventory.add(inv, item, amount);
+        return uInventory.add(chest.getInventory(), item, amount);
     }
 
     private static int removeItem(ItemStack item, short durability, int amount, Chest chest) {
-        Inventory inv = chest.getInventory();
-        return uInventory.remove(inv, item, amount, durability);
+        return uInventory.remove(chest.getInventory(), item, amount, durability);
     }
 }

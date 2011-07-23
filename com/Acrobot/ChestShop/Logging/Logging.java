@@ -11,30 +11,32 @@ import org.bukkit.inventory.ItemStack;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Acrobot
  */
 public class Logging {
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final Logger logger = Logger.getLogger("ChestShop");
 
-    public static String getDateAndTime() {
+    private static String getDateAndTime() {
         Date date = new Date();
         return dateFormat.format(date);
     }
 
     public static void log(String string) {
-        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) {
-            System.out.println("[ChestShop] " + string);
-        }
-        FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
+        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) logger.log(Level.INFO,"[ChestShop] " + string);
+        if (Config.getBoolean(Property.LOG_TO_FILE)) FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
     }
 
     public static void logTransaction(boolean isBuying, Shop shop, Player player) {
         log(player.getName() + (isBuying ? " bought " : " sold ") + shop.stockAmount + ' ' + shop.stock.getType() + " for " + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ") + shop.owner);
-        if (!Config.getBoolean(Property.LOG_TO_DATABASE)) {
-            return;
-        }
+        if (Config.getBoolean(Property.LOG_TO_DATABASE)) logToDatabase(isBuying, shop, player);
+    }
+
+    private static void logToDatabase(boolean isBuying, Shop shop, Player player){
         Transaction transaction = new Transaction();
 
         transaction.setAmount(shop.stockAmount);

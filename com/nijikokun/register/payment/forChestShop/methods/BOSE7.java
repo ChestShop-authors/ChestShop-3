@@ -63,7 +63,7 @@ public class BOSE7 implements Method {
         BOSEconomy = (BOSEconomy)plugin;
     }
 
-    public class BOSEAccount implements MethodAccount {
+    public static class BOSEAccount implements MethodAccount {
         private String name;
         private BOSEconomy BOSEconomy;
 
@@ -120,7 +120,7 @@ public class BOSE7 implements Method {
         }
     }
 
-    public class BOSEBankAccount implements MethodBankAccount {
+    public static class BOSEBankAccount implements MethodBankAccount {
         private String bank;
         private BOSEconomy BOSEconomy;
 

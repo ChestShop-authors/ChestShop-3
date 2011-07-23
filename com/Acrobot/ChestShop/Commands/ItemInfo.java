@@ -15,19 +15,13 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ItemInfo implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        boolean isPlayer = (sender instanceof Player);
-
         if (args.length == 0) {
-            if (!isPlayer) {
-                return false;
-            }
+            if (!(sender instanceof Player)) return false;
             Player player = (Player) sender;
 
             ItemStack itemInHand = player.getItemInHand();
 
-            if (itemInHand.getType() == Material.AIR) {
-                return false;
-            }
+            if (itemInHand.getType() == Material.AIR) return false;
 
             player.sendMessage(Config.getLocal(Language.iteminfo));
             player.sendMessage(itemInHand.getTypeId() + ":" + itemInHand.getDurability() + " - " + itemInHand.getType().name());
@@ -36,9 +30,7 @@ public class ItemInfo implements CommandExecutor {
         } else {
             ItemStack item = Items.getItemStack(args[0]);
 
-            if (item == null) {
-                return false;
-            }
+            if (item == null) return false;
 
             sender.sendMessage(Config.getLocal(Language.iteminfo));
             sender.sendMessage(item.getTypeId() + ":" + item.getDurability() + " - " + item.getType().name());

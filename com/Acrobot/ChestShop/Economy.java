@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop;
 
+import com.Acrobot.ChestShop.Utils.uLongName;
 import com.nijikokun.register.payment.forChestShop.Method;
 
 /**
@@ -10,23 +11,23 @@ public class Economy {
     public static Method economy;
 
     public static boolean hasAccount(String p) {
-        return economy.hasAccount(p);
+        return economy.hasAccount(uLongName.getName(p));
     }
 
     public static void add(String name, float amount) {
-        economy.getAccount(name).add(amount);
+        economy.getAccount(uLongName.getName(name)).add(amount);
     }
 
     public static void substract(String name, float amount) {
-        economy.getAccount(name).subtract(amount);
+        economy.getAccount(uLongName.getName(name)).subtract(amount);
     }
 
     public static boolean hasEnough(String name, float amount) {
-        return economy.getAccount(name).hasEnough(amount);
+        return economy.getAccount(uLongName.getName(name)).hasEnough(amount);
     }
 
     public static double balance(String name) {
-        return economy.getAccount(name).balance();
+        return economy.getAccount(uLongName.getName(name)).balance();
     }
 
     public static String formatBalance(double amount) {

@@ -11,10 +11,7 @@ import java.util.regex.Pattern;
  * @author Acrobot
  */
 public class uSign {
-
-    //static Pattern firstLine = Pattern.compile("^[A-Za-z0-9].+$");
-
-    static Pattern[] patterns = {
+    private static final Pattern[] patterns = {
             Pattern.compile("^$|^\\w.+$"),
             Pattern.compile("[0-9]+"),
             Pattern.compile(".+"),
@@ -56,16 +53,16 @@ public class uSign {
     public static float buyPrice(String text) {
         text = text.replace(" ", "").toLowerCase();
 
-        int buyPart = (text.contains("b") ? 0 : -1);
-        if (buyPart == -1) {
-            return -1;
-        }
-        text = text.replace("b", "").replace("s", "");
         String[] split = text.split(":");
-        if (uNumber.isFloat(split[0])) {
-            float buyPrice = Float.parseFloat(split[0]);
+        int buyPart = (text.contains("b") ? (split[0].contains("b") ? 0 : 1) : -1);
+        if (buyPart == -1 || (buyPart == 1 && split.length != 2)) return -1;
+
+        split[buyPart] = split[buyPart].replace("b", "");
+
+        if (uNumber.isFloat(split[buyPart])) {
+            float buyPrice = Float.parseFloat(split[buyPart]);
             return (buyPrice != 0 ? buyPrice : -1);
-        } else if (split[0].equals("free")) {
+        } else if (split[buyPart].equals("free")) {
             return 0;
         }
 
@@ -75,14 +72,12 @@ public class uSign {
     public static float sellPrice(String text) {
         text = text.replace(" ", "").toLowerCase();
 
-        int sellPart = (text.contains("b") && text.contains("s") ? 1 : (text.contains("s") ? 0 : -1));
-        text = text.replace("b", "").replace("s", "");
         String[] split = text.split(":");
+        int sellPart = (text.contains("s") ? (split[0].contains("s") ? 0 : 1) : -1);
+        if(sellPart == -1 || (sellPart == 1 && split.length != 2)) return -1;
 
-        if (sellPart == -1 || (sellPart == 1 && split.length < 2)) {
-            return -1;
-        }
-
+        split[sellPart] = split[sellPart].replace("s", "");
+        
         if (uNumber.isFloat(split[sellPart])) {
             Float sellPrice = Float.parseFloat(split[sellPart]);
             return (sellPrice != 0 ? sellPrice : -1);
@@ -96,8 +91,6 @@ public class uSign {
         if (uNumber.isInteger(text)) {
             int amount = Integer.parseInt(text);
             return (amount >= 1 ? amount : 1);
-        } else {
-            return 1;
-        }
+        } else return 1;
     }
 }

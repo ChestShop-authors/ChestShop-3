@@ -7,8 +7,9 @@ import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
 import com.Acrobot.ChestShop.Protection.Security;
-import com.Acrobot.ChestShop.Restrictions.RestrictedSign;
+import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uNumber;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
@@ -33,21 +34,13 @@ public class signChange extends BlockListener {
         Boolean isAlmostReady = uSign.isValidPreparedSign(event.getLines());
 
         Player player = event.getPlayer();
-
         ItemStack stock = Items.getItemStack(line[3]);
-
-
         Material mat = stock == null ? null : stock.getType();
 
         boolean playerIsAdmin = Permission.has(player, Permission.ADMIN);
 
 
         if (isAlmostReady) {
-            if (player.getName().length() > 15) {
-                player.sendMessage(Config.getLocal(Language.NAME_TOO_LONG));
-                dropSign(event);
-                return;
-            }
             if (mat == null) {
                 player.sendMessage(Config.getLocal(Language.INCORRECT_ITEM_ID));
                 dropSign(event);
@@ -63,13 +56,13 @@ public class signChange extends BlockListener {
                 return;
             }
         } else {
-            if (RestrictedSign.isRestricted(event.getLines())) {
+            if (restrictedSign.isRestricted(event.getLines())) {
                 if (!playerIsAdmin) {
                     player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                     dropSign(event);
                     return;
                 }
-                Block secondSign = signBlock.getFace(BlockFace.DOWN);
+                Block secondSign = signBlock.getRelative(BlockFace.DOWN);
                 if (!uSign.isSign(secondSign) || !uSign.isValid((Sign) secondSign.getState())) {
                     dropSign(event);
                 }
@@ -84,7 +77,7 @@ public class signChange extends BlockListener {
         }
 
         line = event.getLines();
-
+        
         boolean isAdminShop = uSign.isAdminShop(line[0]);
 
         if (!isReady) {
@@ -155,10 +148,11 @@ public class signChange extends BlockListener {
             player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));
         }
 
+        uLongName.saveName(player.getName());
         player.sendMessage(Config.getLocal(Language.SHOP_CREATED));
     }
 
-    public static void dropSign(SignChangeEvent event) {
+    private static void dropSign(SignChangeEvent event) {
         event.setCancelled(true);
 
         Block block = event.getBlock();
