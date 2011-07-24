@@ -5,8 +5,8 @@ import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Default;
-import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
+import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
@@ -57,9 +57,9 @@ public class playerInteract extends PlayerListener {
 
         lastTransactionTime.put(player, System.currentTimeMillis());
 
-        String playerName = player.getName();
+        String playerName = uLongName.stripName(player.getName());
 
-        if (playerName.equals(sign.getLine(0)) || uLongName.stripName(playerName).equals(sign.getLine(0))) {
+        if (playerName.equals(sign.getLine(0))) {
             Chest chest1 = uBlock.findChest(sign);
             if (chest1 == null) {
                 player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));

@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +37,7 @@ public class ChestShop extends JavaPlugin {
     private static Server server;
 
     public void onEnable() {
+        blockBreak blockBreak = new blockBreak();
         PluginManager pm = getServer().getPluginManager();
 
         //Yep, set up our folder!
@@ -46,14 +47,18 @@ public class ChestShop extends JavaPlugin {
         Config.setUp();
 
         //Register our events
-        pm.registerEvent(Event.Type.BLOCK_BREAK, new blockBreak(), Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, new blockPlace(), Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, new signChange(), Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest, this);
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable(), Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, new pluginDisable(), Event.Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, new blockBreak(), Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, new blockBreak(), Event.Priority.Normal, this);
+
+        if(Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)){
+            pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockBreak, Event.Priority.Normal, this);
+            pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak, Event.Priority.Normal, this);
+            pm.registerEvent(Event.Type.ENTITY_EXPLODE, new entityExplode(), Event.Priority.Normal, this);
+        }
 
         description = this.getDescription();  //Description of the plugin
         server = getServer();          //Setting out server variable
@@ -65,7 +70,6 @@ public class ChestShop extends JavaPlugin {
             if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
                 getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
             }
-            DB = database.getDatabase();
         }
 
         //Now set up our logging to file!
@@ -97,12 +101,12 @@ public class ChestShop extends JavaPlugin {
         return config;
     }
 
-    private Database database;
+    private static Database database;
 
     private void setupDB() {
         database = new Database(this) {
             protected java.util.List<Class<?>> getDatabaseClasses() {
-                List<Class<?>> list = new LinkedList<Class<?>>();
+                List<Class<?>> list = new ArrayList<Class<?>>();
                 list.add(Transaction.class);
                 return list;
             }
@@ -117,8 +121,10 @@ public class ChestShop extends JavaPlugin {
                 config.getString("database.password"),
                 config.getString("database.isolation"),
                 false,
-                false
+                true
         );
+
+        DB = database.getDatabase();
     }
 
     @Override

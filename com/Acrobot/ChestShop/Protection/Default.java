@@ -31,7 +31,7 @@ public class Default implements Protection {
         if (sign != null) signLine = sign.getLine(0);
         if (neighborSign != null) signLine = neighborSign.getLine(0);
 
-        return playerName.equals(signLine) || uLongName.stripName(playerName).equals(signLine);
+        return uLongName.stripName(playerName).equals(signLine);
     }
 
     public boolean protect(String name, Block block) {

@@ -185,6 +185,8 @@ public abstract class Database {
             } catch (Exception ignored) {}
         }
 
+        if(databaseExists) return;
+
         //Fire "before drop" event
         try {
             beforeDropDatabase();

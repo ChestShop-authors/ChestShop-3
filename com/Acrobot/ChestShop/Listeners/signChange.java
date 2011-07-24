@@ -73,7 +73,7 @@ public class signChange extends BlockListener {
         Boolean isReady = uSign.isValid(line);
 
         if (line[0].isEmpty() || (!line[0].startsWith(player.getName()) && !Permission.has(player, Permission.ADMIN))) {
-            event.setLine(0, player.getName());
+            event.setLine(0, uLongName.stripName(player.getName()));
         }
 
         line = event.getLines();

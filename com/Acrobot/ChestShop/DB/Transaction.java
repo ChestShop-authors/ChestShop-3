@@ -23,6 +23,8 @@ public class Transaction {
     private float price;
     private long sec;
 
+    public Transaction() {}
+
     public float getAveragePricePerItem() {
         return price / amount;
     }
