@@ -21,6 +21,7 @@ public class LWCplugin implements Protection {
     }
 
     public boolean protect(String name, Block block) {
+        if (lwc.findProtection(block) != null) return false;
         lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), ProtectionTypes.PRIVATE, block.getWorld().getName(), name, "", block.getX(), block.getY(), block.getZ());
         return true;
     }

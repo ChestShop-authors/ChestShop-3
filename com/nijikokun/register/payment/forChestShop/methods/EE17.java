@@ -9,6 +9,16 @@ import com.nijikokun.register.payment.forChestShop.Method;
 
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Essentials 17 Implementation of Method
+ *
+ * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
+ * @author Snowleo
+ * @author Acrobot
+ * @author KHobbits
+ * @copyright (c) 2011
+ * @license AOL license <http://aol.nexua.org>
+ */
 public class EE17 implements Method {
     private Essentials Essentials;
 
@@ -65,7 +75,7 @@ public class EE17 implements Method {
     }
 
     public static class EEcoAccount implements MethodAccount {
-        private String name;
+        private final String name;
 
         public EEcoAccount(String name) {
             this.name = name;

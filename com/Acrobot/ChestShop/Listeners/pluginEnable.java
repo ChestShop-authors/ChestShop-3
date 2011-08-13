@@ -18,14 +18,27 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.yi.acru.bukkit.Lockette.Lockette;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Acrobot
  */
 public class pluginEnable extends ServerListener {
 
     public static final Methods methods = new Methods(Config.getPreferred());
+    private static final String lineStart = "[ChestShop] ";
+
+    private static List<String> pluginsToLoad = new LinkedList<String>(Arrays.asList(
+            "Permissions",
+            "LWC",
+            "Lockette",
+            "OddItem"
+    ));
 
     public void onPluginEnable(PluginEnableEvent event) {
+        LinkedList<String> toRemove = new LinkedList();
 
         //Economy plugins
         if (!methods.hasMethod()) {
@@ -35,51 +48,33 @@ public class pluginEnable extends ServerListener {
             }
         }
 
-        //Permissions
-        if (Permission.permissions == null) {
-            Plugin permissions = ChestShop.getBukkitServer().getPluginManager().getPlugin("Permissions");
-
-            if (permissions != null) {
-                Permission.permissions = ((Permissions) permissions).getHandler();
-                PluginDescriptionFile pDesc = permissions.getDescription();
-                System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
-            }
+        for (String pluginName : pluginsToLoad) {
+            Plugin plugin = ChestShop.getBukkitServer().getPluginManager().getPlugin(pluginName);
+            if (plugin == null) continue;
+            initializePlugin(pluginName, plugin);
+            toRemove.add(pluginName);
         }
 
-        //LWC
-        if (LWCplugin.lwc == null) {
-            Plugin lwcPlugin = ChestShop.getBukkitServer().getPluginManager().getPlugin("LWC");
+        for (String pluginName : toRemove) pluginsToLoad.remove(pluginName);
+    }
 
-            if (lwcPlugin != null) {
-                PluginDescriptionFile pDesc = lwcPlugin.getDescription();
-                LWCplugin.lwc = ((LWCPlugin) lwcPlugin).getLWC();
-                Security.protection = new LWCplugin();
-
-                System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
-            }
+    private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+        PluginDescriptionFile description = plugin.getDescription();
+        if (name.equals("Permissions")) {
+            if (Permission.permissions != null) return;
+            Permission.permissions = ((Permissions) plugin).getHandler();
+        } else if (name.equals("LWC")) {
+            if (LWCplugin.lwc != null) return;
+            LWCplugin.lwc = ((LWCPlugin) plugin).getLWC();
+            Security.protection = new LWCplugin();
+        } else if (name.equals("Lockette")) {
+            if (LockettePlugin.lockette != null) return;
+            LockettePlugin.lockette = (Lockette) plugin;
+            Security.protection = new LockettePlugin();
+        } else if (name.equals("OddItem")) {
+            if (Odd.oddItem != null) return;
+            Odd.oddItem = (OddItem) plugin;
         }
-
-        //OddItem
-        if (Odd.oddItem == null) {
-            Plugin oddItem = ChestShop.getBukkitServer().getPluginManager().getPlugin("OddItem");
-
-            if (oddItem != null) {
-                PluginDescriptionFile pDesc = oddItem.getDescription();
-                Odd.oddItem = (OddItem) ChestShop.getBukkitServer().getPluginManager().getPlugin("OddItem");
-                System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
-            }
-        }
-
-        //Lockette
-        if (LockettePlugin.lockette == null) {
-            Plugin lockette = ChestShop.getBukkitServer().getPluginManager().getPlugin("Lockette");
-
-            if (lockette != null) {
-                PluginDescriptionFile pDesc = lockette.getDescription();
-                LockettePlugin.lockette = ((Lockette) lockette);
-                Security.protection = new LockettePlugin();
-                System.out.println("[ChestShop] " + pDesc.getName() + " version " + pDesc.getVersion() + " loaded.");
-            }
-        }
+        System.out.println(lineStart + description.getName() + " version " + description.getVersion() + " loaded.");
     }
 }

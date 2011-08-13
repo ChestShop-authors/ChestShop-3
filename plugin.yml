@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.00 BETA 11
+version: 3.00
 
 
 author: Acrobot
@@ -13,13 +13,13 @@ commands:
     aliases: [iinfo]
     description: Lists item id and names
     usage: |
-           /<command> (item name/item ID/alias)
-           () - optional
+           /<command> §2(what's the item in hand?)
+           /<command> §712§f §2(what's the item with ID §712§2?)
+           /<command> §7log§f §2(what's the item ID of §7LOG§2?)
+
   csVersion:
-    aliases: [cv]
     description: Shows the ChestShop's version
-    usage: |
-           /<command>
+    usage: /<command>
 
 permissions:
   ChestShop.*:
@@ -37,8 +37,10 @@ permissions:
     default: true
   ChestShop.shop.create.(itemID):
     description: Allows user to create a shop that sells item with itemID like in the permission node (replace (itemID) with NUMERICAL item ID)
-  ChestShop.shop.exclude.(itemID):
-    description: Denies creation of a shop that sells item with itemID like in the permission node (replace (itemID) with NUMERICAL item ID)
+  ChestShop.shop.buy.(itemID):
+    description: Allows user to buy certain (itemID) from a shop (replace (itemID) with NUMERICAL item ID)
+  ChestShop.shop.sell.(itemID):
+    description: Allows user to sell certain (itemID) from a shop (replace (itemID) with NUMERICAL item ID)
   ChestShop.shop.create:
     description: Allows user to create a shop that sells any item
   ChestShop.shop.buy:

@@ -54,11 +54,10 @@ public class Generator implements Runnable {
     private static double generateItemTotal(int itemID, boolean bought, boolean sold) {
         double amount = 0;
         List<Transaction> list;
-        if (bought)
-        list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 1).eq("itemID", itemID).findList();
+        if (bought) list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 1).eq("itemID", itemID).findList();
         else if (sold) list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 0).eq("itemID", itemID).findList();
         else list = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).findList();
-        
+
         for (Transaction t : list) amount += t.getAmount();
         return amount;
     }
@@ -118,7 +117,7 @@ public class Generator implements Runnable {
             buf = new BufferedWriter(new FileWriter(filePath, true));
             long genTime = System.currentTimeMillis();
             for (Material m : Material.values()) generateItemStats(m.getId());
-            
+
             buf.close();
 
             generationTime = (System.currentTimeMillis() - genTime) / 1000;

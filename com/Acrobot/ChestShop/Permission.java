@@ -8,8 +8,9 @@ import org.bukkit.entity.Player;
  */
 public enum Permission {
     SHOP_CREATION("ChestShop.shop.create"),
-    EXCLUDE_ITEM("ChestShop.shop.exclude"),
     BUY("ChestShop.shop.buy"),
+    BUY_ID("ChestShop.shop.buy."),
+    SELL_ID("ChestShop.shop.sell."),
     SELL("ChestShop.shop.sell"),
     ADMIN("ChestShop.admin"),
     MOD("ChestShop.mod");
@@ -27,7 +28,6 @@ public enum Permission {
     }
 
     public static boolean has(Player player, String node) {
-        //return !node.contains("exclude") && !node.contains ("create.") && ((!node.contains("admin") && !node.contains("mod")) || player.isOp());
         if (permissions != null) return permissions.has(player, node);
         return player.hasPermission(node);
     }

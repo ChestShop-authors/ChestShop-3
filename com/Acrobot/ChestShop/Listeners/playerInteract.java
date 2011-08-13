@@ -30,8 +30,9 @@ import java.util.HashMap;
  */
 public class playerInteract extends PlayerListener {
 
-    private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>();
-    private static final int interval = 100;
+    private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>(); //Last player's transaction
+    private static final int interval = 100;//Minimal interval between transactions
+
 
     public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -42,39 +43,24 @@ public class playerInteract extends PlayerListener {
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
             Default protection = new Default();
-            if (!Permission.has(player, Permission.ADMIN) && !Permission.has(player, Permission.MOD) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
+            if (!hasAdminPermissions(player) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
             }
         }
 
-        if (!uSign.isSign(block)) return;
-
+        if (!uSign.isSign(block)) return; //It's not a sign!
         Sign sign = (Sign) block.getState();
 
-        if (!uSign.isValid(sign) || lastTransactionTime.containsKey(player) && (System.currentTimeMillis() - lastTransactionTime.get(player)) < interval || player.isSneaking()) return;
+        if (!uSign.isValid(sign) || !enoughTimeHasPassed(player) || player.isSneaking()) return;
 
         lastTransactionTime.put(player, System.currentTimeMillis());
 
-        String playerName = uLongName.stripName(player.getName());
+        event.setCancelled(true);
 
-        if (playerName.equals(sign.getLine(0))) {
-            Chest chest1 = uBlock.findChest(sign);
-            if (chest1 == null) {
-                player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
-                return;
-            }
-
-            IInventory inventory = ((CraftInventory) chest1.getInventory()).getInventory();
-            Chest chest2 = uBlock.findNeighbor(chest1);
-
-            if (chest2 != null) {
-                IInventory iInv2 = ((CraftInventory) chest2.getInventory()).getInventory();
-                inventory = new InventoryLargeChest(player.getName() + "'s Shop", inventory, iInv2);
-            }
-
-            ((CraftPlayer) player).getHandle().a(inventory);
+        if (uLongName.stripName(player.getName()).equals(sign.getLine(0))) {
+            showChestGUI(player, block);
             return;
         }
 
@@ -90,5 +76,30 @@ public class playerInteract extends PlayerListener {
         } else {
             ShopManagement.sell(sign, player);
         }
+    }
+    
+    private static boolean enoughTimeHasPassed(Player player) {
+        return !lastTransactionTime.containsKey(player) || (System.currentTimeMillis() - lastTransactionTime.get(player)) >= interval;
+    }
+
+    private static boolean hasAdminPermissions(Player player) {
+        return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
+    }
+
+    private static void showChestGUI(Player player, Block block) {
+        Chest chest = uBlock.findChest(block);
+        if (chest == null) { //Sorry, no chest found
+            player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
+            return;
+        }
+
+        IInventory inventory = ((CraftInventory) chest.getInventory()).getInventory();
+        chest = uBlock.findNeighbor(chest);
+
+        if (chest != null) { //There is also a neighbor chest
+            inventory = new InventoryLargeChest(player.getName() + "'s Shop", inventory, ((CraftInventory) chest.getInventory()).getInventory());
+        }
+
+        ((CraftPlayer) player).getHandle().a(inventory); //Show inventory on the screen
     }
 }

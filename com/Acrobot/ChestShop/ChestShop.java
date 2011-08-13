@@ -30,23 +30,21 @@ import java.util.List;
  */
 public class ChestShop extends JavaPlugin {
 
-    public static File folder = new File("plugins/ChestShop"); //In case Bukkit fails
+    public static File folder = new File("plugins/ChestShop");
     private static EbeanServer DB;
 
     private static PluginDescriptionFile description;
     private static Server server;
 
     public void onEnable() {
-        blockBreak blockBreak = new blockBreak();
         PluginManager pm = getServer().getPluginManager();
-
-        //Yep, set up our folder!
-        folder = getDataFolder();
 
         //Set up our config file!
         Config.setUp();
 
         //Register our events
+        blockBreak blockBreak = new blockBreak();
+
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, new blockPlace(), Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, new signChange(), Event.Priority.Normal, this);

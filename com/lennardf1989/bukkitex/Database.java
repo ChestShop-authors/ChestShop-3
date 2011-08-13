@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Database {
-    private JavaPlugin javaPlugin;
+    private final JavaPlugin javaPlugin;
     private ClassLoader classLoader;
     private Level loggerLevel;
     private boolean usingSQLite;
@@ -294,7 +294,7 @@ public abstract class Database {
             }
 
             //Turn all the lines back into a single string
-            StringBuilder newScript = new StringBuilder();
+            StringBuilder newScript = new StringBuilder(5);
             for (String newLine : scriptLines) newScript.append(newLine).append('\n');
 
             //Print the new script

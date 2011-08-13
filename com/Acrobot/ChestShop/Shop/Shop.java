@@ -18,10 +18,11 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class Shop {
-    public final ItemStack stock;
     private final short durability;
-    public final int stockAmount;
     private final ChestObject chest;
+
+    public final ItemStack stock;
+    public final int stockAmount;
     public final float buyPrice;
     public final float sellPrice;
     public final String owner;
@@ -45,7 +46,7 @@ public class Shop {
             player.sendMessage(Config.getLocal(Language.NO_BUYING_HERE));
             return;
         }
-        if (!Permission.has(player, Permission.BUY)) {
+        if (!Permission.has(player, Permission.BUY) && !Permission.has(player, Permission.BUY_ID + Integer.toString(stock.getTypeId()))) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return;
         }
@@ -63,6 +64,7 @@ public class Shop {
 
         if (!isAdminShop() && !hasEnoughStock()) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_STOCK));
+            if (!Config.getBoolean(Property.SHOW_MESSAGE_OUT_OF_STOCK)) return;
             sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
             return;
         }
@@ -75,21 +77,25 @@ public class Shop {
         if (!isAdminShop()) chest.removeItem(stock, durability, stockAmount);
 
         String formatedPrice = Economy.formatBalance(buyPrice);
-        player.sendMessage(Config.getLocal(Language.YOU_BOUGHT_FROM_SHOP)
-                .replace("%amount", String.valueOf(stockAmount))
-                .replace("%item", materialName)
-                .replace("%owner", owner)
-                .replace("%price", formatedPrice));
+        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_CLIENT)) {
+            player.sendMessage(Config.getLocal(Language.YOU_BOUGHT_FROM_SHOP)
+                    .replace("%amount", String.valueOf(stockAmount))
+                    .replace("%item", materialName)
+                    .replace("%owner", owner)
+                    .replace("%price", formatedPrice));
+        }
 
         uInventory.add(player.getInventory(), stock, stockAmount);
         Logging.logTransaction(true, this, player);
         player.updateInventory();
 
-        sendMessageToOwner(Config.getLocal(Language.SOMEBODY_BOUGHT_FROM_YOUR_SHOP)
-                .replace("%amount", String.valueOf(stockAmount))
-                .replace("%item", materialName)
-                .replace("%buyer", playerName)
-                .replace("%price", formatedPrice));
+        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
+            sendMessageToOwner(Config.getLocal(Language.SOMEBODY_BOUGHT_FROM_YOUR_SHOP)
+                    .replace("%amount", String.valueOf(stockAmount))
+                    .replace("%item", materialName)
+                    .replace("%buyer", playerName)
+                    .replace("%price", formatedPrice));
+        }
     }
 
     public void sell(Player player) {
@@ -101,11 +107,11 @@ public class Shop {
             player.sendMessage(Config.getLocal(Language.NO_SELLING_HERE));
             return;
         }
-        if (!Permission.has(player, Permission.SELL)) {
+        if (!Permission.has(player, Permission.SELL) && !Permission.has(player, Permission.SELL_ID + Integer.toString(stock.getTypeId()))) {
             player.sendMessage(Config.getLocal(Language.NO_PERMISSION));
             return;
         }
-        
+
         String account = getOwnerAccount();
         boolean accountExists = !account.isEmpty() && Economy.hasAccount(account);
 
@@ -132,21 +138,25 @@ public class Shop {
         String materialName = stock.getType().name();
         String formatedBalance = Economy.formatBalance(sellPrice);
 
-        player.sendMessage(Config.getLocal(Language.YOU_SOLD_TO_SHOP)
-                .replace("%amount", String.valueOf(stockAmount))
-                .replace("%item", materialName)
-                .replace("%buyer", owner)
-                .replace("%price", formatedBalance));
+        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_CLIENT)) {
+            player.sendMessage(Config.getLocal(Language.YOU_SOLD_TO_SHOP)
+                    .replace("%amount", String.valueOf(stockAmount))
+                    .replace("%item", materialName)
+                    .replace("%buyer", owner)
+                    .replace("%price", formatedBalance));
+        }
 
         uInventory.remove(player.getInventory(), stock, stockAmount, durability);
         Logging.logTransaction(false, this, player);
         player.updateInventory();
 
-        sendMessageToOwner(Config.getLocal(Language.SOMEBODY_SOLD_TO_YOUR_SHOP)
-                .replace("%amount", String.valueOf(stockAmount))
-                .replace("%item", materialName)
-                .replace("%seller", player.getName())
-                .replace("%price", formatedBalance));
+        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
+            sendMessageToOwner(Config.getLocal(Language.SOMEBODY_SOLD_TO_YOUR_SHOP)
+                    .replace("%amount", String.valueOf(stockAmount))
+                    .replace("%item", materialName)
+                    .replace("%seller", player.getName())
+                    .replace("%price", formatedBalance));
+        }
     }
 
     private String getOwnerAccount() {

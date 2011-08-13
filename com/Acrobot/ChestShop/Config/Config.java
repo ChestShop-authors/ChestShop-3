@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Config;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import org.bukkit.util.config.Configuration;
 
@@ -12,21 +11,20 @@ import java.io.FileWriter;
  * @author Acrobot
  */
 public class Config {
-    private static File configFile;
-    private static File langFile;
-    private static Configuration config = new Configuration(new File(ChestShop.folder, "config.yml"));
-    private static Configuration language;
+    private static File configFile = new File(ChestShop.folder, "config.yml");
+    private static File langFile = new File(ChestShop.folder, "local.yml");
+    private static Configuration config = new Configuration(configFile);
+    private static Configuration language = new Configuration(langFile);
 
     public static void setUp() {
-        setUpConfigurations();
+        if(!ChestShop.folder.exists()) ChestShop.folder.mkdir();
 
         reloadConfig();
         config.load();
 
         reloadLanguage();
         language.load();
-
-        uLongName.config = new Configuration(new File(ChestShop.folder, "longName.storage"));
+        
         uLongName.config.load();
     }
 
@@ -48,26 +46,22 @@ public class Config {
         }
     }
 
-    private static void setUpConfigurations(){
-        configFile = new File(ChestShop.folder, "config.yml");
-        langFile = new File(ChestShop.folder, "local.yml");
-
-        config = new Configuration(configFile);
-        language = new Configuration(langFile);
-    }
-
     private static void writeToFile(String string, File file) {
         try {
             FileWriter fw = new FileWriter(file, true);
-            fw.write('\n' + string);
+            fw.write(string + '\n');
             fw.close();
         } catch (Exception e) {
-            Logging.log("Couldn't write to file - " + file.getName());
+            System.out.println("Couldn't write to file - " + file.getName());
         }
     }
 
     public static boolean getBoolean(Property value) {
         return (Boolean) getValue(value.name());
+    }
+
+    public static float getFloat(Property value){
+        return new Float(getValue(value.name()).toString());
     }
 
     public static String getString(Property value) {
@@ -95,7 +89,6 @@ public class Config {
     }
 
     public static String getPreferred() {
-        config = new Configuration(new File("plugins/ChestShop", "config.yml"));
         config.load();
         
         return getString(Property.PREFERRED_ECONOMY_PLUGIN);

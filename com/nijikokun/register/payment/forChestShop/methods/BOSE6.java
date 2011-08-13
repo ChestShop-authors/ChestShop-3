@@ -4,6 +4,13 @@ import com.nijikokun.register.payment.forChestShop.Method;
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * BOSEconomy 6 Implementation of Method
+ *
+ * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
+ * @copyright (c) 2011
+ * @license AOL license <http://aol.nexua.org>
+ */
 public class BOSE6 implements Method {
     private BOSEconomy BOSEconomy;
 
@@ -60,8 +67,8 @@ public class BOSE6 implements Method {
     }
 
     public static class BOSEAccount implements MethodAccount {
-        private String name;
-        private BOSEconomy BOSEconomy;
+        private final String name;
+        private final BOSEconomy BOSEconomy;
 
         public BOSEAccount(String name, BOSEconomy bOSEconomy) {
             this.name = name;
@@ -122,8 +129,8 @@ public class BOSE6 implements Method {
     }
 
     public static class BOSEBankAccount implements MethodBankAccount {
-        private String bank;
-        private BOSEconomy BOSEconomy;
+        private final String bank;
+        private final BOSEconomy BOSEconomy;
 
         public BOSEBankAccount(String bank, BOSEconomy bOSEconomy) {
             this.bank = bank;

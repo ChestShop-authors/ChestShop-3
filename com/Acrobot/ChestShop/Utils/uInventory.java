@@ -11,7 +11,7 @@ import java.util.HashMap;
  * @author Acrobot
  */
 public class uInventory {
-
+    
     public static int remove(Inventory inv, ItemStack item, int amount, short durability) {
         amount = (amount > 0 ? amount : 1);
         Material itemMaterial = item.getType();
@@ -98,7 +98,7 @@ public class uInventory {
             int currentAmount = currentItem.getAmount();
 
             if (currentAmount != maxStackSize && currentItem.getType() == itemMaterial && (durability == -1 || currentItem.getDurability() == durability)) {
-                amountLeft = ((currentAmount + amountLeft) <= maxStackSize ? 0 : amountLeft - (maxStackSize - currentAmount));
+                amountLeft = currentAmount + amountLeft <= maxStackSize ? 0 : amountLeft - (maxStackSize - currentAmount);
             }
         }
 

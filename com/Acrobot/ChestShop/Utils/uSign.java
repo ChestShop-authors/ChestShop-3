@@ -41,49 +41,35 @@ public class uSign {
     public static boolean isValidPreparedSign(String[] lines){
         try{
             boolean toReturn = true;
-            for(int i = 0; i < 4; i++){
-                toReturn = toReturn && patterns[i].matcher(lines[i]).matches();
-            }
-            return toReturn;
+            for(int i = 0; i < 4 && toReturn; i++) toReturn = patterns[i].matcher(lines[i]).matches();
+            return toReturn && lines[2].split(":").length <= 2;
         } catch (Exception e){
             return false;
         }
     }
 
     public static float buyPrice(String text) {
-        text = text.replace(" ", "").toLowerCase();
-
-        String[] split = text.split(":");
-        int buyPart = (text.contains("b") ? (split[0].contains("b") ? 0 : 1) : -1);
-        if (buyPart == -1 || (buyPart == 1 && split.length != 2)) return -1;
-
-        split[buyPart] = split[buyPart].replace("b", "");
-
-        if (uNumber.isFloat(split[buyPart])) {
-            float buyPrice = Float.parseFloat(split[buyPart]);
-            return (buyPrice != 0 ? buyPrice : -1);
-        } else if (split[buyPart].equals("free")) {
-            return 0;
-        }
-
-        return -1;
+        return price(text, true);
     }
 
     public static float sellPrice(String text) {
+        return price(text, false);
+    }
+
+    private static float price(String text, boolean buy){
+        String toContain = buy ? "b" : "s";
         text = text.replace(" ", "").toLowerCase();
 
         String[] split = text.split(":");
-        int sellPart = (text.contains("s") ? (split[0].contains("s") ? 0 : 1) : -1);
-        if(sellPart == -1 || (sellPart == 1 && split.length != 2)) return -1;
+        int part = (text.contains(toContain) ? (split[0].contains(toContain) ? 0 : 1) : -1);
+        if(part == -1 || (part == 1 && split.length != 2)) return -1;
 
-        split[sellPart] = split[sellPart].replace("s", "");
-        
-        if (uNumber.isFloat(split[sellPart])) {
-            Float sellPrice = Float.parseFloat(split[sellPart]);
-            return (sellPrice != 0 ? sellPrice : -1);
-        } else if (split[sellPart].equals("free")) {
-            return 0;
-        }
+        split[part] = split[part].replace(toContain, "");
+
+        if (uNumber.isFloat(split[part])) {
+            Float price = Float.parseFloat(split[part]);
+            return (price != 0 ? price : -1);
+        } else if (split[part].equals("free")) return 0;
         return -1;
     }
 

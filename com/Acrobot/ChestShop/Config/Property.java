@@ -8,6 +8,7 @@ public enum Property {
     REVERSE_BUTTONS(false, "If true, people will buy with left-click and sell with right-click."),
     SERVER_ECONOMY_ACCOUNT("", "Economy account's name you want Admin Shops to be assigned to"),
     ADMIN_SHOP_NAME("Admin Shop", "First line of your admin shop should look like this"),
+    SHOP_CREATION_PRICE(0, "Amount of money player must pay to create a shop"),
     LOG_TO_FILE(false, "If true, plugin will log transactions in its own file"),
     LOG_TO_CONSOLE(true, "Do you want ChestShop's messages to show up in console?"),
     LOG_TO_DATABASE(false, "If true, plugin will log transactions in EBean database"),
@@ -18,7 +19,10 @@ public enum Property {
     USE_BUILT_IN_PROTECTION(true, "Do you want to use built-in protection against chest destruction?"),
     PROTECT_CHEST_WITH_LWC(false, "Do you want to protect shop chests with LWC?"),
     PROTECT_SIGN_WITH_LWC(false, "Do you want to protect shop signs with LWC?"),
-    MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!");
+    MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!"),
+    SHOW_MESSAGE_OUT_OF_STOCK(true, "Do you want to show \"Out of stock\" messages?"),
+    SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
+    SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?");
 
 
     private final Object value;

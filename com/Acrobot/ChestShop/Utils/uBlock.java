@@ -23,9 +23,7 @@ public class uBlock {
     public static Chest findChest(Block block) {
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
-            if (faceBlock.getType() == Material.CHEST) {
-                return (Chest) faceBlock.getState();
-            }
+            if (faceBlock.getType() == Material.CHEST) return (Chest) faceBlock.getState();
         }
         return null;
     }
@@ -35,9 +33,7 @@ public class uBlock {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
-                if (uSign.isValid(sign)) {
-                    return sign;
-                }
+                if (uSign.isValid(sign)) return sign;
             }
         }
         return null;
@@ -48,9 +44,7 @@ public class uBlock {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
-                if (restrictedSign.isRestricted(sign)) {
-                    return sign;
-                }
+                if (restrictedSign.isRestricted(sign)) return sign;
             }
         }
         return null;
@@ -63,7 +57,7 @@ public class uBlock {
                 return (Chest) neighborBlock.getState();
             }
         }
-        return null; //Shame, we didn't find double chest :/
+        return null;
     }
 
     public static Chest findNeighbor(Chest chest) {

@@ -5,7 +5,7 @@ import com.nijikokun.register.payment.forChestShop.Method;
 
 /**
  * @author Acrobot
- *         Economy management
+ * Economy management
  */
 public class Economy {
     public static Method economy;

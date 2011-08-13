@@ -12,23 +12,25 @@ public class Items {
 
     public static Material getMaterial(String itemName) {
         if (uNumber.isInteger(itemName)) return Material.getMaterial(Integer.parseInt(itemName));
+        itemName = itemName.replace(" ", "_");
+        Material finalMaterial = Material.getMaterial(itemName.toUpperCase());
+        if (finalMaterial != null) return finalMaterial;
 
         int length = 256;
-        Material finalMat = null;
-        itemName = itemName.toLowerCase().replace("_", "").replace(" ", "");
-        for (Material m : Material.values()) {
-            String matName = m.name().toLowerCase().replace("_", "");
-            if (matName.startsWith(itemName) && (matName.length() < length)) {
-                length = matName.length();
-                finalMat = m;
+        itemName = itemName.toLowerCase().replace("_", "");
+        for (Material currentMaterial : Material.values()) {
+            String materialName = currentMaterial.name().toLowerCase().replace("_", "");
+            if (materialName.startsWith(itemName) && (materialName.length() < length)) {
+                length = materialName.length();
+                finalMaterial = currentMaterial;
             }
         }
-        return finalMat;
+        return finalMaterial;
     }
 
     public static ItemStack getItemStack(String itemName) {
-        ItemStack toReturn;
-        if ((toReturn = getFromOddItem(itemName)) != null) return toReturn;
+        ItemStack toReturn = getFromOddItem(itemName);
+        if (toReturn != null) return toReturn;
 
         Material material = getMaterial(itemName);
         if (material != null) return new ItemStack(material, 1);
@@ -37,8 +39,7 @@ public class Items {
     }
 
     private static ItemStack getFromOddItem(String itemName) {
-        if (!Odd.isInitialized()) return null;
-        return Odd.returnItemStack(itemName.replace(":", ";"));
+        return !Odd.isInitialized() ? null : Odd.returnItemStack(itemName.replace(":", ";"));
     }
 
     private static ItemStack getItemStackWithDataValue(String itemName) {
@@ -51,24 +52,12 @@ public class Items {
         return item == null ? null : new ItemStack(item, 1, Short.parseShort(word[1]));
     }
 
-    private static ItemStack getItemStackWithDataValueFromWord(String itemName) {
-        if (!itemName.contains(" ") || getMaterial(itemName) != null) return null;
-        String[] word = itemName.split(" ");
-        if (word.length < 2) return null;
+    private static ItemStack getItemStackWithDataValueFromWord(String itemName){
+        int indexOfChar = itemName.indexOf(' ');
 
-        String dataValue = word[0];
-
-        String material[] = new String[word.length - 1];
-        System.arraycopy(word, 1, material, 0, word.length - 1);
-        StringBuilder mat = new StringBuilder();
-
-        for (String s : material) mat.append(s);
-
-        Material item = getMaterial(mat.toString());
-
-        return item == null ? null : new ItemStack(item, 1, DataValue.get(dataValue, item));
-
-
+        if(indexOfChar == -1) return null;
+        Material item = getMaterial(itemName.substring(indexOfChar));
+        return item == null ? null : new ItemStack(item, 1, DataValue.get(itemName.substring(0, indexOfChar), item));
     }
 
 }
