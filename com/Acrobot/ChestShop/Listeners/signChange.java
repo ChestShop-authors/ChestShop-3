@@ -103,7 +103,7 @@ public class signChange extends BlockListener {
                 }
 
                 Block chestBlock = chest.getBlock();
-                boolean canAccess = !Security.isProtected(chestBlock) || !Security.canAccess(player, chestBlock);
+                boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
 
                 if (!(Security.protection instanceof Default) && canAccess) {
                     Default protection = new Default();

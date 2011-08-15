@@ -44,7 +44,7 @@ public class pluginEnable extends ServerListener {
         if (!methods.hasMethod()) {
             if (methods.setMethod(event.getPlugin())) {
                 Economy.economy = methods.getMethod();
-                System.out.println("[ChestShop] " + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
+                System.out.println(lineStart + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
             }
         }
 
