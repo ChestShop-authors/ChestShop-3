@@ -68,7 +68,7 @@ public class uSign {
 
         if (uNumber.isFloat(split[part])) {
             Float price = Float.parseFloat(split[part]);
-            return (price != 0 ? price : -1);
+            return (price > 0 ? price : -1);
         } else if (split[part].equals("free")) return 0;
         return -1;
     }

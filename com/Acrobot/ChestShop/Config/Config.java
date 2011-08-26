@@ -11,10 +11,10 @@ import java.io.FileWriter;
  * @author Acrobot
  */
 public class Config {
-    private static File configFile = new File(ChestShop.folder, "config.yml");
-    private static File langFile = new File(ChestShop.folder, "local.yml");
-    private static Configuration config = new Configuration(configFile);
-    private static Configuration language = new Configuration(langFile);
+    private static final File configFile = new File(ChestShop.folder, "config.yml");
+    private static final File langFile = new File(ChestShop.folder, "local.yml");
+    private static final Configuration config = new Configuration(configFile);
+    private static final Configuration language = new Configuration(langFile);
 
     public static void setUp() {
         if(!ChestShop.folder.exists()) ChestShop.folder.mkdir();

@@ -30,7 +30,7 @@ public class pluginEnable extends ServerListener {
     public static final Methods methods = new Methods(Config.getPreferred());
     private static final String lineStart = "[ChestShop] ";
 
-    private static List<String> pluginsToLoad = new LinkedList<String>(Arrays.asList(
+    private static final List<String> pluginsToLoad = new LinkedList<String>(Arrays.asList(
             "Permissions",
             "LWC",
             "Lockette",

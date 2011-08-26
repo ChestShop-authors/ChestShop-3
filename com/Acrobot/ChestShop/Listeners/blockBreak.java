@@ -22,14 +22,22 @@ public class blockBreak extends BlockListener {
         if (uSign.isSign(block)) block.getState().update();
 
         Sign sign = uBlock.findRestrictedSign(block);
-        if (sign != null) return true;
+        if (sign != null && getAttachedFace(sign) == block) return true;
 
         sign = uBlock.findSign(block);
-        return sign != null && (player == null || (!uLongName.stripName(player.getName()).equals(sign.getLine(0))));
+        return sign != null && getAttachedFace(sign) == block && playerIsNotOwner(player, sign);
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
         if (cancellingBlockBreak(event.getBlock(), event.getPlayer())) event.setCancelled(true);
+    }
+
+    private static Block getAttachedFace(Sign sign){
+        return sign.getBlock().getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
+    }
+
+    private static boolean playerIsNotOwner(Player player, Sign sign){
+        return player == null || !uLongName.stripName(player.getName()).equals(sign.getLine(0));
     }
 
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
@@ -42,6 +50,6 @@ public class blockBreak extends BlockListener {
     }
 
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (cancellingBlockBreak(event.getRetractLocation().getBlock(), null)) event.setCancelled(true);
+        if (!uSign.isSign(event.getRetractLocation().getBlock()) && cancellingBlockBreak(event.getRetractLocation().getBlock(), null)) event.setCancelled(true);
     }
 }

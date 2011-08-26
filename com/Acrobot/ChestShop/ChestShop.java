@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ChestShop extends JavaPlugin {
 
-    public static File folder = new File("plugins/ChestShop");
+    public static final File folder = new File("plugins/ChestShop");
     private static EbeanServer DB;
 
     private static PluginDescriptionFile description;
@@ -45,6 +45,9 @@ public class ChestShop extends JavaPlugin {
         //Register our events
         blockBreak blockBreak = new blockBreak();
 
+        description = this.getDescription();  //Description of the plugin
+        server = getServer();          //Setting out server variable
+
         pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.BLOCK_PLACE, new blockPlace(), Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.SIGN_CHANGE, new signChange(), Event.Priority.Normal, this);
@@ -57,9 +60,6 @@ public class ChestShop extends JavaPlugin {
             pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak, Event.Priority.Normal, this);
             pm.registerEvent(Event.Type.ENTITY_EXPLODE, new entityExplode(), Event.Priority.Normal, this);
         }
-
-        description = this.getDescription();  //Description of the plugin
-        server = getServer();          //Setting out server variable
 
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) { //Now set up our database for storing transactions!
             setupDB();

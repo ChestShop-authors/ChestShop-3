@@ -9,7 +9,7 @@ import java.io.File;
  * @author Acrobot
  */
 public class uLongName {
-    public static Configuration config = new Configuration(new File(ChestShop.folder, "longName.storage"));
+    public static final Configuration config = new Configuration(new File(ChestShop.folder, "longName.storage"));
 
     public static String getName(final String shortName) {
         return config.getString(shortName, shortName);

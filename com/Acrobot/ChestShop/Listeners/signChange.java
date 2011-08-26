@@ -74,22 +74,11 @@ public class signChange extends BlockListener {
             return;
         }
         event.setLine(2, thirdLine);
-
-        String[] split = line[3].split(":");
-        if (uNumber.isInteger(split[0])) {
-            String materialLine = mat.name();
-            if (split.length == 2) {
-                int maxLength = (15 - split[1].length() - 1);
-                if (materialLine.length() > maxLength) materialLine = materialLine.substring(0, maxLength);
-                materialLine = materialLine + ':' + split[1];
-            }
-            event.setLine(3, materialLine);
-        }
+        event.setLine(3, formatFourthLine(line[3], mat));
 
         Chest chest = uBlock.findChest(signBlock);
 
-        line = event.getLines();
-        boolean isAdminShop = uSign.isAdminShop(line[0]);
+        boolean isAdminShop = uSign.isAdminShop(event.getLine(0));
         if (!isAdminShop) {
             if (chest == null) {
                 player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
@@ -158,6 +147,20 @@ public class signChange extends BlockListener {
         if (thirdLine.length() > 15) thirdLine = thirdLine.replace(" ", "");
 
         return (thirdLine.length() > 15 ? null : thirdLine);
+    }
+
+    private static String formatFourthLine(String fourthLine, Material material){
+        String[] split = fourthLine.split(":");
+        if (uNumber.isInteger(split[0])) {
+            String materialLine = material.name();
+            if (split.length == 2) { 
+                int maxLength = (14 - split[1].length()); //15 - length - 1
+                if (materialLine.length() > maxLength) materialLine = materialLine.substring(0, maxLength);
+                materialLine = materialLine + ':' + split[1];
+            }
+            return materialLine;
+        }
+        return fourthLine;
     }
 
     private static boolean formatFirstLine(String line1, Player player) {

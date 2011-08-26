@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -47,28 +46,13 @@ public class uInventory {
     public static int add(Inventory inv, ItemStack item, int amount) {
         amount = (amount > 0 ? amount : 1);
 
-        int maxStackSize = item.getType().getMaxStackSize();
-
-        if (amount <= maxStackSize) {
-            item.setAmount(amount);
-            HashMap<Integer, ItemStack> left = inv.addItem(item);
-            return (left.isEmpty() ? 0 : left.get(0).getAmount());
-        }
-
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        for (int i = 0; i < Math.ceil(amount / maxStackSize); i++) {
-            if (amount <= maxStackSize) {
-                item.setAmount(amount);
-                return 0;
-            } else {
-                item.setAmount(maxStackSize);
-                items.add(item);
-            }
-        }
-
+        ItemStack itemToAdd = new ItemStack(item.getType(), amount, item.getDurability());
+        HashMap<Integer, ItemStack> items = inv.addItem(itemToAdd);
+        
         amount = 0;
-        for (ItemStack itemToAdd : items) amount += (!inv.addItem(itemToAdd).isEmpty() ? itemToAdd.getAmount() : 0);
-
+        for(ItemStack toAdd : items.values()){
+            amount += toAdd.getAmount();
+        }
         return amount;
     }
 

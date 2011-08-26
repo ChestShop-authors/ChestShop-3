@@ -68,7 +68,7 @@ public class playerInteract extends PlayerListener {
             player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
             return;
         }
-
+        
         Action buy = (Config.getBoolean(Property.REVERSE_BUTTONS) ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 
         if (action == buy) {
