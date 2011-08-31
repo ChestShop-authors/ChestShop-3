@@ -32,7 +32,7 @@ public class Config {
         config.load();
         for (Property def : Property.values()) {
             if (config.getProperty(def.name()) == null) {
-                writeToFile(def.name() + ": " + def.getValue() + "\n#" + def.getComment(), configFile);
+                writeToFile('\n' + def.name() + ": " + def.getValue() + "\n#" + def.getComment(), configFile);
             }
         }
     }
@@ -41,7 +41,7 @@ public class Config {
         language.load();
         for (Language def : Language.values()) {
             if (language.getProperty(def.name()) == null) {
-                writeToFile(def.name() + ": \"" + def.toString() + '\"', langFile);
+                writeToFile('\n' + def.name() + ": \"" + def.toString() + '\"', langFile);
             }
         }
     }

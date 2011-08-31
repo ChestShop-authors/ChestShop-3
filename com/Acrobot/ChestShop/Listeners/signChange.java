@@ -109,8 +109,9 @@ public class signChange extends BlockListener {
         }
 
         float shopCreationPrice = Config.getFloat(Property.SHOP_CREATION_PRICE);
-        if(shopCreationPrice != 0 && !isAdminShop){
-            if(!Economy.hasEnough(player.getName(), shopCreationPrice)){
+        boolean paid = shopCreationPrice != 0 && !isAdminShop;
+        if (paid) {
+            if (!Economy.hasEnough(player.getName(), shopCreationPrice)) {
                 player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
                 dropSign(event);
                 return;
@@ -127,7 +128,7 @@ public class signChange extends BlockListener {
         }
 
         uLongName.saveName(player.getName());
-        player.sendMessage(Config.getLocal(Language.SHOP_CREATED));
+        player.sendMessage(Config.getLocal(Language.SHOP_CREATED) + (paid ? " - " + Economy.formatBalance(shopCreationPrice) : ""));
     }
 
     private static boolean canCreateShop(Player player, boolean isAdmin, int ID) {
@@ -149,11 +150,11 @@ public class signChange extends BlockListener {
         return (thirdLine.length() > 15 ? null : thirdLine);
     }
 
-    private static String formatFourthLine(String fourthLine, Material material){
+    private static String formatFourthLine(String fourthLine, Material material) {
         String[] split = fourthLine.split(":");
         if (uNumber.isInteger(split[0])) {
             String materialLine = material.name();
-            if (split.length == 2) { 
+            if (split.length == 2) {
                 int maxLength = (14 - split[1].length()); //15 - length - 1
                 if (materialLine.length() > maxLength) materialLine = materialLine.substring(0, maxLength);
                 materialLine = materialLine + ':' + split[1];

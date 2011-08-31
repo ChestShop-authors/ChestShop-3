@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
  * @copyright (c) 2011
  * @license AOL license <http://aol.nexua.org>
  */
+@SuppressWarnings({"deprecation"})
 public class BOSE6 implements Method {
     private BOSEconomy BOSEconomy;
 

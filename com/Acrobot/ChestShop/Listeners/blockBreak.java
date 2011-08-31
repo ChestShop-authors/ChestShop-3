@@ -17,19 +17,23 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
  */
 public class blockBreak extends BlockListener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
-        if (player != null && Permission.has(player, Permission.ADMIN)) return false;
+        if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
 
         if (uSign.isSign(block)) block.getState().update();
 
         Sign sign = uBlock.findRestrictedSign(block);
-        if (sign != null && getAttachedFace(sign) == block) return true;
+        if (sign != null && isCorrectSign(sign, block)) return true;
 
         sign = uBlock.findSign(block);
-        return sign != null && getAttachedFace(sign) == block && playerIsNotOwner(player, sign);
+        return sign != null && (isCorrectSign(sign, block) && playerIsNotOwner(player, sign));
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
         if (cancellingBlockBreak(event.getBlock(), event.getPlayer())) event.setCancelled(true);
+    }
+
+    private static boolean isCorrectSign(Sign sign, Block block){
+        return sign.getBlock() == block || getAttachedFace(sign) == block;
     }
 
     private static Block getAttachedFace(Sign sign){

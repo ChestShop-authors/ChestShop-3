@@ -65,7 +65,7 @@ public class pluginEnable extends ServerListener {
             Permission.permissions = ((Permissions) plugin).getHandler();
         } else if (name.equals("LWC")) {
             if (LWCplugin.lwc != null) return;
-            LWCplugin.lwc = ((LWCPlugin) plugin).getLWC();
+            LWCplugin.setLWC(((LWCPlugin) plugin).getLWC());
             Security.protection = new LWCplugin();
         } else if (name.equals("Lockette")) {
             if (LockettePlugin.lockette != null) return;
