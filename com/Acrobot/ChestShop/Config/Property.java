@@ -6,6 +6,7 @@ package com.Acrobot.ChestShop.Config;
 public enum Property {
     PREFERRED_ECONOMY_PLUGIN("", "Preferred economy plugin (iConomy, BOSEconomy, Essentials). If you do not want to specify this, leave it blank."),
     REVERSE_BUTTONS(false, "If true, people will buy with left-click and sell with right-click."),
+    //ALLOW_LEFT_CLICK_DESTROYING(false, "If true, if you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign."),
     SERVER_ECONOMY_ACCOUNT("", "Economy account's name you want Admin Shops to be assigned to"),
     ADMIN_SHOP_NAME("Admin Shop", "First line of your admin shop should look like this"),
     SHOP_CREATION_PRICE(0, "Amount of money player must pay to create a shop"),

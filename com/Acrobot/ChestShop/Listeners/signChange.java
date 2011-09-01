@@ -6,7 +6,7 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.Default;
+import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;

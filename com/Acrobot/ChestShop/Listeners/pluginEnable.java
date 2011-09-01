@@ -5,8 +5,9 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Odd;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.LWCplugin;
-import com.Acrobot.ChestShop.Protection.LockettePlugin;
+import com.Acrobot.ChestShop.Protection.Plugins.LWCplugin;
+import com.Acrobot.ChestShop.Protection.Plugins.LockettePlugin;
+import com.Acrobot.ChestShop.Protection.Plugins.OldLockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -28,7 +29,6 @@ import java.util.List;
 public class pluginEnable extends ServerListener {
 
     public static final Methods methods = new Methods(Config.getPreferred());
-    private static final String lineStart = "[ChestShop] ";
 
     private static final List<String> pluginsToLoad = new LinkedList<String>(Arrays.asList(
             "Permissions",
@@ -44,7 +44,7 @@ public class pluginEnable extends ServerListener {
         if (!methods.hasMethod()) {
             if (methods.setMethod(event.getPlugin())) {
                 Economy.economy = methods.getMethod();
-                System.out.println(lineStart + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
+                System.out.println(ChestShop.chatPrefix + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
             }
         }
 
@@ -68,13 +68,18 @@ public class pluginEnable extends ServerListener {
             LWCplugin.setLWC(((LWCPlugin) plugin).getLWC());
             Security.protection = new LWCplugin();
         } else if (name.equals("Lockette")) {
-            if (LockettePlugin.lockette != null) return;
-            LockettePlugin.lockette = (Lockette) plugin;
-            Security.protection = new LockettePlugin();
+            if (OldLockettePlugin.lockette != null || LockettePlugin.lockette != null) return;
+            if (plugin.getClass().getName().equals("com.daemitus.lockette.Lockette")) {
+                LockettePlugin.lockette = (com.daemitus.lockette.Lockette) plugin;
+                Security.protection = new LockettePlugin();
+            } else {
+                OldLockettePlugin.lockette = (Lockette) plugin;
+                Security.protection = new OldLockettePlugin();
+            }
         } else if (name.equals("OddItem")) {
             if (Odd.oddItem != null) return;
             Odd.oddItem = (OddItem) plugin;
         }
-        System.out.println(lineStart + description.getName() + " version " + description.getVersion() + " loaded.");
+        System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");
     }
 }

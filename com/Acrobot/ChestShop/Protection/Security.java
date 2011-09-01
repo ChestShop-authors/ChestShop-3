@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Protection;
 
+import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import org.bukkit.block.Block;

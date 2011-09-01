@@ -31,6 +31,7 @@ import java.util.List;
 public class ChestShop extends JavaPlugin {
 
     public static final File folder = new File("plugins/ChestShop");
+    public static final String chatPrefix = "[ChestShop] ";
     private static EbeanServer DB;
 
     private static PluginDescriptionFile description;
