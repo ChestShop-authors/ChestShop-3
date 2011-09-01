@@ -8,6 +8,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.LWCplugin;
 import com.Acrobot.ChestShop.Protection.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
+import com.daemitus.lockette.Lockette;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.forChestShop.Methods;
@@ -16,7 +17,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.yi.acru.bukkit.Lockette.Lockette;
 
 import java.util.Arrays;
 import java.util.LinkedList;
