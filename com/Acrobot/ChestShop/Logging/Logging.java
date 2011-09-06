@@ -27,7 +27,7 @@ public class Logging {
     }
 
     public static void log(String string) {
-        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) logger.log(Level.INFO,"[ChestShop] " + string);
+        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) logger.log(Level.INFO, "[ChestShop] " + string);
         if (Config.getBoolean(Property.LOG_TO_FILE)) FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
     }
 
@@ -36,7 +36,7 @@ public class Logging {
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) logToDatabase(isBuying, shop, player);
     }
 
-    private static void logToDatabase(boolean isBuying, Shop shop, Player player){
+    private static void logToDatabase(boolean isBuying, Shop shop, Player player) {
         Transaction transaction = new Transaction();
 
         transaction.setAmount(shop.stockAmount);

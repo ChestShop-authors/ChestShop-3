@@ -1,5 +1,7 @@
 package com.Acrobot.ChestShop.Utils;
 
+import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +12,7 @@ import java.util.HashMap;
  * @author Acrobot
  */
 public class uInventory {
-    
+
     public static int remove(Inventory inv, ItemStack item, int amount, short durability) {
         amount = (amount > 0 ? amount : 1);
         Material itemMaterial = item.getType();
@@ -45,13 +47,29 @@ public class uInventory {
 
     public static int add(Inventory inv, ItemStack item, int amount) {
         amount = (amount > 0 ? amount : 1);
-
-        ItemStack itemToAdd = new ItemStack(item.getType(), amount, item.getDurability());
-        HashMap<Integer, ItemStack> items = inv.addItem(itemToAdd);
-        
+        if (Config.getBoolean(Property.STACK_UNSTACKABLES)) return addAndStackTo64(inv, item, amount);
+        HashMap<Integer, ItemStack> items = inv.addItem(new ItemStack(item.getType(), amount, item.getDurability()));
         amount = 0;
-        for(ItemStack toAdd : items.values()){
-            amount += toAdd.getAmount();
+        for (ItemStack toAdd : items.values()) amount += toAdd.getAmount();
+
+        return amount;
+    }
+
+    public static int addAndStackTo64(Inventory inv, ItemStack item, int amount) {
+        Material type = item.getType();
+        for (int slot = 0; slot < inv.getSize(); slot++) {
+            if (amount <= 0) return 0;
+            ItemStack curItem = inv.getItem(slot);
+            if (curItem == null || curItem.getType() == Material.AIR) {
+                item.setAmount((amount > 64 ? 64 : amount));
+                amount -= item.getAmount();
+                inv.setItem(slot, item);
+            } else if (curItem.getType() == type && curItem.getDurability() == item.getDurability() && curItem.getAmount() != 64) {
+                int toFill = (64 - curItem.getAmount());
+                item.setAmount((amount > toFill ? 64 : curItem.getAmount() + amount));
+                amount -= item.getAmount();
+                inv.setItem(slot, item);
+            }
         }
         return amount;
     }
@@ -68,7 +86,7 @@ public class uInventory {
 
     public static int fits(Inventory inv, ItemStack item, int amount, short durability) {
         Material itemMaterial = item.getType();
-        int maxStackSize = itemMaterial.getMaxStackSize();
+        int maxStackSize = (Config.getBoolean(Property.STACK_UNSTACKABLES) ? 64 : itemMaterial.getMaxStackSize());
         int amountLeft = amount;
 
         for (ItemStack currentItem : inv.getContents()) {

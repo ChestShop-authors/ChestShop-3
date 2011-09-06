@@ -32,15 +32,15 @@ public class blockBreak extends BlockListener {
         if (cancellingBlockBreak(event.getBlock(), event.getPlayer())) event.setCancelled(true);
     }
 
-    private static boolean isCorrectSign(Sign sign, Block block){
+    private static boolean isCorrectSign(Sign sign, Block block) {
         return sign.getBlock() == block || getAttachedFace(sign) == block;
     }
 
-    private static Block getAttachedFace(Sign sign){
+    private static Block getAttachedFace(Sign sign) {
         return sign.getBlock().getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
     }
 
-    private static boolean playerIsNotOwner(Player player, Sign sign){
+    private static boolean playerIsNotOwner(Player player, Sign sign) {
         return player == null || !uLongName.stripName(player.getName()).equals(sign.getLine(0));
     }
 

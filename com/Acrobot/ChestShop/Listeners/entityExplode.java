@@ -7,11 +7,11 @@ import org.bukkit.event.entity.EntityListener;
 /**
  * @author Acrobot
  */
-public class entityExplode extends EntityListener{
-    public void onEntityExplode(EntityExplodeEvent event){
+public class entityExplode extends EntityListener {
+    public void onEntityExplode(EntityExplodeEvent event) {
         if (event.isCancelled() || event.blockList() == null) return;
-        for(Block block : event.blockList()){
-            if(blockBreak.cancellingBlockBreak(block, null)){
+        for (Block block : event.blockList()) {
+            if (blockBreak.cancellingBlockBreak(block, null)) {
                 event.setCancelled(true);
                 return;
             }

@@ -1,6 +1,7 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
+import com.LRFLEW.register.payment.forChestShop.Method;
+
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
@@ -11,7 +12,7 @@ import org.bukkit.plugin.Plugin;
  * @copyright (c) 2011
  * @license AOL license <http://aol.nexua.org>
  */
-@SuppressWarnings({"deprecation"})
+@SuppressWarnings("deprecation")
 public class BOSE6 implements Method {
     private BOSEconomy BOSEconomy;
 
@@ -25,6 +26,10 @@ public class BOSE6 implements Method {
 
     public String getVersion() {
         return "0.6.2";
+    }
+    
+    public int fractionalDigits() {
+    	return 0;
     }
 
     public String format(double amount) {
@@ -76,7 +81,7 @@ public class BOSE6 implements Method {
             this.BOSEconomy = bOSEconomy;
         }
 
-        public double balance() {
+		public double balance() {
             return (double) this.BOSEconomy.getPlayerMoney(this.name);
         }
 

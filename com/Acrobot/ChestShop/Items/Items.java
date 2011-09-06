@@ -52,10 +52,10 @@ public class Items {
         return item == null ? null : new ItemStack(item, 1, Short.parseShort(word[1]));
     }
 
-    private static ItemStack getItemStackWithDataValueFromWord(String itemName){
+    private static ItemStack getItemStackWithDataValueFromWord(String itemName) {
         int indexOfChar = itemName.indexOf(' ');
 
-        if(indexOfChar == -1) return null;
+        if (indexOfChar == -1) return null;
         Material item = getMaterial(itemName.substring(indexOfChar));
         return item == null ? null : new ItemStack(item, 1, DataValue.get(itemName.substring(0, indexOfChar), item));
     }

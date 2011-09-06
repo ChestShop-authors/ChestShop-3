@@ -1,9 +1,9 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
+import com.LRFLEW.register.payment.forChestShop.Method;
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 
 import org.bukkit.plugin.Plugin;
 
@@ -28,9 +28,13 @@ public class iCo4 implements Method {
     public String getVersion() {
         return "4";
     }
+    
+    public int fractionalDigits() {
+    	return 2;
+    }
 
-    public String format(double amount) {
-        return iConomy.getBank().format(amount);
+	public String format(double amount) {
+        return com.nijiko.coelho.iConomy.iConomy.getBank().format(amount);
     }
 
     public boolean hasBanks() {
@@ -42,7 +46,7 @@ public class iCo4 implements Method {
     }
 
     public boolean hasAccount(String name) {
-        return iConomy.getBank().hasAccount(name);
+        return com.nijiko.coelho.iConomy.iConomy.getBank().hasAccount(name);
     }
 
     public boolean hasBankAccount(String bank, String name) {
@@ -50,7 +54,7 @@ public class iCo4 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        return new iCoAccount(iConomy.getBank().getAccount(name));
+        return new iCoAccount(com.nijiko.coelho.iConomy.iConomy.getBank().getAccount(name));
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
@@ -58,7 +62,9 @@ public class iCo4 implements Method {
     }
 	
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && !plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin.getDescription().getVersion().length() > 0 && plugin.getDescription().getVersion().charAt(0) == '4' && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") 
+        		&& plugin.getClass().getName().equals("com.nijiko.coelho.iConomy.iConomy") 
+        		&& plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {

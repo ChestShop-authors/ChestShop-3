@@ -1,11 +1,11 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
+import com.LRFLEW.register.payment.forChestShop.Method;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 
 import org.bukkit.plugin.Plugin;
 
@@ -32,6 +32,10 @@ public class EE17 implements Method {
 
     public String getVersion() {
         return "2.2";
+    }
+    
+    public int fractionalDigits() {
+    	return -1;
     }
 
     public String format(double amount) {
@@ -75,7 +79,7 @@ public class EE17 implements Method {
     }
 
     public static class EEcoAccount implements MethodAccount {
-        private final String name;
+        private String name;
 
         public EEcoAccount(String name) {
             this.name = name;

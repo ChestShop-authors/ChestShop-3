@@ -57,9 +57,9 @@ public class playerInteract extends PlayerListener {
 
         lastTransactionTime.put(player, System.currentTimeMillis());
 
-        event.setCancelled(true);
+        if (action == Action.RIGHT_CLICK_BLOCK) event.setCancelled(true);
 
-        if (uLongName.stripName(player.getName()).equals(sign.getLine(0))) {
+        if (uLongName.stripName(player.getName()).equals(sign.getLine(0)) && (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING))) {
             showChestGUI(player, block);
             return;
         }
@@ -68,7 +68,7 @@ public class playerInteract extends PlayerListener {
             player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
             return;
         }
-        
+
         Action buy = (Config.getBoolean(Property.REVERSE_BUTTONS) ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 
         if (action == buy) {
@@ -77,7 +77,7 @@ public class playerInteract extends PlayerListener {
             ShopManagement.sell(sign, player);
         }
     }
-    
+
     private static boolean enoughTimeHasPassed(Player player) {
         return !lastTransactionTime.containsKey(player) || (System.currentTimeMillis() - lastTransactionTime.get(player)) >= interval;
     }

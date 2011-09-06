@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.ConfigObject;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
@@ -14,6 +15,7 @@ import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,57 +32,34 @@ import java.util.List;
  */
 public class ChestShop extends JavaPlugin {
 
-    public static final File folder = new File("plugins/ChestShop");
+    public static File folder = new File("plugins/ChestShop");
     public static final String chatPrefix = "[ChestShop] ";
     private static EbeanServer DB;
 
     private static PluginDescriptionFile description;
     private static Server server;
 
+    public static PluginManager pm;
+
     public void onEnable() {
-        PluginManager pm = getServer().getPluginManager();
+        pm = getServer().getPluginManager();
+        folder = getDataFolder();
 
         //Set up our config file!
-        Config.setUp();
+        Config.setup(new ConfigObject());
 
         //Register our events
-        blockBreak blockBreak = new blockBreak();
+        registerEvents();
 
         description = this.getDescription();  //Description of the plugin
         server = getServer();          //Setting out server variable
 
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockBreak, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.BLOCK_PLACE, new blockPlace(), Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.SIGN_CHANGE, new signChange(), Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest, this);
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable(), Event.Priority.Monitor, this);
-        pm.registerEvent(Event.Type.PLUGIN_DISABLE, new pluginDisable(), Event.Priority.Monitor, this);
+        pluginEnable.initializePlugins();
 
-        if(Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)){
-            pm.registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockBreak, Event.Priority.Normal, this);
-            pm.registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak, Event.Priority.Normal, this);
-            pm.registerEvent(Event.Type.ENTITY_EXPLODE, new entityExplode(), Event.Priority.Normal, this);
-        }
-
-        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) { //Now set up our database for storing transactions!
-            setupDB();
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
-
-            if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
-                getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
-            }
-        }
-
-        //Now set up our logging to file!
-        if (Config.getBoolean(Property.LOG_TO_FILE)) {
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new FileWriterQueue(), 201L, 201L);
-        }
-
-        //And now for the chest masking
-        if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) {
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new MaskChest(), 40L, 40L);
-        }
-
+        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
+        if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
+        if (Config.getBoolean(Property.LOG_TO_FILE)) scheduleTask(new FileWriterQueue(), 201L, 201L);
+        if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) scheduleTask(new MaskChest(), 40L, 40L);
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
@@ -91,6 +70,33 @@ public class ChestShop extends JavaPlugin {
 
     public void onDisable() {
         System.out.println('[' + getPluginName() + "] version " + getVersion() + " shutting down!");
+    }
+
+    //////////////////    REGISTER EVENTS & SCHEDULER    ///////////////////////////
+    private void registerEvents() {
+        blockBreak blockBreak = new blockBreak();
+        registerEvent(Event.Type.BLOCK_BREAK, blockBreak);
+        registerEvent(Event.Type.BLOCK_PLACE, new blockPlace());
+        registerEvent(Event.Type.SIGN_CHANGE, new signChange());
+        registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest);
+        registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable());
+        registerEvent(Event.Type.PLUGIN_DISABLE, new pluginDisable());
+        if (!Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) return;
+        registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockBreak);
+        registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak);
+        registerEvent(Event.Type.ENTITY_EXPLODE, new entityExplode());
+    }
+
+    private void registerEvent(Event.Type type, Listener listener) {
+        registerEvent(type, listener, Event.Priority.Normal);
+    }
+
+    private void registerEvent(Event.Type type, Listener listener, Event.Priority priority) {
+        pm.registerEvent(type, listener, priority, this);
+    }
+
+    private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {
+        server.getScheduler().scheduleAsyncRepeatingTask(this, runnable, startTime, repetetionTime);
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
@@ -124,6 +130,7 @@ public class ChestShop extends JavaPlugin {
         );
 
         DB = database.getDatabase();
+        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
     }
 
     @Override
@@ -146,5 +153,9 @@ public class ChestShop extends JavaPlugin {
 
     public static EbeanServer getDB() {
         return DB;
+    }
+
+    public static ArrayList getDependencies() {
+        return (ArrayList) description.getSoftDepend();
     }
 }

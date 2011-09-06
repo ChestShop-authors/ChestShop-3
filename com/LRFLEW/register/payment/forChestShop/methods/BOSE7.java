@@ -1,6 +1,7 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
+import com.LRFLEW.register.payment.forChestShop.Method;
+
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
@@ -25,6 +26,10 @@ public class BOSE7 implements Method {
 
     public String getVersion() {
         return "0.7.0";
+    }
+    
+    public int fractionalDigits() {
+    	return this.BOSEconomy.getFractionalDigits();
     }
 
     public String format(double amount) {
@@ -68,8 +73,8 @@ public class BOSE7 implements Method {
     }
 
     public static class BOSEAccount implements MethodAccount {
-        private final String name;
-        private final BOSEconomy BOSEconomy;
+        private String name;
+        private BOSEconomy BOSEconomy;
 
         public BOSEAccount(String name, BOSEconomy bOSEconomy) {
             this.name = name;
@@ -125,8 +130,8 @@ public class BOSE7 implements Method {
     }
 
     public static class BOSEBankAccount implements MethodBankAccount {
-        private final String bank;
-        private final BOSEconomy BOSEconomy;
+        private String bank;
+        private BOSEconomy BOSEconomy;
 
         public BOSEBankAccount(String bank, BOSEconomy bOSEconomy) {
             this.bank = bank;

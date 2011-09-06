@@ -1,11 +1,11 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.ChestShop.Utils.uLongName;
-import com.nijikokun.register.payment.forChestShop.Method;
+import com.LRFLEW.register.payment.forChestShop.Method;
 
 /**
  * @author Acrobot
- * Economy management
+ *         Economy management
  */
 public class Economy {
     public static Method economy;

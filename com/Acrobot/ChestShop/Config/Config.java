@@ -1,66 +1,23 @@
 package com.Acrobot.ChestShop.Config;
 
-import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Utils.uLongName;
-import org.bukkit.util.config.Configuration;
-
-import java.io.File;
-import java.io.FileWriter;
+import com.LRFLEW.register.payment.forChestShop.Methods;
 
 /**
  * @author Acrobot
  */
 public class Config {
-    private static final File configFile = new File(ChestShop.folder, "config.yml");
-    private static final File langFile = new File(ChestShop.folder, "local.yml");
-    private static final Configuration config = new Configuration(configFile);
-    private static final Configuration language = new Configuration(langFile);
+    private static ConfigObject config;
 
-    public static void setUp() {
-        if(!ChestShop.folder.exists()) ChestShop.folder.mkdir();
-
-        reloadConfig();
-        config.load();
-
-        reloadLanguage();
-        language.load();
-        
-        uLongName.config.load();
-    }
-
-    private static void reloadConfig(){
-        config.load();
-        for (Property def : Property.values()) {
-            if (config.getProperty(def.name()) == null) {
-                writeToFile('\n' + def.name() + ": " + def.getValue() + "\n#" + def.getComment(), configFile);
-            }
-        }
-    }
-
-    private static void reloadLanguage(){
-        language.load();
-        for (Language def : Language.values()) {
-            if (language.getProperty(def.name()) == null) {
-                writeToFile('\n' + def.name() + ": \"" + def.toString() + '\"', langFile);
-            }
-        }
-    }
-
-    private static void writeToFile(String string, File file) {
-        try {
-            FileWriter fw = new FileWriter(file, true);
-            fw.write(string + '\n');
-            fw.close();
-        } catch (Exception e) {
-            System.out.println("Couldn't write to file - " + file.getName());
-        }
+    public static void setup(ConfigObject cfg) {
+        config = cfg;
+        Methods.preferred = Config.getString(Property.PREFERRED_ECONOMY_PLUGIN);
     }
 
     public static boolean getBoolean(Property value) {
         return (Boolean) getValue(value.name());
     }
 
-    public static float getFloat(Property value){
+    public static float getFloat(Property value) {
         return new Float(getValue(value.name()).toString());
     }
 
@@ -73,7 +30,7 @@ public class Config {
     }
 
     public static double getDouble(Property value) {
-        return config.getDouble(value.name(), -1);
+        return Double.parseDouble(getValue(value.name()).toString());
     }
 
     private static String getColored(String msg) {
@@ -81,16 +38,10 @@ public class Config {
     }
 
     public static String getLocal(Language lang) {
-        return getColored(language.getString(Language.prefix.name()) + language.getString(lang.name()));
+        return getColored(config.getLanguageConfig().getString(Language.prefix.name()) + config.getLanguageConfig().getString(lang.name()));
     }
 
     private static Object getValue(String node) {
         return config.getProperty(node);
-    }
-
-    public static String getPreferred() {
-        config.load();
-        
-        return getString(Property.PREFERRED_ECONOMY_PLUGIN);
     }
 }

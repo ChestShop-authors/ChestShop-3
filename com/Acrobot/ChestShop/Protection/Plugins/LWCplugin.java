@@ -5,7 +5,6 @@ import com.Acrobot.ChestShop.Protection.Protection;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.ProtectionTypes;
 import com.griefcraft.modules.limits.LimitsModule;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 

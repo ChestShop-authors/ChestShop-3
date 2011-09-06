@@ -1,6 +1,6 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
+import com.LRFLEW.register.payment.forChestShop.Method;
 
 import me.ashtheking.currency.Currency;
 import me.ashtheking.currency.CurrencyList;
@@ -22,11 +22,15 @@ public class MCUR implements Method {
     }
 
     public String getName() {
-        return "Currency";
+        return "MultiCurrency";
     }
 
     public String getVersion() {
         return "0.09";
+    }
+    
+    public int fractionalDigits() {
+    	return -1;
     }
 
     public String format(double amount) {
@@ -58,7 +62,9 @@ public class MCUR implements Method {
     }
 
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase(getName()) && plugin instanceof Currency;
+        return (plugin.getDescription().getName().equalsIgnoreCase("Currency")
+        		|| plugin.getDescription().getName().equalsIgnoreCase("MultiCurrency"))
+        		&& plugin instanceof Currency;
     }
 
     public void setPlugin(Plugin plugin) {
@@ -66,7 +72,7 @@ public class MCUR implements Method {
     }
 
     public static class MCurrencyAccount implements MethodAccount{
-        private final String name;
+        private String name;
 
         public MCurrencyAccount(String name) {
             this.name = name;

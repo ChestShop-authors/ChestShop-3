@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Economy;
+import com.LRFLEW.register.payment.forChestShop.Methods;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.ServerListener;
 
@@ -9,13 +10,9 @@ import org.bukkit.event.server.ServerListener;
  */
 public class pluginDisable extends ServerListener {
     public void onPluginDisable(PluginDisableEvent event) {
-        if (Economy.economy != null && pluginEnable.methods.hasMethod()) {
-            boolean check = pluginEnable.methods.checkDisabled(event.getPlugin());
-
-            if (check) {
-                Economy.economy = null;
-                System.out.println("[ChestShop] Economy plugin disabled!");
-            }
+        if (Economy.economy != null && Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {
+            Economy.economy = null;
+            System.out.println("[ChestShop] Economy plugin disabled!");
         }
     }
 }

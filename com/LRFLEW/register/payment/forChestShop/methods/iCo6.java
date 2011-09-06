@@ -1,11 +1,11 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
+import com.LRFLEW.register.payment.forChestShop.Method;
 import com.iCo6.iConomy;
 import com.iCo6.system.Account;
 import com.iCo6.system.Accounts;
 import com.iCo6.system.Holdings;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 
 import org.bukkit.plugin.Plugin;
 
@@ -30,9 +30,13 @@ public class iCo6 implements Method {
     public String getVersion() {
         return "6";
     }
+    
+    public int fractionalDigits() {
+    	return 2;
+    }
 
-    public String format(double amount) {
-        return iConomy.format(amount);
+	public String format(double amount) {
+        return com.iCo6.iConomy.format(amount);
     }
 
     public boolean hasBanks() {
@@ -60,10 +64,9 @@ public class iCo6 implements Method {
     }
 
     public boolean isCompatible(Plugin plugin) {
-        try { Class.forName("com.iCo6.IO.InventoryDB"); }
-        catch(Exception e) {return false;}
-
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iCo6.iConomy") && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") 
+        		&& plugin.getClass().getName().equals("com.iCo6.iConomy") 
+        		&& plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {
@@ -71,8 +74,8 @@ public class iCo6 implements Method {
     }
 
     public static class iCoAccount implements MethodAccount {
-        private final Account account;
-        private final Holdings holdings;
+        private Account account;
+        private Holdings holdings;
 
         public iCoAccount(Account account) {
             this.account = account;

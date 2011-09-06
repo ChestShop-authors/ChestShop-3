@@ -24,7 +24,7 @@ public class ItemInfo implements CommandExecutor {
             item = Items.getItemStack(args[0]);
         }
 
-        if(item == null || item.getType() == Material.AIR) return false;
+        if (item == null || item.getType() == Material.AIR) return false;
 
         sender.sendMessage(Config.getLocal(Language.iteminfo));
         sender.sendMessage(item.getTypeId() + (item.getDurability() != 0 ? " : " + item.getDurability() : "") + " - " + ChatColor.GRAY + item.getType().name());

@@ -1,12 +1,12 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.LRFLEW.register.payment.forChestShop.methods;
 
+import com.LRFLEW.register.payment.forChestShop.Method;
 import com.iConomy.iConomy;
 import com.iConomy.system.Account;
 import com.iConomy.system.BankAccount;
 import com.iConomy.system.Holdings;
 import com.iConomy.util.Constants;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 
 import org.bukkit.plugin.Plugin;
 
@@ -31,9 +31,13 @@ public class iCo5 implements Method {
     public String getVersion() {
         return "5";
     }
+    
+    public int fractionalDigits() {
+    	return 2;
+    }
 
-    public String format(double amount) {
-        return iConomy.format(amount);
+	public String format(double amount) {
+        return com.iConomy.iConomy.format(amount);
     }
 
     public boolean hasBanks() {
@@ -41,27 +45,29 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBank(String bank) {
-        return (hasBanks()) && this.iConomy.Banks.exists(bank);
+        return (hasBanks()) && com.iConomy.iConomy.Banks.exists(bank);
     }
 
     public boolean hasAccount(String name) {
-        return this.iConomy.hasAccount(name);
+        return com.iConomy.iConomy.hasAccount(name);
     }
 
     public boolean hasBankAccount(String bank, String name) {
-        return (hasBank(bank)) && this.iConomy.getBank(bank).hasAccount(name);
+        return (hasBank(bank)) && com.iConomy.iConomy.getBank(bank).hasAccount(name);
     }
 
     public MethodAccount getAccount(String name) {
-        return new iCoAccount(this.iConomy.getAccount(name));
+        return new iCoAccount(com.iConomy.iConomy.getAccount(name));
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
-        return new iCoBankAccount(this.iConomy.getBank(bank).getAccount(name));
+        return new iCoBankAccount(com.iConomy.iConomy.getBank(bank).getAccount(name));
     }
 
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") 
+        		&& plugin.getClass().getName().equals("com.iConomy.iConomy") 
+        		&& plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {

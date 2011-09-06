@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop.Config;
 /**
  * @author Acrobot
  */
-public enum Language{
+public enum Language {
     prefix("&a[Shop] &f"),
     iteminfo("&aItem Information:&f"),
 

@@ -27,14 +27,15 @@ public class restrictedSign {
     public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
         if (Permission.permissions == null || !uSign.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) return true;
-        
+
         String world = blockUp.getWorld().getName();
         String playerName = player.getName();
 
         sign = (Sign) blockUp.getState();
 
         for (int i = 1; i <= 3; i++) {
-            if(Permission.permissions.inGroup(world, playerName, sign.getLine(i))) return true;
+            if (Permission.permissions != null && Permission.permissions.inGroup(world, playerName, sign.getLine(i))) return true;
+            if (player.hasPermission("ChestShop.group." + sign.getLine(i))) return true;
         }
         return false;
     }
