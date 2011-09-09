@@ -22,10 +22,10 @@ public class blockBreak extends BlockListener {
         if (uSign.isSign(block)) block.getState().update();
 
         Sign sign = uBlock.findRestrictedSign(block);
-        if (sign != null && isCorrectSign(sign, block)) return true;
+        if (isCorrectSign(sign, block)) return true;
 
         sign = uBlock.findSign(block);
-        return sign != null && (isCorrectSign(sign, block) && playerIsNotOwner(player, sign));
+        return isCorrectSign(sign, block) && playerIsNotOwner(player, sign);
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
@@ -33,7 +33,7 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean isCorrectSign(Sign sign, Block block) {
-        return sign.getBlock() == block || getAttachedFace(sign) == block;
+        return sign != null && sign.getBlock() == block || getAttachedFace(sign) == block;
     }
 
     private static Block getAttachedFace(Sign sign) {

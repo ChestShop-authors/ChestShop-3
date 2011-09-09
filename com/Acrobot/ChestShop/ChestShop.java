@@ -13,6 +13,7 @@ import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.Acrobot.ChestShop.Protection.MaskChest;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
