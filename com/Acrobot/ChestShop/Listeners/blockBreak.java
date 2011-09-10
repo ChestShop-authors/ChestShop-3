@@ -33,7 +33,7 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean isCorrectSign(Sign sign, Block block) {
-        return sign != null && sign.getBlock() == block || getAttachedFace(sign) == block;
+        return sign != null && (sign.getBlock() == block || getAttachedFace(sign) == block);
     }
 
     private static Block getAttachedFace(Sign sign) {
@@ -54,6 +54,8 @@ public class blockBreak extends BlockListener {
     }
 
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (!uSign.isSign(event.getRetractLocation().getBlock()) && cancellingBlockBreak(event.getRetractLocation().getBlock(), null)) event.setCancelled(true);
+        try{
+            if (!uSign.isSign(event.getRetractLocation().getBlock()) && cancellingBlockBreak(event.getRetractLocation().getBlock(), null)) event.setCancelled(true);
+        } catch (Exception ignored){}
     }
 }
