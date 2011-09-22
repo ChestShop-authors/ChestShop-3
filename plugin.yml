@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.12
+version: 3.2
 
 
 author: Acrobot
@@ -10,7 +10,7 @@ description: >
              A chest shop for economy plugins.
  
  
-softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem]
+softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny]
 commands:
   iteminfo:
     aliases: [iinfo]

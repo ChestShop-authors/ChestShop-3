@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.ChestShop.Utils.uLongName;
-import com.LRFLEW.register.payment.forChestShop.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 
 /**
  * @author Acrobot

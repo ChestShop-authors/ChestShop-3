@@ -1,4 +1,4 @@
-package com.LRFLEW.register.payment.forChestShop;
+package com.nijikokun.register.payment.forChestShop;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -15,9 +15,10 @@ import java.util.Set;
  * Methods also allows you to set a preferred method of payment before it captures
  * payment plugins in the initialization process.
  * <p/>
- * in server.properties:
+ * in <code>bukkit.yml</code>:
  * <blockquote><pre>
- *  economy=iConomy
+ *  economy:
+ *      preferred: "iConomy"
  * </pre></blockquote>
  *
  * @author: Nijikokun <nijikokun@shortmail.com> (@nijikokun)
@@ -33,19 +34,21 @@ public class Methods {
     private static Set<String> Dependencies = new HashSet<String>();
     private static Set<Method> Attachables = new HashSet<Method>();
 
-    static { _init(); }
+    static {
+        _init();
+    }
 
     /**
      * Implement all methods along with their respective name & class.
      */
     private static void _init() {
-        addMethod("iConomy", new com.LRFLEW.register.payment.forChestShop.methods.iCo6());
-        addMethod("iConomy", new com.LRFLEW.register.payment.forChestShop.methods.iCo5());
-        addMethod("iConomy", new com.LRFLEW.register.payment.forChestShop.methods.iCo4());
-        addMethod("BOSEconomy", new com.LRFLEW.register.payment.forChestShop.methods.BOSE6());
-        addMethod("BOSEconomy", new com.LRFLEW.register.payment.forChestShop.methods.BOSE7());
-        addMethod("Essentials", new com.LRFLEW.register.payment.forChestShop.methods.EE17());
-        addMethod("Currency", new com.LRFLEW.register.payment.forChestShop.methods.MCUR());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo6());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
+        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE6());
+        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE7());
+        addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
+        addMethod("Currency", new com.nijikokun.register.payment.forChestShop.methods.MCUR());
         Dependencies.add("MultiCurrency");
     }
 
@@ -96,12 +99,11 @@ public class Methods {
      * @return Method <em>or</em> Null
      */
     public static Method createMethod(Plugin plugin) {
-        for (Method method : Methods) {
+        for (Method method : Methods)
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;
             }
-        }
 
         return null;
     }
@@ -128,49 +130,59 @@ public class Methods {
      * @return <code>boolean</code> True on success, False on failure.
      */
     public static boolean setMethod(PluginManager manager) {
-        if (hasMethod()) return true;
-        if (self) { self = false; return false; }
+        if (hasMethod())
+            return true;
+
+        if (self) {
+            self = false;
+            return false;
+        }
 
         int count = 0;
         boolean match = false;
         Plugin plugin;
 
         for (String name : Dependencies) {
-            if (hasMethod()) break;
+            if (hasMethod())
+                break;
+
             plugin = manager.getPlugin(name);
-            if (plugin == null) continue;
+            if (plugin == null)
+                continue;
 
             Method current = createMethod(plugin);
-            if (current == null) continue;
+            if (current == null)
+                continue;
 
             if (preferred.isEmpty())
                 Method = current;
-            else {
+            else
                 Attachables.add(current);
-            }
         }
 
         if (!preferred.isEmpty()) {
             do {
-                if (hasMethod()) {
+                if (hasMethod())
                     match = true;
-                } else {
+                else {
                     for (Method attached : Attachables) {
-                        if (attached == null) continue;
+                        if (attached == null)
+                            continue;
 
                         if (hasMethod()) {
                             match = true;
                             break;
                         }
 
-                        if (preferred.isEmpty()) Method = attached;
+                        if (preferred.isEmpty())
+                            Method = attached;
 
-                        if (count == 0) {
+                        if (count == 0)
                             if (preferred.equalsIgnoreCase(attached.getName()))
                                 Method = attached;
-                        } else {
-                            Method = attached;
-                        }
+
+                            else
+                                Method = attached;
                     }
 
                     count++;
@@ -179,6 +191,20 @@ public class Methods {
         }
 
         return hasMethod();
+    }
+
+    /**
+     * Sets the preferred economy
+     *
+     * @return <code>boolean</code>
+     */
+    public static boolean setPreferred(String check) {
+        if (Dependencies.contains(check)) {
+            preferred = check;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -198,8 +224,12 @@ public class Methods {
      * @return <code>boolean</code>
      */
     public static boolean checkDisabled(Plugin method) {
-        if (!hasMethod()) return true;
-        if (Method.isCompatible(method)) Method = null;
+        if (!hasMethod())
+            return true;
+
+        if (Method.isCompatible(method))
+            Method = null;
+
         return (Method == null);
     }
 }

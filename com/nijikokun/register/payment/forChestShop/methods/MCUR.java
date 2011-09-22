@@ -1,10 +1,8 @@
-package com.LRFLEW.register.payment.forChestShop.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.LRFLEW.register.payment.forChestShop.Method;
-
+import com.nijikokun.register.payment.forChestShop.Method;
 import me.ashtheking.currency.Currency;
 import me.ashtheking.currency.CurrencyList;
-
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -28,9 +26,9 @@ public class MCUR implements Method {
     public String getVersion() {
         return "0.09";
     }
-    
+
     public int fractionalDigits() {
-    	return -1;
+        return -1;
     }
 
     public String format(double amount) {
@@ -63,15 +61,15 @@ public class MCUR implements Method {
 
     public boolean isCompatible(Plugin plugin) {
         return (plugin.getDescription().getName().equalsIgnoreCase("Currency")
-        		|| plugin.getDescription().getName().equalsIgnoreCase("MultiCurrency"))
-        		&& plugin instanceof Currency;
+                || plugin.getDescription().getName().equalsIgnoreCase("MultiCurrency"))
+                && plugin instanceof Currency;
     }
 
     public void setPlugin(Plugin plugin) {
         currencyList = (Currency) plugin;
     }
 
-    public static class MCurrencyAccount implements MethodAccount{
+    public static class MCurrencyAccount implements MethodAccount {
         private String name;
 
         public MCurrencyAccount(String name) {

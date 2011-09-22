@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -50,7 +51,7 @@ public class playerInteract extends PlayerListener {
             }
         }
 
-        if (!uSign.isSign(block)) return; //It's not a sign!
+        if (!uSign.isSign(block)) return;
         Sign sign = (Sign) block.getState();
 
         if (!uSign.isValid(sign) || !enoughTimeHasPassed(player) || player.isSneaking()) return;
@@ -59,8 +60,8 @@ public class playerInteract extends PlayerListener {
 
         if (action == Action.RIGHT_CLICK_BLOCK) event.setCancelled(true);
 
-        if (uLongName.stripName(player.getName()).equals(sign.getLine(0)) && (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING))) {
-            showChestGUI(player, block);
+        if (uLongName.stripName(player.getName()).equals(sign.getLine(0))) {
+            if (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING)) showChestGUI(player, block);
             return;
         }
 
@@ -96,9 +97,7 @@ public class playerInteract extends PlayerListener {
         IInventory inventory = ((CraftInventory) chest.getInventory()).getInventory();
         chest = uBlock.findNeighbor(chest);
 
-        if (chest != null) { //There is also a neighbor chest
-            inventory = new InventoryLargeChest(player.getName() + "'s Shop", inventory, ((CraftInventory) chest.getInventory()).getInventory());
-        }
+        if (chest != null) inventory = new InventoryLargeChest(player.getName() + "'s Shop", inventory, ((CraftInventory) chest.getInventory()).getInventory());
 
         ((CraftPlayer) player).getHandle().a(inventory); //Show inventory on the screen
     }

@@ -24,7 +24,8 @@ public enum Property {
     MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!"),
     SHOW_MESSAGE_OUT_OF_STOCK(true, "Do you want to show \"Out of stock\" messages?"),
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
-    SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?");
+    SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?"),
+    TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?");
 
 
     private final Object value;

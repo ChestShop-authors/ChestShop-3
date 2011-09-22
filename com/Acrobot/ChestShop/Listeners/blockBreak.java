@@ -11,14 +11,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.material.PistonBaseMaterial;
 
 /**
  * @author Acrobot
  */
 public class blockBreak extends BlockListener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
-        if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
-
+        if (block == null || (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD)))) return false;
         if (uSign.isSign(block)) block.getState().update();
 
         Sign sign = uBlock.findRestrictedSign(block);
@@ -54,8 +54,10 @@ public class blockBreak extends BlockListener {
     }
 
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        try{
-            if (!uSign.isSign(event.getRetractLocation().getBlock()) && cancellingBlockBreak(event.getRetractLocation().getBlock(), null)) event.setCancelled(true);
-        } catch (Exception ignored){}
+        if (cancellingBlockBreak(getRetractBlock(event), null)) event.setCancelled(true);
+    }
+
+    private static Block getRetractBlock(BlockPistonRetractEvent event) {
+        return event.getBlock().getState().getData() instanceof PistonBaseMaterial ? event.getRetractLocation().getBlock() : null;
     }
 }

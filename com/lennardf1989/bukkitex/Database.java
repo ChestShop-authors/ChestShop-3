@@ -59,14 +59,12 @@ public abstract class Database {
      * @param username  Username required to access the database
      * @param password  Password belonging to the username, may be empty
      * @param isolation Isolation type. For example: SERIALIZABLE, also see TransactionIsolation
-     * @param logging   If set to false, all logging will be disabled
-     * @param rebuild   If set to true, all tables will be dropped and recreated. Be sure to create a backup before doing so!
      */
-    public void initializeDatabase(String driver, String url, String username, String password, String isolation, boolean logging, boolean rebuild) {
+    public void initializeDatabase(String driver, String url, String username, String password, String isolation) {
         //Logging needs to be set back to the original level, no matter what happens
         try {
             //Disable all logging
-            disableDatabaseLogging(logging);
+            disableDatabaseLogging(false);
 
             //Prepare the database
             prepareDatabase(driver, url, username, password, isolation);
@@ -75,12 +73,12 @@ public abstract class Database {
             loadDatabase();
 
             //Create all tables
-            installDatabase(rebuild);
+            installDatabase(true);
         } catch (Exception ex) {
             throw new RuntimeException("An exception has occured while initializing the database", ex);
         } finally {
             //Enable all logging
-            enableDatabaseLogging(logging);
+            enableDatabaseLogging(false);
         }
     }
 

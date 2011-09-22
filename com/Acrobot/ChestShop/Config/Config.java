@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Config;
 
-import com.LRFLEW.register.payment.forChestShop.Methods;
+import com.nijikokun.register.payment.forChestShop.Methods;
 
 /**
  * @author Acrobot
@@ -10,7 +10,7 @@ public class Config {
 
     public static void setup(ConfigObject cfg) {
         config = cfg;
-        Methods.preferred = Config.getString(Property.PREFERRED_ECONOMY_PLUGIN);
+        Methods.setPreferred(Config.getString(Property.PREFERRED_ECONOMY_PLUGIN));
     }
 
     public static boolean getBoolean(Property value) {

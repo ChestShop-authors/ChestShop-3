@@ -9,10 +9,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
-import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uLongName;
-import com.Acrobot.ChestShop.Utils.uNumber;
-import com.Acrobot.ChestShop.Utils.uSign;
+import com.Acrobot.ChestShop.Utils.*;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -92,6 +89,13 @@ public class signChange extends BlockListener {
                 }
 
                 Block chestBlock = chest.getBlock();
+
+                if(!uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())){
+                    player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
+                    dropSign(event);
+                    return;
+                }
+
                 boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
 
                 if (!(Security.protection instanceof Default) && canAccess) {
