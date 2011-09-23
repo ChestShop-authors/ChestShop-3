@@ -9,6 +9,7 @@ import com.Acrobot.ChestShop.Protection.Plugins.LWCplugin;
 import com.Acrobot.ChestShop.Protection.Plugins.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.uNumber;
+import com.Acrobot.ChestShop.Utils.uSign;
 import com.Acrobot.ChestShop.Utils.uTowny;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
@@ -61,12 +62,12 @@ public class pluginEnable extends ServerListener {
             if (Odd.oddItem != null) return;
             Odd.oddItem = (OddItem) plugin;
         } else if (name.equals("Towny")) {
-            if (uTowny.towny != null) return;
+            if (uSign.towny != null) return;
             int versionNumber = 0;
             String[] split = plugin.getDescription().getVersion().split("\\.");
             for (int i = 0; i < 4; i++) if (split.length >= i+1 && uNumber.isInteger(split[i])) versionNumber += (Math.pow(10, (3 - i) << 1) * Integer.parseInt(split[i])); //EPIC CODE RIGHT HERE
             if(versionNumber < 760047){ System.out.println(ChestShop.chatPrefix + "Your Towny version is outdated! Need version AT LEAST 0.76.0.47! - Your version is " + plugin.getDescription().getVersion()); return; }
-            uTowny.towny = (Towny) plugin;
+            uSign.towny = (Towny) plugin;
         }
         PluginDescriptionFile description = plugin.getDescription();
         System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");

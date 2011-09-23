@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
+import com.palmergames.bukkit.towny.Towny;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
@@ -17,6 +18,8 @@ public class uSign {
             Pattern.compile(".+"),
             Pattern.compile("[\\w :]+")
     };
+
+    public static Towny towny; //Moved this here - somehow, java fails at try/catch
 
     public static boolean isSign(Block block) {
         return block.getState() instanceof Sign;

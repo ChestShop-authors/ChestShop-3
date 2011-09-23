@@ -97,7 +97,7 @@ public class playerInteract extends PlayerListener {
         IInventory inventory = ((CraftInventory) chest.getInventory()).getInventory();
         chest = uBlock.findNeighbor(chest);
 
-        if (chest != null) inventory = new InventoryLargeChest(player.getName() + "'s Shop", inventory, ((CraftInventory) chest.getInventory()).getInventory());
+        if (chest != null) inventory = new InventoryLargeChest("Large chest", inventory, ((CraftInventory) chest.getInventory()).getInventory());
 
         ((CraftPlayer) player).getHandle().a(inventory); //Show inventory on the screen
     }

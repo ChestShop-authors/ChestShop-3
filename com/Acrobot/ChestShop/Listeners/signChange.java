@@ -90,7 +90,7 @@ public class signChange extends BlockListener {
 
                 Block chestBlock = chest.getBlock();
 
-                if(!uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())){
+                if(uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())){
                     player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
@@ -169,8 +169,7 @@ public class signChange extends BlockListener {
     }
 
     private static boolean formatFirstLine(String line1, Player player) {
-        return line1.isEmpty() ||
-                (!line1.equals(uLongName.stripName(player.getName())) && !Permission.has(player, Permission.ADMIN));
+        return line1.isEmpty() || (!line1.equals(uLongName.stripName(player.getName())) && !Permission.has(player, Permission.ADMIN));
     }
 
     private static void dropSign(SignChangeEvent event) {
