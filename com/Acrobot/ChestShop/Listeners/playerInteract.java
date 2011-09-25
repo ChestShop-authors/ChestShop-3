@@ -12,7 +12,6 @@ import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;

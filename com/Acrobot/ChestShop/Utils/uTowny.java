@@ -18,17 +18,17 @@ public class uTowny {
         return uSign.towny.getTownyUniverse().getTownBlock(chestlocation).getType() == TownBlockType.COMMERCIAL && uSign.towny.getTownyUniverse().getTownBlock(signLocation).getType() == TownBlockType.COMMERCIAL;
     }
 
-    public static boolean isPlotOwner(Player player, Location chestLocation, Location signLocation){
+    public static boolean isPlotOwner(Player player, Location chestLocation, Location signLocation) {
         return isBlockOwner(player, chestLocation) && isBlockOwner(player, signLocation);
     }
 
-    public static boolean canBuild(Player player, Location chestLocation, Location signLocation){
+    public static boolean canBuild(Player player, Location chestLocation, Location signLocation) {
         return !Config.getBoolean(Property.TOWNY_INTEGRATION) || (isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
     }
 
-    private static boolean isBlockOwner(Player player, Location location){
-        try{
+    private static boolean isBlockOwner(Player player, Location location) {
+        try {
             return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(uSign.towny.getTownyUniverse().getResident(player.getName()));
-        } catch (NotRegisteredException ex){ return false; }
+        } catch (NotRegisteredException ex) { return false; }
     }
 }

@@ -11,7 +11,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.material.PistonBaseMaterial;
 
 /**
  * @author Acrobot
@@ -58,6 +57,6 @@ public class blockBreak extends BlockListener {
     }
 
     private static Block getRetractBlock(BlockPistonRetractEvent event) {
-        return event.getBlock().getState().getData() instanceof PistonBaseMaterial ? event.getRetractLocation().getBlock() : null;
+        return (!uSign.isSign(event.getRetractLocation().getBlock()) ? event.getRetractLocation().getBlock() : null);
     }
 }

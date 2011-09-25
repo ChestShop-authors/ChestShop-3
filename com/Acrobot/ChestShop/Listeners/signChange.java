@@ -90,7 +90,7 @@ public class signChange extends BlockListener {
 
                 Block chestBlock = chest.getBlock();
 
-                if(uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())){
+                if (uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())) {
                     player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;

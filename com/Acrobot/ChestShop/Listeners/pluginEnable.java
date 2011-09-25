@@ -10,13 +10,11 @@ import com.Acrobot.ChestShop.Protection.Plugins.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.uNumber;
 import com.Acrobot.ChestShop.Utils.uSign;
-import com.Acrobot.ChestShop.Utils.uTowny;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
-import info.somethingodd.bukkit.OddItem.OddItem;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -59,17 +57,22 @@ public class pluginEnable extends ServerListener {
             DeadboltPlugin.deadbolt = (Deadbolt) plugin;
             Security.protection = new DeadboltPlugin();
         } else if (name.equals("OddItem")) {
-            if (Odd.oddItem != null) return;
-            Odd.oddItem = (OddItem) plugin;
+            if (Odd.isInitialized()) return;
+            if (plugin.getDescription().getVersion().startsWith("0.7")) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.8")); return; }
+            Odd.isInitialized = true;
         } else if (name.equals("Towny")) {
             if (uSign.towny != null) return;
             int versionNumber = 0;
             String[] split = plugin.getDescription().getVersion().split("\\.");
-            for (int i = 0; i < 4; i++) if (split.length >= i+1 && uNumber.isInteger(split[i])) versionNumber += (Math.pow(10, (3 - i) << 1) * Integer.parseInt(split[i])); //EPIC CODE RIGHT HERE
-            if(versionNumber < 760047){ System.out.println(ChestShop.chatPrefix + "Your Towny version is outdated! Need version AT LEAST 0.76.0.47! - Your version is " + plugin.getDescription().getVersion()); return; }
+            for (int i = 0; i < 4; i++) if (split.length >= i + 1 && uNumber.isInteger(split[i])) versionNumber += (Math.pow(10, (3 - i) << 1) * Integer.parseInt(split[i])); //EPIC CODE RIGHT HERE
+            if (versionNumber < 760047) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.76.0.47")); return; }
             uSign.towny = (Towny) plugin;
         }
         PluginDescriptionFile description = plugin.getDescription();
         System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");
+    }
+
+    private static String generateOutdatedVersion(String pluginName, String curVersion, String neededVersion){
+        return (new StringBuilder(7).append(ChestShop.chatPrefix).append("Your ").append(pluginName).append(" is outdated! Need version AT LEAST ").append(neededVersion).append(" - Your version is ").append(curVersion).toString());
     }
 }

@@ -7,15 +7,15 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class Odd {
-    public static OddItem oddItem;
+    public static boolean isInitialized;
 
     public static boolean isInitialized() {
-        return oddItem != null;
+        return isInitialized;
     }
 
     public static ItemStack returnItemStack(String name) {
         try {
-            return oddItem.getItemStack(name);
+            return OddItem.getItemStack(name);
         } catch (Exception ignored) {
             return null;
         }
