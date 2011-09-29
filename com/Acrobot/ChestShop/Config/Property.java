@@ -25,7 +25,8 @@ public enum Property {
     SHOW_MESSAGE_OUT_OF_STOCK(true, "Do you want to show \"Out of stock\" messages?"),
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
     SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?"),
-    TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?");
+    TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?"),
+    TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)");
 
 
     private final Object value;

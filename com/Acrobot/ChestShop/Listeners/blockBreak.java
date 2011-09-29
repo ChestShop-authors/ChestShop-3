@@ -5,12 +5,14 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.material.PistonBaseMaterial;
 
 /**
  * @author Acrobot
@@ -57,6 +59,17 @@ public class blockBreak extends BlockListener {
     }
 
     private static Block getRetractBlock(BlockPistonRetractEvent event) {
-        return (!uSign.isSign(event.getRetractLocation().getBlock()) ? event.getRetractLocation().getBlock() : null);
+        Block block = getRetractLocationBlock(event);
+        return (block != null && !uSign.isSign(block) ? block : null);
+    }
+
+    //Those are fixes for CraftBukkit's piston bug, where piston appears not to be a piston.
+    private static BlockFace getPistonDirection(Block block) {
+        return block.getState().getData() instanceof PistonBaseMaterial ? ((PistonBaseMaterial) block.getState().getData()).getFacing() : null;
+    }
+
+    private static Block getRetractLocationBlock(BlockPistonRetractEvent event) {
+        BlockFace pistonDirection = getPistonDirection(event.getBlock());
+        return pistonDirection != null ? event.getBlock().getRelative((pistonDirection), 2).getLocation().getBlock() : null;
     }
 }

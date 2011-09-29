@@ -1,4 +1,4 @@
-package com.nijikokun.register.payment.forChestShop;
+package com.nijikokun.register.forChestShop.payment;
 
 import org.bukkit.plugin.Plugin;
 
@@ -14,11 +14,11 @@ public interface Method {
      * Encodes the Plugin into an Object disguised as the Plugin.
      * If you want the original Plugin Class you must cast it to the correct
      * Plugin, to do so you have to verify the name and or version then cast.
-     * <p/>
+     *
      * <pre>
      *  if(method.getName().equalsIgnoreCase("iConomy"))
      *   iConomy plugin = ((iConomy)method.getPlugin());</pre>
-     *
+     * 
      * @return <code>Object</code>
      * @see #getName()
      * @see #getVersion()
@@ -38,11 +38,11 @@ public interface Method {
      * @return <code>String</code> Plugin version.
      */
     public String getVersion();
-
+    
     /**
      * Returns the amount of decimal places that get stored
      * NOTE: it will return -1 if there is no rounding
-     *
+     * 
      * @return <code>int</code> for each decimal place
      */
     public int fractionalDigits();
@@ -89,6 +89,23 @@ public interface Method {
     public boolean hasBankAccount(String bank, String name);
 
     /**
+     * Forces an account creation
+     *
+     * @param name Account name
+     * @return <code>boolean</code>
+     */
+    public boolean createAccount(String name);
+
+    /**
+     * Forces an account creation
+     *
+     * @param name Account name
+     * @param balance Initial account balance
+     * @return <code>boolean</code>
+     */
+    public boolean createAccount(String name, Double balance);
+
+    /**
      * Returns a <code>MethodAccount</code> class for an account <code>name</code>.
      *
      * @param name Account name
@@ -127,25 +144,15 @@ public interface Method {
      */
     public interface MethodAccount {
         public double balance();
-
         public boolean set(double amount);
-
         public boolean add(double amount);
-
         public boolean subtract(double amount);
-
         public boolean multiply(double amount);
-
         public boolean divide(double amount);
-
         public boolean hasEnough(double amount);
-
         public boolean hasOver(double amount);
-
         public boolean hasUnder(double amount);
-
         public boolean isNegative();
-
         public boolean remove();
 
         @Override
@@ -157,29 +164,17 @@ public interface Method {
      */
     public interface MethodBankAccount {
         public double balance();
-
         public String getBankName();
-
         public int getBankId();
-
         public boolean set(double amount);
-
         public boolean add(double amount);
-
         public boolean subtract(double amount);
-
         public boolean multiply(double amount);
-
         public boolean divide(double amount);
-
         public boolean hasEnough(double amount);
-
         public boolean hasOver(double amount);
-
         public boolean hasUnder(double amount);
-
         public boolean isNegative();
-
         public boolean remove();
 
         @Override

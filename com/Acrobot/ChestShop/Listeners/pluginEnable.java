@@ -13,7 +13,7 @@ import com.Acrobot.ChestShop.Utils.uSign;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.nijikokun.register.payment.forChestShop.Methods;
+import com.nijikokun.register.forChestShop.payment.Methods;
 import com.palmergames.bukkit.towny.Towny;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
@@ -72,7 +72,7 @@ public class pluginEnable extends ServerListener {
         System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");
     }
 
-    private static String generateOutdatedVersion(String pluginName, String curVersion, String neededVersion){
+    private static String generateOutdatedVersion(String pluginName, String curVersion, String neededVersion) {
         return (new StringBuilder(7).append(ChestShop.chatPrefix).append("Your ").append(pluginName).append(" is outdated! Need version AT LEAST ").append(neededVersion).append(" - Your version is ").append(curVersion).toString());
     }
 }

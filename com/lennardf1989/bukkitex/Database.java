@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Database {
-    private final JavaPlugin javaPlugin;
+    private JavaPlugin javaPlugin;
     private ClassLoader classLoader;
     private Level loggerLevel;
     private boolean usingSQLite;
@@ -31,7 +31,7 @@ public abstract class Database {
 
     /**
      * Create an instance of Database
-     *
+     * 
      * @param javaPlugin Plugin instancing this database
      */
     public Database(JavaPlugin javaPlugin) {
@@ -45,8 +45,9 @@ public abstract class Database {
             method.setAccessible(true);
 
             //Store the ClassLoader
-            this.classLoader = (ClassLoader) method.invoke(javaPlugin);
-        } catch (Exception ex) {
+            this.classLoader = (ClassLoader)method.invoke(javaPlugin);
+        }
+        catch(Exception ex ) {
             throw new RuntimeException("Failed to retrieve the ClassLoader of the plugin using Reflection", ex);
         }
     }
@@ -54,15 +55,15 @@ public abstract class Database {
     /**
      * Initialize the database using the passed arguments
      *
-     * @param driver    Database-driver to use. For example: org.sqlite.JDBC
-     * @param url       Location of the database. For example: jdbc:sqlite:{DIR}{NAME}.db
-     * @param username  Username required to access the database
-     * @param password  Password belonging to the username, may be empty
-     * @param isolation Isolation type. For example: SERIALIZABLE, also see TransactionIsolation
+     * @param driver        Database-driver to use. For example: org.sqlite.JDBC
+     * @param url           Location of the database. For example: jdbc:sqlite:{DIR}{NAME}.db
+     * @param username      Username required to access the database
+     * @param password      Password belonging to the username, may be empty
+     * @param isolation     Isolation type. For example: SERIALIZABLE, also see TransactionIsolation
      */
     public void initializeDatabase(String driver, String url, String username, String password, String isolation) {
         //Logging needs to be set back to the original level, no matter what happens
-        try {
+        try {            
             //Disable all logging
             disableDatabaseLogging(false);
 
@@ -73,16 +74,18 @@ public abstract class Database {
             loadDatabase();
 
             //Create all tables
-            installDatabase(true);
-        } catch (Exception ex) {
+            installDatabase(false);
+        }
+        catch(Exception ex) {
             throw new RuntimeException("An exception has occured while initializing the database", ex);
-        } finally {
+        }
+        finally {
             //Enable all logging
             enableDatabaseLogging(false);
         }
     }
 
-    private void prepareDatabase(String driver, String url, String username, String password, String isolation) {
+    private void prepareDatabase(String driver, String url, String username, String password, String isolation) {       
         //Setup the data source
         DataSourceConfig ds = new DataSourceConfig();
         ds.setDriver(driver);
@@ -101,7 +104,10 @@ public abstract class Database {
         List<Class<?>> classes = getDatabaseClasses();
 
         //Do a sanity check first
-        if (classes.isEmpty()) throw new RuntimeException("Database has been enabled, but no classes are registered to it");
+        if(classes.isEmpty()) {
+            //Exception: There is no use in continuing to load this database
+            throw new RuntimeException("Database has been enabled, but no classes are registered to it");
+        }
 
         //Register them with the EbeanServer
         sc.setClasses(classes);
@@ -115,6 +121,8 @@ public abstract class Database {
             sc.setDatabasePlatform(new SQLitePlatform());
             sc.getDatabasePlatform().getDbDdlSyntax().setIdentity("");
         }
+
+        prepareDatabaseAdditionalConfig(ds, sc);
 
         //Finally the data source
         sc.setDataSourceConfig(ds);
@@ -146,33 +154,34 @@ public abstract class Database {
 
             //Setup Ebean based on the configuration
             ebeanServer = EbeanServerFactory.create(serverConfig);
-        } catch (Exception ex) {
+        }
+        catch(Exception ex) {
             throw new RuntimeException("Failed to create a new instance of the EbeanServer", ex);
-        } finally {
+        }
+        finally {
             //Revert the ClassLoader back to its original value
-            if (currentClassLoader != null) Thread.currentThread().setContextClassLoader(currentClassLoader);
+            if(currentClassLoader != null) {
+                Thread.currentThread().setContextClassLoader(currentClassLoader); 
+            }
 
             //Revert the "defaultUseCaches"-field in URLConnection back to its original value
             try {
-                if (cacheField != null) cacheField.setBoolean(null, cacheValue);
-            } catch (Exception e) {
+                if(cacheField != null) {
+                    cacheField.setBoolean(null, cacheValue);
+                }
+            }
+            catch (Exception e) {
                 System.out.println("Failed to revert the \"defaultUseCaches\"-field back to its original value, URLConnection-caching remains disabled.");
             }
         }
     }
 
     private void installDatabase(boolean rebuild) {
-        //Check if the database has to be rebuild
-        if (!rebuild) return;
-
-        //Create a DDL generator
-        SpiEbeanServer serv = (SpiEbeanServer) ebeanServer;
-        DdlGenerator gen = serv.getDdlGenerator();
-
-        //Check if the database already (partially) exists
+         //Check if the database already (partially) exists
         boolean databaseExists = false;
 
-        for (Class<?> aClass : getDatabaseClasses()) {
+        List<Class<?>> classes = getDatabaseClasses();
+        for (Class<?> aClass : classes) {
             try {
                 //Do a simple query which only throws an exception if the table does not exist
                 ebeanServer.find(aClass).findRowCount();
@@ -180,33 +189,53 @@ public abstract class Database {
                 //Query passed without throwing an exception, a database therefore already exists
                 databaseExists = true;
                 break;
-            } catch (Exception ignored) {}
+            } catch (Exception ex) {
+                //Do nothing
+            }
         }
 
-        if(databaseExists) return;
+        //Check if the database has to be created or rebuilt
+        if(!rebuild && databaseExists) {
+            return;
+        }
 
-        //Fire "before drop" event
+        //Create a DDL generator
+        SpiEbeanServer serv = (SpiEbeanServer) ebeanServer;
+        DdlGenerator gen = serv.getDdlGenerator();
+
+       //Fire "before drop" event
         try {
             beforeDropDatabase();
-        } catch (Exception ex) {
+        }
+        catch(Exception ex) {
             //If the database exists, dropping has to be canceled to prevent data-loss
-            if (databaseExists) throw new RuntimeException("An unexpected exception occured", ex);
+            if(databaseExists) {
+                throw new RuntimeException("An unexpected exception occured", ex);
+            }
         }
 
         //Generate a DropDDL-script
         gen.runScript(true, gen.generateDropDdl());
 
         //If SQLite is being used, the database has to reloaded to release all resources
-        if (usingSQLite) loadDatabase();
+        if(usingSQLite) {
+            loadDatabase();
+        }
 
         //Generate a CreateDDL-script
-        //If SQLite is being used, the CreateDLL-script has to be validated and potentially fixed to be valid
-        gen.runScript(false, (usingSQLite ? validateCreateDDLSqlite(gen.generateCreateDdl()) : gen.generateCreateDdl()));
+        if(usingSQLite) {
+            //If SQLite is being used, the CreateDLL-script has to be validated and potentially fixed to be valid
+            gen.runScript(false, validateCreateDDLSqlite(gen.generateCreateDdl()));
+        }
+        else {
+            gen.runScript(false, gen.generateCreateDdl());
+        }
 
         //Fire "after create" event
         try {
             afterCreateDatabase();
-        } catch (Exception ex) {
+        }
+        catch(Exception ex) {
             throw new RuntimeException("An unexpected exception occured", ex);
         }
     }
@@ -241,11 +270,12 @@ public abstract class Database {
                 scriptLines.add(currentLine.trim());
 
                 //Check if the current line is of any use
-                if (currentLine.startsWith("create table")) {
+                if(currentLine.startsWith("create table")) {
                     //Found a table, so get its name and remember the line it has been encountered on
                     currentTable = currentLine.split(" ", 4)[2];
                     foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
-                } else if (currentLine.length() > 0 && currentLine.charAt(0) == ';' && currentTable != null && !currentTable.isEmpty()) {
+                }
+                else if(currentLine.length() > 0 && currentLine.charAt(0) == ';' && currentTable != null && !currentTable.isEmpty()) {
                     //Found the end of a table definition, so update the entry
                     int index = scriptLines.size() - 1;
                     foundTables.put(currentTable, index);
@@ -260,16 +290,17 @@ public abstract class Database {
 
                     //Reset the table-tracker
                     currentTable = null;
-                } else if (currentLine.startsWith("alter table")) {
+                }
+                else if(currentLine.startsWith("alter table")) {
                     //Found a potentially unsupported action
                     String[] alterTableLine = currentLine.split(" ", 4);
 
-                    if (alterTableLine[3].startsWith("add constraint")) {
+                    if(alterTableLine[3].startsWith("add constraint")) {
                         //Found an unsupported action: ALTER TABLE using ADD CONSTRAINT
                         String[] addConstraintLine = alterTableLine[3].split(" ", 4);
 
                         //Check if this line can be fixed somehow
-                        if (addConstraintLine[3].startsWith("foreign key")) {
+                        if(addConstraintLine[3].startsWith("foreign key")) {
                             //Calculate the index of last line of the current table
                             int tableLastLine = foundTables.get(alterTableLine[2]) + tableOffset;
 
@@ -283,7 +314,8 @@ public abstract class Database {
                             //Remove this line and raise the table offset because a line has been inserted
                             scriptLines.remove(scriptLines.size() - 1);
                             tableOffset++;
-                        } else {
+                        }
+                        else {
                             //Exception: This line cannot be fixed but is known the be unsupported by SQLite
                             throw new RuntimeException("Unsupported action encountered: ALTER TABLE using ADD CONSTRAINT with " + addConstraintLine[3]);
                         }
@@ -293,14 +325,15 @@ public abstract class Database {
 
             //Turn all the lines back into a single string
             StringBuilder newScript = new StringBuilder(5);
-            for (String newLine : scriptLines) newScript.append(newLine).append('\n');
+            for(String newLine : scriptLines) newScript.append(newLine).append('\n');
 
             //Print the new script
             System.out.println(newScript);
 
             //Return the fixed script
             return newScript.toString();
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) {
             //Exception: Failed to fix the DDL or something just went plain wrong
             throw new RuntimeException("Failed to validate the CreateDDL-script for SQLite", ex);
         }
@@ -308,7 +341,9 @@ public abstract class Database {
 
     private void disableDatabaseLogging(boolean logging) {
         //If logging is allowed, nothing has to be changed
-        if (logging) return;
+        if(logging) {
+            return;
+        }
 
         //Retrieve the level of the root logger
         loggerLevel = Logger.getLogger("").getLevel();
@@ -319,7 +354,9 @@ public abstract class Database {
 
     private void enableDatabaseLogging(boolean logging) {
         //If logging is allowed, nothing has to be changed
-        if (logging) return;
+        if(logging) {
+            return;
+        }
 
         //Set the level of the root logger back to the original value
         Logger.getLogger("").setLevel(loggerLevel);
@@ -327,7 +364,7 @@ public abstract class Database {
 
     /**
      * Get a list of classes which should be registered with the EbeanServer
-     *
+     * 
      * @return List List of classes which should be registered with the EbeanServer
      */
     protected List<Class<?>> getDatabaseClasses() {
@@ -337,18 +374,24 @@ public abstract class Database {
     /**
      * Method called before the loaded database is being dropped
      */
-    protected void beforeDropDatabase() {
-    }
+    protected void beforeDropDatabase() {}
 
     /**
      * Method called after the loaded database has been created
      */
-    protected void afterCreateDatabase() {
-    }
+    protected void afterCreateDatabase() {}
+
+    /**
+     * Method called near the end of prepareDatabase, before the dataSourceConfig is attached to the serverConfig.
+     *
+     * @param dataSourceConfig
+     * @param serverConfig
+     */
+    protected void prepareDatabaseAdditionalConfig(DataSourceConfig dataSourceConfig, ServerConfig serverConfig) {}
 
     /**
      * Get the instance of the EbeanServer
-     *
+     * 
      * @return EbeanServer Instance of the EbeanServer
      */
     public EbeanServer getDatabase() {

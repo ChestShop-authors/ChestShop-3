@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Config;
 
-import com.nijikokun.register.payment.forChestShop.Methods;
+import com.nijikokun.register.forChestShop.payment.Methods;
 
 /**
  * @author Acrobot

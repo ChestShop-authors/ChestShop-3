@@ -1,20 +1,20 @@
-package com.nijikokun.register.payment.forChestShop;
-
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+package com.nijikokun.register.forChestShop.payment;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+
 /**
  * The <code>Methods</code> initializes Methods that utilize the Method interface
  * based on a "first come, first served" basis.
- * <p/>
+ *
  * Allowing you to check whether a payment method exists or not.
- * <p/>
+ *
  * Methods also allows you to set a preferred method of payment before it captures
  * payment plugins in the initialization process.
- * <p/>
+ *
  * in <code>bukkit.yml</code>:
  * <blockquote><pre>
  *  economy:
@@ -29,7 +29,7 @@ public class Methods {
     private static String version = null;
     private static boolean self = false;
     private static Method Method = null;
-    public static String preferred = "";
+    private static String preferred = "";
     private static Set<Method> Methods = new HashSet<Method>();
     private static Set<String> Dependencies = new HashSet<String>();
     private static Set<Method> Attachables = new HashSet<Method>();
@@ -42,13 +42,13 @@ public class Methods {
      * Implement all methods along with their respective name & class.
      */
     private static void _init() {
-        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo6());
-        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
-        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
-        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE6());
-        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE7());
-        addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
-        addMethod("Currency", new com.nijikokun.register.payment.forChestShop.methods.MCUR());
+        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo6());
+        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo5());
+        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo4());
+        addMethod("BOSEconomy", new com.nijikokun.register.forChestShop.payment.methods.BOSE6());
+        addMethod("BOSEconomy", new com.nijikokun.register.forChestShop.payment.methods.BOSE7());
+        addMethod("Essentials", new com.nijikokun.register.forChestShop.payment.methods.EE17());
+        addMethod("Currency", new com.nijikokun.register.forChestShop.payment.methods.MCUR());
         Dependencies.add("MultiCurrency");
     }
 
@@ -74,7 +74,6 @@ public class Methods {
 
     /**
      * Use to get version of Register plugin
-     *
      * @return version
      */
     public static String getVersion() {
@@ -86,6 +85,7 @@ public class Methods {
      * through the <code>_init</code> method.
      *
      * @return <code>Set<String></code> - Array of payment methods that are loaded.
+     * @see #setMethod(org.bukkit.plugin.Plugin)
      */
     public static Set<String> getDependencies() {
         return Dependencies;
@@ -99,7 +99,7 @@ public class Methods {
      * @return Method <em>or</em> Null
      */
     public static Method createMethod(Plugin plugin) {
-        for (Method method : Methods)
+        for (Method method: Methods)
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;
@@ -117,6 +117,7 @@ public class Methods {
      * Verifies if Register has set a payment method for usage yet.
      *
      * @return <code>boolean</code>
+     * @see #setMethod(org.bukkit.plugin.Plugin)
      * @see #checkDisabled(org.bukkit.plugin.Plugin)
      */
     public static boolean hasMethod() {
@@ -127,6 +128,7 @@ public class Methods {
      * Checks Plugin Class against a multitude of checks to verify it's usability
      * as a payment method.
      *
+     * @param <code>PluginManager</code> the plugin manager for the server
      * @return <code>boolean</code> True on success, False on failure.
      */
     public static boolean setMethod(PluginManager manager) {
@@ -140,14 +142,14 @@ public class Methods {
 
         int count = 0;
         boolean match = false;
-        Plugin plugin;
+        Plugin plugin = null;
 
-        for (String name : Dependencies) {
+        for (String name : getDependencies()) {
             if (hasMethod())
                 break;
 
             plugin = manager.getPlugin(name);
-            if (plugin == null)
+            if (plugin == null || !plugin.isEnabled())
                 continue;
 
             Method current = createMethod(plugin);
@@ -170,8 +172,7 @@ public class Methods {
                             continue;
 
                         if (hasMethod()) {
-                            match = true;
-                            break;
+                            match = true; break;
                         }
 
                         if (preferred.isEmpty())
@@ -181,8 +182,8 @@ public class Methods {
                             if (preferred.equalsIgnoreCase(attached.getName()))
                                 Method = attached;
 
-                            else
-                                Method = attached;
+                        else
+                            Method = attached;
                     }
 
                     count++;
@@ -199,7 +200,7 @@ public class Methods {
      * @return <code>boolean</code>
      */
     public static boolean setPreferred(String check) {
-        if (Dependencies.contains(check)) {
+        if (getDependencies().contains(check)) {
             preferred = check;
             return true;
         }
@@ -224,7 +225,7 @@ public class Methods {
      * @return <code>boolean</code>
      */
     public static boolean checkDisabled(Plugin method) {
-        if (!hasMethod())
+        if(!hasMethod())
             return true;
 
         if (Method.isCompatible(method))

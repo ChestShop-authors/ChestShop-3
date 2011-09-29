@@ -71,11 +71,8 @@ public class playerInteract extends PlayerListener {
 
         Action buy = (Config.getBoolean(Property.REVERSE_BUTTONS) ? Action.LEFT_CLICK_BLOCK : Action.RIGHT_CLICK_BLOCK);
 
-        if (action == buy) {
-            ShopManagement.buy(sign, player);
-        } else {
-            ShopManagement.sell(sign, player);
-        }
+        if (action == buy) ShopManagement.buy(sign, player);
+        else ShopManagement.sell(sign, player);
     }
 
     private static boolean enoughTimeHasPassed(Player player) {

@@ -1,8 +1,10 @@
-package com.nijikokun.register.payment.forChestShop.methods;
+package com.nijikokun.register.forChestShop.payment.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
+import com.nijikokun.register.forChestShop.payment.Method;
+
 import me.ashtheking.currency.Currency;
 import me.ashtheking.currency.CurrencyList;
+
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -26,9 +28,9 @@ public class MCUR implements Method {
     public String getVersion() {
         return "0.09";
     }
-
+    
     public int fractionalDigits() {
-        return -1;
+    	return -1;
     }
 
     public String format(double amount) {
@@ -51,6 +53,16 @@ public class MCUR implements Method {
         return false;
     }
 
+    public boolean createAccount(String name) {
+        CurrencyList.setValue((String) CurrencyList.maxCurrency(name)[0], name, 0);
+        return true;
+    }
+
+    public boolean createAccount(String name, Double balance) {
+        CurrencyList.setValue((String) CurrencyList.maxCurrency(name)[0], name, balance);
+        return true;
+    }
+
     public MethodAccount getAccount(String name) {
         return new MCurrencyAccount(name);
     }
@@ -61,15 +73,15 @@ public class MCUR implements Method {
 
     public boolean isCompatible(Plugin plugin) {
         return (plugin.getDescription().getName().equalsIgnoreCase("Currency")
-                || plugin.getDescription().getName().equalsIgnoreCase("MultiCurrency"))
-                && plugin instanceof Currency;
+             || plugin.getDescription().getName().equalsIgnoreCase("MultiCurrency"))
+             && plugin instanceof Currency;
     }
 
     public void setPlugin(Plugin plugin) {
         currencyList = (Currency) plugin;
     }
 
-    public static class MCurrencyAccount implements MethodAccount {
+    public class MCurrencyAccount implements MethodAccount{
         private String name;
 
         public MCurrencyAccount(String name) {

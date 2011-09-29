@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Economy;
-import com.nijikokun.register.payment.forChestShop.Methods;
+import com.nijikokun.register.forChestShop.payment.Methods;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.ServerListener;
 

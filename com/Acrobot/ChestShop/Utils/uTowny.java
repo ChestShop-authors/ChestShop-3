@@ -22,8 +22,13 @@ public class uTowny {
         return isBlockOwner(player, chestLocation) && isBlockOwner(player, signLocation);
     }
 
+    public static boolean isNotInTheWilderness(Location chestLocation, Location signLocation) {
+        return !uSign.towny.getTownyUniverse().isWilderness(chestLocation.getBlock()) && !uSign.towny.getTownyUniverse().isWilderness(signLocation.getBlock());
+    }
+
     public static boolean canBuild(Player player, Location chestLocation, Location signLocation) {
-        return !Config.getBoolean(Property.TOWNY_INTEGRATION) || (isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
+        System.out.println(isNotInTheWilderness(chestLocation, signLocation));
+        return uSign.towny == null || !Config.getBoolean(Property.TOWNY_INTEGRATION) || (isNotInTheWilderness(chestLocation, signLocation) && isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
     }
 
     private static boolean isBlockOwner(Player player, Location location) {
