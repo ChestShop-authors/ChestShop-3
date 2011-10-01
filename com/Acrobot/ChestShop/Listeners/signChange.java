@@ -76,7 +76,7 @@ public class signChange extends BlockListener {
             dropSign(event);
             return;
         }
-//        if (!playerIsAdmin) {
+        if (!playerIsAdmin) {
             for (int id : Config.getIntArr(Property.BLACKLISTED_ITEMS)) {
                 if (id == mat.getId()) {
                     player.sendMessage(Config.getLocal(Language.BLACKLISTED_ITEM).replace("&item", ItemType.toName(id)));
@@ -84,7 +84,7 @@ public class signChange extends BlockListener {
                     return;
                 }
             }
-//        }
+        }
         if (thirdLine == null) {
             dropSign(event);
             player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
