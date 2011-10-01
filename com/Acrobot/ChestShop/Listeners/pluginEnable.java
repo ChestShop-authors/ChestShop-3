@@ -15,6 +15,8 @@ import com.griefcraft.lwc.LWCPlugin;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.forChestShop.payment.Methods;
 import com.palmergames.bukkit.towny.Towny;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -67,6 +69,11 @@ public class pluginEnable extends ServerListener {
             for (int i = 0; i < 4; i++) if (split.length >= i + 1 && uNumber.isInteger(split[i])) versionNumber += (Math.pow(10, (3 - i) << 1) * Integer.parseInt(split[i])); //EPIC CODE RIGHT HERE
             if (versionNumber < 760047) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.76.0.47")); return; }
             uSign.towny = (Towny) plugin;
+        } else if (name.equalsIgnoreCase("WorldGuard")) {
+            if (ChestShop.getWorldGuard() != null) return;
+            ChestShop.setWorldGuard((WorldGuardPlugin) plugin);
+            ChestShop.setGlobalRegionManager(ChestShop.getWorldGuard().getGlobalRegionManager());
+            ChestShop.getGlobalRegionManager().preload();
         }
         PluginDescriptionFile description = plugin.getDescription();
         System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");

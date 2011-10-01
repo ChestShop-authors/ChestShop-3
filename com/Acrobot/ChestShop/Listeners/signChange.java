@@ -65,12 +65,18 @@ public class signChange extends BlockListener {
         if (formatFirstLine(line[0], player)) event.setLine(0, uLongName.stripName(player.getName()));
 
         String thirdLine = formatThirdLine(line[2]);
+        if (!uSign.inRegion(player, signBlock.getLocation()) && !playerIsAdmin) {
+            player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
+            dropSign(event);
+            return;
+        }
+        
         if (thirdLine == null) {
             dropSign(event);
             player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
             return;
         }
-        event.setLine(2, thirdLine);
+        event.setLine(2, thirdLine.toUpperCase());
         event.setLine(3, formatFourthLine(line[3], mat));
 
         Chest chest = uBlock.findChest(signBlock);
@@ -95,7 +101,7 @@ public class signChange extends BlockListener {
                     dropSign(event);
                     return;
                 }
-
+                
                 boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
 
                 if (!(Security.protection instanceof Default) && canAccess) {

@@ -10,7 +10,7 @@ description: >
              A chest shop for economy plugins.
  
  
-softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny]
+softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard]
 commands:
   iteminfo:
     aliases: [iinfo]
