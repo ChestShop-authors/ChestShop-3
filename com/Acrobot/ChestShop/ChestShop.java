@@ -13,7 +13,11 @@ import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.Acrobot.ChestShop.Protection.MaskChest;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.GlobalRegionManager;
+
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -41,6 +45,9 @@ public class ChestShop extends JavaPlugin {
 
     public static PluginManager pm;
 
+    private static WorldGuardPlugin worldguard = null;
+    private static GlobalRegionManager globalRegionManager = null;
+    
     public void onEnable() {
         pm = getServer().getPluginManager();
         folder = getDataFolder();
@@ -153,6 +160,22 @@ public class ChestShop extends JavaPlugin {
         return DB;
     }
 
+    public static GlobalRegionManager getGlobalRegionManager() {
+        return globalRegionManager;
+    }
+
+    public static WorldGuardPlugin getWorldGuard() {
+        return worldguard;
+    }
+    
+    public static void setGlobalRegionManager(GlobalRegionManager mgr) {
+        globalRegionManager = mgr;
+    }
+
+    public static void setWorldGuard(WorldGuardPlugin plugin) {
+        worldguard = plugin;
+    }
+    
     public static ArrayList getDependencies() {
         return (ArrayList) description.getSoftDepend();
     }

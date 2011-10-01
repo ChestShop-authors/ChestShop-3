@@ -26,8 +26,8 @@ public enum Property {
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
     SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?"),
     TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?"),
-    TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)");
-
+    TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)"),
+    BLACKLISTED_ITEMS("19, 46, 92, 344, 354, 7, 14, 41, 266", "Items that you dont want being sold");
 
     private final Object value;
     private final String comment;

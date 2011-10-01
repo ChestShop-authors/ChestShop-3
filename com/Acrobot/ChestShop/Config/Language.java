@@ -38,9 +38,9 @@ public enum Language {
 
     NO_PERMISSION("You don't have permissions to do that!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!"),
-
-    TOWNY_CANNOT_CREATE_SHOP_HERE("You can't create shop here!");
-
+    BLACKLISTED_ITEM("You can't have &item in your shop!"),
+    
+    TOWNY_CANNOT_CREATE_SHOP_HERE("You can't create a shop here!");
 
     private final String text;
 
