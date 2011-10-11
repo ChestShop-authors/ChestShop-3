@@ -26,7 +26,9 @@ public enum Property {
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
     SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?"),
     TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?"),
-    TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)");
+    WORLDGUARD_INTEGRATION(false, "Do you want to only let people build inside plots?"),
+    TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)"),
+    SHOP_REFUND_PRICE(0, "How much money do you get back when destroying a sign?");
 
 
     private final Object value;

@@ -1,4 +1,4 @@
-package com.nijikokun.register.forChestShop.payment;
+package com.nijikokun.register.payment.forChestShop;
 
 import org.bukkit.plugin.Plugin;
 
@@ -103,7 +103,7 @@ public interface Method {
      * @param balance Initial account balance
      * @return <code>boolean</code>
      */
-    public boolean createAccount(String name, Double balance);
+    public boolean createAccount(String name, double balance);
 
     /**
      * Returns a <code>MethodAccount</code> class for an account <code>name</code>.

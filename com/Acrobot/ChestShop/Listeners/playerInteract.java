@@ -64,6 +64,7 @@ public class playerInteract extends PlayerListener {
             return;
         }
 
+
         if (restrictedSign.isRestrictedShop(sign) && !restrictedSign.canAccess(sign, player)) {
             player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
             return;

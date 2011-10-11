@@ -1,20 +1,20 @@
-package com.nijikokun.register.forChestShop.payment;
-
-import java.util.HashSet;
-import java.util.Set;
+package com.nijikokun.register.payment.forChestShop;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * The <code>Methods</code> initializes Methods that utilize the Method interface
  * based on a "first come, first served" basis.
- *
+ * <p/>
  * Allowing you to check whether a payment method exists or not.
- *
+ * <p/>
  * Methods also allows you to set a preferred method of payment before it captures
  * payment plugins in the initialization process.
- *
+ * <p/>
  * in <code>bukkit.yml</code>:
  * <blockquote><pre>
  *  economy:
@@ -42,13 +42,14 @@ public class Methods {
      * Implement all methods along with their respective name & class.
      */
     private static void _init() {
-        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo6());
-        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo5());
-        addMethod("iConomy", new com.nijikokun.register.forChestShop.payment.methods.iCo4());
-        addMethod("BOSEconomy", new com.nijikokun.register.forChestShop.payment.methods.BOSE6());
-        addMethod("BOSEconomy", new com.nijikokun.register.forChestShop.payment.methods.BOSE7());
-        addMethod("Essentials", new com.nijikokun.register.forChestShop.payment.methods.EE17());
-        addMethod("Currency", new com.nijikokun.register.forChestShop.payment.methods.MCUR());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo6());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
+        addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
+        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE6());
+        addMethod("BOSEconomy", new com.nijikokun.register.payment.forChestShop.methods.BOSE7());
+        addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
+        addMethod("Currency", new com.nijikokun.register.payment.forChestShop.methods.MCUR());
+        addMethod("3co", new com.nijikokun.register.payment.forChestShop.methods.ECO3());
         Dependencies.add("MultiCurrency");
     }
 
@@ -74,6 +75,7 @@ public class Methods {
 
     /**
      * Use to get version of Register plugin
+     *
      * @return version
      */
     public static String getVersion() {
@@ -85,7 +87,7 @@ public class Methods {
      * through the <code>_init</code> method.
      *
      * @return <code>Set<String></code> - Array of payment methods that are loaded.
-     * @see #setMethod(org.bukkit.plugin.Plugin)
+     * @see #setMethod(org.bukkit.plugin.PluginManager)
      */
     public static Set<String> getDependencies() {
         return Dependencies;
@@ -99,7 +101,7 @@ public class Methods {
      * @return Method <em>or</em> Null
      */
     public static Method createMethod(Plugin plugin) {
-        for (Method method: Methods)
+        for (Method method : Methods)
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;
@@ -117,7 +119,7 @@ public class Methods {
      * Verifies if Register has set a payment method for usage yet.
      *
      * @return <code>boolean</code>
-     * @see #setMethod(org.bukkit.plugin.Plugin)
+     * @see #setMethod(org.bukkit.plugin.PluginManager)
      * @see #checkDisabled(org.bukkit.plugin.Plugin)
      */
     public static boolean hasMethod() {
@@ -128,7 +130,7 @@ public class Methods {
      * Checks Plugin Class against a multitude of checks to verify it's usability
      * as a payment method.
      *
-     * @param <code>PluginManager</code> the plugin manager for the server
+     * @param manager the plugin manager for the server
      * @return <code>boolean</code> True on success, False on failure.
      */
     public static boolean setMethod(PluginManager manager) {
@@ -168,8 +170,7 @@ public class Methods {
                     match = true;
                 else {
                     for (Method attached : Attachables) {
-                        if (attached == null)
-                            continue;
+                        if (attached == null) continue;
 
                         if (hasMethod()) {
                             match = true; break;
@@ -178,12 +179,11 @@ public class Methods {
                         if (preferred.isEmpty())
                             Method = attached;
 
-                        if (count == 0)
-                            if (preferred.equalsIgnoreCase(attached.getName()))
-                                Method = attached;
-
-                        else
+                        if (count == 0) {
+                            if (preferred.equalsIgnoreCase(attached.getName())) Method = attached;
+                        } else {
                             Method = attached;
+                        }
                     }
 
                     count++;
@@ -197,6 +197,7 @@ public class Methods {
     /**
      * Sets the preferred economy
      *
+     * @param check The plugin name to check
      * @return <code>boolean</code>
      */
     public static boolean setPreferred(String check) {
@@ -225,7 +226,7 @@ public class Methods {
      * @return <code>boolean</code>
      */
     public static boolean checkDisabled(Plugin method) {
-        if(!hasMethod())
+        if (!hasMethod())
             return true;
 
         if (Method.isCompatible(method))

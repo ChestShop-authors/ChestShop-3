@@ -36,7 +36,7 @@ public class MaskChest implements Runnable {
                         Block block = world.getBlockAt(x + pX, y + pY, z + pZ);
 
                         if (block.getType() == Material.CHEST) {
-                            if (uBlock.findSign(block) != null) {
+                            if (uBlock.findSign2(block) != null) {
                                 Chest neighbor = uBlock.findNeighbor(block);
                                 Material nMat = returnNearestMat(block);
                                 if (neighbor != null) {

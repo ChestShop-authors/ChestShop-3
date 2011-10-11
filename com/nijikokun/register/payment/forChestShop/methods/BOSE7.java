@@ -1,6 +1,6 @@
-package com.nijikokun.register.forChestShop.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.forChestShop.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
@@ -65,7 +65,7 @@ public class BOSE7 implements Method {
         return true;
     }
 
-    public boolean createAccount(String name, Double balance) {
+    public boolean createAccount(String name, double balance) {
         if(hasAccount(name))
             return false;
         

@@ -14,20 +14,20 @@ import org.bukkit.entity.Player;
 public class Default implements Protection {
     public boolean isProtected(Block block) {
         if (!(block.getState() instanceof Chest)) return false;
-        if (uBlock.findSign(block) != null) return true;
+        if (uBlock.findSign2(block) != null) return true;
 
         Chest neighbor = uBlock.findNeighbor(block);
-        return neighbor != null && uBlock.findSign(neighbor.getBlock()) != null;
+        return neighbor != null && uBlock.findSign2(neighbor.getBlock()) != null;
     }
 
     public boolean canAccess(Player player, Block block) {
         String playerName = player.getName();
 
-        Sign sign = uBlock.findSign(block);
+        Sign sign = uBlock.findSign2(block);
         if (sign != null) return uLongName.stripName(playerName).equals(sign.getLine(0));
 
         Chest neighborChest = uBlock.findNeighbor(block);
-        Sign neighborSign = (neighborChest != null ? uBlock.findSign(neighborChest.getBlock()) : null);
+        Sign neighborSign = (neighborChest != null ? uBlock.findSign2(neighborChest.getBlock()) : null);
 
         return neighborSign != null && uLongName.stripName(playerName).equals(neighborSign.getLine(0));
     }

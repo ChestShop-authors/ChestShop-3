@@ -1,9 +1,13 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -13,6 +17,9 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.material.PistonBaseMaterial;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Acrobot
@@ -26,6 +33,7 @@ public class blockBreak extends BlockListener {
         if (isCorrectSign(sign, block)) return true;
 
         sign = uBlock.findSign(block);
+        if (Config.getFloat(Property.SHOP_REFUND_PRICE) != 0F && isCorrectSign(sign, block) && !playerIsNotOwner(player, sign)) Economy.add(uLongName.getName(sign.getLine(0)), Config.getFloat(Property.SHOP_REFUND_PRICE));
         return isCorrectSign(sign, block) && playerIsNotOwner(player, sign);
     }
 
@@ -34,10 +42,10 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean isCorrectSign(Sign sign, Block block) {
-        return sign != null && (sign.getBlock() == block || getAttachedFace(sign) == block);
+        return sign != null && (sign.getBlock().equals(block) || getAttachedFace(sign).equals(block));
     }
 
-    private static Block getAttachedFace(Sign sign) {
+    public static Block getAttachedFace(Sign sign) {
         return sign.getBlock().getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
     }
 
@@ -46,7 +54,7 @@ public class blockBreak extends BlockListener {
     }
 
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        for (Block b : event.getBlocks()) {
+        for (Block b : getExtendBlocks(event)) {
             if (cancellingBlockBreak(b, null)) {
                 event.setCancelled(true);
                 return;
@@ -71,5 +79,19 @@ public class blockBreak extends BlockListener {
     private static Block getRetractLocationBlock(BlockPistonRetractEvent event) {
         BlockFace pistonDirection = getPistonDirection(event.getBlock());
         return pistonDirection != null ? event.getBlock().getRelative((pistonDirection), 2).getLocation().getBlock() : null;
+    }
+
+    private static List<Block> getExtendBlocks(BlockPistonExtendEvent event){
+        BlockFace pistonDirection = getPistonDirection(event.getBlock());
+        if (pistonDirection == null) return new ArrayList<Block>();
+        Block piston = event.getBlock();
+        ArrayList<Block> list = new ArrayList<Block>();
+        for (int b = 1; b < event.getLength() + 1; b++){
+            Block block = piston.getRelative(pistonDirection, b);
+            Material blockType = block.getType();
+            if (blockType == Material.AIR) break;
+            list.add(block);
+        }
+        return list;
     }
 }

@@ -1,6 +1,6 @@
-package com.nijikokun.register.forChestShop.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.forChestShop.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 
 import me.ashtheking.currency.Currency;
 import me.ashtheking.currency.CurrencyList;
@@ -58,7 +58,7 @@ public class MCUR implements Method {
         return true;
     }
 
-    public boolean createAccount(String name, Double balance) {
+    public boolean createAccount(String name, double balance) {
         CurrencyList.setValue((String) CurrencyList.maxCurrency(name)[0], name, balance);
         return true;
     }

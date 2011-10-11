@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Utils.uLongName;
-import com.nijikokun.register.forChestShop.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 
 /**
  * @author Acrobot

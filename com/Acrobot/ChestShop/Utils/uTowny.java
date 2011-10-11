@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class uTowny {
-
-
     public static boolean isInsideShopPlot(Location chestlocation, Location signLocation) {
         return uSign.towny.getTownyUniverse().getTownBlock(chestlocation).getType() == TownBlockType.COMMERCIAL && uSign.towny.getTownyUniverse().getTownBlock(signLocation).getType() == TownBlockType.COMMERCIAL;
     }
@@ -27,7 +25,6 @@ public class uTowny {
     }
 
     public static boolean canBuild(Player player, Location chestLocation, Location signLocation) {
-        System.out.println(isNotInTheWilderness(chestLocation, signLocation));
         return uSign.towny == null || !Config.getBoolean(Property.TOWNY_INTEGRATION) || (isNotInTheWilderness(chestLocation, signLocation) && isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
     }
 

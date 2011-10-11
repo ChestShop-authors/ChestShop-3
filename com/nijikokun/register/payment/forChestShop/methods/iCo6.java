@@ -1,6 +1,6 @@
-package com.nijikokun.register.forChestShop.payment.methods;
+package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.forChestShop.payment.Method;
+import com.nijikokun.register.payment.forChestShop.Method;
 import com.iCo6.iConomy;
 import com.iCo6.system.Account;
 import com.iCo6.system.Accounts;
@@ -62,7 +62,7 @@ public class iCo6 implements Method {
         return (new Accounts()).create(name);
     }
 
-    public boolean createAccount(String name, Double balance) {
+    public boolean createAccount(String name, double balance) {
         if(hasAccount(name))
             return false;
         

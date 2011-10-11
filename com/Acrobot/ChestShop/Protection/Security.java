@@ -1,9 +1,11 @@
 package com.Acrobot.ChestShop.Protection;
 
+import com.Acrobot.ChestShop.Listeners.blockBreak;
 import com.Acrobot.ChestShop.Protection.Plugins.Default;
-import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -11,6 +13,7 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class Security {
+    private static BlockFace[] faces = {BlockFace.UP, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     public static Protection protection = new Default();
 
     public static boolean protect(String name, Block block) {
@@ -25,10 +28,16 @@ public class Security {
         return protection.isProtected(block);
     }
 
-    public static boolean canPlaceSign(Player p, Block block) {
-        Sign sign = uBlock.findSign(uBlock.findChest(block).getBlock());
-        if (sign == null) sign = uBlock.findSign(block);
+    public static boolean canPlaceSign(Player p, Sign sign) {
+        Block block = blockBreak.getAttachedFace(sign);
+        return !thereIsAnotherSignByPlayer(block, sign.getBlock(), uLongName.stripName(p.getName()));
+    }
 
-        return (sign == null || sign.getLine(0).equals(uLongName.stripName(p.getName())));
+    private static boolean thereIsAnotherSignByPlayer(Block baseBlock, Block signBlock, String shortName){
+        for (BlockFace bf : faces){
+            Block block = baseBlock.getRelative(bf);
+            if(uSign.isSign(block) && !block.equals(signBlock) && blockBreak.getAttachedFace((Sign) block.getState()).equals(baseBlock) && !((Sign) block.getState()).getLine(0).equals(shortName)) return true;
+        }
+        return false;
     }
 }

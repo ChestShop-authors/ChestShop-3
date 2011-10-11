@@ -82,7 +82,7 @@ public class signChange extends BlockListener {
                 dropSign(event);
                 return;
             } else if (!playerIsAdmin) {
-                if (!Security.canPlaceSign(player, signBlock)) {
+                if (!Security.canPlaceSign(player, (Sign) signBlock.getState())) {
                     player.sendMessage(Config.getLocal(Language.ANOTHER_SHOP_DETECTED));
                     dropSign(event);
                     return;
@@ -90,7 +90,7 @@ public class signChange extends BlockListener {
 
                 Block chestBlock = chest.getBlock();
 
-                if (uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation())) {
+                if (!uWorldGuard.isNotOutsideWGplot(signBlock.getLocation()) || (uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation()))) {
                     player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
@@ -150,6 +150,7 @@ public class signChange extends BlockListener {
         if (uNumber.isFloat(split[0])) thirdLine = "B " + thirdLine;
         if (split.length == 2 && uNumber.isFloat(split[1])) thirdLine = thirdLine + " S";
         if (thirdLine.length() > 15) thirdLine = thirdLine.replace(" ", "");
+        thirdLine = thirdLine.toUpperCase();
 
         return (thirdLine.length() > 15 ? null : thirdLine);
     }
@@ -163,8 +164,9 @@ public class signChange extends BlockListener {
                 if (materialLine.length() > maxLength) materialLine = materialLine.substring(0, maxLength);
                 materialLine = materialLine + ':' + split[1];
             }
-            return materialLine;
+            fourthLine = materialLine;
         }
+        fourthLine = fourthLine.replace("_", " ");
         return fourthLine;
     }
 

@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Utils;
 
+import com.Acrobot.ChestShop.Listeners.blockBreak;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,6 +34,18 @@ public class uBlock {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
+                if (uSign.isValid(sign) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
+            }
+        }
+        return null;
+    }
+
+    //Well, I need to re-write this plugin... I hate to code like that - sorry!
+    public static Sign findSign2(Block block){
+        for (BlockFace bf : shopFaces) {
+            Block faceBlock = block.getRelative(bf);
+            if (uSign.isSign(faceBlock)) {
+                Sign sign = (Sign) faceBlock.getState();
                 if (uSign.isValid(sign)) return sign;
             }
         }
@@ -44,7 +57,7 @@ public class uBlock {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {
                 Sign sign = (Sign) faceBlock.getState();
-                if (restrictedSign.isRestricted(sign)) return sign;
+                if (restrictedSign.isRestricted(sign) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
             }
         }
         return null;
