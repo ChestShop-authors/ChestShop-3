@@ -29,7 +29,14 @@ public class uBlock {
         return null;
     }
 
-    public static Sign findSign(Block block) {
+    public static Sign findSign(Block block, String originalName) {
+        for (BlockFace bf : shopFaces) {
+            Block faceBlock = block.getRelative(bf);
+            if (uSign.isSign(faceBlock)) {
+                Sign sign = (Sign) faceBlock.getState();
+                if (uSign.isValid(sign) && !sign.getLine(0).equals(originalName) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
+            }
+        }
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {

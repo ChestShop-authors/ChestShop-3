@@ -28,7 +28,8 @@ public enum Property {
     TOWNY_INTEGRATION(false, "Do you want to only let people build inside shop plots?"),
     WORLDGUARD_INTEGRATION(false, "Do you want to only let people build inside plots?"),
     TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)"),
-    SHOP_REFUND_PRICE(0, "How much money do you get back when destroying a sign?");
+    SHOP_REFUND_PRICE(0, "How much money do you get back when destroying a sign?"),
+    ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK(false, "Do you want to allow other players to build a shop on a block where there's one already?");
 
 
     private final Object value;

@@ -26,15 +26,27 @@ import java.util.List;
  */
 public class blockBreak extends BlockListener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
-        if (block == null || (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD)))) return false;
-        if (uSign.isSign(block)) block.getState().update();
+        if (block == null) return false;
+        if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
+        if (uSign.isSign(block)) block.getState().update(); //Show the text immediately
 
-        Sign sign = uBlock.findRestrictedSign(block);
-        if (isCorrectSign(sign, block)) return true;
+        if (restrictedSign(block)) return true; //If the block is a restricted sign (and the player is not an admin/mod)
 
-        sign = uBlock.findSign(block);
-        if (Config.getFloat(Property.SHOP_REFUND_PRICE) != 0F && isCorrectSign(sign, block) && !playerIsNotOwner(player, sign)) Economy.add(uLongName.getName(sign.getLine(0)), Config.getFloat(Property.SHOP_REFUND_PRICE));
-        return isCorrectSign(sign, block) && playerIsNotOwner(player, sign);
+        Sign sign = uBlock.findSign(block, uLongName.stripName(player.getName()));
+        if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
+        if (playerIsNotOwner(player, sign)) return true; //Player is not the owner of the shop - cancel!
+        if (weShouldReturnMoney()) Economy.add(uLongName.getName(sign.getLine(0)), Config.getFloat(Property.SHOP_REFUND_PRICE)); //Add some money
+        return false; //Player is the owner, so we don't want to cancel this :)
+    }
+
+    private static boolean weShouldReturnMoney() {
+        //We should return money when it's turned on in config, obviously
+        return Config.getFloat(Property.SHOP_REFUND_PRICE) != 0;
+    }
+
+    private static boolean restrictedSign(Block block) {
+        Sign s = uBlock.findRestrictedSign(block);
+        return isCorrectSign(s, block);
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
@@ -50,7 +62,7 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean playerIsNotOwner(Player player, Sign sign) {
-        return player == null || !uLongName.stripName(player.getName()).equals(sign.getLine(0));
+        return player == null || (!uLongName.stripName(player.getName()).equals(sign.getLine(0)) && !Permission.has(player, Permission.OTHER_NAME + sign.getLine(0)));
     }
 
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {

@@ -33,7 +33,6 @@ public class playerInteract extends PlayerListener {
     private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>(); //Last player's transaction
     private static final int interval = 100;//Minimal interval between transactions
 
-
     public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK) return;

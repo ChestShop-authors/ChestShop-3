@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Odd;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Plugins.DeadboltPlugin;
+import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Protection.Plugins.LWCplugin;
 import com.Acrobot.ChestShop.Protection.Plugins.LockettePlugin;
 import com.Acrobot.ChestShop.Protection.Security;
@@ -43,21 +44,22 @@ public class pluginEnable extends ServerListener {
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+        Security.protections.add(new Default()); //Initialize basic protection
         if (name.equals("Permissions")) {
             if (Permission.permissions != null) return;
             Permission.permissions = ((Permissions) plugin).getHandler();
         } else if (name.equals("LWC")) {
             if (LWCplugin.lwc != null) return;
             LWCplugin.setLWC(((LWCPlugin) plugin).getLWC());
-            Security.protection = new LWCplugin();
+            Security.protections.add(new LWCplugin());
         } else if (name.equals("Lockette")) {
             if (LockettePlugin.lockette != null) return;
             LockettePlugin.lockette = (Lockette) plugin;
-            Security.protection = new LockettePlugin();
+            Security.protections.add(new LockettePlugin());
         } else if (name.equals("Deadbolt")) {
             if (DeadboltPlugin.deadbolt != null) return;
             DeadboltPlugin.deadbolt = (Deadbolt) plugin;
-            Security.protection = new DeadboltPlugin();
+            Security.protections.add(new DeadboltPlugin());
         } else if (name.equals("OddItem")) {
             if (Odd.isInitialized()) return;
             if (plugin.getDescription().getVersion().startsWith("0.7")) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.8")); return; }

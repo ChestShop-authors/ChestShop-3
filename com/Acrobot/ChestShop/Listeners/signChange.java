@@ -6,7 +6,6 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.*;
@@ -82,7 +81,7 @@ public class signChange extends BlockListener {
                 dropSign(event);
                 return;
             } else if (!playerIsAdmin) {
-                if (!Security.canPlaceSign(player, (Sign) signBlock.getState())) {
+                if (!Config.getBoolean(Property.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK) && !Security.canPlaceSign(player, (Sign) signBlock.getState())) {
                     player.sendMessage(Config.getLocal(Language.ANOTHER_SHOP_DETECTED));
                     dropSign(event);
                     return;
@@ -97,12 +96,6 @@ public class signChange extends BlockListener {
                 }
 
                 boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
-
-                if (!(Security.protection instanceof Default) && canAccess) {
-                    Default protection = new Default();
-                    if (protection.isProtected(chestBlock) && !protection.canAccess(player, chestBlock))
-                        canAccess = false;
-                }
 
                 if (!canAccess) {
                     player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
@@ -125,7 +118,7 @@ public class signChange extends BlockListener {
         }
 
         if (Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)) {
-            Security.protect(player.getName(), signBlock);
+            if (!Security.protect(player.getName(), signBlock)) player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_LWC_PROTECTIONS));
         }
         if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && chest != null && Security.protect(player.getName(), chest.getBlock())) {
             player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));
@@ -146,11 +139,12 @@ public class signChange extends BlockListener {
     }
 
     private static String formatThirdLine(String thirdLine) {
+        thirdLine = thirdLine.toUpperCase();
         String[] split = thirdLine.split(":");
         if (uNumber.isFloat(split[0])) thirdLine = "B " + thirdLine;
         if (split.length == 2 && uNumber.isFloat(split[1])) thirdLine = thirdLine + " S";
         if (thirdLine.length() > 15) thirdLine = thirdLine.replace(" ", "");
-        thirdLine = thirdLine.toUpperCase();
+
 
         return (thirdLine.length() > 15 ? null : thirdLine);
     }
@@ -171,7 +165,10 @@ public class signChange extends BlockListener {
     }
 
     private static boolean formatFirstLine(String line1, Player player) {
-        return line1.isEmpty() || (!line1.equals(uLongName.stripName(player.getName())) && !Permission.has(player, Permission.ADMIN));
+        return line1.isEmpty() ||
+                (!line1.equals(uLongName.stripName(player.getName()))
+                && !Permission.has(player, Permission.ADMIN)
+                && !Permission.has(player, Permission.OTHER_NAME + line1));
     }
 
     private static void dropSign(SignChangeEvent event) {

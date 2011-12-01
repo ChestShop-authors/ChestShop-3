@@ -13,7 +13,8 @@ public enum Permission {
     SELL_ID("ChestShop.shop.sell."),
     SELL("ChestShop.shop.sell"),
     ADMIN("ChestShop.admin"),
-    MOD("ChestShop.mod");
+    MOD("ChestShop.mod"),
+    OTHER_NAME("ChestShop.name.");
 
     private final String permission;
 
@@ -28,8 +29,8 @@ public enum Permission {
     }
 
     public static boolean has(Player player, String node) {
-        if (permissions != null) return permissions.has(player, node);
-        return player.hasPermission(node);
+        if (permissions != null) return permissions.has(player, node) || permissions.has(player, node.toLowerCase());
+        return player.hasPermission(node) || player.hasPermission(node.toLowerCase());
     }
 
     public String toString() {
