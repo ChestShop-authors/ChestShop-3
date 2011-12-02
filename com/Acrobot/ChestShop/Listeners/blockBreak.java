@@ -32,7 +32,7 @@ public class blockBreak extends BlockListener {
 
         if (restrictedSign(block)) return true; //If the block is a restricted sign (and the player is not an admin/mod)
 
-        Sign sign = uBlock.findSign(block, uLongName.stripName(player.getName()));
+        Sign sign = uBlock.findSign(block, (player != null ? uLongName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
         if (playerIsNotOwner(player, sign)) return true; //Player is not the owner of the shop - cancel!
         if (weShouldReturnMoney()) Economy.add(uLongName.getName(sign.getLine(0)), Config.getFloat(Property.SHOP_REFUND_PRICE)); //Add some money
