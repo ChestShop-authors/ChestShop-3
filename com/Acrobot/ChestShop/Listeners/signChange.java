@@ -94,7 +94,6 @@ public class signChange extends BlockListener {
                     dropSign(event);
                     return;
                 }
-
                 boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
 
                 if (!canAccess) {
@@ -150,18 +149,17 @@ public class signChange extends BlockListener {
     }
 
     private static String formatFourthLine(String fourthLine, Material material) {
-        String[] split = fourthLine.split(":");
-        if (uNumber.isInteger(split[0])) {
-            String materialLine = material.name();
-            if (split.length == 2) {
-                int maxLength = (14 - split[1].length()); //15 - length - 1
-                if (materialLine.length() > maxLength) materialLine = materialLine.substring(0, maxLength);
-                materialLine = materialLine + ':' + split[1];
-            }
-            fourthLine = materialLine;
-        }
-        fourthLine = fourthLine.replace("_", " ");
-        return fourthLine;
+        int index = (fourthLine.indexOf(':') != -1 ? fourthLine.indexOf(':') : 9999);
+        if (fourthLine.indexOf('-') < index && fourthLine.indexOf('-') != -1) index = fourthLine.indexOf('-');
+
+        StringBuilder toReturn = new StringBuilder(3);
+        String matName = uSign.capitalizeFirst(material.name());
+        if (index != 9999 && matName.length() > (15 - (fourthLine.length() - index))) matName = matName.substring(0, 15 - (fourthLine.length() - index));
+        if (Items.getMaterial(matName) == material) toReturn.append(matName);
+        else toReturn.append(material.getId());
+
+        if (index != -1 && index != 9999) toReturn.append(fourthLine.substring(index));
+        return toReturn.toString();
     }
 
     private static boolean formatFirstLine(String line1, Player player) {

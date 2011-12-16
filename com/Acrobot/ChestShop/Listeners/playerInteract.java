@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 public class playerInteract extends PlayerListener {
 
     private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>(); //Last player's transaction
-    private static final int interval = 100;//Minimal interval between transactions
+    public static int interval = 100;//Minimal interval between transactions
 
     public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
@@ -53,6 +54,11 @@ public class playerInteract extends PlayerListener {
         Sign sign = (Sign) block.getState();
 
         if (!uSign.isValid(sign) || !enoughTimeHasPassed(player) || player.isSneaking()) return;
+
+        if (Config.getBoolean(Property.IGNORE_CREATIVE_MODE) && player.getGameMode() == GameMode.CREATIVE){
+            event.setCancelled(true);
+            return;
+        }
 
         lastTransactionTime.put(player, System.currentTimeMillis());
 

@@ -29,7 +29,7 @@ public class Default implements Protection {
         Chest neighborChest = uBlock.findNeighbor(block);
         Sign neighborSign = (neighborChest != null ? uBlock.findSign2(neighborChest.getBlock()) : null);
 
-        return neighborSign != null && uLongName.stripName(playerName).equals(neighborSign.getLine(0));
+        return neighborSign == null || uLongName.stripName(playerName).equals(neighborSign.getLine(0));
     }
 
     public boolean protect(String name, Block block) {

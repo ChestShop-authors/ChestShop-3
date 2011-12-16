@@ -16,7 +16,7 @@ public class uSign {
             Pattern.compile("^$|^\\w.+$"),
             Pattern.compile("[0-9]+"),
             Pattern.compile(".+"),
-            Pattern.compile("[\\w :]+")
+            Pattern.compile("[\\w : -]+")
     };
 
     public static Towny towny; //Moved this here - somehow, java fails at try/catch
@@ -81,5 +81,18 @@ public class uSign {
             int amount = Integer.parseInt(text);
             return (amount >= 1 ? amount : 1);
         } else return 1;
+    }
+
+    public static String capitalizeFirst(String name){
+        return capitalizeFirst(name, '_');
+    }
+
+    public static String capitalizeFirst(String name, char separator){
+        name = name.toLowerCase();
+        String[] split = name.split(Character.toString(separator));
+        StringBuilder total = new StringBuilder(3);
+        for (String s : split) total.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(' ');
+
+        return total.toString().trim();
     }
 }

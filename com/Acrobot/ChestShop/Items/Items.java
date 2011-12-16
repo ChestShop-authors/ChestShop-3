@@ -1,8 +1,12 @@
 package com.Acrobot.ChestShop.Items;
 
+import com.Acrobot.ChestShop.Utils.uEnchantment;
 import com.Acrobot.ChestShop.Utils.uNumber;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 /**
  * @author Acrobot
@@ -31,33 +35,42 @@ public class Items {
     public static ItemStack getItemStack(String itemName) {
         ItemStack toReturn = getFromOddItem(itemName);
         if (toReturn != null) return toReturn;
+        
+        String[] split = itemName.split(":|-");
 
-        Material material = getMaterial(itemName);
-        if (material != null) return new ItemStack(material, 1);
+        String[] space = split[0].split(" ");
+        Material material = getMaterial(split[0]);
 
-        return getItemStackWithDataValue(itemName);
+        for (int i = (space.length > 1 ? 1 : 0); i >= 0 && material == null; i--) material = getMaterial(space[i]);
+
+        if (material == null) return null;
+        
+        toReturn = new ItemStack(material, 1);
+        
+        for (int i = 1; i < split.length; i++){
+            split[i] = split[i].trim();
+            if (uNumber.isInteger(split[i])) toReturn.setDurability((short) Integer.parseInt(split[i]));
+            else {
+                try{ toReturn.addEnchantments(getEnchantment(split[i]));
+                } catch (Exception ignored){}
+            }
+        }
+        short data = getDataFromWord(space[0], material);
+        if (data != 0) toReturn.setDurability(data);
+
+        return toReturn;
+    }
+    
+    private static Map<Enchantment, Integer> getEnchantment(String itemName){
+        return uEnchantment.decodeEnchantment(itemName);
     }
 
     private static ItemStack getFromOddItem(String itemName) {
         return !Odd.isInitialized() ? null : Odd.returnItemStack(itemName.replace(":", ";"));
     }
 
-    private static ItemStack getItemStackWithDataValue(String itemName) {
-        if (!itemName.contains(":")) return getItemStackWithDataValueFromWord(itemName);
-
-        String[] word = itemName.split(":");
-        if (word.length < 2 || !uNumber.isInteger(word[1])) return null;
-
-        Material item = getMaterial(word[0]);
-        return item == null ? null : new ItemStack(item, 1, Short.parseShort(word[1]));
-    }
-
-    private static ItemStack getItemStackWithDataValueFromWord(String itemName) {
-        int indexOfChar = itemName.indexOf(' ');
-
-        if (indexOfChar == -1) return null;
-        Material item = getMaterial(itemName.substring(indexOfChar));
-        return item == null ? null : new ItemStack(item, 1, DataValue.get(itemName.substring(0, indexOfChar), item));
+    private static short getDataFromWord(String name, Material material) {
+        return DataValue.get(name, material);
     }
 
 }

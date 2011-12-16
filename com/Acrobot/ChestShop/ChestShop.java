@@ -10,7 +10,6 @@ import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
-import com.Acrobot.ChestShop.Protection.MaskChest;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
@@ -59,7 +58,8 @@ public class ChestShop extends JavaPlugin {
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
         if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
         if (Config.getBoolean(Property.LOG_TO_FILE)) scheduleTask(new FileWriterQueue(), 201L, 201L);
-        if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) scheduleTask(new MaskChest(), 40L, 40L);
+        //if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) scheduleTask(new MaskChest(), 40L, 40L); //Disabled due to bug //TODO Fix that
+        playerInteract.interval = Config.getInteger(Property.SHOP_INTERACTION_INTERVAL);
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());

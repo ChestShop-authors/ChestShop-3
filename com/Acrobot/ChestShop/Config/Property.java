@@ -21,7 +21,8 @@ public enum Property {
     USE_BUILT_IN_PROTECTION(true, "Do you want to use built-in protection against chest destruction?"),
     PROTECT_CHEST_WITH_LWC(false, "Do you want to protect shop chests with LWC?"),
     PROTECT_SIGN_WITH_LWC(false, "Do you want to protect shop signs with LWC?"),
-    MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!"),
+    //MASK_CHESTS_AS_OTHER_BLOCKS(false, "Do you want to mask shop chests as other blocks? HIGHLY EXPERIMENTAL, CAN LAG!"),
+    IGNORE_CREATIVE_MODE(true, "Do you want to allow using shops to people in creative mode?"),
     SHOW_MESSAGE_OUT_OF_STOCK(true, "Do you want to show \"Out of stock\" messages?"),
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
     SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?"),
@@ -29,7 +30,8 @@ public enum Property {
     WORLDGUARD_INTEGRATION(false, "Do you want to only let people build inside plots?"),
     TAX_AMOUNT(0, "Percent of the price that should go to the server's account. (100 = 100 percent)"),
     SHOP_REFUND_PRICE(0, "How much money do you get back when destroying a sign?"),
-    ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK(false, "Do you want to allow other players to build a shop on a block where there's one already?");
+    ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK(false, "Do you want to allow other players to build a shop on a block where there's one already?"),
+    SHOP_INTERACTION_INTERVAL(100, "(In 1/1000th of a second) How often can a player use a shop sign?");
 
 
     private final Object value;
