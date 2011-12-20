@@ -112,6 +112,9 @@ public class Generator implements Runnable {
 
     private static void generateStats() {
         try {
+            File f = new File(filePath).getParentFile();
+            if (!f.exists()) f.mkdir();
+
             fileStart();
 
             buf = new BufferedWriter(new FileWriter(filePath, true));
@@ -124,6 +127,7 @@ public class Generator implements Runnable {
             fileEnd();
         } catch (Exception e) {
             Logging.log("Couldn't generate statistics page!");
+            e.printStackTrace();
         }
     }
 }

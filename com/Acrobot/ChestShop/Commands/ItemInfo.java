@@ -36,8 +36,9 @@ public class ItemInfo implements CommandExecutor {
         String enchantment = (ench != null ? ChatColor.DARK_AQUA + "-" + ench : "");
 
         sender.sendMessage(Config.getLocal(Language.iteminfo));
-        sender.sendMessage(ChatColor.GRAY + uSign.capitalizeFirst(item.getType().name())
-                + ChatColor.WHITE + "      " + item.getTypeId() + durability + enchantment + ChatColor.WHITE);
+        String itemname = Items.getName(item);
+        sender.sendMessage(ChatColor.GRAY + itemname + ChatColor.WHITE + "      "
+                + item.getTypeId() + durability + enchantment + ChatColor.WHITE);
 
         Map<Enchantment, Integer> map = item.getEnchantments();
         for (Map.Entry<Enchantment, Integer> e : map.entrySet())

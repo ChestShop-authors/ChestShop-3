@@ -70,7 +70,7 @@ public class signChange extends BlockListener {
             return;
         }
         event.setLine(2, thirdLine);
-        event.setLine(3, formatFourthLine(line[3], mat));
+        event.setLine(3, formatFourthLine(line[3], stock));
 
         Chest chest = uBlock.findChest(signBlock);
 
@@ -148,15 +148,18 @@ public class signChange extends BlockListener {
         return (thirdLine.length() > 15 ? null : thirdLine);
     }
 
-    private static String formatFourthLine(String fourthLine, Material material) {
+    private static String formatFourthLine(String fourthLine, ItemStack is) {
         int index = (fourthLine.indexOf(':') != -1 ? fourthLine.indexOf(':') : 9999);
         if (fourthLine.indexOf('-') < index && fourthLine.indexOf('-') != -1) index = fourthLine.indexOf('-');
 
         StringBuilder toReturn = new StringBuilder(3);
-        String matName = uSign.capitalizeFirst(material.name());
-        if (index != 9999 && matName.length() > (15 - (fourthLine.length() - index))) matName = matName.substring(0, 15 - (fourthLine.length() - index));
-        if (Items.getMaterial(matName) == material) toReturn.append(matName);
-        else toReturn.append(material.getId());
+        String matName = fourthLine.split(":|-")[0];
+        matName = matName.trim();
+        if (uNumber.isInteger(matName)) matName = Items.getName(is, false);
+        int iPos = 15 - (fourthLine.length() - index);
+        if (index != 9999 && matName.length() > iPos) matName = matName.substring(0, iPos);
+        if (Items.getItemStack(matName).getType() == is.getType()) toReturn.append(matName);
+        else toReturn.append(is.getTypeId());
 
         if (index != -1 && index != 9999) toReturn.append(fourthLine.substring(index));
         return toReturn.toString();

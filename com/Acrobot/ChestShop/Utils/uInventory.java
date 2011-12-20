@@ -57,7 +57,7 @@ public class uInventory {
     }
 
     private static int addManually(Inventory inv, ItemStack item, int amount) {
-        return addManually(inv, item, amount, item.getType().getMaxStackSize());
+        return addManually(inv, item, amount, (item.getType() != Material.POTION ? item.getType().getMaxStackSize() : 1)); //TODO Change it when it's repaired in Bukkit
     }
 
     public static int addAndStackTo64(Inventory inv, ItemStack item, int amount) {
@@ -76,7 +76,7 @@ public class uInventory {
                 dupe.addEnchantments(item.getEnchantments());
                 amount -= dupe.getAmount();
                 inv.setItem(slot, dupe);
-            } else if (equals(item, curItem, item.getDurability()) && curItem.getAmount() != max) {
+            } else if (equals(item, curItem, curItem.getDurability()) && curItem.getAmount() != max) {
                 int cA = curItem.getAmount();
                 int amountAdded = amount > max - cA ? max - cA : amount;
                 dupe.setAmount(cA + amountAdded);

@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Items;
 
 import com.Acrobot.ChestShop.Utils.uEnchantment;
 import com.Acrobot.ChestShop.Utils.uNumber;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,15 @@ public class Items {
             }
         }
         return finalMaterial;
+    }
+    
+    public static String getName(ItemStack is){
+        return getName(is, true);
+    }
+    
+    public static String getName(ItemStack is, boolean showData){
+        String name = DataValue.getName(is);
+        return uSign.capitalizeFirst((name != null && showData ? name + '_' : "") + is.getType());
     }
 
     public static ItemStack getItemStack(String itemName) {
