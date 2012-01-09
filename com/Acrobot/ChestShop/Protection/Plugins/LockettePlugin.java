@@ -16,8 +16,10 @@ public class LockettePlugin implements Protection {
     }
 
     public boolean canAccess(Player player, Block block) {
-        int length = (player.getName().length() > 15 ? 15 : player.getName().length());
-        return player.getName().substring(0, length).equals(Lockette.getProtectedOwner(block));
+        String pName = player.getName();
+        int length = (pName.length() > 15 ? 15 : pName.length());
+        String owner = Lockette.getProtectedOwner(block);
+        return owner == null || pName.substring(0, length).equals(owner);
     }
 
     public boolean protect(String name, Block block) {

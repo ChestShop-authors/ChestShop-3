@@ -31,7 +31,8 @@ public class DataValue {
                     materialData = new Wool(DyeColor.valueOf(type));
                     break;
                 case INK_SACK:
-                    materialData = new Wool(15 - DyeColor.valueOf(type).getData());
+                    byte data = (byte) (15 - DyeColor.valueOf(type).getData());
+                    materialData = new Wool(DyeColor.getByData(data));
                     break;
                 case COAL:
                     materialData = new Coal(CoalType.valueOf(type));

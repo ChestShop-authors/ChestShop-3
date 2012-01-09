@@ -2,9 +2,11 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Permission;
 import com.palmergames.bukkit.towny.Towny;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
 
@@ -34,21 +36,21 @@ public class uSign {
     }
 
     public static boolean isValid(String[] line) {
-        try {
-            return isValidPreparedSign(line) && (line[2].contains("B") || line[2].contains("S"));
-        } catch (Exception e) {
-            return false;
-        }
+        return isValidPreparedSign(line) && (line[2].contains("B") || line[2].contains("S")) && !line[0].isEmpty();
+    }
+
+    public static boolean canAccess(Player p, Sign s) {
+        if (p == null) return false;
+        if (s == null) return true;
+
+        String line = s.getLine(0);
+        return uLongName.stripName(p.getName()).equals(line) || Permission.otherName(p, line);
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-        try {
-            boolean toReturn = true;
-            for (int i = 0; i < 4 && toReturn; i++) toReturn = patterns[i].matcher(lines[i]).matches();
-            return toReturn && lines[2].split(":").length <= 2;
-        } catch (Exception e) {
-            return false;
-        }
+        boolean toReturn = true;
+        for (int i = 0; i < 4 && toReturn; i++) toReturn = patterns[i].matcher(lines[i]).matches();
+        return toReturn && lines[2].indexOf(':') == lines[2].lastIndexOf(':');
     }
 
     public static float buyPrice(String text) {
@@ -83,11 +85,11 @@ public class uSign {
         } else return 1;
     }
 
-    public static String capitalizeFirst(String name){
+    public static String capitalizeFirst(String name) {
         return capitalizeFirst(name, '_');
     }
 
-    public static String capitalizeFirst(String name, char separator){
+    public static String capitalizeFirst(String name, char separator) {
         name = name.toLowerCase();
         String[] split = name.split(Character.toString(separator));
         StringBuilder total = new StringBuilder(3);

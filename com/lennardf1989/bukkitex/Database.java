@@ -275,7 +275,7 @@ public abstract class Database {
                     currentTable = currentLine.split(" ", 4)[2];
                     foundTables.put(currentLine.split(" ", 3)[2], scriptLines.size() - 1);
                 }
-                else if(currentLine.length() > 0 && currentLine.charAt(0) == ';' && currentTable != null && !currentTable.isEmpty()) {
+                else if(!currentLine.isEmpty() && currentLine.charAt(0) == ';' && currentTable != null && !currentTable.isEmpty()) {
                     //Found the end of a table definition, so update the entry
                     int index = scriptLines.size() - 1;
                     foundTables.put(currentTable, index);

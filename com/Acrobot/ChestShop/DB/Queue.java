@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Config.Property;
 
 import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Acrobot
@@ -18,10 +19,27 @@ public class Queue implements Runnable {
     }
 
     public void run() {
-        ChestShop.getDB().delete(ChestShop.getDB().find(Transaction.class).where().lt("sec", System.currentTimeMillis() / 1000 - Config.getInteger(Property.RECORD_TIME_TO_LIVE)).findList());
+        deleteOld();
 
-        ArrayList<Transaction> queueCopy = queue;
-        try { ChestShop.getDB().save(queueCopy); } catch (OptimisticLockException ignored) {}
+        ChestShop.getDB().save(queue);
         queue.clear();
+    }
+
+    public static boolean deleteOld() {
+        try {
+            ChestShop.getDB().delete(getOld());
+            return true;
+        } catch (OptimisticLockException ex) {
+            return false;
+        }
+    }
+
+    public static List getOld() throws OptimisticLockException {
+        return ChestShop
+                .getDB()
+                .find(Transaction.class)
+                .where()
+                .lt("sec", System.currentTimeMillis() / 1000 - Config.getInteger(Property.RECORD_TIME_TO_LIVE))
+                .findList();
     }
 }

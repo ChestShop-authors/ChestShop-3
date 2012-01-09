@@ -37,6 +37,7 @@ public class pluginEnable extends ServerListener {
     }
 
     public static void initializePlugins() {
+        Security.protections.add(new Default()); //Initialize basic protection
         for (Object plugin : ChestShop.getDependencies()) {
             Plugin pl = ChestShop.pm.getPlugin((String) plugin);
             if (pl != null) initializePlugin((String) plugin, pl);
@@ -44,7 +45,6 @@ public class pluginEnable extends ServerListener {
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
-        Security.protections.add(new Default()); //Initialize basic protection
         if (name.equals("Permissions")) {
             if (Permission.permissions != null) return;
             Permission.permissions = ((Permissions) plugin).getHandler();

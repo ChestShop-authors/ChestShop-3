@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
@@ -28,9 +29,10 @@ public class blockBreak extends BlockListener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
         if (block == null) return false;
         if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
+
         if (uSign.isSign(block)) block.getState().update(); //Show the text immediately
 
-        if (restrictedSign(block)) return true; //If the block is a restricted sign (and the player is not an admin/mod)
+        if (restrictedSign(block)) return !restrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
 
         Sign sign = uBlock.findSign(block, (player != null ? uLongName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
@@ -45,8 +47,7 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean restrictedSign(Block block) {
-        Sign s = uBlock.findRestrictedSign(block);
-        return isCorrectSign(s, block);
+        return uBlock.findRestrictedSign(block) != null;
     }
 
     public void onBlockBreak(BlockBreakEvent event) {
@@ -62,7 +63,8 @@ public class blockBreak extends BlockListener {
     }
 
     private static boolean playerIsNotOwner(Player player, Sign sign) {
-        return player == null || (!uLongName.stripName(player.getName()).equals(sign.getLine(0)) && !Permission.has(player, Permission.OTHER_NAME + sign.getLine(0)));
+        return player == null || (!uLongName.stripName(player.getName()).equals(sign.getLine(0))
+                && !Permission.otherName(player, sign.getLine(0)));
     }
 
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {

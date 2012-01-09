@@ -8,7 +8,6 @@ import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.InventoryLargeChest;
@@ -64,11 +63,10 @@ public class playerInteract extends PlayerListener {
 
         if (action == Action.RIGHT_CLICK_BLOCK) event.setCancelled(true);
 
-        if (uLongName.stripName(player.getName()).equals(sign.getLine(0))) {
+        if (uSign.canAccess(player, sign)) {
             if (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING)) showChestGUI(player, block);
             return;
         }
-
 
         if (restrictedSign.isRestrictedShop(sign) && !restrictedSign.canAccess(sign, player)) {
             player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));

@@ -49,14 +49,15 @@ public class signChange extends BlockListener {
                 return;
             }
         } else {
-            if (restrictedSign.isRestricted(event.getLines())) {
-                if (!playerIsAdmin) {
+            if (restrictedSign.isRestricted(line)) {
+                if (!restrictedSign.hasPermission(player, line)) {
                     player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                     dropSign(event);
                     return;
                 }
                 Block secondSign = signBlock.getRelative(BlockFace.DOWN);
-                if (!uSign.isSign(secondSign) || !uSign.isValid((Sign) secondSign.getState())) dropSign(event);
+                if (!playerIsAdmin && (!uSign.isSign(secondSign) || !uSign.isValid((Sign) secondSign.getState())
+                        || !uSign.canAccess(player, (Sign) secondSign))) dropSign(event);
             }
             return;
         }
@@ -94,8 +95,8 @@ public class signChange extends BlockListener {
                     dropSign(event);
                     return;
                 }
-                boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
 
+                boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
                 if (!canAccess) {
                     player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
                     dropSign(event);
@@ -103,6 +104,8 @@ public class signChange extends BlockListener {
                 }
             }
         }
+
+
 
         float shopCreationPrice = Config.getFloat(Property.SHOP_CREATION_PRICE);
         boolean paid = shopCreationPrice != 0 && !isAdminShop;
@@ -162,14 +165,14 @@ public class signChange extends BlockListener {
         else toReturn.append(is.getTypeId());
 
         if (index != -1 && index != 9999) toReturn.append(fourthLine.substring(index));
-        return toReturn.toString();
+        return uSign.capitalizeFirst(toReturn.toString(), ' ');
     }
 
     private static boolean formatFirstLine(String line1, Player player) {
         return line1.isEmpty() ||
                 (!line1.equals(uLongName.stripName(player.getName()))
                 && !Permission.has(player, Permission.ADMIN)
-                && !Permission.has(player, Permission.OTHER_NAME + line1));
+                && !Permission.otherName(player, line1));
     }
 
     private static void dropSign(SignChangeEvent event) {

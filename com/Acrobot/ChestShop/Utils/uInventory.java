@@ -51,7 +51,7 @@ public class uInventory {
         amount = 0;
         for (ItemStack toAdd : items.values()) amount += toAdd.getAmount();
 
-        return amount;*/ //TODO: Fix this in CraftBukkit's code
+        return amount;*/ //TODO: revert when Bukkit releases new RB
 
         return addManually(inv, item, amount);
     }
@@ -101,6 +101,8 @@ public class uInventory {
 
     public static int fits(Inventory inv, ItemStack item, int amount, short durability) {
         int maxStackSize = (Config.getBoolean(Property.STACK_UNSTACKABLES) ? 64 : item.getType().getMaxStackSize());
+        if (item.getType() == Material.POTION) maxStackSize = 1; //TODO Bukkit, can you fix that?
+
         int amountLeft = amount;
 
         for (ItemStack currentItem : inv.getContents()) {

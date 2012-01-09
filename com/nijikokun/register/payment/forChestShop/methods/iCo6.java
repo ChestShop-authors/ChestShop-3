@@ -56,17 +56,13 @@ public class iCo6 implements Method {
     }
 
     public boolean createAccount(String name) {
-        if(hasAccount(name))
-            return false;
-        
-        return (new Accounts()).create(name);
+        return !hasAccount(name) && (new Accounts()).create(name);
+
     }
 
     public boolean createAccount(String name, double balance) {
-        if(hasAccount(name))
-            return false;
-        
-        return (new Accounts()).create(name, balance);
+        return !hasAccount(name) && (new Accounts()).create(name, balance);
+
     }
 
     public MethodAccount getAccount(String name) {

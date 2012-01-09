@@ -26,7 +26,7 @@ public class LWCplugin implements Protection {
     }
 
     public boolean canAccess(Player player, Block block) {
-        return lwc.canAccessProtection(player, block);
+        return lwc.findProtection(block) == null || lwc.canAccessProtection(player, block);
     }
 
     public boolean protect(String name, Block block) {

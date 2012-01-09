@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The <code>Methods</code> initializes Methods that utilize the Method interface
+ * The <code>methods</code> initializes methods that utilize the Method interface
  * based on a "first come, first served" basis.
  * <p/>
  * Allowing you to check whether a payment method exists or not.
  * <p/>
- * Methods also allows you to set a preferred method of payment before it captures
+ * methods also allows you to set a preferred method of payment before it captures
  * payment plugins in the initialization process.
  * <p/>
  * in <code>bukkit.yml</code>:
@@ -30,18 +30,18 @@ public class Methods {
     private static boolean self = false;
     private static Method Method = null;
     private static String preferred = "";
-    private static Set<Method> Methods = new HashSet<Method>();
-    private static Set<String> Dependencies = new HashSet<String>();
-    private static Set<Method> Attachables = new HashSet<Method>();
+    private static Set<Method> methods = new HashSet<Method>();
+    private static Set<String> dependencies = new HashSet<String>();
+    private static Set<Method> attachables = new HashSet<Method>();
 
     static {
-        _init();
+        init();
     }
 
     /**
      * Implement all methods along with their respective name & class.
      */
-    private static void _init() {
+    private static void init() {
         addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo6());
         addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo5());
         addMethod("iConomy", new com.nijikokun.register.payment.forChestShop.methods.iCo4());
@@ -50,7 +50,7 @@ public class Methods {
         addMethod("Essentials", new com.nijikokun.register.payment.forChestShop.methods.EE17());
         addMethod("Currency", new com.nijikokun.register.payment.forChestShop.methods.MCUR());
         addMethod("3co", new com.nijikokun.register.payment.forChestShop.methods.ECO3());
-        Dependencies.add("MultiCurrency");
+        dependencies.add("MultiCurrency");
     }
 
     /**
@@ -70,7 +70,7 @@ public class Methods {
         self = false;
         Method = null;
         preferred = "";
-        Attachables.clear();
+        attachables.clear();
     }
 
     /**
@@ -84,13 +84,13 @@ public class Methods {
 
     /**
      * Returns an array of payment method names that have been loaded
-     * through the <code>_init</code> method.
+     * through the <code>init</code> method.
      *
      * @return <code>Set<String></code> - Array of payment methods that are loaded.
      * @see #setMethod(org.bukkit.plugin.PluginManager)
      */
     public static Set<String> getDependencies() {
-        return Dependencies;
+        return dependencies;
     }
 
     /**
@@ -101,18 +101,18 @@ public class Methods {
      * @return Method <em>or</em> Null
      */
     public static Method createMethod(Plugin plugin) {
-        for (Method method : Methods)
+        for (Method method : methods){
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;
             }
-
+        }
         return null;
     }
 
     private static void addMethod(String name, Method method) {
-        Dependencies.add(name);
-        Methods.add(method);
+        dependencies.add(name);
+        methods.add(method);
     }
 
     /**
@@ -144,9 +144,9 @@ public class Methods {
 
         int count = 0;
         boolean match = false;
-        Plugin plugin = null;
+        Plugin plugin;
 
-        for (String name : getDependencies()) {
+        for (String name : dependencies) {
             if (hasMethod())
                 break;
 
@@ -161,7 +161,7 @@ public class Methods {
             if (preferred.isEmpty())
                 Method = current;
             else
-                Attachables.add(current);
+                attachables.add(current);
         }
 
         if (!preferred.isEmpty()) {
@@ -169,7 +169,7 @@ public class Methods {
                 if (hasMethod())
                     match = true;
                 else {
-                    for (Method attached : Attachables) {
+                    for (Method attached : attachables) {
                         if (attached == null) continue;
 
                         if (hasMethod()) {
@@ -201,7 +201,7 @@ public class Methods {
      * @return <code>boolean</code>
      */
     public static boolean setPreferred(String check) {
-        if (getDependencies().contains(check)) {
+        if (dependencies.contains(check)) {
             preferred = check;
             return true;
         }

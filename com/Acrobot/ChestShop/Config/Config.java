@@ -6,7 +6,7 @@ import com.nijikokun.register.payment.forChestShop.Methods;
  * @author Acrobot
  */
 public class Config {
-    private static ConfigObject config;
+    public static ConfigObject config;
 
     public static void setup(ConfigObject cfg) {
         config = cfg;

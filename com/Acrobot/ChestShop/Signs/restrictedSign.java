@@ -26,16 +26,28 @@ public class restrictedSign {
 
     public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
-        if (Permission.permissions == null || !uSign.isSign(blockUp) || Permission.has(player, Permission.ADMIN)) return true;
+        return !uSign.isSign(blockUp) || hasPermission(player, ((Sign) blockUp.getState()).getLines());
 
-        String world = blockUp.getWorld().getName();
-        String playerName = player.getName();
+    }
 
-        sign = (Sign) blockUp.getState();
+    public static boolean canDestroy(Player p, Sign sign){
+        Sign shopSign = getAssociatedSign(sign);
+        return uSign.canAccess(p, shopSign);
+    }
+    
+    public static Sign getAssociatedSign(Sign restricted){
+        Block down = restricted.getBlock().getRelative(BlockFace.DOWN);
+        return uSign.isSign(down) ? (Sign) down.getState() : null;
+    }
+    
+    public static boolean hasPermission(Player p, String[] lines){
+        if (Permission.has(p, Permission.ADMIN)) return true;
 
+        String world = p.getWorld().getName();
+        String playerName = p.getName();
         for (int i = 1; i <= 3; i++) {
-            if (Permission.permissions != null && Permission.permissions.inGroup(world, playerName, sign.getLine(i))) return true;
-            if (player.hasPermission("ChestShop.group." + sign.getLine(i))) return true;
+            if (Permission.permissions != null && Permission.permissions.inGroup(world, playerName, lines[i])) return true;
+            if (p.hasPermission(Permission.GROUP.toString() + lines[i])) return true;
         }
         return false;
     }

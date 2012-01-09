@@ -17,7 +17,8 @@ public class uTowny {
     }
 
     public static boolean isPlotOwner(Player player, Location chestLocation, Location signLocation) {
-        return isBlockOwner(player, chestLocation) && isBlockOwner(player, signLocation);
+        if (Config.getBoolean(Property.TOWNY_SHOPS_FOR_OWNERS_ONLY)) return isBlockOwner(player, chestLocation) && isBlockOwner(player, signLocation);
+        return isResident(player, chestLocation) && isResident(player, signLocation);
     }
 
     public static boolean isNotInTheWilderness(Location chestLocation, Location signLocation) {
@@ -29,8 +30,12 @@ public class uTowny {
     }
 
     private static boolean isBlockOwner(Player player, Location location) {
-        try {
-            return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(uSign.towny.getTownyUniverse().getResident(player.getName()));
+        try { return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(uSign.towny.getTownyUniverse().getResident(player.getName()));
+        } catch (NotRegisteredException ex) { return false; }
+    }
+    
+    private static boolean isResident(Player p, Location l){
+        try { return uSign.towny.getTownyUniverse().getTownBlock(l).getTown().hasResident(p.getName());
         } catch (NotRegisteredException ex) { return false; }
     }
 }
