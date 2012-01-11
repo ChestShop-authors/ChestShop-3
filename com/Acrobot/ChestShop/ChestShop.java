@@ -11,6 +11,7 @@ import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.avaje.ebean.EbeanServer;
+import com.herocraftonline.dev.heroes.Heroes;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
 import org.bukkit.event.Event;
@@ -34,6 +35,7 @@ public class ChestShop extends JavaPlugin {
     public static File folder = new File("plugins/ChestShop");
     public static final String chatPrefix = "[ChestShop] ";
     private static EbeanServer DB;
+    public static Heroes heroes = null;
 
     private static PluginDescriptionFile description;
     private static Server server;
@@ -49,6 +51,7 @@ public class ChestShop extends JavaPlugin {
 
         //Register our events
         registerEvents();
+        getHeroes();
 
         description = this.getDescription();  //Description of the plugin
         server = getServer();          //Setting out server variable
@@ -70,6 +73,13 @@ public class ChestShop extends JavaPlugin {
 
     public void onDisable() {
         System.out.println('[' + getPluginName() + "] version " + getVersion() + " shutting down!");
+    }
+    
+    private void getHeroes() {
+        if (pm.isPluginEnabled("Heroes")) {
+            ChestShop.heroes = (Heroes) pm.getPlugin("Heroes");
+            System.out.println("[ChestShop] loaded Heroes");
+        }
     }
 
     //////////////////    REGISTER EVENTS & SCHEDULER    ///////////////////////////

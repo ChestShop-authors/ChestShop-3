@@ -14,6 +14,7 @@ import com.Acrobot.ChestShop.Utils.uSign;
 import com.Acrobot.ChestShop.Utils.uWorldGuard;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
+import com.herocraftonline.dev.heroes.Heroes;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
@@ -30,6 +31,10 @@ import org.yi.acru.bukkit.Lockette.Lockette;
 public class pluginEnable extends ServerListener {
 
     public void onPluginEnable(PluginEnableEvent event) {
+        if (event.getPlugin().getDescription().getName().equals("Heroes")) {
+            ChestShop.heroes = (Heroes) event.getPlugin();
+            System.out.println(ChestShop.chatPrefix + "Heroes loaded.");
+        }
         if (!Methods.hasMethod() && Methods.setMethod(ChestShop.pm)) {
             Economy.economy = Methods.getMethod();
             System.out.println(ChestShop.chatPrefix + Economy.economy.getName() + ' ' + Economy.economy.getVersion() + " loaded.");
