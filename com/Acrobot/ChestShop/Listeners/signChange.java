@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
@@ -9,6 +10,9 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.*;
+import com.herocraftonline.dev.heroes.classes.HeroClass.ExperienceType;
+import com.herocraftonline.dev.heroes.hero.Hero;
+import com.herocraftonline.dev.heroes.party.HeroParty;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -128,6 +132,14 @@ public class signChange extends BlockListener {
 
         uLongName.saveName(player.getName());
         player.sendMessage(Config.getLocal(Language.SHOP_CREATED) + (paid ? " - " + Economy.formatBalance(shopCreationPrice) : ""));
+        if (ChestShop.heroes != null) {
+            Hero hero =  ChestShop.heroes.getHeroManager().getHero(player);
+            if (hero.hasParty()) {
+                hero.getParty().gainExp(Config.getDouble(Property.HEROES_EXP), ExperienceType.EXTERNAL, player.getLocation());
+            } else {
+                hero.gainExp(Config.getDouble(Property.HEROES_EXP), ExperienceType.EXTERNAL);
+            }
+        }
     }
 
     private static boolean canCreateShop(Player player, boolean isAdmin, int ID) {
