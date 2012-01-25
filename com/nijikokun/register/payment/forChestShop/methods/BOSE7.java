@@ -155,7 +155,7 @@ public class BOSE7 implements Method {
         }
     }
 
-    public class BOSEBankAccount implements MethodBankAccount {
+    public class BOSEBankAccount implements MethodBankAccount, MethodAccount {
         private String bank;
         private BOSEconomy BOSEconomy;
 

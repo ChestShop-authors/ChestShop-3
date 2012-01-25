@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop.Listeners;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Economy;
+import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
@@ -108,7 +108,7 @@ public class signChange extends BlockListener {
 
 
         float shopCreationPrice = Config.getFloat(Property.SHOP_CREATION_PRICE);
-        boolean paid = shopCreationPrice != 0 && !isAdminShop;
+        boolean paid = shopCreationPrice != 0 && !isAdminShop && !Permission.has(player, Permission.NOFEE);
         if (paid) {
             if (!Economy.hasEnough(player.getName(), shopCreationPrice)) {
                 player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
@@ -116,7 +116,7 @@ public class signChange extends BlockListener {
                 return;
             }
 
-            Economy.substract(player.getName(), shopCreationPrice);
+            Economy.subtract(player.getName(), shopCreationPrice);
         }
 
         if (Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)) {
@@ -128,6 +128,8 @@ public class signChange extends BlockListener {
 
         uLongName.saveName(player.getName());
         player.sendMessage(Config.getLocal(Language.SHOP_CREATED) + (paid ? " - " + Economy.formatBalance(shopCreationPrice) : ""));
+
+        uHeroes.addHeroExp(player);
     }
 
     private static boolean canCreateShop(Player player, boolean isAdmin, int ID) {

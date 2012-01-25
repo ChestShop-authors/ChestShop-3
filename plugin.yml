@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.32
+version: 3.34
 
 
 author: Acrobot
@@ -10,7 +10,7 @@ description: >
              A chest shop for economy plugins.
  
  
-softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard]
+softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes]
 commands:
   iteminfo:
     aliases: [iinfo]
@@ -51,6 +51,8 @@ permissions:
     description: Allows user to buy from a shop
   ChestShop.shop.sell:
     description: Allows user to sell to a shop
+  ChestShop.nofee:
+    description: User doesn't have to pay the shop creation fee.
   ChestShop.admin:
     description: Allows user to modify/destroy other stores and create an Admin Shops
     default: op

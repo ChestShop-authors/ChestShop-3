@@ -5,9 +5,10 @@ import com.Acrobot.ChestShop.Chests.ChestObject;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Economy;
+import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uInventory;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Sign;
@@ -26,6 +27,7 @@ public class Shop {
     public final float buyPrice;
     public final float sellPrice;
     public final String owner;
+    private final Sign sign;
 
     public Shop(ChestObject chest, boolean buy, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
@@ -35,6 +37,7 @@ public class Shop {
         this.sellPrice = (!buy ? uSign.sellPrice(sign.getLine(2)) : -1);
         this.owner = sign.getLine(0);
         this.stockAmount = uSign.itemAmount(sign.getLine(1));
+        this.sign = sign;
     }
 
     public void buy(Player player) {
@@ -70,9 +73,12 @@ public class Shop {
         }
 
         String account = getOwnerAccount();
-        if (!account.isEmpty() && Economy.hasAccount(account)) Economy.add(account, buyPrice);
+        if (!account.isEmpty() && Economy.hasAccount(account)) {
+            if (!isAdminShop()) Economy.add(account, buyPrice);
+            else Economy.addServer(account, buyPrice);
+        }
 
-        Economy.substract(playerName, buyPrice);
+        Economy.subtract(playerName, buyPrice);
 
         if (!isAdminShop()) chest.removeItem(stock, durability, stockAmount);
 
@@ -96,6 +102,8 @@ public class Shop {
                     .replace("%buyer", playerName)
                     .replace("%price", formatedPrice));
         }
+        
+        if (Config.getBoolean(Property.BLOCK_UPDATE)) uBlock.blockUpdate(sign.getBlock());
     }
 
     public void sell(Player player) {
@@ -130,10 +138,11 @@ public class Shop {
         }
 
 
-        if (accountExists) Economy.substract(account, sellPrice);
+        if (accountExists) Economy.subtract(account, sellPrice);
         if (!isAdminShop()) chest.addItem(stock, stockAmount);
 
-        Economy.add(player.getName(), sellPrice);
+        if (!isAdminShop()) Economy.add(player.getName(), sellPrice);
+        else Economy.addServer(player.getName(), sellPrice);
 
         String materialName = stock.getType().name();
         String formatedBalance = Economy.formatBalance(sellPrice);
@@ -157,6 +166,7 @@ public class Shop {
                     .replace("%seller", player.getName())
                     .replace("%price", formatedBalance));
         }
+        if (Config.getBoolean(Property.BLOCK_UPDATE)) uBlock.blockUpdate(sign.getBlock());
     }
 
     private String getOwnerAccount() {

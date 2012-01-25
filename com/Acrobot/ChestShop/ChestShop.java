@@ -65,6 +65,9 @@ public class ChestShop extends JavaPlugin {
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("csVersion").setExecutor(new Version());
 
+        //Start the statistics pinger
+        startStatistics();
+
         System.out.println('[' + getPluginName() + "] version " + getVersion() + " initialized!");
     }
 
@@ -72,7 +75,7 @@ public class ChestShop extends JavaPlugin {
         System.out.println('[' + getPluginName() + "] version " + getVersion() + " shutting down!");
     }
 
-    //////////////////    REGISTER EVENTS & SCHEDULER    ///////////////////////////
+    //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
     private void registerEvents() {
         blockBreak blockBreak = new blockBreak();
         registerEvent(Event.Type.BLOCK_BREAK, blockBreak);
@@ -80,7 +83,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(Event.Type.SIGN_CHANGE, new signChange());
         registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest);
         registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable());
-        registerEvent(Event.Type.PLUGIN_DISABLE, new pluginDisable());
         if (!Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) return;
         registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockBreak);
         registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak);
@@ -97,6 +99,14 @@ public class ChestShop extends JavaPlugin {
 
     private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {
         server.getScheduler().scheduleAsyncRepeatingTask(this, runnable, startTime, repetetionTime);
+    }
+
+    private void startStatistics(){
+        try{
+            new Metrics().beginMeasuringPlugin(this);
+        } catch (Exception ex){
+            System.out.println(chatPrefix + "There was an error while submitting statistics.");
+        }
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////

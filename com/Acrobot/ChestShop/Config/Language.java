@@ -35,6 +35,7 @@ public enum Language {
 
     PROTECTED_SHOP("Successfully protected the shop with LWC!"),
     SHOP_CREATED("Shop successfully created!"),
+    SHOP_REFUNDED("You have been refunded %amount."),
 
     NO_PERMISSION("You don't have permissions to do that!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!"),

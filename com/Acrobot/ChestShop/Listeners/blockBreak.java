@@ -1,8 +1,9 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Economy;
+import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -37,7 +38,11 @@ public class blockBreak extends BlockListener {
         Sign sign = uBlock.findSign(block, (player != null ? uLongName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
         if (playerIsNotOwner(player, sign)) return true; //Player is not the owner of the shop - cancel!
-        if (weShouldReturnMoney()) Economy.add(uLongName.getName(sign.getLine(0)), Config.getFloat(Property.SHOP_REFUND_PRICE)); //Add some money
+        if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)){
+            float refundPrice = Config.getFloat(Property.SHOP_REFUND_PRICE);
+            Economy.add(uLongName.getName(sign.getLine(0)), refundPrice); //Add some money
+            player.sendMessage(Config.getLocal(Language.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
+        }
         return false; //Player is the owner, so we don't want to cancel this :)
     }
 

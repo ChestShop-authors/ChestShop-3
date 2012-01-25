@@ -15,7 +15,8 @@ public enum Permission {
     ADMIN("ChestShop.admin"),
     MOD("ChestShop.mod"),
     OTHER_NAME("ChestShop.name."),
-    GROUP("ChestShop.group.");
+    GROUP("ChestShop.group."),
+    NOFEE("ChestShop.nofee");
 
     private final String permission;
 
@@ -35,6 +36,7 @@ public enum Permission {
     }
     
     public static boolean otherName(Player p, String name){
+        if (has(p, Permission.ADMIN)) return false;
         String node = OTHER_NAME + name;
         if (permissions != null) return permissions.has(p, node) || permissions.has(p, node.toLowerCase());
         return hasPermissionSet(p, node) || hasPermissionSet(p, node.toLowerCase());

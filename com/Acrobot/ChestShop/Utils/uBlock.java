@@ -28,6 +28,12 @@ public class uBlock {
         }
         return null;
     }
+    
+    public static void blockUpdate(Block block){
+        for (BlockFace bf : shopFaces){
+            block.getRelative(bf).getState().update(true);
+        }
+    }
 
     public static Sign findSign(Block block, String originalName) {
         for (BlockFace bf : shopFaces) {
