@@ -1,52 +1,40 @@
-package com.Acrobot.ChestShop;
-
-/*
- * Copyright 2011 Tyler Blair. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
- *
- *    1. Redistributions of source code must retain the above copyright notice, this list of
- *       conditions and the following disclaimer.
- *
- *    2. Redistributions in binary form must reproduce the above copyright notice, this list
- *       of conditions and the following disclaimer in the documentation and/or other materials
- *       provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * The views and conclusions contained in the software and documentation are those of the
- * authors and contributors and should not be interpreted as representing official policies,
- * either expressed or implied, of anybody else.
- */
+package com.Acrobot.ChestShop;/*
+* Copyright 2011 Tyler Blair. All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without modification, are
+* permitted provided that the following conditions are met:
+*
+*    1. Redistributions of source code must retain the above copyright notice, this list of
+*       conditions and the following disclaimer.
+*
+*    2. Redistributions in binary form must reproduce the above copyright notice, this list
+*       of conditions and the following disclaimer in the documentation and/or other materials
+*       provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+* FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
+* CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+* ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+* The views and conclusions contained in the software and documentation are those of the
+* authors and contributors and should not be interpreted as representing official policies,
+* either expressed or implied, of anybody else.
+*/
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Tooling to post to metrics.griefcraft.com
@@ -72,6 +60,12 @@ public class Metrics {
          */
         public abstract int getValue();
 
+        /**
+         * Called after the website graphs have been updated
+         */
+        public void reset() {
+        }
+
         @Override
         public int hashCode() {
             return getColumnName().hashCode() + getValue();
@@ -92,7 +86,7 @@ public class Metrics {
     /**
      * The metrics revision number
      */
-    private final static int REVISION = 3;
+    private final static int REVISION = 4;
 
     /**
      * The base url of the metrics domain
@@ -172,10 +166,20 @@ public class Metrics {
      */
     public void beginMeasuringPlugin(final Plugin plugin) throws IOException {
         // Did we opt out?
-        if (configuration.getBoolean("opt-out", false)) return;
+        if (configuration.getBoolean("opt-out", false)) {
+            return;
+        }
 
         // First tell the server about us
-        postPlugin(plugin, false);
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+            public void run() {
+                try {
+                    postPlugin(plugin, false);
+                } catch (IOException e) {
+                    System.out.println("[Metrics] " + e.getMessage());
+                }
+            }
+        }, 20L);
 
         // Ping the server in intervals
         plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
@@ -183,21 +187,10 @@ public class Metrics {
                 try {
                     postPlugin(plugin, true);
                 } catch (IOException e) {
-                    System.out.println("[ChestShop] There was an error while submitting statistics.");
+                    System.out.println("[Metrics] " + e.getMessage());
                 }
             }
         }, PING_INTERVAL * 1200, PING_INTERVAL * 1200);
-    }
-
-    /**
-     * Generates a field
-     * @param name Field name
-     * @param data Data assigned to the field
-     * @return Field
-     * @throws UnsupportedEncodingException
-     */
-    private static String gField(String name, String data) throws UnsupportedEncodingException {
-        return '&' + encode(name) + '=' + encode(data);
     }
 
     /**
@@ -208,15 +201,16 @@ public class Metrics {
     private void postPlugin(Plugin plugin, boolean isPing) throws IOException {
         // Construct the post data
         String response = "ERR No response";
-        String data = encode("guid") + '=' + encode(guid)
-                + gField("version", plugin.getDescription().getVersion())
-                + gField("server", Bukkit.getVersion())
-                + gField("players", String.valueOf(Bukkit.getServer().getOnlinePlayers().length))
-                + gField("revision", String.valueOf(REVISION));
+        StringBuilder data = new StringBuilder(10);
+        data.append(encode("guid")).append('=').append(encode(guid))
+                .append(gField("version", plugin.getDescription().getVersion()))
+                .append(gField("server", Bukkit.getVersion()))
+                .append(gField("players", String.valueOf(Bukkit.getServer().getOnlinePlayers().length)))
+                .append(gField("revision", String.valueOf(REVISION)));
 
         // If we're pinging, append it
         if (isPing) {
-            data += gField("ping", "true");
+            data.append(gField("ping", "true"));
         }
 
         // Add any custom data (if applicable)
@@ -224,7 +218,7 @@ public class Metrics {
 
         if (plotters != null) {
             for (Plotter plotter : plotters) {
-                data += gField("Custom" + plotter.getColumnName(), Integer.toString(plotter.getValue()));
+                data.append(gField("Custom" + plotter.getColumnName(), Integer.toString(plotter.getValue())));
             }
         }
 
@@ -237,7 +231,7 @@ public class Metrics {
 
         // Write the data
         OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-        writer.write(data);
+        writer.write(data.toString());
         writer.flush();
 
         // Now read the response
@@ -247,7 +241,31 @@ public class Metrics {
         // close resources
         writer.close();
         reader.close();
-        if (response.startsWith("ERR")) throw new IOException(response);
+
+        if (response.startsWith("ERR")) {
+            throw new IOException(response); //Throw the exception
+        } else {
+            // Is this the first update this hour?
+            if (response.contains("OK This is your first update this hour")) {
+                if (plotters != null) {
+                    for (Plotter plotter : plotters) {
+                        plotter.reset();
+                    }
+                }
+            }
+        }
+        //if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
+    }
+
+    /**
+     * Generates a field
+     * @param name Field name
+     * @param data Data assigned to the field
+     * @return Field
+     * @throws UnsupportedEncodingException
+     */
+    private static String gField(String name, String data) throws UnsupportedEncodingException {
+        return '&' + encode(name) + '=' + encode(data);
     }
 
     /**

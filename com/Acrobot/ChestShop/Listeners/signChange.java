@@ -15,16 +15,18 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Acrobot
  */
-public class signChange extends BlockListener {
+public class signChange implements Listener {
 
-    public void onSignChange(SignChangeEvent event) {
+    @EventHandler
+    public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
         String[] line = event.getLines();
 

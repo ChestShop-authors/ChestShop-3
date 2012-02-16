@@ -42,7 +42,7 @@ public class Security {
     private static boolean thereIsAnotherSignByPlayer(Block baseBlock, Block signBlock, String shortName) {
         for (BlockFace bf : faces) {
             Block block = baseBlock.getRelative(bf);
-            if (uSign.isSign(block) && !block.equals(signBlock) && blockBreak.getAttachedFace((Sign) block.getState()).equals(baseBlock) && !((Sign) block.getState()).getLine(0).equals(shortName))
+            if (uSign.isSign(block) && uSign.isValid((Sign) block.getState()) && !block.equals(signBlock) && blockBreak.getAttachedFace((Sign) block.getState()).equals(baseBlock) && !((Sign) block.getState()).getLine(0).equals(shortName))
                 return true;
         }
         return false;

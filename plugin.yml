@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.34
+version: 3.35
 
 
 author: Acrobot
@@ -10,7 +10,8 @@ description: >
              A chest shop for economy plugins.
  
  
-softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes]
+softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes,
+                iConomy, BOSEconomy, Essentials, 3co, MultiCurrency, Currency, SimpleChestLock]
 commands:
   iteminfo:
     aliases: [iinfo]
@@ -106,7 +107,7 @@ permissions:
       ChestShop.shop.create.292: true #IronHoe
   ChestShop.shop.create.goldgrade:
     description: Allows to create a shop that sells gold gear
-  children:
+    children:
       ChestShop.shop.create.314: true #GoldHelm
       ChestShop.shop.create.315: true #GoldChestplate
       ChestShop.shop.create.316: true #GoldLeggings
@@ -118,7 +119,7 @@ permissions:
       ChestShop.shop.create.294: true #GoldHoe
   ChestShop.shop.create.stonegrade:
     description: Allows to create a shop that sells stone tools and chain armor
-  children:
+    children:
       ChestShop.shop.create.302: true #ChainHelm
       ChestShop.shop.create.303: true #ChainChestplate
       ChestShop.shop.create.304: true #ChainLeggings
@@ -130,7 +131,7 @@ permissions:
       ChestShop.shop.create.291: true #StoneHoe
   ChestShop.shop.create.woodgrade:
     description: Allows to create a shop that sells wood tools and leather armor
-  children:
+    children:
       ChestShop.shop.create.298: true #LeatherHelm
       ChestShop.shop.create.299: true #LeatherChestplate
       ChestShop.shop.create.300: true #LeatherLeggings

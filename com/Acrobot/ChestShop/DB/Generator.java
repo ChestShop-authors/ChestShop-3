@@ -24,6 +24,7 @@ public class Generator implements Runnable {
     private static BufferedWriter buf;
 
     public void run() {
+        if (row.isEmpty()) System.out.println(ChestShop.chatPrefix + "You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
         generateStats();
     }
 

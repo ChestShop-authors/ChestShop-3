@@ -41,7 +41,7 @@ public class Economy {
     }
 
     public static void subtract(String name, float amount) {
-        economy.subtract(name, amount);
+        economy.subtract(uLongName.getName(name), amount);
     }
 
     public static boolean hasEnough(String name, float amount) {

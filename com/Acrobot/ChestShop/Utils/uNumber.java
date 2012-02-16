@@ -10,7 +10,7 @@ public class uNumber {
         try {
             Integer.parseInt(string);
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -19,7 +19,7 @@ public class uNumber {
         try {
             Float.parseFloat(string);
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -28,7 +28,7 @@ public class uNumber {
         try {
             Double.parseDouble(string);
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }

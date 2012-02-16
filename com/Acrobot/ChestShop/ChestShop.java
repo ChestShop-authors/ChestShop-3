@@ -13,8 +13,6 @@ import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
-import org.bukkit.event.Event;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -77,24 +75,13 @@ public class ChestShop extends JavaPlugin {
 
     //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
     private void registerEvents() {
-        blockBreak blockBreak = new blockBreak();
-        registerEvent(Event.Type.BLOCK_BREAK, blockBreak);
-        registerEvent(Event.Type.BLOCK_PLACE, new blockPlace());
-        registerEvent(Event.Type.SIGN_CHANGE, new signChange());
-        registerEvent(Event.Type.PLAYER_INTERACT, new playerInteract(), Event.Priority.Highest);
-        registerEvent(Event.Type.PLUGIN_ENABLE, new pluginEnable());
-        if (!Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) return;
-        registerEvent(Event.Type.BLOCK_PISTON_EXTEND, blockBreak);
-        registerEvent(Event.Type.BLOCK_PISTON_RETRACT, blockBreak);
-        registerEvent(Event.Type.ENTITY_EXPLODE, new entityExplode());
-    }
-
-    private void registerEvent(Event.Type type, Listener listener) {
-        registerEvent(type, listener, Event.Priority.Normal);
-    }
-
-    private void registerEvent(Event.Type type, Listener listener, Event.Priority priority) {
-        pm.registerEvent(type, listener, priority, this);
+        PluginManager pm = getServer().getPluginManager();
+        
+        pm.registerEvents(new blockBreak(), this);
+        pm.registerEvents(new blockPlace(), this);
+        pm.registerEvents(new signChange(), this);
+        pm.registerEvents(new playerInteract(), this);
+        pm.registerEvents(new entityExplode(), this);
     }
 
     private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {

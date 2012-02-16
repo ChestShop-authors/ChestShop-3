@@ -54,7 +54,7 @@ public class ItemInfo implements CommandExecutor {
         if (integer == 3) return "III";
         if (integer == 4) return "IV";
         if (integer == 5) return "V";
-        return null;
+        return Integer.toString(integer);
     }
     
 

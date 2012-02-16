@@ -1,14 +1,12 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Economy.NoProvider;
 import com.Acrobot.ChestShop.Economy.Register;
 import com.Acrobot.ChestShop.Economy.Vault;
 import com.Acrobot.ChestShop.Items.Odd;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.Plugins.DeadboltPlugin;
-import com.Acrobot.ChestShop.Protection.Plugins.Default;
-import com.Acrobot.ChestShop.Protection.Plugins.LWCplugin;
-import com.Acrobot.ChestShop.Protection.Plugins.LockettePlugin;
+import com.Acrobot.ChestShop.Protection.Plugins.*;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.uHeroes;
 import com.Acrobot.ChestShop.Utils.uNumber;
@@ -22,8 +20,8 @@ import com.nijikokun.register.payment.forChestShop.Method;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.webkonsept.bukkit.simplechestlock.SCL;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -32,7 +30,7 @@ import org.yi.acru.bukkit.Lockette.Lockette;
 /**
  * @author Acrobot
  */
-public class pluginEnable extends ServerListener {
+public class pluginEnable {
 
     public static void initializePlugins() {
         Security.protections.add(new Default()); //Initialize basic protection
@@ -46,7 +44,10 @@ public class pluginEnable extends ServerListener {
     private static void loadRegister(){
         if (com.Acrobot.ChestShop.Economy.Economy.economy == null) {
             Method m = Methods.load(ChestShop.pm);
-            if (m == null) return;
+            if (m == null) {
+                com.Acrobot.ChestShop.Economy.Economy.economy = new NoProvider();
+                return;
+            }
             Register.eco = m;
             com.Acrobot.ChestShop.Economy.Economy.economy = new Register();
             System.out.println(ChestShop.chatPrefix + m.getName() + " loaded.");
@@ -66,7 +67,6 @@ public class pluginEnable extends ServerListener {
             DeadboltPlugin.deadbolt = (Deadbolt) plugin;
             Security.protections.add(new DeadboltPlugin());
         } else if (name.equals("OddItem")) {
-            if (Odd.isInitialized()) return;
             if (plugin.getDescription().getVersion().startsWith("0.7")) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.8")); return; }
             Odd.isInitialized = true;
         } else if (name.equals("Towny")) {
@@ -87,6 +87,9 @@ public class pluginEnable extends ServerListener {
             return;
         } else if (name.equals("Heroes")){
             uHeroes.heroes = (Heroes) plugin;
+        } else if (name.equals("SimpleChestLock")) {
+            SCLplugin.scl = (SCL) plugin;
+            Security.protections.add(new SCLplugin());
         }
         
         PluginDescriptionFile description = plugin.getDescription();

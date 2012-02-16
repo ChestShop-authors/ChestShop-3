@@ -9,14 +9,16 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * @author Acrobot
  */
-public class blockPlace extends BlockListener {
-    public void onBlockPlace(BlockPlaceEvent event) {
+public class blockPlace implements Listener {
+    @EventHandler
+    public static void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlockAgainst();
         if (uSign.isSign(block) && uSign.isValid((Sign) block.getState())) {
             event.setCancelled(true);

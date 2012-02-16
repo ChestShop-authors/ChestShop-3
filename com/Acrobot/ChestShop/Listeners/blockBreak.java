@@ -14,8 +14,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.material.PistonBaseMaterial;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author Acrobot
  */
-public class blockBreak extends BlockListener {
+public class blockBreak implements Listener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
         if (block == null) return false;
         if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
@@ -55,7 +56,8 @@ public class blockBreak extends BlockListener {
         return uBlock.findRestrictedSign(block) != null;
     }
 
-    public void onBlockBreak(BlockBreakEvent event) {
+    @EventHandler
+    public static void onBlockBreak(BlockBreakEvent event) {
         if (cancellingBlockBreak(event.getBlock(), event.getPlayer())) event.setCancelled(true);
     }
 
@@ -72,7 +74,8 @@ public class blockBreak extends BlockListener {
                 && !Permission.otherName(player, sign.getLine(0)));
     }
 
-    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+    @EventHandler
+    public static void onBlockPistonExtend(BlockPistonExtendEvent event) {
         for (Block b : getExtendBlocks(event)) {
             if (cancellingBlockBreak(b, null)) {
                 event.setCancelled(true);
@@ -81,7 +84,8 @@ public class blockBreak extends BlockListener {
         }
     }
 
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+    @EventHandler
+    public static void onBlockPistonRetract(BlockPistonRetractEvent event) {
         if (cancellingBlockBreak(getRetractBlock(event), null)) event.setCancelled(true);
     }
 

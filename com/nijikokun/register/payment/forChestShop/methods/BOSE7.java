@@ -75,7 +75,7 @@ public class BOSE7 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        if(!hasAccount(name)) 
+        if(!hasAccount(name))
             return null;
 
         return new BOSEAccount(name, this.BOSEconomy);
@@ -98,7 +98,7 @@ public class BOSE7 implements Method {
         BOSEconomy = (BOSEconomy)plugin;
     }
 
-    public class BOSEAccount implements MethodAccount {
+    public static class BOSEAccount implements MethodAccount {
         private String name;
         private BOSEconomy BOSEconomy;
 
@@ -155,7 +155,7 @@ public class BOSE7 implements Method {
         }
     }
 
-    public class BOSEBankAccount implements MethodBankAccount, MethodAccount {
+    public static class BOSEBankAccount implements MethodBankAccount, MethodAccount {
         private String bank;
         private BOSEconomy BOSEconomy;
 

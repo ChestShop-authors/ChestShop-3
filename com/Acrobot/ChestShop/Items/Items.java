@@ -50,8 +50,12 @@ public class Items {
     public static ItemStack getItemStack(String itemName) {
         ItemStack toReturn = getFromOddItem(itemName);
         if (toReturn != null) return toReturn;
-        
-        String first = itemName.split(":|-")[0];
+
+        if (itemName == null) itemName = "";
+        String[] split = itemName.split(":|-");
+
+        if (split.length == 0) return null;
+        String first = split[0];
 
         String[] space = first.split(" ");
         Material material = getMaterial(first);

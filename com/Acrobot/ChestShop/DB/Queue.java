@@ -39,7 +39,7 @@ public class Queue implements Runnable {
                 .getDB()
                 .find(Transaction.class)
                 .where()
-                .lt("sec", System.currentTimeMillis() / 1000 - Config.getInteger(Property.RECORD_TIME_TO_LIVE))
+                .lt("sec", (System.currentTimeMillis() / 1000L) - Config.getInteger(Property.RECORD_TIME_TO_LIVE))
                 .findList();
     }
 }

@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 /**
  * @author Acrobot
  */
@@ -45,29 +47,24 @@ public class uInventory {
     public static int add(Inventory inv, ItemStack item, int amount) {
         amount = (amount > 0 ? amount : 1);
         if (Config.getBoolean(Property.STACK_UNSTACKABLES)) return addAndStackTo64(inv, item, amount);
-        /*ItemStack itemstack = new ItemStack(item.getType(), amount, item.getDurability());
+        ItemStack itemstack = new ItemStack(item.getType(), amount, item.getDurability());
         itemstack.addEnchantments(item.getEnchantments());
+
         HashMap<Integer, ItemStack> items = inv.addItem(itemstack);
         amount = 0;
         for (ItemStack toAdd : items.values()) amount += toAdd.getAmount();
 
-        return amount;*/ //TODO: revert when Bukkit releases new RB
-
-        return addManually(inv, item, amount);
-    }
-
-    private static int addManually(Inventory inv, ItemStack item, int amount) {
-        return addManually(inv, item, amount, (item.getType() != Material.POTION ? item.getType().getMaxStackSize() : 1)); //TODO Change it when it's repaired in Bukkit
+        return amount;
     }
 
     public static int addAndStackTo64(Inventory inv, ItemStack item, int amount) {
         return addManually(inv, item, amount, 64);
     }
-    
-    public static int addManually(Inventory inv, ItemStack item, int amount, int max){
+
+    public static int addManually(Inventory inv, ItemStack item, int amount, int max) {
         if (amount <= 0) return 0;
 
-        for (int slot = 0; slot < inv.getSize() && amount > 0; slot++){
+        for (int slot = 0; slot < inv.getSize() && amount > 0; slot++) {
             ItemStack curItem = inv.getItem(slot);
             ItemStack dupe = item.clone();
 
@@ -101,7 +98,6 @@ public class uInventory {
 
     public static int fits(Inventory inv, ItemStack item, int amount, short durability) {
         int maxStackSize = (Config.getBoolean(Property.STACK_UNSTACKABLES) ? 64 : item.getType().getMaxStackSize());
-        if (item.getType() == Material.POTION) maxStackSize = 1; //TODO Bukkit, can you fix that?
 
         int amountLeft = amount;
 
@@ -122,8 +118,8 @@ public class uInventory {
 
         return amountLeft;
     }
-    
-    private static boolean equals(ItemStack i, ItemStack item, short durability){
+
+    private static boolean equals(ItemStack i, ItemStack item, short durability) {
         return i != null
                 && i.getType() == item.getType()
                 && i.getEnchantments().equals(item.getEnchantments())

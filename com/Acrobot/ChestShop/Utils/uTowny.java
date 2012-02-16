@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 
@@ -21,12 +22,16 @@ public class uTowny {
         return isResident(player, chestLocation) && isResident(player, signLocation);
     }
 
-    public static boolean isNotInTheWilderness(Location chestLocation, Location signLocation) {
-        return !uSign.towny.getTownyUniverse().isWilderness(chestLocation.getBlock()) && !uSign.towny.getTownyUniverse().isWilderness(signLocation.getBlock());
+    public static boolean isInWilderness(Location chestLocation, Location signLocation) {
+        return isInWilderness(chestLocation.getBlock()) || isInWilderness(signLocation.getBlock());
+    }
+
+    private static boolean isInWilderness(Block block){
+        return uSign.towny.getTownyUniverse().isWilderness(block);
     }
 
     public static boolean canBuild(Player player, Location chestLocation, Location signLocation) {
-        return uSign.towny == null || !Config.getBoolean(Property.TOWNY_INTEGRATION) || (isNotInTheWilderness(chestLocation, signLocation) && isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
+        return uSign.towny == null || !Config.getBoolean(Property.TOWNY_INTEGRATION) || (!isInWilderness(chestLocation, signLocation) && isInsideShopPlot(chestLocation, signLocation) && isPlotOwner(player, chestLocation, signLocation));
     }
 
     private static boolean isBlockOwner(Player player, Location location) {

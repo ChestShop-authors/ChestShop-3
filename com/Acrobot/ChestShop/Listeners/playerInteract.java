@@ -19,21 +19,24 @@ import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 
 import java.util.HashMap;
 
 /**
  * @author Acrobot
  */
-public class playerInteract extends PlayerListener {
+public class playerInteract implements Listener {
 
     private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>(); //Last player's transaction
     public static int interval = 100;//Minimal interval between transactions
 
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public static void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK) return;
 

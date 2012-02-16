@@ -35,7 +35,8 @@ public enum Property {
     ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK(false, "Do you want to allow other players to build a shop on a block where there's one already?"),
     SHOP_INTERACTION_INTERVAL(100, "(In 1/1000th of a second) How often can a player use a shop sign?"),
     HEROES_EXP(100, "How much Heroes exp should people get for creating a ChestShop?"),
-    BLOCK_UPDATE(false, "EXPERIMENTAL: Should every ChestShop transaction result in a block update?");
+    BLOCK_UPDATE(false, "EXPERIMENTAL: Should every ChestShop transaction result in a block update?"),
+    ALLOW_PARTIAL_TRANSACTIONS(true, "Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)");
 
 
     private final Object value;

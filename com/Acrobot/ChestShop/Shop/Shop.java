@@ -23,9 +23,9 @@ public class Shop {
     private final ChestObject chest;
 
     public final ItemStack stock;
-    public final int stockAmount;
-    public final float buyPrice;
-    public final float sellPrice;
+    public int stockAmount;
+    public float buyPrice;
+    public float sellPrice;
     public final String owner;
     private final Sign sign;
 
@@ -55,8 +55,14 @@ public class Shop {
         }
         String playerName = player.getName();
         if (!Economy.hasEnough(playerName, buyPrice)) {
-            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
-            return;
+            int items = calculateItemAmount(Economy.balance(playerName), true);
+            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
+                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
+                return;
+            } else {
+                buyPrice = (buyPrice / stockAmount) * items;
+                stockAmount = items;
+            }
         }
         if (!stockFitsPlayer(player)) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_INVENTORY));
@@ -66,10 +72,17 @@ public class Shop {
         String materialName = stock.getType().name();
 
         if (!isAdminShop() && !hasEnoughStock()) {
-            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_STOCK));
-            if (!Config.getBoolean(Property.SHOW_MESSAGE_OUT_OF_STOCK)) return;
-            sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
-            return;
+            int items = stockAmount(stock, durability);
+            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
+                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_STOCK));
+
+                if (!Config.getBoolean(Property.SHOW_MESSAGE_OUT_OF_STOCK)) return;
+                sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
+                return;
+            } else {
+                buyPrice = (buyPrice / stockAmount) * items;
+                stockAmount = items;
+            }
         }
 
         String account = getOwnerAccount();
@@ -102,7 +115,7 @@ public class Shop {
                     .replace("%buyer", playerName)
                     .replace("%price", formatedPrice));
         }
-        
+
         if (Config.getBoolean(Property.BLOCK_UPDATE)) uBlock.blockUpdate(sign.getBlock());
     }
 
@@ -124,19 +137,30 @@ public class Shop {
         boolean accountExists = !account.isEmpty() && Economy.hasAccount(account);
 
         if (accountExists && !Economy.hasEnough(account, sellPrice)) {
-            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
-            return;
+            int items = calculateItemAmount(Economy.balance(account), false);
+            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
+                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
+                return;
+            } else {
+                sellPrice = (sellPrice / stockAmount) * items;
+                stockAmount = items;
+            }
         }
+        if (uInventory.amount(player.getInventory(), stock, durability) < stockAmount) {
+            int items = uInventory.amount(player.getInventory(), stock, durability);
+            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
+                player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
+                return;
+            } else {
+                sellPrice = (sellPrice / stockAmount) * items;
+                stockAmount = items;
+            }
+        }
+
         if (!isAdminShop() && !stockFitsChest(chest)) {
             player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_SPACE_IN_CHEST));
             return;
         }
-
-        if (uInventory.amount(player.getInventory(), stock, durability) < stockAmount) {
-            player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_ITEMS_TO_SELL));
-            return;
-        }
-
 
         if (accountExists) Economy.subtract(account, sellPrice);
         if (!isAdminShop()) chest.addItem(stock, stockAmount);
@@ -180,6 +204,10 @@ public class Shop {
     private boolean hasEnoughStock() {
         return chest.hasEnough(stock, stockAmount, durability);
     }
+    
+    private int stockAmount(ItemStack item, short durability){
+        return chest.amount(item, durability);
+    }
 
     private boolean stockFitsPlayer(Player player) {
         return uInventory.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
@@ -187,6 +215,10 @@ public class Shop {
 
     private boolean stockFitsChest(ChestObject chest) {
         return chest.fits(stock, stockAmount, durability);
+    }
+
+    private int calculateItemAmount(double money, boolean buy) {
+        return (int) Math.floor(money / ((buy ? buyPrice : sellPrice) / stockAmount));
     }
 
     private void sendMessageToOwner(String msg) {
