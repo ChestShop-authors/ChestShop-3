@@ -29,10 +29,8 @@ import java.util.List;
  */
 public class blockBreak implements Listener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
-        if (block == null) return false;
+        if (block == null || !uSign.isSign(block)) block.getState().update(); return false;
         if (player != null && (Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD))) return false;
-
-        if (uSign.isSign(block)) block.getState().update(); //Show the text immediately
 
         if (restrictedSign(block)) return !restrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
 
