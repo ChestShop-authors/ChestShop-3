@@ -19,7 +19,8 @@ public class Queue implements Runnable {
     }
 
     public void run() {
-        deleteOld();
+        if (Config.getInteger(Property.RECORD_TIME_TO_LIVE) != -1)
+            deleteOld();
 
         ChestShop.getDB().save(queue);
         queue.clear();
