@@ -91,7 +91,7 @@ public class iCo5 implements Method {
         iConomy = (iConomy)plugin;
     }
 
-    public class iCoAccount implements MethodAccount {
+    public static class iCoAccount implements MethodAccount {
         private Account account;
         private Holdings holdings;
 
@@ -161,7 +161,7 @@ public class iCo5 implements Method {
         }
     }
 
-    public class iCoBankAccount implements MethodBankAccount {
+    public static class iCoBankAccount implements MethodBankAccount {
         private BankAccount account;
         private Holdings holdings;
 

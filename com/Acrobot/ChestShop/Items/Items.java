@@ -58,6 +58,8 @@ public class Items {
         String first = split[0];
 
         String[] space = first.split(" ");
+        if (space.length == 0) return null;
+
         Material material = getMaterial(first);
 
         for (int i = (space.length > 1 ? 1 : 0); i >= 0 && material == null; i--) material = getMaterial(space[i]);

@@ -81,7 +81,7 @@ public class MCUR implements Method {
         currencyList = (Currency) plugin;
     }
 
-    public class MCurrencyAccount implements MethodAccount{
+    public static class MCurrencyAccount implements MethodAccount{
         private String name;
 
         public MCurrencyAccount(String name) {

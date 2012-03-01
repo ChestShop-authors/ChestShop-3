@@ -74,7 +74,7 @@ public class MinecraftChest implements ChestObject {
         return main.getInventory().getSize() + (neighbor != null ? neighbor.getInventory().getSize() : 0);
     }
 
-    private Chest getNeighbor() {
+    public Chest getNeighbor() {
         return uBlock.findNeighbor(main);
     }
 

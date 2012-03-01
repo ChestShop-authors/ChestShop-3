@@ -43,10 +43,7 @@ public class restrictedSign {
     public static boolean hasPermission(Player p, String[] lines){
         if (Permission.has(p, Permission.ADMIN)) return true;
 
-        String world = p.getWorld().getName();
-        String playerName = p.getName();
         for (int i = 1; i <= 3; i++) {
-            if (Permission.permissions != null && Permission.permissions.inGroup(world, playerName, lines[i])) return true;
             if (p.hasPermission(Permission.GROUP.toString() + lines[i])) return true;
         }
         return false;

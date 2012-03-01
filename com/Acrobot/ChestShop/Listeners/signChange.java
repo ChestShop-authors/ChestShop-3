@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Config.MaxPrice;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Items.Items;
@@ -9,6 +10,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.*;
+import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -38,15 +40,9 @@ public class signChange implements Listener {
 
         boolean playerIsAdmin = Permission.has(player, Permission.ADMIN);
 
-
         if (isAlmostReady) {
             if (mat == null) {
                 player.sendMessage(Config.getLocal(Language.INCORRECT_ITEM_ID));
-                dropSign(event);
-                return;
-            }
-            if (!canCreateShop(player, mat.getId())) {
-                player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
                 dropSign(event);
                 return;
             }
@@ -91,8 +87,9 @@ public class signChange implements Listener {
                 }
 
                 Block chestBlock = chest.getBlock();
+                boolean cantBuildTowny = uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation());
 
-                if (!uWorldGuard.isNotOutsideWGplot(signBlock.getLocation()) || (uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation()))) {
+                if (!uWorldGuard.canBuildShopHere(signBlock.getLocation()) && cantBuildTowny){
                     player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
@@ -107,7 +104,14 @@ public class signChange implements Listener {
             }
         }
 
+        float buyPrice  = uSign.buyPrice(thirdLine);
+        float sellPrice = uSign.sellPrice(thirdLine);
 
+        if (!playerIsAdmin && (!canCreateShop(player, mat.getId(), buyPrice != -1, sellPrice != -1) || !MaxPrice.canCreate(buyPrice, sellPrice, mat))) {
+            player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
+            dropSign(event);
+            return;
+        }
 
         float shopCreationPrice = Config.getFloat(Property.SHOP_CREATION_PRICE);
         boolean paid = shopCreationPrice != 0 && !isAdminShop && !Permission.has(player, Permission.NOFEE);
@@ -134,14 +138,13 @@ public class signChange implements Listener {
         uHeroes.addHeroExp(player);
     }
 
-    private static boolean canCreateShop(Player player, boolean isAdmin, int ID) {
-        return isAdmin ||
-                Permission.has(player, Permission.SHOP_CREATION) ||
-                Permission.has(player, Permission.SHOP_CREATION.toString() + '.' + ID);
-    }
+    private static boolean canCreateShop(Player player, int ID, boolean buy, boolean sell) {
+        if (Permission.has(player, Permission.SHOP_CREATION_ID + Integer.toString(ID))) return true;
+        
+        if (buy  && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
+        if (sell && !Permission.has(player, Permission.SHOP_CREATION_SELL)) return false;
 
-    private static boolean canCreateShop(Player player, int ID) {
-        return canCreateShop(player, Permission.has(player, Permission.ADMIN), ID);
+        return true;
     }
 
     private static String formatThirdLine(String thirdLine) {

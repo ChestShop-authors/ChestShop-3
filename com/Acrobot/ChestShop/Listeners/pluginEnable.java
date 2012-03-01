@@ -5,17 +5,15 @@ import com.Acrobot.ChestShop.Economy.NoProvider;
 import com.Acrobot.ChestShop.Economy.Register;
 import com.Acrobot.ChestShop.Economy.Vault;
 import com.Acrobot.ChestShop.Items.Odd;
-import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Plugins.*;
 import com.Acrobot.ChestShop.Protection.Security;
+import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
 import com.Acrobot.ChestShop.Utils.uHeroes;
 import com.Acrobot.ChestShop.Utils.uNumber;
 import com.Acrobot.ChestShop.Utils.uSign;
-import com.Acrobot.ChestShop.Utils.uWorldGuard;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
 import com.herocraftonline.dev.heroes.Heroes;
-import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.forChestShop.Method;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
@@ -50,14 +48,12 @@ public class pluginEnable {
             }
             Register.eco = m;
             com.Acrobot.ChestShop.Economy.Economy.economy = new Register();
-            System.out.println(ChestShop.chatPrefix + m.getName() + " loaded.");
+            System.out.println(ChestShop.chatPrefix + m.getName() + " version " + m.getName() + " loaded.");
         }
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
-        if (name.equals("Permissions")) {
-            Permission.permissions = ((Permissions) plugin).getHandler();
-        } else if (name.equals("LWC")) {
+        if (name.equals("LWC")) {
             LWCplugin.setLWC(((LWCPlugin) plugin).getLWC());
             Security.protections.add(new LWCplugin());
         } else if (name.equals("Lockette")) {
@@ -77,6 +73,7 @@ public class pluginEnable {
             uSign.towny = (Towny) plugin;
         } else if (name.equals("WorldGuard")) {
             uWorldGuard.worldGuard = (WorldGuardPlugin) plugin;
+            uWorldGuard.injectHax(); //Inject hax into WorldGuard
         } else if (name.equals("Vault")) {
             if (com.Acrobot.ChestShop.Economy.Economy.economy != null) return;
             RegisteredServiceProvider<Economy> rsp = ChestShop.getBukkitServer().getServicesManager().getRegistration(Economy.class);
@@ -90,6 +87,8 @@ public class pluginEnable {
         } else if (name.equals("SimpleChestLock")) {
             SCLplugin.scl = (SCL) plugin;
             Security.protections.add(new SCLplugin());
+        } else {
+            return;
         }
         
         PluginDescriptionFile description = plugin.getDescription();

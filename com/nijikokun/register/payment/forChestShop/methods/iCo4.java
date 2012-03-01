@@ -97,7 +97,7 @@ public class iCo4 implements Method {
         iConomy = (iConomy)plugin;
     }
 	
-    public class iCoAccount implements MethodAccount {
+    public static class iCoAccount implements MethodAccount {
         private Account account;
 
         public iCoAccount(Account account) {

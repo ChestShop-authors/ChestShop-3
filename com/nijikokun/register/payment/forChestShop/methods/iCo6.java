@@ -83,7 +83,7 @@ public class iCo6 implements Method {
         iConomy = (iConomy)plugin;
     }
 
-    public class iCoAccount implements MethodAccount {
+    public static class iCoAccount implements MethodAccount {
         private Account account;
         private Holdings holdings;
 

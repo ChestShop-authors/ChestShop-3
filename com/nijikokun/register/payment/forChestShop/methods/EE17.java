@@ -28,7 +28,7 @@ public class EE17 implements Method {
     }
 
     public String getVersion() {
-        return "2.2";
+        return "2.8.2";
     }
     
     public int fractionalDigits() {
@@ -102,7 +102,7 @@ public class EE17 implements Method {
         Essentials = (Essentials)plugin;
     }
 
-    public class EEcoAccount implements MethodAccount {
+    public static class EEcoAccount implements MethodAccount {
         private String name;
 
         public EEcoAccount(String name) {

@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.BukkitFixes.bInventoryFix;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
@@ -9,21 +10,18 @@ import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uSign;
-import net.minecraft.server.IInventory;
-import net.minecraft.server.InventoryLargeChest;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
 
@@ -96,12 +94,7 @@ public class playerInteract implements Listener {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;
         }
-
-        IInventory inventory = ((CraftInventory) chest.getInventory()).getInventory();
-        chest = uBlock.findNeighbor(chest);
-
-        if (chest != null) inventory = new InventoryLargeChest("Large chest", inventory, ((CraftInventory) chest.getInventory()).getInventory());
-
-        ((CraftPlayer) player).getHandle().a(inventory); //Show inventory on the screen
+        Inventory chestInv = bInventoryFix.getInventory(chest);
+        player.openInventory(chestInv);
     }
 }

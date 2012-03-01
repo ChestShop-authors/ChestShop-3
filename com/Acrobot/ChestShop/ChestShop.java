@@ -13,10 +13,10 @@ import com.Acrobot.ChestShop.Logging.FileWriterQueue;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Server;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +56,6 @@ public class ChestShop extends JavaPlugin {
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
         if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
         if (Config.getBoolean(Property.LOG_TO_FILE)) scheduleTask(new FileWriterQueue(), 201L, 201L);
-        //if (Config.getBoolean(Property.MASK_CHESTS_AS_OTHER_BLOCKS)) scheduleTask(new MaskChest(), 40L, 40L); //Disabled due to bug //TODO Fix that
         playerInteract.interval = Config.getInteger(Property.SHOP_INTERACTION_INTERVAL);
 
         //Register our commands!
@@ -65,12 +64,10 @@ public class ChestShop extends JavaPlugin {
 
         //Start the statistics pinger
         startStatistics();
-
-        System.out.println('[' + getPluginName() + "] version " + getVersion() + " initialized!");
     }
 
     public void onDisable() {
-        System.out.println('[' + getPluginName() + "] version " + getVersion() + " shutting down!");
+        getServer().getScheduler().cancelTasks(this);
     }
 
     //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
@@ -97,10 +94,8 @@ public class ChestShop extends JavaPlugin {
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
-    private static Configuration getBukkitConfig() {
-        Configuration config = new Configuration(new File("bukkit.yml"));
-        config.load();
-        return config;
+    private static YamlConfiguration getBukkitConfig() {
+        return YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
     }
 
     private static Database database;
@@ -114,7 +109,7 @@ public class ChestShop extends JavaPlugin {
             }
         };
 
-        Configuration config = getBukkitConfig();
+        YamlConfiguration config = getBukkitConfig();
 
         database.initializeDatabase(
                 config.getString("database.driver"),
@@ -150,7 +145,7 @@ public class ChestShop extends JavaPlugin {
         return DB;
     }
 
-    public static ArrayList getDependencies() {
-        return (ArrayList) description.getSoftDepend();
+    public static List getDependencies() {
+        return (List) description.getSoftDepend();
     }
 }

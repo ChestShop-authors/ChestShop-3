@@ -17,13 +17,17 @@ public class Generator implements Runnable {
 
     private static double generationTime;
 
-    private static final String header = fileToString("header");
-    private static final String row = fileToString("row");
-    private static final String footer = fileToString("footer");
+    private static String header;
+    private static String row;
+    private static String footer;
 
     private static BufferedWriter buf;
 
     public void run() {
+        header = fileToString("header");
+        row = fileToString("row");
+        footer = fileToString("footer");
+
         if (row.isEmpty()) System.out.println(ChestShop.chatPrefix + "You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
         generateStats();
     }
@@ -42,7 +46,7 @@ public class Generator implements Runnable {
 
     private static String fileToString(String fileName) {
         try {
-            File f = new File(ChestShop.folder + "/HTML/" + fileName + ".html");
+            File f = new File(ChestShop.folder + File.separator + "HTML" + File.separator + fileName + ".html");
             FileReader rd = new FileReader(f);
             char[] buf = new char[(int) f.length()];
             rd.read(buf);
@@ -113,6 +117,7 @@ public class Generator implements Runnable {
 
     private static void generateStats() {
         try {
+
             File f = new File(filePath).getParentFile();
             if (!f.exists()) f.mkdir();
 

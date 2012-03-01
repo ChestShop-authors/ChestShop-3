@@ -99,7 +99,7 @@ public class BOSE6 implements Method {
         BOSEconomy = (BOSEconomy) plugin;
     }
 
-    public class BOSEAccount implements MethodAccount {
+    public static class BOSEAccount implements MethodAccount {
         private final String name;
         private final BOSEconomy BOSEconomy;
 
@@ -161,7 +161,7 @@ public class BOSE6 implements Method {
         }
     }
 
-    public class BOSEBankAccount implements MethodBankAccount {
+    public static class BOSEBankAccount implements MethodBankAccount {
         private final String bank;
         private final BOSEconomy BOSEconomy;
 

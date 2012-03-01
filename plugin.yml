@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.35
+version: 3.36
 
 
 author: Acrobot
@@ -10,7 +10,7 @@ description: >
              A chest shop for economy plugins.
  
  
-softdepend: [Permissions, LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes,
+softdepend: [LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes,
                 iConomy, BOSEconomy, Essentials, 3co, MultiCurrency, Currency, SimpleChestLock]
 commands:
   iteminfo:
@@ -40,14 +40,21 @@ permissions:
         ChestShop.shop.buy: true
         ChestShop.shop.sell: true
     default: true
+  ChestShop.shop.create:
+    description: Allows the user to create a shop that sells and buys any item
+    children:
+        ChestShop.shop.create.buy: true
+        ChestShop.shop.create.sell: true
+  ChestShop.shop.create.buy:
+    description: Allows the user to create a shop that sells any item
+  ChestShop.shop.create.sell:
+    description: Allows the user to create a shop that buy any item
   ChestShop.shop.create.(itemID):
     description: Allows user to create a shop that sells item with itemID like in the permission node (replace (itemID) with NUMERICAL item ID)
   ChestShop.shop.buy.(itemID):
     description: Allows user to buy certain (itemID) from a shop (replace (itemID) with NUMERICAL item ID)
   ChestShop.shop.sell.(itemID):
     description: Allows user to sell certain (itemID) from a shop (replace (itemID) with NUMERICAL item ID)
-  ChestShop.shop.create:
-    description: Allows user to create a shop that sells any item
   ChestShop.shop.buy:
     description: Allows user to buy from a shop
   ChestShop.shop.sell:
