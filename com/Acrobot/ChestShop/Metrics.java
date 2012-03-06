@@ -194,7 +194,7 @@ public class Metrics {
                     // Each post thereafter will be a ping
                     firstPost = false;
                 } catch (IOException e) {
-                    System.out.println("[Metrics] " + e.getMessage());
+                    System.err.println("[Metrics] " + e.getMessage());
                 }
             }
         }, 0, PING_INTERVAL * 1200);

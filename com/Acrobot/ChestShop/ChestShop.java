@@ -53,6 +53,8 @@ public class ChestShop extends JavaPlugin {
 
         pluginEnable.initializePlugins();
 
+        warnAboutSpawnProtection();
+
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
         if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
         if (Config.getBoolean(Property.LOG_TO_FILE)) scheduleTask(new FileWriterQueue(), 201L, 201L);
@@ -89,8 +91,15 @@ public class ChestShop extends JavaPlugin {
         try{
             new Metrics().beginMeasuringPlugin(this);
         } catch (Exception ex){
-            System.out.println(chatPrefix + "There was an error while submitting statistics.");
+            System.err.println(chatPrefix + "There was an error while submitting statistics.");
         }
+    }
+
+    /////////////////////   WARN ABOUT SPAWN PROTECTION ///////////////////////////
+    private static void warnAboutSpawnProtection() {
+        if (getBukkitConfig().getInt("settings.spawn-radius") > 0)
+            System.err.println(ChestShop.chatPrefix + "WARNING! Your spawn-radius in bukkit.yml isn't set to 0! " +
+                    "You won't be able to sell to shops built near spawn!");
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////

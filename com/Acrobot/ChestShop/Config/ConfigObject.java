@@ -53,7 +53,7 @@ public class ConfigObject {
             fw.write(string);
             fw.close();
         } catch (Exception e) {
-            System.out.println("Couldn't write to file - " + file.getName());
+            System.err.println("Couldn't write to file - " + file.getName());
         }
     }
 

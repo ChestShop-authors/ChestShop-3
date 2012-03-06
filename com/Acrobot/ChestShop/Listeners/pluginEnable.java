@@ -9,11 +9,10 @@ import com.Acrobot.ChestShop.Protection.Plugins.*;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
 import com.Acrobot.ChestShop.Utils.uHeroes;
-import com.Acrobot.ChestShop.Utils.uNumber;
 import com.Acrobot.ChestShop.Utils.uSign;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
-import com.herocraftonline.dev.heroes.Heroes;
+import com.herocraftonline.heroes.Heroes;
 import com.nijikokun.register.payment.forChestShop.Method;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
@@ -48,7 +47,7 @@ public class pluginEnable {
             }
             Register.eco = m;
             com.Acrobot.ChestShop.Economy.Economy.economy = new Register();
-            System.out.println(ChestShop.chatPrefix + m.getName() + " version " + m.getName() + " loaded.");
+            System.out.println(ChestShop.chatPrefix + m.getName() + " version " + m.getVersion() + " loaded.");
         }
     }
 
@@ -63,20 +62,16 @@ public class pluginEnable {
             DeadboltPlugin.deadbolt = (Deadbolt) plugin;
             Security.protections.add(new DeadboltPlugin());
         } else if (name.equals("OddItem")) {
-            if (plugin.getDescription().getVersion().startsWith("0.7")) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.8")); return; }
             Odd.isInitialized = true;
         } else if (name.equals("Towny")) {
-            int versionNumber = 0;
-            String[] split = plugin.getDescription().getVersion().split("\\.");
-            for (int i = 0; i < 4; i++) if (split.length >= i + 1 && uNumber.isInteger(split[i])) versionNumber += (Math.pow(10, (3 - i) << 1) * Integer.parseInt(split[i])); //EPIC CODE RIGHT HERE
-            if (versionNumber < 760047) { System.out.println(generateOutdatedVersion(name, plugin.getDescription().getVersion(), "0.76.0.47")); return; }
             uSign.towny = (Towny) plugin;
         } else if (name.equals("WorldGuard")) {
-            uWorldGuard.worldGuard = (WorldGuardPlugin) plugin;
+            uWorldGuard.wg = (WorldGuardPlugin) plugin;
             uWorldGuard.injectHax(); //Inject hax into WorldGuard
         } else if (name.equals("Vault")) {
             if (com.Acrobot.ChestShop.Economy.Economy.economy != null) return;
             RegisteredServiceProvider<Economy> rsp = ChestShop.getBukkitServer().getServicesManager().getRegistration(Economy.class);
+            if (rsp == null) return;
             Vault.economy = rsp.getProvider();
             if (Vault.economy == null) return;
             com.Acrobot.ChestShop.Economy.Economy.economy = new Vault();

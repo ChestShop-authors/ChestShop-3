@@ -5,30 +5,34 @@ package com.Acrobot.ChestShop.Economy;
  */
 public class NoProvider implements EcoPlugin{
     public boolean hasAccount(String player) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
         return false;
     }
 
     public void add(String player, double amount) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
     }
 
     public void subtract(String player, double amount) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
     }
 
     public boolean hasEnough(String player, double amount) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
         return false;
     }
 
     public double balance(String player) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
         return 0;
     }
 
     public String format(double amount) {
-        System.out.println("[ChestShop] You haven't got any economy plugin!");
+        printError();
         return null;
+    }
+    
+    private static void printError() {
+        System.err.println("[ChestShop] You haven't got any economy plugin!");
     }
 }

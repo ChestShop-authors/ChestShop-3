@@ -28,7 +28,7 @@ public class Generator implements Runnable {
         row = fileToString("row");
         footer = fileToString("footer");
 
-        if (row.isEmpty()) System.out.println(ChestShop.chatPrefix + "You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
+        if (row.isEmpty()) System.err.println(ChestShop.chatPrefix + "You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
         generateStats();
     }
 

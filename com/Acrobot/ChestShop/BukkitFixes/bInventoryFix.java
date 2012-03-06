@@ -9,7 +9,7 @@ import org.bukkit.craftbukkit.inventory.CraftInventoryDoubleChest;
 import org.bukkit.inventory.Inventory;
 
 /**
- * Temporary class until this is fixed in Bukkit
+ * Temporary class until this is fixed in Bukkit RB
  * @author Acrobot
  */
 public class bInventoryFix {

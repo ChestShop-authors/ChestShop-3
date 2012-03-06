@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Protection.Plugins;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Protection.Protection;
 import com.griefcraft.lwc.LWC;
-import com.griefcraft.model.ProtectionTypes;
 import com.griefcraft.modules.limits.LimitsModule;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -32,13 +31,9 @@ public class LWCplugin implements Protection {
     public boolean protect(String name, Block block) {
         if (lwc.findProtection(block) != null) return false;
         Player player = ChestShop.getBukkitServer().getPlayer(name);
-        try {
-            if (player != null && limitsModule.hasReachedLimit(player, block)) return false;
-        } catch (NoSuchMethodError e) {
-            System.out.println(ChestShop.chatPrefix + "Your LWC plugin is outdated!");
-        }
+        if (player != null && limitsModule.hasReachedLimit(player, block)) return false;
 
-        lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), ProtectionTypes.PRIVATE, block.getWorld().getName(), name, "", block.getX(), block.getY(), block.getZ());
+        lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), com.griefcraft.model.Protection.Type.PUBLIC, block.getWorld().getName(), name, "", block.getX(), block.getY(), block.getZ());
         return true;
     }
 }

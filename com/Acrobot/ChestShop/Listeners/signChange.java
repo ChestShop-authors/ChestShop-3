@@ -9,8 +9,8 @@ import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
-import com.Acrobot.ChestShop.Utils.*;
 import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
+import com.Acrobot.ChestShop.Utils.*;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -87,9 +87,11 @@ public class signChange implements Listener {
                 }
 
                 Block chestBlock = chest.getBlock();
-                boolean cantBuildTowny = uSign.towny != null && !uTowny.canBuild(player, signBlock.getLocation(), chestBlock.getLocation());
+                boolean canBuildTowny = uSign.towny == null || uTowny.canBuild(player, signBlock.getLocation(), chest.getLocation());
+                boolean canBuildWorldGuard = uWorldGuard.wg == null || uWorldGuard.canBuildShopHere(signBlock.getLocation());
+                boolean bothActive = uSign.towny != null && uWorldGuard.wg != null;
 
-                if (!uWorldGuard.canBuildShopHere(signBlock.getLocation()) && cantBuildTowny){
+                if (((!canBuildTowny || !canBuildWorldGuard) && !bothActive) || (bothActive && !canBuildTowny && !canBuildWorldGuard)) {
                     player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
@@ -140,7 +142,7 @@ public class signChange implements Listener {
 
     private static boolean canCreateShop(Player player, int ID, boolean buy, boolean sell) {
         if (Permission.has(player, Permission.SHOP_CREATION_ID + Integer.toString(ID))) return true;
-        
+
         if (buy  && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
         if (sell && !Permission.has(player, Permission.SHOP_CREATION_SELL)) return false;
 

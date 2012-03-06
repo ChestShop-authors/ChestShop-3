@@ -18,13 +18,9 @@ public class Methods {
             "3co"
     };
     private static final Method[] methods = new Method[]{
-            new iCo4(),
             new iCo5(),
             new iCo6(),
-            new BOSE6(),
             new BOSE7(),
-            new MCUR(),
-            new ECO3(),
             new EE17()
     };
 

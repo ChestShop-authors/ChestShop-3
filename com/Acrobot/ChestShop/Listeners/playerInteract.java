@@ -41,6 +41,7 @@ public class playerInteract implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
+        if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
             Default protection = new Default();
             if (!hasAdminPermissions(player) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
