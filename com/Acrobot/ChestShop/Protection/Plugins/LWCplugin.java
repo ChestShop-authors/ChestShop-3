@@ -33,7 +33,7 @@ public class LWCplugin implements Protection {
         Player player = ChestShop.getBukkitServer().getPlayer(name);
         if (player != null && limitsModule.hasReachedLimit(player, block)) return false;
 
-        lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), com.griefcraft.model.Protection.Type.PUBLIC, block.getWorld().getName(), name, "", block.getX(), block.getY(), block.getZ());
+        lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), com.griefcraft.model.Protection.Type.PRIVATE, block.getWorld().getName(), name, "", block.getX(), block.getY(), block.getZ());
         return true;
     }
 }

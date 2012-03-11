@@ -1,6 +1,9 @@
 package com.nijikokun.register.payment.forChestShop;
 
-import com.nijikokun.register.payment.forChestShop.methods.*;
+import com.nijikokun.register.payment.forChestShop.methods.BOSE7;
+import com.nijikokun.register.payment.forChestShop.methods.EE17;
+import com.nijikokun.register.payment.forChestShop.methods.iCo5;
+import com.nijikokun.register.payment.forChestShop.methods.iCo6;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -13,9 +16,6 @@ public class Methods {
             "iConomy",
             "BOSEconomy",
             "Essentials",
-            "Currency",
-            "MultiCurrency",
-            "3co"
     };
     private static final Method[] methods = new Method[]{
             new iCo5(),
@@ -36,7 +36,7 @@ public class Methods {
                 if (m != null) return m;
             }
         }
-        
+
         for (String plugin : toLoad){
             Plugin pl = pm.getPlugin(plugin);
             if (pl != null){
