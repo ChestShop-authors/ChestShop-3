@@ -12,7 +12,7 @@ import com.Acrobot.ChestShop.Utils.uHeroes;
 import com.Acrobot.ChestShop.Utils.uSign;
 import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
-import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.dev.heroes.Heroes;
 import com.nijikokun.register.payment.forChestShop.Method;
 import com.nijikokun.register.payment.forChestShop.Methods;
 import com.palmergames.bukkit.towny.Towny;
@@ -59,7 +59,6 @@ public class pluginEnable {
             LockettePlugin.lockette = (Lockette) plugin;
             Security.protections.add(new LockettePlugin());
         } else if (name.equals("Deadbolt")) {
-            DeadboltPlugin.deadbolt = (Deadbolt) plugin;
             Security.protections.add(new DeadboltPlugin());
         } else if (name.equals("OddItem")) {
             Odd.isInitialized = true;
