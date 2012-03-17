@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
  */
 public class Version implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length > 0 && args[0].equals("reload")){
+        if (args.length > 0 && args[0].equals("reload")) {
             Config.config = new ConfigObject();
             sender.sendMessage(ChatColor.DARK_GREEN + "The config was reloaded.");
             return true;

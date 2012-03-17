@@ -80,8 +80,8 @@ public class signChange implements Listener {
                 dropSign(event);
                 return;
             } else if (!playerIsAdmin) {
-                if (!Config.getBoolean(Property.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK) && !Security.canPlaceSign(player, (Sign) signBlock.getState())) {
-                    player.sendMessage(Config.getLocal(Language.ANOTHER_SHOP_DETECTED));
+                if (!Security.canPlaceSign(player, (Sign) signBlock.getState())) {
+                    player.sendMessage(Config.getLocal(Language.CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
                 }
@@ -92,7 +92,7 @@ public class signChange implements Listener {
                 boolean bothActive = uSign.towny != null && uWorldGuard.wg != null;
 
                 if (((!canBuildTowny || !canBuildWorldGuard) && !bothActive) || (bothActive && !canBuildTowny && !canBuildWorldGuard)) {
-                    player.sendMessage(Config.getLocal(Language.TOWNY_CANNOT_CREATE_SHOP_HERE));
+                    player.sendMessage(Config.getLocal(Language.CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
                 }
@@ -106,7 +106,7 @@ public class signChange implements Listener {
             }
         }
 
-        float buyPrice  = uSign.buyPrice(thirdLine);
+        float buyPrice = uSign.buyPrice(thirdLine);
         float sellPrice = uSign.sellPrice(thirdLine);
 
         if (!playerIsAdmin && (!canCreateShop(player, mat.getId(), buyPrice != -1, sellPrice != -1) || !MaxPrice.canCreate(buyPrice, sellPrice, mat))) {
@@ -128,7 +128,7 @@ public class signChange implements Listener {
         }
 
         if (Config.getBoolean(Property.PROTECT_SIGN_WITH_LWC)) {
-            if (!Security.protect(player.getName(), signBlock)) player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_LWC_PROTECTIONS));
+            if (!Security.protect(player.getName(), signBlock)) player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_PROTECTIONS));
         }
         if (Config.getBoolean(Property.PROTECT_CHEST_WITH_LWC) && chest != null && Security.protect(player.getName(), chest.getBlock())) {
             player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));
@@ -143,7 +143,7 @@ public class signChange implements Listener {
     private static boolean canCreateShop(Player player, int ID, boolean buy, boolean sell) {
         if (Permission.has(player, Permission.SHOP_CREATION_ID + Integer.toString(ID))) return true;
 
-        if (buy  && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
+        if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
         if (sell && !Permission.has(player, Permission.SHOP_CREATION_SELL)) return false;
 
         return true;
@@ -180,8 +180,8 @@ public class signChange implements Listener {
     private static boolean formatFirstLine(String line1, Player player) {
         return line1.isEmpty() ||
                 (!line1.equals(uLongName.stripName(player.getName()))
-                && !Permission.has(player, Permission.ADMIN)
-                && !Permission.otherName(player, line1));
+                        && !Permission.has(player, Permission.ADMIN)
+                        && !Permission.otherName(player, line1));
     }
 
     private static void dropSign(SignChangeEvent event) {

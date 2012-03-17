@@ -26,7 +26,7 @@ public class Economy {
         economy.add(uLongName.getName(name), amount);
     }
 
-    public static void addServer(String name, float amount){
+    public static void addServer(String name, float amount) {
         String account = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
         if (!account.isEmpty()) {
             float tax = getTax(Property.SERVER_TAX_AMOUNT, amount);
@@ -36,7 +36,7 @@ public class Economy {
         economy.add(uLongName.getName(name), amount);
     }
 
-    public static float getTax(Property tax, float price){
+    public static float getTax(Property tax, float price) {
         return (Config.getFloat(tax) / 100F) * price;
     }
 

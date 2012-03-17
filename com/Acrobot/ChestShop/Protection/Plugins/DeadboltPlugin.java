@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class DeadboltPlugin implements Protection {
-    public static Deadbolt deadbolt;
-
     public boolean isProtected(Block block) {
         return Deadbolt.isProtected(block);
     }

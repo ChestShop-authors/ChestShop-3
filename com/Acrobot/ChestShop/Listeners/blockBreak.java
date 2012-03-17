@@ -39,7 +39,7 @@ public class blockBreak implements Listener {
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
         if (playerIsNotOwner(player, sign)) return !isAdmin(player); //If the player isn't the owner or an admin - cancel!
 
-        if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)){
+        if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)) {
             float refundPrice = Config.getFloat(Property.SHOP_REFUND_PRICE);
             Economy.add(uLongName.getName(sign.getLine(0)), refundPrice); //Add some money
             player.sendMessage(Config.getLocal(Language.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
@@ -47,7 +47,7 @@ public class blockBreak implements Listener {
 
         return false; //Player is the owner, so we don't want to cancel this :)
     }
-    
+
     private static boolean isAdmin(Player p) {
         return p != null && (Permission.has(p, Permission.ADMIN) || Permission.has(p, Permission.MOD));
     }
@@ -109,12 +109,12 @@ public class blockBreak implements Listener {
         return pistonDirection != null ? event.getBlock().getRelative((pistonDirection), 2).getLocation().getBlock() : null;
     }
 
-    private static List<Block> getExtendBlocks(BlockPistonExtendEvent event){
+    private static List<Block> getExtendBlocks(BlockPistonExtendEvent event) {
         BlockFace pistonDirection = getPistonDirection(event.getBlock());
         if (pistonDirection == null) return new ArrayList<Block>();
         Block piston = event.getBlock();
         ArrayList<Block> list = new ArrayList<Block>();
-        for (int b = 1; b < event.getLength() + 1; b++){
+        for (int b = 1; b < event.getLength() + 1; b++) {
             Block block = piston.getRelative(pistonDirection, b);
             Material blockType = block.getType();
             if (blockType == Material.AIR) break;

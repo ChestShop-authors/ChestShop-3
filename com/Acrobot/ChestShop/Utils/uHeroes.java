@@ -15,7 +15,7 @@ public class uHeroes {
 
     public static void addHeroExp(Player p) {
         if (heroes != null) {
-            Hero hero = heroes.getHeroManager().getHero(p);
+            Hero hero = heroes.getCharacterManager().getHero(p);
             if (hero.hasParty()) {
                 hero.getParty().gainExp(Config.getDouble(Property.HEROES_EXP), HeroClass.ExperienceType.EXTERNAL, p.getLocation());
             } else {

@@ -41,7 +41,6 @@ public class playerInteract implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
-        if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
             Default protection = new Default();
             if (!hasAdminPermissions(player) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
@@ -54,9 +53,10 @@ public class playerInteract implements Listener {
         if (!uSign.isSign(block)) return;
         Sign sign = (Sign) block.getState();
 
+        if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
         if (!uSign.isValid(sign) || !enoughTimeHasPassed(player) || player.isSneaking()) return;
 
-        if (Config.getBoolean(Property.IGNORE_CREATIVE_MODE) && player.getGameMode() == GameMode.CREATIVE){
+        if (Config.getBoolean(Property.IGNORE_CREATIVE_MODE) && player.getGameMode() == GameMode.CREATIVE) {
             event.setCancelled(true);
             return;
         }

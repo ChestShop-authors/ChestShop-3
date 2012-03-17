@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 
 /**
  * Temporary class until this is fixed in Bukkit RB
+ *
  * @author Acrobot
  */
 public class bInventoryFix {
@@ -18,7 +19,7 @@ public class bInventoryFix {
 
         TileEntityChest teChest = (TileEntityChest) ((CraftWorld) chest.getWorld()).getTileEntityAt(chest.getX(), chest.getY(), chest.getZ());
         CraftInventory ci = new CraftInventory(teChest);
-        
+
         if (mchest.getNeighbor() != null) {
             Chest nb = mchest.getNeighbor();
             TileEntityChest neighbor = (TileEntityChest) ((CraftWorld) chest.getWorld()).getTileEntityAt(nb.getX(), nb.getY(), nb.getZ());

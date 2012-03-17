@@ -37,14 +37,20 @@ public class Items {
         }
         return finalMaterial;
     }
-    
-    public static String getName(ItemStack is){
+
+    public static String getName(ItemStack is) {
         return getName(is, true);
     }
-    
-    public static String getName(ItemStack is, boolean showData){
+
+    public static String getName(ItemStack is, boolean showData) {
         String name = DataValue.getName(is);
         return uSign.capitalizeFirst((name != null && showData ? name + '_' : "") + is.getType());
+    }
+
+    public static String getSignName(ItemStack is) {
+        return is.getType().name()
+                + (is.getDurability() > 0 ? ':' + is.getDurability() : "")
+                + (!is.getEnchantments().isEmpty() ? '-' + uEnchantment.encodeEnchantment(is.getEnchantments()) : "");
     }
 
     public static ItemStack getItemStack(String itemName) {
@@ -65,11 +71,11 @@ public class Items {
         for (int i = (space.length > 1 ? 1 : 0); i >= 0 && material == null; i--) material = getMaterial(space[i]);
 
         if (material == null) return null;
-        
+
         toReturn = new ItemStack(material, 1);
         toReturn = addEnchantments(toReturn, itemName);
         toReturn = addDurability(toReturn, itemName);
-        
+
         short data = getDataFromWord(space[0], material);
         if (data != 0) toReturn.setDurability(data);
 
@@ -79,7 +85,7 @@ public class Items {
     private static ItemStack addDurability(ItemStack toReturn, String itemName) {
         Matcher m = Durability.matcher(itemName);
         if (!m.find()) return toReturn;
-        
+
         String data = m.group();
         if (data == null || data.isEmpty()) return toReturn;
         data = data.substring(1);
@@ -88,19 +94,19 @@ public class Items {
         return toReturn;
     }
 
-    private static Map<Enchantment, Integer> getEnchantment(String itemName){
+    private static Map<Enchantment, Integer> getEnchantment(String itemName) {
         return uEnchantment.decodeEnchantment(itemName);
     }
-    
-    private static Map<Enchantment, Integer> getEnchant(String original){
+
+    private static Map<Enchantment, Integer> getEnchant(String original) {
         Matcher m = Enchant.matcher(original);
         if (!m.find()) return new HashMap<Enchantment, Integer>();
         String group = m.group().substring(1);
         return getEnchantment(group);
     }
-    
-    private static ItemStack addEnchantments(ItemStack is, String itemname){
-        try{ is.addEnchantments(getEnchant(itemname));
+
+    private static ItemStack addEnchantments(ItemStack is, String itemname) {
+        try { is.addEnchantments(getEnchant(itemname));
         } catch (Exception ignored) {}
         return is;
     }

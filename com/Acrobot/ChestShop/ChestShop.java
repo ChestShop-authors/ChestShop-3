@@ -10,8 +10,11 @@ import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
 import com.Acrobot.ChestShop.Logging.FileWriterQueue;
+import com.Acrobot.ChestShop.Shop.ShopManagement;
+import com.Acrobot.ChestShop.Utils.uNumber;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -54,6 +57,7 @@ public class ChestShop extends JavaPlugin {
         pluginEnable.initializePlugins();
 
         warnAboutSpawnProtection();
+        warnAboutOldBukkit();
 
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
         if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
@@ -75,7 +79,7 @@ public class ChestShop extends JavaPlugin {
     //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
-        
+
         pm.registerEvents(new blockBreak(), this);
         pm.registerEvents(new blockPlace(), this);
         pm.registerEvents(new signChange(), this);
@@ -87,19 +91,27 @@ public class ChestShop extends JavaPlugin {
         server.getScheduler().scheduleAsyncRepeatingTask(this, runnable, startTime, repetetionTime);
     }
 
-    private void startStatistics(){
-        try{
+    private void startStatistics() {
+        try {
             new Metrics().beginMeasuringPlugin(this);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.err.println(chatPrefix + "There was an error while submitting statistics.");
         }
     }
 
-    /////////////////////   WARN ABOUT SPAWN PROTECTION ///////////////////////////
+    /////////////////////   WARN  ///////////////////////////
     private static void warnAboutSpawnProtection() {
         if (getBukkitConfig().getInt("settings.spawn-radius") > 0)
             System.err.println(ChestShop.chatPrefix + "WARNING! Your spawn-radius in bukkit.yml isn't set to 0! " +
                     "You won't be able to sell to shops built near spawn!");
+    }
+
+    private static void warnAboutOldBukkit() {
+        String split[] = Bukkit.getBukkitVersion().split("-R");
+        if (split[0].equals("1.1") && split.length > 1 && uNumber.isInteger(split[1]) && (Integer.parseInt(split[1])) < 7) {
+            System.err.println(ChestShop.chatPrefix + "Your CraftBukkit version is outdated! Use at least 1.1-R7 or 1.2.3-R0!");
+            ShopManagement.useOldChest = true;
+        }
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////

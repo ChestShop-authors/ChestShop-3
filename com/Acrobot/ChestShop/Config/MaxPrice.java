@@ -9,11 +9,11 @@ public class MaxPrice {
     public static boolean canCreate(float buyPrice, float sellPrice, Material mat) {
         float bPrice = maxBuyPrice(mat.getId());
         float sPrice = maxSellPrice(mat.getId());
-        
+
         return (bPrice == -1 || buyPrice <= maxBuyPrice(mat.getId()))
                 && (sPrice == -1 || sellPrice <= maxSellPrice(mat.getId()));
     }
-    
+
     public static float maxBuyPrice(int itemID) {
         return getPrice("buy", itemID);
     }

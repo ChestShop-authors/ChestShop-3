@@ -26,7 +26,7 @@ public class JavaWorkaround {
         elements.add(ChestShopFlag.flag);
         return elements;
     }
-    
+
     public static void injectHax() {
         try {
             Field field = DefaultFlag.class.getDeclaredField("flagsList");

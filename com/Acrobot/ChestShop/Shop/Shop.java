@@ -27,7 +27,7 @@ public class Shop {
     public float buyPrice;
     public float sellPrice;
     public final String owner;
-    private final Sign sign;
+    public final Sign sign;
 
     public Shop(ChestObject chest, boolean buy, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
@@ -204,8 +204,8 @@ public class Shop {
     private boolean hasEnoughStock() {
         return chest.hasEnough(stock, stockAmount, durability);
     }
-    
-    private int stockAmount(ItemStack item, short durability){
+
+    private int stockAmount(ItemStack item, short durability) {
         return chest.amount(item, durability);
     }
 

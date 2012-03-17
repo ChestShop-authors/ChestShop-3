@@ -5,8 +5,9 @@ import com.nijikokun.register.payment.forChestShop.Method;
 /**
  * @author Acrobot
  */
-public class Register implements EcoPlugin{
+public class Register implements EcoPlugin {
     public static Method eco;
+
     public boolean hasAccount(String player) {
         return eco.hasAccount(player);
     }

@@ -39,9 +39,9 @@ public enum Language {
 
     NO_PERMISSION("You don't have permissions to do that!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!"),
-    NOT_ENOUGH_LWC_PROTECTIONS("You have reached the LWC protections limit!"),
+    NOT_ENOUGH_PROTECTIONS("You have reached the protection limit!"),
 
-    TOWNY_CANNOT_CREATE_SHOP_HERE("You can't create shop here!");
+    CANNOT_CREATE_SHOP_HERE("You can't create shop here!");
 
 
     private final String text;

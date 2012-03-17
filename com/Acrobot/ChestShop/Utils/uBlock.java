@@ -28,9 +28,9 @@ public class uBlock {
         }
         return null;
     }
-    
-    public static void blockUpdate(Block block){
-        for (BlockFace bf : shopFaces){
+
+    public static void blockUpdate(Block block) {
+        for (BlockFace bf : shopFaces) {
             block.getRelative(bf).getState().update(true);
         }
     }
@@ -54,7 +54,7 @@ public class uBlock {
     }
 
     //Well, I need to re-write this plugin... I hate to code like that - sorry!
-    public static Sign findSign2(Block block){
+    public static Sign findSign2(Block block) {
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
             if (uSign.isSign(faceBlock)) {

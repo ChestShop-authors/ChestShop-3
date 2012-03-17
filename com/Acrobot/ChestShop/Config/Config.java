@@ -20,7 +20,7 @@ public class Config {
     public static float getFloat(Property value) {
         return new Float(getValue(value.name()).toString());
     }
-    
+
     public static float getFloat(String value) {
         return new Float(getValue(value).toString());
     }
@@ -44,7 +44,7 @@ public class Config {
     public static String getLocal(Language lang) {
         return getColored(config.getLanguageConfig().getString(Language.prefix.name()) + config.getLanguageConfig().getString(lang.name()));
     }
-    
+
     public static boolean exists(String value) {
         return getValue(value) != null;
     }

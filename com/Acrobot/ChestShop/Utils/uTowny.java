@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.palmergames.bukkit.towny.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class uTowny {
         return isInWilderness(chestLocation.getBlock()) || isInWilderness(signLocation.getBlock());
     }
 
-    private static boolean isInWilderness(Block block){
+    private static boolean isInWilderness(Block block) {
         return uSign.towny.getTownyUniverse().isWilderness(block);
     }
 
@@ -35,12 +36,18 @@ public class uTowny {
     }
 
     private static boolean isBlockOwner(Player player, Location location) {
-        try { return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(uSign.towny.getTownyUniverse().getResident(player.getName()));
-        } catch (NotRegisteredException ex) { return false; }
+        try {
+            return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(TownyUniverse.getDataSource().getResident(player.getName()));
+        } catch (NotRegisteredException ex) {
+            return false;
+        }
     }
-    
-    private static boolean isResident(Player p, Location l){
-        try { return uSign.towny.getTownyUniverse().getTownBlock(l).getTown().hasResident(p.getName());
-        } catch (NotRegisteredException ex) { return false; }
+
+    private static boolean isResident(Player p, Location l) {
+        try {
+            return uSign.towny.getTownyUniverse().getTownBlock(l).getTown().hasResident(p.getName());
+        } catch (NotRegisteredException ex) {
+            return false;
+        }
     }
 }

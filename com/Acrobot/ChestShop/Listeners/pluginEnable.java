@@ -10,7 +10,6 @@ import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
 import com.Acrobot.ChestShop.Utils.uHeroes;
 import com.Acrobot.ChestShop.Utils.uSign;
-import com.daemitus.deadbolt.Deadbolt;
 import com.griefcraft.lwc.LWCPlugin;
 import com.herocraftonline.heroes.Heroes;
 import com.nijikokun.register.payment.forChestShop.Method;
@@ -37,8 +36,8 @@ public class pluginEnable {
         }
         loadRegister();
     }
-    
-    private static void loadRegister(){
+
+    private static void loadRegister() {
         if (com.Acrobot.ChestShop.Economy.Economy.economy == null) {
             Method m = Methods.load(ChestShop.pm);
             if (m == null) {
@@ -59,7 +58,6 @@ public class pluginEnable {
             LockettePlugin.lockette = (Lockette) plugin;
             Security.protections.add(new LockettePlugin());
         } else if (name.equals("Deadbolt")) {
-            DeadboltPlugin.deadbolt = (Deadbolt) plugin;
             Security.protections.add(new DeadboltPlugin());
         } else if (name.equals("OddItem")) {
             Odd.isInitialized = true;
@@ -77,7 +75,7 @@ public class pluginEnable {
             com.Acrobot.ChestShop.Economy.Economy.economy = new Vault();
             System.out.println(ChestShop.chatPrefix + "Vault loaded using economy plugin " + Vault.economy.getName());
             return;
-        } else if (name.equals("Heroes")){
+        } else if (name.equals("Heroes")) {
             uHeroes.heroes = (Heroes) plugin;
         } else if (name.equals("SimpleChestLock")) {
             SCLplugin.scl = (SCL) plugin;
@@ -85,7 +83,7 @@ public class pluginEnable {
         } else {
             return;
         }
-        
+
         PluginDescriptionFile description = plugin.getDescription();
         System.out.println(ChestShop.chatPrefix + description.getName() + " version " + description.getVersion() + " loaded.");
     }

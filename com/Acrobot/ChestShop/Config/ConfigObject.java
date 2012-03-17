@@ -64,7 +64,7 @@ public class ConfigObject {
     public Object getProperty(String property) {
         return config.get(property);
     }
-    
+
     public static void load(FileConfiguration config, File file) {
         try {
             config.load(file);
@@ -72,7 +72,7 @@ public class ConfigObject {
             ex.printStackTrace();
         }
     }
-    
+
     public static void save(FileConfiguration config, File file) {
         try {
             config.save(file);
@@ -80,7 +80,7 @@ public class ConfigObject {
             ex.printStackTrace();
         }
     }
-    
+
     public static void reloadConfig(FileConfiguration config, File file) {
         save(config, file);
         load(config, file);

@@ -38,15 +38,17 @@ public class DataValue {
                     materialData = new Coal(CoalType.valueOf(type));
                     break;
             }
-        } catch (Exception e) { return 0; }
+        } catch (Exception e) {
+            return 0;
+        }
 
         return (materialData == null ? 0 : materialData.getData());
     }
-    
-    public static String getName(ItemStack is){
+
+    public static String getName(ItemStack is) {
         short dur = is.getDurability();
         if (dur == 0) return null;
-        
+
         Material material = is.getType();
 
         String name = null;
@@ -71,7 +73,9 @@ public class DataValue {
                     name = CoalType.getByData((byte) dur).name();
                     break;
             }
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
 
         return name;
     }

@@ -26,13 +26,13 @@ public class Default implements Protection {
 
         Sign sign = uBlock.findSign2(block);
 
-        if (sign != null) return uLongName.stripName(playerName).equals(sign.getLine(0)) 
+        if (sign != null) return uLongName.stripName(playerName).equals(sign.getLine(0))
                 || Permission.otherName(player, sign.getLine(0));
 
         Chest neighborChest = uBlock.findNeighbor(block);
         Sign neighborSign = (neighborChest != null ? uBlock.findSign2(neighborChest.getBlock()) : null);
 
-        return neighborSign == null 
+        return neighborSign == null
                 || uLongName.stripName(playerName).equals(neighborSign.getLine(0))
                 || Permission.otherName(player, neighborSign.getLine(0));
     }

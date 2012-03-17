@@ -26,12 +26,12 @@ public class blockPlace implements Listener {
         }
 
         Block placed = event.getBlockPlaced();
-        if (placed.getType() == Material.CHEST){
+        if (placed.getType() == Material.CHEST) {
             Chest neighbor = uBlock.findNeighbor(placed);
             if (neighbor == null) return;
 
             Block neighborBlock = neighbor.getBlock();
-            if (Security.isProtected(neighborBlock) && !Security.canAccess(event.getPlayer(), neighborBlock)){
+            if (Security.isProtected(neighborBlock) && !Security.canAccess(event.getPlayer(), neighborBlock)) {
                 event.getPlayer().sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
             }

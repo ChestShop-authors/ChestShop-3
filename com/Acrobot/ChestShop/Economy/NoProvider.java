@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop.Economy;
 /**
  * @author Acrobot
  */
-public class NoProvider implements EcoPlugin{
+public class NoProvider implements EcoPlugin {
     public boolean hasAccount(String player) {
         printError();
         return false;
@@ -31,7 +31,7 @@ public class NoProvider implements EcoPlugin{
         printError();
         return null;
     }
-    
+
     private static void printError() {
         System.err.println("[ChestShop] You haven't got any economy plugin!");
     }

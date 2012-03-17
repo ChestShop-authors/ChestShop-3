@@ -36,14 +36,14 @@ public enum Permission {
     public static boolean has(Player player, String node) {
         return player.hasPermission(node) || player.hasPermission(node.toLowerCase());
     }
-    
-    public static boolean otherName(Player p, String name){
+
+    public static boolean otherName(Player p, String name) {
         if (has(p, Permission.ADMIN)) return false;
         String node = OTHER_NAME + name;
         return hasPermissionSet(p, node) || hasPermissionSet(p, node.toLowerCase());
     }
-    
-    private static boolean hasPermissionSet(Player p, String perm){
+
+    private static boolean hasPermissionSet(Player p, String perm) {
         return p.isPermissionSet(perm) && p.hasPermission(perm);
     }
 

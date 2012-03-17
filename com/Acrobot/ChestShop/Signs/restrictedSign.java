@@ -30,17 +30,17 @@ public class restrictedSign {
 
     }
 
-    public static boolean canDestroy(Player p, Sign sign){
+    public static boolean canDestroy(Player p, Sign sign) {
         Sign shopSign = getAssociatedSign(sign);
         return uSign.canAccess(p, shopSign);
     }
-    
-    public static Sign getAssociatedSign(Sign restricted){
+
+    public static Sign getAssociatedSign(Sign restricted) {
         Block down = restricted.getBlock().getRelative(BlockFace.DOWN);
         return uSign.isSign(down) ? (Sign) down.getState() : null;
     }
-    
-    public static boolean hasPermission(Player p, String[] lines){
+
+    public static boolean hasPermission(Player p, String[] lines) {
         if (Permission.has(p, Permission.ADMIN)) return true;
 
         for (int i = 1; i <= 3; i++) {

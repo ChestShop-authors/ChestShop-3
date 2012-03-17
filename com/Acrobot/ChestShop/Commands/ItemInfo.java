@@ -30,7 +30,7 @@ public class ItemInfo implements CommandExecutor {
         }
 
         if (item == null || item.getType() == Material.AIR) return false;
-        
+
         String durability = (item.getDurability() != 0 ? ChatColor.DARK_GREEN + ":" + item.getDurability() : "");
         String ench = uEnchantment.getEnchantment(item);
         String enchantment = (ench != null ? ChatColor.DARK_AQUA + "-" + ench : "");
@@ -47,8 +47,8 @@ public class ItemInfo implements CommandExecutor {
         return true;
 
     }
-    
-    private static String intToRoman(int integer){
+
+    private static String intToRoman(int integer) {
         if (integer == 1) return "I";
         if (integer == 2) return "II";
         if (integer == 3) return "III";
@@ -56,10 +56,9 @@ public class ItemInfo implements CommandExecutor {
         if (integer == 5) return "V";
         return Integer.toString(integer);
     }
-    
 
-    
-    private static String joinArray(String[] array){
+
+    private static String joinArray(String[] array) {
         StringBuilder b = new StringBuilder(array.length);
         for (String s : array) b.append(s).append(' ');
         return b.toString();

@@ -4,7 +4,9 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
+import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Shop.Shop;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,8 +34,18 @@ public class Logging {
     }
 
     public static void logTransaction(boolean isBuying, Shop shop, Player player) {
-        log(player.getName() + (isBuying ? " bought " : " sold ") + shop.stockAmount + ' ' + shop.stock.getType() + " for " + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ") + shop.owner);
+        log(player.getName()
+                + (isBuying ? " bought " : " sold ")
+                + shop.stockAmount + ' '
+                + Items.getSignName(shop.stock) + " for "
+                + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ")
+                + shop.owner + " at "
+                + locationToString(shop.sign.getLocation()));
         if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) logToDatabase(isBuying, shop, player);
+    }
+
+    private static String locationToString(Location loc) {
+        return '[' + loc.getWorld().getName() + "] " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
     }
 
     private static void logToDatabase(boolean isBuying, Shop shop, Player player) {
