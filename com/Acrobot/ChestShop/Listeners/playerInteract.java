@@ -64,8 +64,14 @@ public class playerInteract implements Listener {
 
         if (action == Action.RIGHT_CLICK_BLOCK) event.setCancelled(true);
 
-        if (Config.getBoolean(Property.ALLOW_SIGN_CHEST_OPEN) && uSign.canAccess(player, sign)) {
-            if (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING)) showChestGUI(player, block);
+        if (uSign.canAccess(player, sign)) {
+            if (!Config.getBoolean(Property.ALLOW_SIGN_CHEST_OPEN)) {
+                return;
+            }
+
+            if (action != Action.LEFT_CLICK_BLOCK || !Config.getBoolean(Property.ALLOW_LEFT_CLICK_DESTROYING)) {
+                showChestGUI(player, block);
+            }
             return;
         }
 
