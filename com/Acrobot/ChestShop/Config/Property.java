@@ -39,6 +39,7 @@ public enum Property {
     HEROES_EXP(100, "How much Heroes exp should people get for creating a ChestShop?"),
     BLOCK_UPDATE(false, "EXPERIMENTAL: Should every ChestShop transaction result in a block update?"),
     ALLOW_PARTIAL_TRANSACTIONS(true, "Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)");
+    ALLOW_SIGN_CHEST_OPEN(true, "Can shop's chest be opened by owner with right-clicking a shop's sign?");
 
 
     private final Object value;
