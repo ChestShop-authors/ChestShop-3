@@ -15,6 +15,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -61,7 +62,7 @@ public class blockBreak implements Listener {
         return uBlock.findRestrictedSign(block) != null;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public static void onBlockBreak(BlockBreakEvent event) {
         if (cancellingBlockBreak(event.getBlock(), event.getPlayer())) event.setCancelled(true);
     }
@@ -79,7 +80,7 @@ public class blockBreak implements Listener {
                 && !Permission.otherName(player, sign.getLine(0)));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void onBlockPistonExtend(BlockPistonExtendEvent event) {
         for (Block b : getExtendBlocks(event)) {
             if (cancellingBlockBreak(b, null)) {
@@ -89,7 +90,7 @@ public class blockBreak implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void onBlockPistonRetract(BlockPistonRetractEvent event) {
         if (cancellingBlockBreak(getRetractBlock(event), null)) event.setCancelled(true);
     }

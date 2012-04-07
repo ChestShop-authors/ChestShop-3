@@ -89,7 +89,8 @@ public class signChange implements Listener {
                 Block chestBlock = chest.getBlock();
                 boolean canBuildTowny = uSign.towny == null || uTowny.canBuild(player, signBlock.getLocation(), chest.getLocation());
                 boolean canBuildWorldGuard = uWorldGuard.wg == null || uWorldGuard.canBuildShopHere(signBlock.getLocation());
-                boolean bothActive = uSign.towny != null && uWorldGuard.wg != null;
+                boolean bothActive = (uSign.towny != null && Config.getBoolean(Property.TOWNY_INTEGRATION))
+                        && (uWorldGuard.wg != null && Config.getBoolean(Property.WORLDGUARD_INTEGRATION));
 
                 if (((!canBuildTowny || !canBuildWorldGuard) && !bothActive) || (bothActive && !canBuildTowny && !canBuildWorldGuard)) {
                     player.sendMessage(Config.getLocal(Language.CANNOT_CREATE_SHOP_HERE));

@@ -18,7 +18,7 @@ public class Queue implements Runnable {
         queue.add(t);
     }
 
-    public void run() {
+    public synchronized void run() {
         if (Config.getInteger(Property.RECORD_TIME_TO_LIVE) != -1)
             deleteOld();
 

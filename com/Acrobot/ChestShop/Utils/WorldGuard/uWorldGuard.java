@@ -21,10 +21,15 @@ public class uWorldGuard {
 
     public static boolean canBuildShopHere(Location loc) {
         return !turnedOn() || canCreateShops(getRegions(loc));
+
     }
 
     public static boolean canCreateShops(ApplicableRegionSet set) {
-        return JavaWorkaround.setAllowsFlag(set);
+        if (Config.getBoolean(Property.WORLDGUARD_USE_FLAG)) {
+            return JavaWorkaround.setAllowsFlag(set);
+        } else {
+            return set.size() != 0;
+        }
     }
 
     public static ApplicableRegionSet getRegions(Location loc) {

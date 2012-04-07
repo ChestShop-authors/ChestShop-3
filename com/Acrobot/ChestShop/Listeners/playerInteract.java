@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners;
 
-import com.Acrobot.ChestShop.BukkitFixes.bInventoryFix;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
@@ -95,7 +94,7 @@ public class playerInteract implements Listener {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;
         }
-        Inventory chestInv = bInventoryFix.getInventory(chest);
+        Inventory chestInv = chest.getInventory();
         player.openInventory(chestInv);
     }
 }
