@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Protection.Plugins.Default;
+import com.Acrobot.ChestShop.Protection.Security;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -100,6 +101,11 @@ public class playerInteract implements Listener {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;
         }
+
+        if (!hasAdminPermissions(player) && !Security.canAccess(player, block)) {
+            return;
+        }
+
         Inventory chestInv = chest.getInventory();
         player.openInventory(chestInv);
     }

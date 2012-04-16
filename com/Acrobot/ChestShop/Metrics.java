@@ -29,7 +29,7 @@ public class Metrics {
     /**
      * The base url of the metrics domain
      */
-    private static final String BASE_URL = "http://metrics.griefcraft.com";
+    private static final String BASE_URL = "http://mcstats.org";
 
     /**
      * The url used to report a server's status
@@ -93,7 +93,7 @@ public class Metrics {
 
         // Do we need to create the file?
         if (configuration.get("guid", null) == null) {
-            configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
+            configuration.options().header("http://mcstats.org").copyDefaults(true);
             configuration.save(configurationFile);
         }
 
@@ -227,7 +227,7 @@ public class Metrics {
         final PluginDescriptionFile description = plugin.getDescription();
 
         // Construct the post data
-        final StringBuilder data = new StringBuilder();
+        final StringBuilder data = new StringBuilder(100);
         data.append(encode("guid")).append('=').append(encode(guid));
         encodeDataPair(data, "version", description.getVersion());
         encodeDataPair(data, "server", Bukkit.getVersion());
@@ -240,7 +240,7 @@ public class Metrics {
         }
 
         // Create the url
-        final URL url = new URL(BASE_URL + String.format(REPORT_URL, description.getName()));
+        URL url = new URL(BASE_URL + String.format(REPORT_URL, encode(plugin.getDescription().getName())));
 
         // Connect to the website
         URLConnection connection;
@@ -279,7 +279,7 @@ public class Metrics {
      *
      * @return
      */
-    private boolean isMineshafterPresent() {
+    private static boolean isMineshafterPresent() {
         try {
             Class.forName("mineshafter.MineServer");
             return true;

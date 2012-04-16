@@ -93,7 +93,7 @@ public class ChestShop extends JavaPlugin {
 
     private void startStatistics() {
         try {
-            new Metrics().beginMeasuringPlugin(this);
+            new Metrics(this).start();
         } catch (Exception ex) {
             System.err.println(chatPrefix + "There was an error while submitting statistics.");
         }
