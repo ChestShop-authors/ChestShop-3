@@ -8,7 +8,6 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Logging.Logging;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uInventory;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.block.Sign;
@@ -112,8 +111,6 @@ public class Shop {
                     .replace("%buyer", playerName)
                     .replace("%price", formatedPrice));
         }
-
-        if (Config.getBoolean(Property.BLOCK_UPDATE)) uBlock.blockUpdate(sign.getBlock());
     }
 
     public void sell(Player player) {
@@ -189,7 +186,6 @@ public class Shop {
                     .replace("%seller", player.getName())
                     .replace("%price", formatedBalance));
         }
-        if (Config.getBoolean(Property.BLOCK_UPDATE)) uBlock.blockUpdate(sign.getBlock());
     }
 
     private String getOwnerAccount() {
