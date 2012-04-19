@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Shop;
 
-import com.Acrobot.ChestShop.Chests.MinecraftChest;
+import com.Acrobot.ChestShop.Containers.MinecraftChest;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.ChatColor;

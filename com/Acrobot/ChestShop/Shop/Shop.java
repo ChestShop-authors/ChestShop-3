@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Shop;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Chests.ChestObject;
+import com.Acrobot.ChestShop.Containers.Container;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
@@ -19,14 +19,14 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Shop {
     private final short durability;
-    private final ChestObject chest;
+    private final Container chest;
 
     public final ItemStack stock;
     public int stockAmount;
     public final String owner;
     public final Sign sign;
 
-    public Shop(ChestObject chest, Sign sign, ItemStack... itemStacks) {
+    public Shop(Container chest, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
         this.durability = stock.getDurability();
         this.chest = chest;
@@ -208,7 +208,7 @@ public class Shop {
         return uInventory.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
     }
 
-    private boolean stockFitsChest(ChestObject chest) {
+    private boolean stockFitsChest(Container chest) {
         return chest.fits(stock, stockAmount, durability);
     }
 

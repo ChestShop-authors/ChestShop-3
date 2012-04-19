@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Chests;
+package com.Acrobot.ChestShop.Containers;
 
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uInventory;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Acrobot
  */
-public class MinecraftChest implements ChestObject {
+public class MinecraftChest implements Container {
     private final Chest chest;
 
     public MinecraftChest(Chest chest) {

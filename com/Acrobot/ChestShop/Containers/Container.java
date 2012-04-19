@@ -1,11 +1,11 @@
-package com.Acrobot.ChestShop.Chests;
+package com.Acrobot.ChestShop.Containers;
 
 import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Acrobot
  */
-public interface ChestObject {
+public interface Container {
     public ItemStack[] getContents();
 
     public void setSlot(int slot, ItemStack item);

@@ -29,8 +29,7 @@ import java.util.HashMap;
  * @author Acrobot
  */
 public class playerInteract implements Listener {
-
-    private static final HashMap<Player, Long> lastTransactionTime = new HashMap<Player, Long>(); //Last player's transaction
+    private static final HashMap<Player, Long> timeOfTheLatestSignClick = new HashMap<Player, Long>();
     public static int interval = 100;//Minimal interval between transactions
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -61,7 +60,7 @@ public class playerInteract implements Listener {
             return;
         }
 
-        lastTransactionTime.put(player, System.currentTimeMillis());
+        timeOfTheLatestSignClick.put(player, System.currentTimeMillis());
 
         if (action == Action.RIGHT_CLICK_BLOCK) event.setCancelled(true);
 
@@ -88,7 +87,7 @@ public class playerInteract implements Listener {
     }
 
     private static boolean enoughTimeHasPassed(Player player) {
-        return !lastTransactionTime.containsKey(player) || (System.currentTimeMillis() - lastTransactionTime.get(player)) >= interval;
+        return !timeOfTheLatestSignClick.containsKey(player) || (System.currentTimeMillis() - timeOfTheLatestSignClick.get(player)) >= interval;
     }
 
     private static boolean hasAdminPermissions(Player player) {
