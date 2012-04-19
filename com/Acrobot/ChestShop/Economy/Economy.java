@@ -15,10 +15,10 @@ public class Economy {
         return economy.hasAccount(uLongName.getName(p));
     }
 
-    public static void add(String name, float amount) {
+    public static void add(String name, double amount) {
         String account = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
         if (!account.isEmpty()) {
-            float tax = getTax(Property.TAX_AMOUNT, amount);
+            double tax = getTax(Property.TAX_AMOUNT, amount);
             economy.add(account, tax);
             amount = amount - tax;
         }
@@ -26,25 +26,25 @@ public class Economy {
         economy.add(uLongName.getName(name), amount);
     }
 
-    public static void addServer(String name, float amount) {
+    public static void addServer(String name, double amount) {
         String account = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
         if (!account.isEmpty()) {
-            float tax = getTax(Property.SERVER_TAX_AMOUNT, amount);
+            double tax = getTax(Property.SERVER_TAX_AMOUNT, amount);
             economy.add(account, tax);
             amount = amount - tax;
         }
         economy.add(uLongName.getName(name), amount);
     }
 
-    public static float getTax(Property tax, float price) {
+    public static double getTax(Property tax, double price) {
         return (Config.getFloat(tax) / 100F) * price;
     }
 
-    public static void subtract(String name, float amount) {
+    public static void subtract(String name, double amount) {
         economy.subtract(uLongName.getName(name), amount);
     }
 
-    public static boolean hasEnough(String name, float amount) {
+    public static boolean hasEnough(String name, double amount) {
         return economy.hasEnough(uLongName.getName(name), amount);
     }
 

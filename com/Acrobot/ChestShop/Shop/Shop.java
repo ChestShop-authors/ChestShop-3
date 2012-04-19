@@ -24,23 +24,20 @@ public class Shop {
 
     public final ItemStack stock;
     public int stockAmount;
-    public float buyPrice;
-    public float sellPrice;
     public final String owner;
     public final Sign sign;
 
-    public Shop(ChestObject chest, boolean buy, Sign sign, ItemStack... itemStacks) {
+    public Shop(ChestObject chest, Sign sign, ItemStack... itemStacks) {
         this.stock = itemStacks[0];
         this.durability = stock.getDurability();
         this.chest = chest;
-        this.buyPrice = (buy ? uSign.buyPrice(sign.getLine(2)) : -1);
-        this.sellPrice = (!buy ? uSign.sellPrice(sign.getLine(2)) : -1);
         this.owner = sign.getLine(0);
         this.stockAmount = uSign.itemAmount(sign.getLine(1));
         this.sign = sign;
     }
 
     public void buy(Player player) {
+        double buyPrice = uSign.buyPrice(sign.getLine(2));
         if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;
@@ -55,7 +52,7 @@ public class Shop {
         }
         String playerName = player.getName();
         if (!Economy.hasEnough(playerName, buyPrice)) {
-            int items = calculateItemAmount(Economy.balance(playerName), true);
+            int items = calculateItemAmount(Economy.balance(playerName), buyPrice);
             if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
                 player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY));
                 return;
@@ -105,7 +102,7 @@ public class Shop {
         }
 
         uInventory.add(player.getInventory(), stock, stockAmount);
-        Logging.logTransaction(true, this, player);
+        Logging.logTransaction(true, this, buyPrice, player);
         player.updateInventory();
 
         if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
@@ -120,6 +117,8 @@ public class Shop {
     }
 
     public void sell(Player player) {
+        double sellPrice = uSign.sellPrice(sign.getLine(2));
+
         if (chest == null && !isAdminShop()) {
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;
@@ -137,7 +136,7 @@ public class Shop {
         boolean accountExists = !account.isEmpty() && Economy.hasAccount(account);
 
         if (accountExists && !Economy.hasEnough(account, sellPrice)) {
-            int items = calculateItemAmount(Economy.balance(account), false);
+            int items = calculateItemAmount(Economy.balance(account), sellPrice);
             if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
                 player.sendMessage(Config.getLocal(Language.NOT_ENOUGH_MONEY_SHOP));
                 return;
@@ -180,7 +179,7 @@ public class Shop {
         }
 
         uInventory.remove(player.getInventory(), stock, stockAmount, durability);
-        Logging.logTransaction(false, this, player);
+        Logging.logTransaction(false, this, sellPrice, player);
         player.updateInventory();
 
         if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
@@ -217,8 +216,8 @@ public class Shop {
         return chest.fits(stock, stockAmount, durability);
     }
 
-    private int calculateItemAmount(double money, boolean buy) {
-        return (int) Math.floor(money / ((buy ? buyPrice : sellPrice) / stockAmount));
+    private int calculateItemAmount(double money, double basePrice) {
+        return (int) Math.floor(money / (basePrice / stockAmount));
     }
 
     private void sendMessageToOwner(String msg) {
