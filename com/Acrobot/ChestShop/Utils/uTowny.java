@@ -2,7 +2,7 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
-import com.palmergames.bukkit.towny.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class uTowny {
     public static boolean isInsideShopPlot(Location chestlocation, Location signLocation) {
-        return uSign.towny.getTownyUniverse().getTownBlock(chestlocation).getType() == TownBlockType.COMMERCIAL && uSign.towny.getTownyUniverse().getTownBlock(signLocation).getType() == TownBlockType.COMMERCIAL;
+        return TownyUniverse.getTownBlock(chestlocation).getType() == TownBlockType.COMMERCIAL && TownyUniverse.getTownBlock(signLocation).getType() == TownBlockType.COMMERCIAL;
     }
 
     public static boolean isPlotOwner(Player player, Location chestLocation, Location signLocation) {
@@ -28,7 +28,7 @@ public class uTowny {
     }
 
     private static boolean isInWilderness(Block block) {
-        return uSign.towny.getTownyUniverse().isWilderness(block);
+        return TownyUniverse.isWilderness(block);
     }
 
     public static boolean canBuild(Player player, Location chestLocation, Location signLocation) {
@@ -37,7 +37,7 @@ public class uTowny {
 
     private static boolean isBlockOwner(Player player, Location location) {
         try {
-            return uSign.towny.getTownyUniverse().getTownBlock(location).isOwner(TownyUniverse.getDataSource().getResident(player.getName()));
+            return TownyUniverse.getTownBlock(location).isOwner(TownyUniverse.getDataSource().getResident(player.getName()));
         } catch (NotRegisteredException ex) {
             return false;
         }
@@ -45,7 +45,7 @@ public class uTowny {
 
     private static boolean isResident(Player p, Location l) {
         try {
-            return uSign.towny.getTownyUniverse().getTownBlock(l).getTown().hasResident(p.getName());
+            return TownyUniverse.getTownBlock(l).getTown().hasResident(p.getName());
         } catch (NotRegisteredException ex) {
             return false;
         }
