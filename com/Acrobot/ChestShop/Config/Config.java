@@ -38,7 +38,7 @@ public class Config {
     }
 
     public static double getDouble(String value) {
-        return Double.parseDouble(value);
+        return Double.parseDouble(getValue(value).toString());
     }
 
     private static String getColored(String msg) {
