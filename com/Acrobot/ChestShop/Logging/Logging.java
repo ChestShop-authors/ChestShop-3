@@ -33,22 +33,22 @@ public class Logging {
         if (Config.getBoolean(Property.LOG_TO_FILE)) FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
     }
 
-    public static void logTransaction(boolean isBuying, Shop shop, Player player) {
+    public static void logTransaction(boolean isBuying, Shop shop, double price, Player player) {
         log(player.getName()
                 + (isBuying ? " bought " : " sold ")
                 + shop.stockAmount + ' '
                 + Items.getSignName(shop.stock) + " for "
-                + (isBuying ? shop.buyPrice + " from " : shop.sellPrice + " to ")
+                + price + (isBuying ? " from " : " to ")
                 + shop.owner + " at "
                 + locationToString(shop.sign.getLocation()));
-        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) logToDatabase(isBuying, shop, player);
+        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) logToDatabase(isBuying, shop, price, player);
     }
 
     private static String locationToString(Location loc) {
         return '[' + loc.getWorld().getName() + "] " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
     }
 
-    private static void logToDatabase(boolean isBuying, Shop shop, Player player) {
+    private static void logToDatabase(boolean isBuying, Shop shop, double price, Player player) {
         Transaction transaction = new Transaction();
 
         transaction.setAmount(shop.stockAmount);
@@ -58,7 +58,7 @@ public class Logging {
 
         transaction.setItemDurability(stock.getDurability());
         transaction.setItemID(stock.getTypeId());
-        transaction.setPrice((isBuying ? shop.buyPrice : shop.sellPrice));
+        transaction.setPrice((float) price);
         transaction.setSec(System.currentTimeMillis() / 1000);
         transaction.setShopOwner(shop.owner);
         transaction.setShopUser(player.getName());
