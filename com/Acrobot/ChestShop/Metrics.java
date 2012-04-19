@@ -166,10 +166,10 @@ public class Metrics {
                 // Reload the metrics file
                 configuration.load(CONFIG_FILE);
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", ex.getMessage());
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
                 return true;
             } catch (InvalidConfigurationException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] {0}", ex.getMessage());
+                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
                 return true;
             }
             return configuration.getBoolean("opt-out", false);
