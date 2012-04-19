@@ -36,6 +36,6 @@ public class ShopManagement {
             player.sendMessage(ChatColor.RED + "[Shop] The item is not recognised!");
             return null;
         }
-        return new Shop(chestMc != null ? new MinecraftChest(chestMc) : null, false, sign, item);
+        return new Shop(chestMc != null ? new MinecraftChest(chestMc) : null, sign, item);
     }
 }
