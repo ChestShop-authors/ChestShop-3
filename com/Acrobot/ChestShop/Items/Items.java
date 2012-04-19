@@ -49,7 +49,7 @@ public class Items {
 
     public static String getSignName(ItemStack is) {
         return is.getType().name()
-                + (is.getDurability() > 0 ? ':' + is.getDurability() : "")
+                + (is.getDurability() > 0 ? ":" + is.getDurability() : "")
                 + (!is.getEnchantments().isEmpty() ? '-' + uEnchantment.encodeEnchantment(is.getEnchantments()) : "");
     }
 

@@ -66,7 +66,7 @@ public class Shop {
             return;
         }
 
-        String materialName = stock.getType().name();
+        String materialName = uSign.capitalizeFirst(stock.getType().name());
 
         if (!isAdminShop() && !hasEnoughStock()) {
             int items = stockAmount(stock, durability);
@@ -167,7 +167,7 @@ public class Shop {
         if (!isAdminShop()) Economy.add(player.getName(), sellPrice);
         else Economy.addServer(player.getName(), sellPrice);
 
-        String materialName = stock.getType().name();
+        String materialName = uSign.capitalizeFirst(stock.getType().name());
         String formatedBalance = Economy.formatBalance(sellPrice);
 
         if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_CLIENT)) {
