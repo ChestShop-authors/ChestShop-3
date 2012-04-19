@@ -42,7 +42,7 @@ public class playerInteract implements Listener {
         Player player = event.getPlayer();
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
-            Default protection = new Default();
+            Default protection = Security.getDefaultProtection();
             if (!hasAdminPermissions(player) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
