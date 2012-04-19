@@ -9,7 +9,11 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class SCLplugin implements Protection {
-    public static SCL scl;
+    public SCL scl;
+
+    public SCLplugin(SCL scl) {
+        this.scl = scl;
+    }
 
     public boolean isProtected(Block block) {
         return scl.chests.isLocked(block);

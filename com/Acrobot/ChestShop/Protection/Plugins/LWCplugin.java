@@ -11,12 +11,12 @@ import org.bukkit.entity.Player;
  * @author Acrobot
  */
 public class LWCplugin implements Protection {
-    public static LWC lwc;
-    private static LimitsModule limitsModule;
+    public LWC lwc;
+    private LimitsModule limitsModule;
 
 
-    public static void setLWC(LWC LWC) {
-        lwc = LWC;
+    public LWCplugin(LWC lwc) {
+        this.lwc = lwc;
         limitsModule = new LimitsModule();
     }
 
