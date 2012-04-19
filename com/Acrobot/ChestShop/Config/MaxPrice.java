@@ -45,7 +45,7 @@ public class MaxPrice {
     }
 
     public static double getPrice(Price price, int itemID) {
-        String node = "max-" + price + "-price" + (itemID > 0 ? '-' + itemID : "");
+        String node = "max-" + price + "-price" + (itemID > 0 ? "-" + itemID : "");
         return Config.exists(node) ? Config.getDouble(node) : Double.MAX_VALUE;
     }
 
