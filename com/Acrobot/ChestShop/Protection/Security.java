@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Protection;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Listeners.blockBreak;
+import com.Acrobot.ChestShop.Protection.Plugins.Default;
 import com.Acrobot.ChestShop.Utils.uLongName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
@@ -20,22 +21,33 @@ public class Security {
     private static final BlockFace[] faces = {BlockFace.UP, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     private static final BlockFace[] blockFaces = {BlockFace.UP, BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     public static ArrayList<Protection> protections = new ArrayList<Protection>();
+    private static Default defaultProtection = new Default();
+
+    public static Default getDefaultProtection() {
+        return defaultProtection;
+    }
 
     public static boolean protect(String name, Block block) {
         boolean works = false;
-        for (int i = 0; i < protections.size() && !works; i++) works = protections.get(i).protect(name, block);
+        for (int i = 0; i < protections.size() && !works; i++){
+            works = protections.get(i).protect(name, block);
+        }
         return works;
     }
 
     public static boolean canAccess(Player player, Block block) {
         boolean works = true;
-        for (int i = 0; i < protections.size() && works; i++) works = protections.get(i).canAccess(player, block);
+        for (int i = 0; i < protections.size() && works; i++){
+            works = protections.get(i).canAccess(player, block);
+        }
         return works;
     }
 
     public static boolean isProtected(Block block) {
         boolean isProt = false;
-        for (int i = 0; i < protections.size() && !isProt; i++) isProt = protections.get(i).isProtected(block);
+        for (int i = 0; i < protections.size() && !isProt; i++){
+            isProt = protections.get(i).isProtected(block);
+        }
         return isProt;
     }
 
