@@ -14,7 +14,7 @@ import java.util.List;
 public class Queue implements Runnable {
     private static final ArrayList<Transaction> queue = new ArrayList<Transaction>();
 
-    public static void addToQueue(Transaction t) {
+    public synchronized static void addToQueue(Transaction t) {
         queue.add(t);
     }
 
@@ -26,7 +26,7 @@ public class Queue implements Runnable {
         queue.clear();
     }
 
-    public static boolean deleteOld() {
+    public synchronized static boolean deleteOld() {
         try {
             ChestShop.getDB().delete(getOld());
             return true;
@@ -35,7 +35,7 @@ public class Queue implements Runnable {
         }
     }
 
-    public static List getOld() throws OptimisticLockException {
+    public synchronized static List getOld() throws OptimisticLockException {
         return ChestShop
                 .getDB()
                 .find(Transaction.class)
