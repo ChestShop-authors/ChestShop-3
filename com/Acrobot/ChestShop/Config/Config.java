@@ -18,7 +18,7 @@ public class Config {
     }
 
     public static float getFloat(Property value) {
-        return new Float(getValue(value.name()).toString());
+        return getFloat(value.name());
     }
 
     public static float getFloat(String value) {
@@ -34,7 +34,11 @@ public class Config {
     }
 
     public static double getDouble(Property value) {
-        return Double.parseDouble(getValue(value.name()).toString());
+        return getDouble(getValue(value.name()).toString());
+    }
+
+    public static double getDouble(String value) {
+        return Double.parseDouble(value);
     }
 
     private static String getColored(String msg) {

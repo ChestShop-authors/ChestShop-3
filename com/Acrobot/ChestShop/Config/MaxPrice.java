@@ -6,24 +6,51 @@ import org.bukkit.Material;
  * @author Acrobot
  */
 public class MaxPrice {
-    public static boolean canCreate(float buyPrice, float sellPrice, Material mat) {
-        float bPrice = maxBuyPrice(mat.getId());
-        float sPrice = maxSellPrice(mat.getId());
-
-        return (bPrice == -1 || buyPrice <= maxBuyPrice(mat.getId()))
-                && (sPrice == -1 || sellPrice <= maxSellPrice(mat.getId()));
+    public static boolean canCreate(double buyPrice, double sellPrice, Material mat) {
+        return buyPriceWithinRange(buyPrice, mat) && sellPriceWithinRange(sellPrice, mat);
     }
 
-    public static float maxBuyPrice(int itemID) {
-        return getPrice("buy", itemID);
+    private static boolean buyPriceWithinRange(double buyPrice, Material material) {
+        double bPrice = maxBuyPrice(material);
+        double maxPrice = maxBuyPrice();
+
+        return buyPrice <= bPrice && buyPrice <= maxPrice;
     }
 
-    public static float maxSellPrice(int itemID) {
-        return getPrice("sell", itemID);
+    private static boolean sellPriceWithinRange(double sellPrice, Material material) {
+        double sPrice = maxSellPrice(material);
+        double maxPrice = maxSellPrice();
+
+        return sellPrice <= sPrice && sellPrice <= maxPrice;
     }
 
-    public static float getPrice(String value, int itemID) {
-        String node = "max-" + value + "-price-" + itemID;
-        return Config.exists(node) ? Config.getFloat(node) : -1;
+    public static double maxBuyPrice() {
+        return getPrice(Price.buy);
+    }
+
+    public static double maxSellPrice() {
+        return getPrice(Price.sell);
+    }
+
+    public static double maxBuyPrice(Material material) {
+        return getPrice(Price.buy, material.getId());
+    }
+
+    public static double maxSellPrice(Material material) {
+        return getPrice(Price.sell, material.getId());
+    }
+
+    public static double getPrice(Price price) {
+        return getPrice(price, -1);
+    }
+
+    public static double getPrice(Price price, int itemID) {
+        String node = "max-" + price + "-price" + (itemID > 0 ? '-' + itemID : "");
+        return Config.exists(node) ? Config.getDouble(node) : Double.MAX_VALUE;
+    }
+
+    private static enum Price {
+        buy,
+        sell
     }
 }
