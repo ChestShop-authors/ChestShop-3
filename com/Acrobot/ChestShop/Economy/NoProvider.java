@@ -1,5 +1,7 @@
 package com.Acrobot.ChestShop.Economy;
 
+import com.Acrobot.ChestShop.ChestShop;
+
 /**
  * @author Acrobot
  */
@@ -33,6 +35,6 @@ public class NoProvider implements EcoPlugin {
     }
 
     private static void printError() {
-        System.err.println("[ChestShop] You haven't got any economy plugin!");
+        ChestShop.getBukkitLogger().severe("You haven't got any economy plugin!");
     }
 }

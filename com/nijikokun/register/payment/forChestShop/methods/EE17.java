@@ -1,9 +1,8 @@
 package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.Economy;
-
+import com.nijikokun.register.payment.forChestShop.Method;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -30,9 +29,9 @@ public class EE17 implements Method {
     public String getVersion() {
         return "2.8.2";
     }
-    
+
     public int fractionalDigits() {
-    	return -1;
+        return -1;
     }
 
     public String format(double amount) {
@@ -56,17 +55,17 @@ public class EE17 implements Method {
     }
 
     public boolean createAccount(String name) {
-        if(hasAccount(name))
+        if (hasAccount(name))
             return false;
-        
+
         Economy.createNPC(name);
         return true;
     }
 
     public boolean createAccount(String name, double balance) {
-        if(hasAccount(name))
+        if (hasAccount(name))
             return false;
-        
+
         Economy.createNPC(name);
 
         try {
@@ -80,7 +79,7 @@ public class EE17 implements Method {
     }
 
     public MethodAccount getAccount(String name) {
-        if(!hasAccount(name)) 
+        if (!hasAccount(name))
             return null;
 
         return new EEcoAccount(name);
@@ -89,17 +88,20 @@ public class EE17 implements Method {
     public MethodBankAccount getBankAccount(String bank, String name) {
         return null;
     }
-	
+
     public boolean isCompatible(Plugin plugin) {
-        try { Class.forName("com.earth2me.essentials.api.Economy"); }
-        catch(Exception e) { return false; }
+        try {
+            Class.forName("com.earth2me.essentials.api.Economy");
+        } catch (Exception e) {
+            return false;
+        }
 
         return plugin.getDescription().getName().equalsIgnoreCase("essentials")
-            && plugin instanceof Essentials;
+                && plugin instanceof Essentials;
     }
 
     public void setPlugin(Plugin plugin) {
-        Essentials = (Essentials)plugin;
+        Essentials = (Essentials) plugin;
     }
 
     public static class EEcoAccount implements MethodAccount {

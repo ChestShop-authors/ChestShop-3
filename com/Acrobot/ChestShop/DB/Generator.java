@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.DB;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Logging.Logging;
+import com.Acrobot.ChestShop.Utils.uSign;
+import com.avaje.ebean.ExpressionList;
 import org.bukkit.Material;
 
 import java.io.*;
@@ -13,9 +13,7 @@ import java.util.List;
  * @author Acrobot
  */
 public class Generator implements Runnable {
-    private static final String filePath = Config.getString(Property.STATISTICS_PAGE_PATH);
-
-    private static double generationTime;
+    private final File pagePath;
 
     private static String header;
     private static String row;
@@ -23,32 +21,43 @@ public class Generator implements Runnable {
 
     private static BufferedWriter buf;
 
+
+    public Generator(File pagePath) {
+        this.pagePath = pagePath;
+    }
+
     public void run() {
         header = fileToString("header");
         row = fileToString("row");
         footer = fileToString("footer");
 
-        if (row.isEmpty()) System.err.println(ChestShop.chatPrefix + "You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
+        if (row.isEmpty()) {
+            ChestShop.getBukkitLogger().severe("You lack the necessary HTML files in your plugins/ChestShop/HTML folder!");
+            return;
+        }
+
         generateStats();
     }
 
-    private static void fileStart() throws IOException {
-        FileWriter fw = new FileWriter(filePath);
+    private void fileStart() throws IOException {
+        FileWriter fw = new FileWriter(pagePath);
         fw.write(header);
         fw.close();
     }
 
-    private static void fileEnd() throws IOException {
-        FileWriter fw = new FileWriter(filePath, true);
+    private void fileEnd(long generationTime) throws IOException {
+        FileWriter fw = new FileWriter(pagePath, true);
         fw.write(footer.replace("%time", String.valueOf(generationTime)));
         fw.close();
     }
 
     private static String fileToString(String fileName) {
         try {
-            File f = new File(ChestShop.folder + File.separator + "HTML" + File.separator + fileName + ".html");
-            FileReader rd = new FileReader(f);
-            char[] buf = new char[(int) f.length()];
+            File htmlFolder = new File(ChestShop.getFolder(), "HTML");
+            File fileToRead = new File(htmlFolder, fileName + ".html");
+
+            FileReader rd = new FileReader(fileToRead);
+            char[] buf = new char[(int) fileToRead.length()];
             rd.read(buf);
             return new String(buf);
         } catch (Exception e) {
@@ -57,13 +66,25 @@ public class Generator implements Runnable {
     }
 
     private static double generateItemTotal(int itemID, boolean bought, boolean sold) {
-        double amount = 0;
         List<Transaction> list;
-        if (bought) list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 1).eq("itemID", itemID).findList();
-        else if (sold) list = ChestShop.getDB().find(Transaction.class).where().eq("buy", 0).eq("itemID", itemID).findList();
-        else list = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).findList();
+        ExpressionList<Transaction> checkIf = ChestShop.getDB().find(Transaction.class).where();
 
-        for (Transaction t : list) amount += t.getAmount();
+        if (bought || sold) {
+            list = checkIf.eq("buy", bought ? 1 : 0).eq("itemID", itemID).findList();
+        } else {
+            list = checkIf.eq("itemID", itemID).findList();
+        }
+
+        return countTransactionAmount(list);
+    }
+
+    private static double countTransactionAmount(List<Transaction> list) {
+        double amount = 0;
+
+        for (Transaction transaction : list) {
+            amount += transaction.getAmount();
+        }
+
         return amount;
     }
 
@@ -82,7 +103,11 @@ public class Generator implements Runnable {
     private static float generateAveragePrice(int itemID) {
         float price = 0;
         List<Transaction> prices = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).eq("buy", true).findList();
-        for (Transaction t : prices) price += t.getAveragePricePerItem();
+
+        for (Transaction t : prices) {
+            price += t.getAveragePricePerItem();
+        }
+
         float toReturn = price / prices.size();
         return (!Float.isNaN(toReturn) ? toReturn : 0);
     }
@@ -100,7 +125,7 @@ public class Generator implements Runnable {
         double sold = generateTotalSold(itemID);
 
         Material material = Material.getMaterial(itemID);
-        String matName = material.name().replace("_", " ").toLowerCase();
+        String matName = uSign.capitalizeFirstLetter(material.name(), '_');
 
         int maxStackSize = material.getMaxStackSize();
 
@@ -115,22 +140,27 @@ public class Generator implements Runnable {
                 .replace("%pricePerItem", String.valueOf(buyPrice)));
     }
 
-    private static void generateStats() {
+    private void generateStats() {
         try {
-
-            File f = new File(filePath).getParentFile();
-            if (!f.exists()) f.mkdir();
+            File parentFolder = pagePath.getParentFile();
+            if (!parentFolder.exists()) {
+                parentFolder.mkdir();
+            }
 
             fileStart();
 
-            buf = new BufferedWriter(new FileWriter(filePath, true));
+            buf = new BufferedWriter(new FileWriter(pagePath, true));
+
             long genTime = System.currentTimeMillis();
-            for (Material m : Material.values()) generateItemStats(m.getId());
+            for (Material m : Material.values()) {
+                generateItemStats(m.getId());
+            }
 
             buf.close();
 
-            generationTime = (System.currentTimeMillis() - genTime) / 1000;
-            fileEnd();
+            long generationTime = (System.currentTimeMillis() - genTime) / 1000;
+
+            fileEnd(generationTime);
         } catch (Exception e) {
             Logging.log("Couldn't generate statistics page!");
             e.printStackTrace();

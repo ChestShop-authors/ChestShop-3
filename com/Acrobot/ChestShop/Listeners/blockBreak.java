@@ -7,7 +7,7 @@ import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uLongName;
+import com.Acrobot.ChestShop.Utils.uName;
 import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author Acrobot
  */
-public class blockBreak implements Listener {
+public class BlockBreak implements Listener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
         if (block == null) return false;
 
@@ -36,13 +37,13 @@ public class blockBreak implements Listener {
 
         if (restrictedSign(block)) return !restrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
 
-        Sign sign = uBlock.findSign(block, (player != null ? uLongName.stripName(player.getName()) : null));
+        Sign sign = uBlock.findValidShopSign(block, (player != null ? uName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
         if (playerIsNotOwner(player, sign)) return !isAdmin(player); //If the player isn't the owner or an admin - cancel!
 
         if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)) {
             float refundPrice = Config.getFloat(Property.SHOP_REFUND_PRICE);
-            Economy.add(uLongName.getName(sign.getLine(0)), refundPrice); //Add some money
+            Economy.add(uName.getName(sign.getLine(0)), refundPrice); //Add some money
             player.sendMessage(Config.getLocal(Language.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
         }
 
@@ -68,15 +69,11 @@ public class blockBreak implements Listener {
     }
 
     private static boolean isCorrectSign(Sign sign, Block block) {
-        return sign != null && (sign.getBlock().equals(block) || getAttachedFace(sign).equals(block));
-    }
-
-    public static Block getAttachedFace(Sign sign) {
-        return sign.getBlock().getRelative(((org.bukkit.material.Sign) sign.getData()).getAttachedFace());
+        return sign != null && (sign.getBlock().equals(block) || uBlock.getAttachedFace(sign).equals(block));
     }
 
     private static boolean playerIsNotOwner(Player player, Sign sign) {
-        return player == null || (!uLongName.stripName(player.getName()).equals(sign.getLine(0))
+        return player == null || (!uName.stripName(player.getName()).equals(sign.getLine(0))
                 && !Permission.otherName(player, sign.getLine(0)));
     }
 
@@ -102,7 +99,7 @@ public class blockBreak implements Listener {
 
     //Those are fixes for CraftBukkit's piston bug, where piston appears not to be a piston.
     private static BlockFace getPistonDirection(Block block) {
-        return block.getState().getData() instanceof PistonBaseMaterial ? ((PistonBaseMaterial) block.getState().getData()).getFacing() : null;
+        return block.getState().getData() instanceof PistonBaseMaterial ? ((Directional) block.getState().getData()).getFacing() : null;
     }
 
     private static Block getRetractLocationBlock(BlockPistonRetractEvent event) {
@@ -112,15 +109,25 @@ public class blockBreak implements Listener {
 
     private static List<Block> getExtendBlocks(BlockPistonExtendEvent event) {
         BlockFace pistonDirection = getPistonDirection(event.getBlock());
-        if (pistonDirection == null) return new ArrayList<Block>();
-        Block piston = event.getBlock();
-        ArrayList<Block> list = new ArrayList<Block>();
-        for (int b = 1; b < event.getLength() + 1; b++) {
-            Block block = piston.getRelative(pistonDirection, b);
-            Material blockType = block.getType();
-            if (blockType == Material.AIR) break;
-            list.add(block);
+
+        if (pistonDirection == null) {
+            return new ArrayList<Block>();
         }
-        return list;
+
+        Block piston = event.getBlock();
+        List<Block> pushedBlocks = new ArrayList<Block>();
+
+        for (int currentBlock = 1; currentBlock < event.getLength() + 1; currentBlock++) {
+            Block block = piston.getRelative(pistonDirection, currentBlock);
+            Material blockType = block.getType();
+
+            if (blockType == Material.AIR) {
+                break;
+            }
+
+            pushedBlocks.add(block);
+        }
+
+        return pushedBlocks;
     }
 }

@@ -1,15 +1,26 @@
 package com.Acrobot.ChestShop.Config;
 
+import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Utils.uName;
 import com.nijikokun.register.payment.forChestShop.Methods;
+
+import java.io.File;
 
 /**
  * @author Acrobot
  */
 public class Config {
-    public static ConfigObject config;
+    public static BreezeConfiguration normalConfig;
+    public static BreezeConfiguration languageConfig;
 
-    public static void setup(ConfigObject cfg) {
-        config = cfg;
+    public static void setup() {
+        File configFolder = ChestShop.getFolder();
+
+        normalConfig = BreezeConfiguration.loadConfiguration(new File(configFolder, "config.yml"), Property.getValues());
+        languageConfig = BreezeConfiguration.loadConfiguration(new File(configFolder, "local.yml"), Language.getValues());
+
+        uName.config = BreezeConfiguration.loadConfiguration(new File(configFolder, "longName.storage"));
+
         Methods.setPreferred(Config.getString(Property.PREFERRED_ECONOMY_PLUGIN));
     }
 
@@ -34,19 +45,19 @@ public class Config {
     }
 
     public static double getDouble(Property value) {
-        return getDouble(getValue(value.name()).toString());
+        return getDouble(value.name());
     }
 
     public static double getDouble(String value) {
-        return Double.parseDouble(getValue(value).toString());
+        return new Double(getValue(value).toString());
     }
 
     private static String getColored(String msg) {
-        return msg.replaceAll("&([0-9a-f])", "\u00A7$1");
+        return msg.replaceAll("&([0-9a-fk-or])", "\u00A7$1");
     }
 
     public static String getLocal(Language lang) {
-        return getColored(config.getLanguageConfig().getString(Language.prefix.name()) + config.getLanguageConfig().getString(lang.name()));
+        return getColored(languageConfig.getString(Language.prefix.name()) + languageConfig.getString(lang.name()));
     }
 
     public static boolean exists(String value) {
@@ -54,6 +65,6 @@ public class Config {
     }
 
     private static Object getValue(String node) {
-        return config.getProperty(node);
+        return normalConfig.get(node);
     }
 }

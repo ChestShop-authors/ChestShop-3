@@ -2,7 +2,7 @@ package com.Acrobot.ChestShop.Economy;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Utils.uLongName;
+import com.Acrobot.ChestShop.Utils.uName;
 
 /**
  * @author Acrobot
@@ -12,28 +12,26 @@ public class Economy {
     public static EcoPlugin economy;
 
     public static boolean hasAccount(String p) {
-        return economy.hasAccount(uLongName.getName(p));
+        return !p.isEmpty() && economy.hasAccount(uName.getName(p));
     }
 
     public static void add(String name, double amount) {
-        String account = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
-        if (!account.isEmpty()) {
-            double tax = getTax(Property.TAX_AMOUNT, amount);
-            economy.add(account, tax);
-            amount = amount - tax;
+        if (!hasAccount(name)) {
+            return;
         }
 
-        economy.add(uLongName.getName(name), amount);
-    }
+        String serverAccount = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
+        Property taxAmount = name.equals(serverAccount) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
 
-    public static void addServer(String name, double amount) {
-        String account = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
-        if (!account.isEmpty()) {
-            double tax = getTax(Property.SERVER_TAX_AMOUNT, amount);
-            economy.add(account, tax);
-            amount = amount - tax;
+        if (Config.getFloat(taxAmount) != 0) {
+            double tax = getTax(taxAmount, amount);
+            if (!serverAccount.isEmpty()) {
+                economy.add(serverAccount, tax);
+            }
+            amount -= tax;
         }
-        economy.add(uLongName.getName(name), amount);
+
+        economy.add(uName.getName(name), amount);
     }
 
     public static double getTax(Property tax, double price) {
@@ -41,15 +39,23 @@ public class Economy {
     }
 
     public static void subtract(String name, double amount) {
-        economy.subtract(uLongName.getName(name), amount);
+        if (!hasAccount(name)) {
+            return;
+        }
+
+        economy.subtract(uName.getName(name), amount);
     }
 
     public static boolean hasEnough(String name, double amount) {
-        return economy.hasEnough(uLongName.getName(name), amount);
+        if (!hasAccount(name)) {
+            return true;
+        }
+
+        return economy.hasEnough(uName.getName(name), amount);
     }
 
     public static double balance(String name) {
-        return economy.balance(uLongName.getName(name));
+        return economy.balance(uName.getName(name));
     }
 
     public static String formatBalance(double amount) {

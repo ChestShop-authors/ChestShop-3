@@ -52,7 +52,10 @@ public class uInventory {
 
         HashMap<Integer, ItemStack> items = inv.addItem(itemstack);
         amount = 0;
-        for (ItemStack toAdd : items.values()) amount += toAdd.getAmount();
+
+        for (ItemStack toAdd : items.values()) {
+            amount += toAdd.getAmount();
+        }
 
         return amount;
     }
@@ -87,11 +90,20 @@ public class uInventory {
     }
 
     public static int amount(Inventory inv, ItemStack item, short durability) {
-        if (!inv.contains(item.getType())) return 0;
+        if (!inv.contains(item.getType())) {
+            return 0;
+        }
+
+        HashMap<Integer, ? extends ItemStack> items = inv.all(item.getType());
 
         int amount = 0;
-        for (ItemStack i : inv.getContents()) {
-            if (equals(i, item, durability)) amount += i.getAmount();
+
+        for (ItemStack i : items.values()) {
+            if (!equals(i, item, durability)) {
+                continue;
+            }
+
+            amount += i.getAmount();
         }
         return amount;
     }
@@ -102,7 +114,9 @@ public class uInventory {
         int amountLeft = amount;
 
         for (ItemStack currentItem : inv.getContents()) {
-            if (amountLeft <= 0) return 0;
+            if (amountLeft <= 0) {
+                return 0;
+            }
 
             if (currentItem == null || currentItem.getType() == Material.AIR) {
                 amountLeft -= maxStackSize;
@@ -111,9 +125,11 @@ public class uInventory {
 
             int currentAmount = currentItem.getAmount();
 
-            if (currentAmount != maxStackSize && equals(currentItem, item, durability)) {
-                amountLeft = currentAmount + amountLeft <= maxStackSize ? 0 : amountLeft - (maxStackSize - currentAmount);
+            if (currentAmount == maxStackSize || !equals(currentItem, item, durability)) {
+                continue;
             }
+
+            amountLeft = currentAmount + amountLeft <= maxStackSize ? 0 : amountLeft - (maxStackSize - currentAmount);
         }
 
         return amountLeft;

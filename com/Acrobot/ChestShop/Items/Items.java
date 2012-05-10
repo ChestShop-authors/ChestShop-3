@@ -43,8 +43,8 @@ public class Items {
     }
 
     public static String getName(ItemStack is, boolean showData) {
-        String name = DataValue.getName(is);
-        return uSign.capitalizeFirst((name != null && showData ? name + '_' : "") + is.getType());
+        String name = DataValue.name(is);
+        return uSign.capitalizeFirstLetter((name != null && showData ? name + '_' : "") + is.getType());
     }
 
     public static String getSignName(ItemStack is) {
@@ -68,7 +68,9 @@ public class Items {
 
         Material material = getMaterial(first);
 
-        for (int i = (space.length > 1 ? 1 : 0); i >= 0 && material == null; i--) material = getMaterial(space[i]);
+        for (int i = (space.length > 1 ? 1 : 0); i >= 0 && material == null; i--) {
+            material = getMaterial(space[i]);
+        }
 
         if (material == null) return null;
 
@@ -89,7 +91,7 @@ public class Items {
         String data = m.group();
         if (data == null || data.isEmpty()) return toReturn;
         data = data.substring(1);
-        if (uNumber.isInteger(data)) toReturn.setDurability(Short.valueOf(data));
+        if (uNumber.isShort(data)) toReturn.setDurability(Short.valueOf(data));
 
         return toReturn;
     }
@@ -106,8 +108,10 @@ public class Items {
     }
 
     private static ItemStack addEnchantments(ItemStack is, String itemname) {
-        try { is.addEnchantments(getEnchant(itemname));
-        } catch (Exception ignored) {}
+        try {
+            is.addEnchantments(getEnchant(itemname));
+        } catch (Exception ignored) {
+        }
         return is;
     }
 

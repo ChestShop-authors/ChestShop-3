@@ -32,4 +32,13 @@ public class uNumber {
             return false;
         }
     }
+
+    public static boolean isShort(String string) {
+        try {
+            Short.parseShort(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

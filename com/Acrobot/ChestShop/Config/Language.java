@@ -1,5 +1,8 @@
 package com.Acrobot.ChestShop.Config;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author Acrobot
  */
@@ -45,6 +48,7 @@ public enum Language {
 
 
     private final String text;
+    private static final Map<String, Value> values = new LinkedHashMap<String, Value>();
 
     private Language(String def) {
         text = def;
@@ -52,5 +56,19 @@ public enum Language {
 
     public String toString() {
         return text;
+    }
+
+    public Value getValue() {
+        return new Value(text);
+    }
+
+    public static Map<String, Value> getValues() {
+        return values;
+    }
+
+    static {
+        for (Language property : Language.values()) {
+            values.put(property.name(), property.getValue());
+        }
     }
 }

@@ -4,79 +4,103 @@ import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.*;
 
-/**
- * @author Acrobot
- */
 public class DataValue {
+    /**
+     * Gets the data value from a string
+     *
+     * @param type     Data Value string
+     * @param material Material
+     * @return data value
+     */
     public static byte get(String type, Material material) {
-        if (material == null) return 0;
-
-        type = type.toUpperCase().replace(" ", "_");
-        MaterialData materialData = null;
-
-        try {
-            switch (material) {
-                case SAPLING:
-                case LOG:
-                    materialData = new Tree(TreeSpecies.valueOf(type));
-                    break;
-                case STEP:
-                case DOUBLE_STEP:
-                    materialData = new Step(Items.getMaterial(type));
-                    break;
-                case WOOL:
-                    materialData = new Wool(DyeColor.valueOf(type));
-                    break;
-                case INK_SACK:
-                    byte data = (byte) (15 - DyeColor.valueOf(type).getData());
-                    materialData = new Wool(DyeColor.getByData(data));
-                    break;
-                case COAL:
-                    materialData = new Coal(CoalType.valueOf(type));
-                    break;
-            }
-        } catch (Exception e) {
+        if (material == null || material.getData() == null) {
             return 0;
         }
 
-        return (materialData == null ? 0 : materialData.getData());
+        type = type.toUpperCase().replace(" ", "_");
+
+        MaterialData materialData = material.getNewData((byte) 0);
+
+        if (materialData instanceof TexturedMaterial) {
+            TexturedMaterial texturedMaterial = (TexturedMaterial) materialData;
+
+            for (Material mat : texturedMaterial.getTextures()) {
+                if (mat.name().startsWith(type)) {
+                    return (byte) texturedMaterial.getTextures().indexOf(mat);
+                }
+            }
+        } else if (materialData instanceof Colorable) {
+            DyeColor color;
+
+            try {
+                color = DyeColor.valueOf(type);
+            } catch (IllegalArgumentException exception) {
+                return 0;
+            }
+
+            if (material == Material.INK_SACK) {
+                color = DyeColor.getByData((byte) (15 - color.getData()));
+            }
+
+            return color.getData();
+        } else if (materialData instanceof Tree) {
+            try {
+                return TreeSpecies.valueOf(type).getData();
+            } catch (IllegalArgumentException ex) {
+                return 0;
+            }
+        } else if (materialData instanceof SpawnEgg) {
+            try {
+                EntityType entityType = EntityType.valueOf(type);
+
+                return (byte) entityType.getTypeId();
+            } catch (IllegalArgumentException ex) {
+                return 0;
+            }
+        } else if (materialData instanceof Coal) {
+            try {
+                return CoalType.valueOf(type).getData();
+            } catch (IllegalArgumentException ex) {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 
-    public static String getName(ItemStack is) {
-        short dur = is.getDurability();
-        if (dur == 0) return null;
+    /**
+     * Returns a string with the DataValue
+     *
+     * @param itemStack ItemStack to describe
+     * @return Data value string
+     */
+    public static String name(ItemStack itemStack) {
+        MaterialData data = itemStack.getData();
 
-        Material material = is.getType();
-
-        String name = null;
-
-        try {
-            switch (material) {
-                case SAPLING:
-                case LOG:
-                    name = TreeSpecies.getByData((byte) dur).name();
-                    break;
-                case STEP:
-                case DOUBLE_STEP:
-                    name = new Step(Material.getMaterial(dur)).getMaterial().name();
-                    break;
-                case WOOL:
-                    name = DyeColor.getByData((byte) dur).name();
-                    break;
-                case INK_SACK:
-                    name = DyeColor.getByData((byte) (15 - dur)).name();
-                    break;
-                case COAL:
-                    name = CoalType.getByData((byte) dur).name();
-                    break;
-            }
-        } catch (Exception e) {
+        if (data == null) {
             return null;
         }
 
-        return name;
+        if (data instanceof TexturedMaterial) {
+            return ((TexturedMaterial) data).getMaterial().name();
+        } else if (data instanceof Colorable) {
+            return ((Colorable) data).getColor().name();
+        } else if (data instanceof Tree) {
+            //TreeSpecies specie = TreeSpecies.getByData((byte) (data.getData() & 3)); //This works, but not as intended
+            TreeSpecies specie = ((Tree) data).getSpecies();
+            return (specie != null && specie != TreeSpecies.GENERIC ? specie.name() : null);
+        } else if (data instanceof SpawnEgg) {
+            EntityType type = ((SpawnEgg) data).getSpawnedType();
+            return (type != null ? type.name() : null);
+        } else if (data instanceof Coal) {
+            CoalType coal = ((Coal) data).getType();
+            return (coal != null && coal != CoalType.COAL ? coal.name() : null);
+        } else {
+            return null;
+        }
     }
 }

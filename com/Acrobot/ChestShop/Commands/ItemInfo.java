@@ -42,25 +42,35 @@ public class ItemInfo implements CommandExecutor {
 
         Map<Enchantment, Integer> map = item.getEnchantments();
         for (Map.Entry<Enchantment, Integer> e : map.entrySet())
-            sender.sendMessage(ChatColor.DARK_GRAY + uSign.capitalizeFirst(e.getKey().getName()) + ' ' + intToRoman(e.getValue()));
+            sender.sendMessage(ChatColor.DARK_GRAY + uSign.capitalizeFirstLetter(e.getKey().getName()) + ' ' + intToRoman(e.getValue()));
 
         return true;
 
     }
 
     private static String intToRoman(int integer) {
-        if (integer == 1) return "I";
-        if (integer == 2) return "II";
-        if (integer == 3) return "III";
-        if (integer == 4) return "IV";
-        if (integer == 5) return "V";
-        return Integer.toString(integer);
+        switch (integer) {
+            case 1:
+                return "I";
+            case 2:
+                return "II";
+            case 3:
+                return "III";
+            case 4:
+                return "IV";
+            case 5:
+                return "V";
+            default:
+                return Integer.toString(integer);
+        }
     }
 
 
     private static String joinArray(String[] array) {
         StringBuilder b = new StringBuilder(array.length);
-        for (String s : array) b.append(s).append(' ');
+        for (String s : array) {
+            b.append(s).append(' ');
+        }
         return b.toString();
     }
 }

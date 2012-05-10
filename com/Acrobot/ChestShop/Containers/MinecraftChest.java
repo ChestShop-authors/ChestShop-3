@@ -2,7 +2,10 @@ package com.Acrobot.ChestShop.Containers;
 
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uInventory;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -10,21 +13,20 @@ import org.bukkit.inventory.ItemStack;
  */
 public class MinecraftChest implements Container {
     private final Chest chest;
+    private final BlockFace[] neighborFaces = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
 
     public MinecraftChest(Chest chest) {
         this.chest = chest;
     }
 
-    public ItemStack[] getContents() {
-        return chest.getInventory().getContents();
-    }
+    public boolean isEmpty() {
+        for (ItemStack item : chest.getInventory()) {
+            if (item != null) {
+                return false;
+            }
+        }
 
-    public void setSlot(int slot, ItemStack item) {
-        chest.getInventory().setItem(slot, item);
-    }
-
-    public void clearSlot(int slot) {
-        chest.getInventory().setItem(slot, null);
+        return true;
     }
 
     public void addItem(ItemStack item, int amount) {
@@ -47,11 +49,27 @@ public class MinecraftChest implements Container {
         return uInventory.fits(chest.getInventory(), item, amount, durability) <= 0;
     }
 
-    public int getSize() {
-        return chest.getInventory().getSize();
+    public Sign findShopSign() {
+        Sign sign = uBlock.findAnyNearbyShopSign(chest.getBlock());
+
+        if (sign == null && getNeighbor() != null) {
+            sign = uBlock.findAnyNearbyShopSign(getNeighbor().getBlock());
+        }
+
+        return sign;
     }
 
-    public Chest getNeighbor() {
-        return uBlock.findNeighbor(chest);
+    private Chest getNeighbor() {
+        Block chestBlock = chest.getBlock();
+
+        for (BlockFace chestFace : neighborFaces) {
+            Block relative = chestBlock.getRelative(chestFace);
+
+            if (relative.getState() instanceof Chest) {
+                return (Chest) relative.getState();
+            }
+        }
+
+        return null;
     }
 }

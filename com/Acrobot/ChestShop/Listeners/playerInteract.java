@@ -4,8 +4,8 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.Plugins.Default;
-import com.Acrobot.ChestShop.Protection.Security;
+import com.Acrobot.ChestShop.Plugins.ChestShop;
+import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Shop.ShopManagement;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -28,21 +28,26 @@ import java.util.HashMap;
 /**
  * @author Acrobot
  */
-public class playerInteract implements Listener {
+public class PlayerInteract implements Listener {
     private static final HashMap<Player, Long> timeOfTheLatestSignClick = new HashMap<Player, Long>();
-    public static int interval = 100;//Minimal interval between transactions
+    public int transactionBlockInterval = 100;
+
+    public PlayerInteract(int transactionInterval) {
+        this.transactionBlockInterval = transactionInterval;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public static void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
-        if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK) return;
+        if (!playerClickedBlock(action)) {
+            return;
+        }
 
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
         if (Config.getBoolean(Property.USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
-            Default protection = Security.getDefaultProtection();
-            if (!hasAdminPermissions(player) && (protection.isProtected(block) && !protection.canAccess(player, block))) {
+            if (!hasAdminPermissions(player) && !ChestShop.canAccess(player, block)) {
                 player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
@@ -86,16 +91,21 @@ public class playerInteract implements Listener {
         else ShopManagement.sell(sign, player);
     }
 
-    private static boolean enoughTimeHasPassed(Player player) {
-        return !timeOfTheLatestSignClick.containsKey(player) || (System.currentTimeMillis() - timeOfTheLatestSignClick.get(player)) >= interval;
+    private boolean enoughTimeHasPassed(Player player) {
+        return !timeOfTheLatestSignClick.containsKey(player) || (System.currentTimeMillis() - timeOfTheLatestSignClick.get(player)) >= transactionBlockInterval;
     }
+
+    private static boolean playerClickedBlock(Action action) {
+        return action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK;
+    }
+
 
     private static boolean hasAdminPermissions(Player player) {
         return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
     }
 
     private static void showChestGUI(Player player, Block block) {
-        Chest chest = uBlock.findChest(block);
+        Chest chest = uBlock.findConnectedChest(block);
         if (chest == null) { //Sorry, no chest found
             player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
             return;

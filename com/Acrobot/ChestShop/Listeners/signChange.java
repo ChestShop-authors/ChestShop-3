@@ -1,16 +1,21 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.MaxPrice;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.BuildPermissionEvent;
+import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Items.Items;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Protection.Security;
+import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
-import com.Acrobot.ChestShop.Utils.WorldGuard.uWorldGuard;
-import com.Acrobot.ChestShop.Utils.*;
+import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uName;
+import com.Acrobot.ChestShop.Utils.uNumber;
+import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -25,8 +30,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Acrobot
  */
-public class signChange implements Listener {
-
+public class SignChange implements Listener {
     @EventHandler
     public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
@@ -60,7 +64,9 @@ public class signChange implements Listener {
             return;
         }
 
-        if (formatFirstLine(line[0], player)) event.setLine(0, uLongName.stripName(player.getName()));
+        if (!playerCanUseName(player, line[0])) {
+            event.setLine(0, uName.stripName(player.getName()));
+        }
 
         String thirdLine = formatThirdLine(line[2]);
         if (thirdLine == null) {
@@ -71,7 +77,7 @@ public class signChange implements Listener {
         event.setLine(2, thirdLine);
         event.setLine(3, formatFourthLine(line[3], stock));
 
-        Chest chest = uBlock.findChest(signBlock);
+        Chest chest = uBlock.findConnectedChest(signBlock);
 
         boolean isAdminShop = uSign.isAdminShop(event.getLine(0));
         if (!isAdminShop) {
@@ -87,19 +93,17 @@ public class signChange implements Listener {
                 }
 
                 Block chestBlock = chest.getBlock();
-                boolean canBuildTowny = uSign.towny == null || uTowny.canBuild(player, signBlock.getLocation(), chest.getLocation());
-                boolean canBuildWorldGuard = uWorldGuard.wg == null || uWorldGuard.canBuildShopHere(signBlock.getLocation());
-                boolean bothActive = (uSign.towny != null && Config.getBoolean(Property.TOWNY_INTEGRATION))
-                        && (uWorldGuard.wg != null && Config.getBoolean(Property.WORLDGUARD_INTEGRATION));
+                BuildPermissionEvent bEvent = new BuildPermissionEvent(player, chest.getLocation(), signBlock.getLocation());
 
-                if (((!canBuildTowny || !canBuildWorldGuard) && !bothActive) || (bothActive && !canBuildTowny && !canBuildWorldGuard)) {
+                ChestShop.callEvent(bEvent);
+
+                if (!bEvent.isAllowed()) {
                     player.sendMessage(Config.getLocal(Language.CANNOT_CREATE_SHOP_HERE));
                     dropSign(event);
                     return;
                 }
 
-                boolean canAccess = !Security.isProtected(chestBlock) || Security.canAccess(player, chestBlock);
-                if (!canAccess) {
+                if (!Security.canAccess(player, chestBlock)) {
                     player.sendMessage(Config.getLocal(Language.CANNOT_ACCESS_THE_CHEST));
                     dropSign(event);
                     return;
@@ -107,10 +111,10 @@ public class signChange implements Listener {
             }
         }
 
-        float buyPrice = uSign.buyPrice(thirdLine);
-        float sellPrice = uSign.sellPrice(thirdLine);
+        double buyPrice = uSign.buyPrice(thirdLine);
+        double sellPrice = uSign.sellPrice(thirdLine);
 
-        if (!playerIsAdmin && (!canCreateShop(player, mat.getId(), buyPrice != -1, sellPrice != -1) || !MaxPrice.canCreate(buyPrice, sellPrice, mat))) {
+        if (!playerIsAdmin && (!canCreateShop(player, mat, buyPrice != -1, sellPrice != -1) || !MaxPrice.canCreate(buyPrice, sellPrice, mat))) {
             player.sendMessage(Config.getLocal(Language.YOU_CANNOT_CREATE_SHOP));
             dropSign(event);
             return;
@@ -135,14 +139,26 @@ public class signChange implements Listener {
             player.sendMessage(Config.getLocal(Language.PROTECTED_SHOP));
         }
 
-        uLongName.saveName(player.getName());
+        uName.saveName(player.getName());
         player.sendMessage(Config.getLocal(Language.SHOP_CREATED) + (paid ? " - " + Economy.formatBalance(shopCreationPrice) : ""));
 
-        uHeroes.addHeroExp(player);
+        ShopCreatedEvent sEvent = new ShopCreatedEvent(player, (Sign) signBlock.getState(), chest, event.getLines());
+        ChestShop.callEvent(sEvent);
     }
 
-    private static boolean canCreateShop(Player player, int ID, boolean buy, boolean sell) {
-        if (Permission.has(player, Permission.SHOP_CREATION_ID + Integer.toString(ID))) return true;
+    private static boolean canCreateShop(Player player, Material mat, double buyPrice, double sellPrice) {
+        if (Config.getBoolean(Property.BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE)) {
+            if (buyPrice != -1 && sellPrice != -1 && sellPrice > buyPrice) {
+                return false;
+            }
+        }
+        return canCreateShop(player, mat, buyPrice != -1, sellPrice != -1) && MaxPrice.canCreate(buyPrice, sellPrice, mat);
+    }
+
+    private static boolean canCreateShop(Player player, Material material, boolean buy, boolean sell) {
+        if (Permission.has(player, Permission.SHOP_CREATION_ID + Integer.toString(material.getId()))) {
+            return true;
+        }
 
         if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
         if (sell && !Permission.has(player, Permission.SHOP_CREATION_SELL)) return false;
@@ -151,45 +167,59 @@ public class signChange implements Listener {
     }
 
     private static String formatThirdLine(String thirdLine) {
-        thirdLine = thirdLine.toUpperCase();
-        String[] split = thirdLine.split(":");
-        if (uNumber.isFloat(split[0])) thirdLine = "B " + thirdLine;
-        if (split.length == 2 && uNumber.isFloat(split[1])) thirdLine = thirdLine + " S";
-        if (thirdLine.length() > 15) thirdLine = thirdLine.replace(" ", "");
+        String line = thirdLine.toUpperCase();
+        String[] split = line.split(":");
 
+        if (uNumber.isFloat(split[0])) {
+            line = "B " + line;
+        }
+        if (split.length == 2 && uNumber.isFloat(split[1])) {
+            line = line + " S";
+        }
 
-        return (thirdLine.length() > 15 ? null : thirdLine);
+        if (line.length() > 15) {
+            line.replace(" ", "");
+        }
+
+        return (line.length() > 15 ? null : line);
     }
 
-    private static String formatFourthLine(String fourthLine, ItemStack is) {
-        int index = (fourthLine.indexOf(':') != -1 ? fourthLine.indexOf(':') : 9999);
-        if (fourthLine.indexOf('-') < index && fourthLine.indexOf('-') != -1) index = fourthLine.indexOf('-');
+    private static String formatFourthLine(String line, ItemStack itemStack) {
+        StringBuilder formatted = new StringBuilder(15);
 
-        StringBuilder toReturn = new StringBuilder(3);
-        String matName = fourthLine.split(":|-")[0];
-        matName = matName.trim();
-        if (uNumber.isInteger(matName)) matName = Items.getName(is, false);
-        int iPos = 15 - (fourthLine.length() - index);
-        if (index != 9999 && matName.length() > iPos) matName = matName.substring(0, iPos);
-        if (Items.getItemStack(matName).getType() == is.getType()) toReturn.append(matName);
-        else toReturn.append(is.getTypeId());
+        String[] split = line.split(":|-", 2);
+        String itemName = Items.getName(itemStack, false);
 
-        if (index != -1 && index != 9999) toReturn.append(fourthLine.substring(index));
-        return uSign.capitalizeFirst(toReturn.toString(), ' ');
+        short dataLength = (short) (line.length() - split[0].length());
+
+        if (itemName.length() > (15 - dataLength)) {
+            itemName = itemName.substring(0, 15 - dataLength);
+        }
+
+        if (Items.getItemStack(itemName).getType() != itemStack.getType()) {
+            itemName = String.valueOf(itemStack.getTypeId());
+        }
+
+        formatted.append(itemName);
+        if (split.length == 2) {
+            formatted.append(line.charAt(line.indexOf(split[1]) - 1)).append(split[1]);
+        }
+
+        return uSign.capitalizeFirstLetter(formatted.toString(), ' ');
     }
 
-    private static boolean formatFirstLine(String line1, Player player) {
-        return line1.isEmpty() ||
-                (!line1.equals(uLongName.stripName(player.getName()))
-                        && !Permission.has(player, Permission.ADMIN)
-                        && !Permission.otherName(player, line1));
+    private static boolean playerCanUseName(Player player, String name) {
+        return !name.isEmpty() && (uName.canUseName(player, name) || Permission.has(player, Permission.ADMIN));
+    }
+
+    private static void sendMessageAndExit(Player player, Language message, SignChangeEvent event) {
+        player.sendMessage(Config.getLocal(message));
+
+        dropSign(event);
     }
 
     private static void dropSign(SignChangeEvent event) {
         event.setCancelled(true);
-
-        Block block = event.getBlock();
-        block.setType(Material.AIR);
-        block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.SIGN, 1));
+        event.getBlock().breakNaturally();
     }
 }

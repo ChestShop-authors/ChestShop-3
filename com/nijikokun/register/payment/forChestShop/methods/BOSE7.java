@@ -1,7 +1,6 @@
 package com.nijikokun.register.payment.forChestShop.methods;
 
 import com.nijikokun.register.payment.forChestShop.Method;
-
 import cosine.boseconomy.BOSEconomy;
 import org.bukkit.plugin.Plugin;
 
@@ -27,15 +26,15 @@ public class BOSE7 implements Method {
     public String getVersion() {
         return "0.7.0";
     }
-    
+
     public int fractionalDigits() {
-    	return this.BOSEconomy.getFractionalDigits();
+        return this.BOSEconomy.getFractionalDigits();
     }
 
     public String format(double amount) {
         String currency = this.BOSEconomy.getMoneyNamePlural();
 
-        if(amount == 1) 
+        if (amount == 1)
             currency = this.BOSEconomy.getMoneyName();
 
         return amount + " " + currency;
@@ -58,7 +57,7 @@ public class BOSE7 implements Method {
     }
 
     public boolean createAccount(String name) {
-        if(hasAccount(name))
+        if (hasAccount(name))
             return false;
 
         this.BOSEconomy.registerPlayer(name);
@@ -66,36 +65,36 @@ public class BOSE7 implements Method {
     }
 
     public boolean createAccount(String name, double balance) {
-        if(hasAccount(name))
+        if (hasAccount(name))
             return false;
-        
+
         this.BOSEconomy.registerPlayer(name);
         this.BOSEconomy.setPlayerMoney(name, balance, false);
         return true;
     }
 
     public MethodAccount getAccount(String name) {
-        if(!hasAccount(name))
+        if (!hasAccount(name))
             return null;
 
         return new BOSEAccount(name, this.BOSEconomy);
     }
 
     public MethodBankAccount getBankAccount(String bank, String name) {
-        if(!hasBankAccount(bank, name)) 
+        if (!hasBankAccount(bank, name))
             return null;
 
         return new BOSEBankAccount(bank, BOSEconomy);
     }
 
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("boseconomy") 
-            && plugin instanceof BOSEconomy
-           && !plugin.getDescription().getVersion().equals("0.6.2");
+        return plugin.getDescription().getName().equalsIgnoreCase("boseconomy")
+                && plugin instanceof BOSEconomy
+                && !plugin.getDescription().getVersion().equals("0.6.2");
     }
 
     public void setPlugin(Plugin plugin) {
-        BOSEconomy = (BOSEconomy)plugin;
+        BOSEconomy = (BOSEconomy) plugin;
     }
 
     public static class BOSEAccount implements MethodAccount {

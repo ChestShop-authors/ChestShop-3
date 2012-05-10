@@ -10,12 +10,15 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 /**
  * @author Acrobot
  */
-public class entityExplode implements Listener {
+public class EntityExplode implements Listener {
     @EventHandler(ignoreCancelled = true)
     public static void onEntityExplode(EntityExplodeEvent event) {
-        if (event.blockList() == null || !Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) return;
+        if (event.blockList() == null || !Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) {
+            return;
+        }
+
         for (Block block : event.blockList()) {
-            if (blockBreak.cancellingBlockBreak(block, null)) {
+            if (BlockBreak.cancellingBlockBreak(block, null)) {
                 event.setCancelled(true);
                 return;
             }

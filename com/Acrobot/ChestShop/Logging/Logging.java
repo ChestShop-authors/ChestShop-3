@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Logging;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Queue;
@@ -10,9 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,28 +18,43 @@ import java.util.logging.Logger;
  * @author Acrobot
  */
 public class Logging {
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    private static final Logger logger = Logger.getLogger("ChestShop");
-
-    private static String getDateAndTime() {
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
+    private static final Logger logger = ChestShop.getBukkitLogger();
 
     public static void log(String string) {
-        if (Config.getBoolean(Property.LOG_TO_CONSOLE)) logger.log(Level.INFO, "[ChestShop] " + string);
-        if (Config.getBoolean(Property.LOG_TO_FILE)) FileWriterQueue.addToQueue(getDateAndTime() + ' ' + string);
+        logger.log(Level.INFO, string);
     }
 
-    public static void logTransaction(boolean isBuying, Shop shop, double price, Player player) {
-        log(player.getName()
-                + (isBuying ? " bought " : " sold ")
-                + shop.stockAmount + ' '
-                + Items.getSignName(shop.stock) + " for "
-                + price + (isBuying ? " from " : " to ")
-                + shop.owner + " at "
-                + locationToString(shop.sign.getLocation()));
-        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) logToDatabase(isBuying, shop, price, player);
+    public static void logTransaction(boolean playerIsBuyingFromShop, Shop shop, double price, Player player) {
+        StringBuilder builder = new StringBuilder(player.getName());
+
+        if (playerIsBuyingFromShop) {
+            builder.append(" bought ");
+        } else {
+            builder.append(" sold ");
+        }
+
+        builder.append(shop.stockAmount).append(' ');
+        builder.append(Items.getSignName(shop.stock)).append(" for ");
+        builder.append(price);
+
+        if (playerIsBuyingFromShop) {
+            builder.append(" from ");
+        } else {
+            builder.append(" to ");
+        }
+
+        builder.append(shop.owner).append(" at ");
+        builder.append(locationToString(shop.sign.getLocation()));
+
+        log(builder.toString());
+
+        if (weShouldLogToDB()) {
+            logToDatabase(playerIsBuyingFromShop, shop, price, player);
+        }
+    }
+
+    private static boolean weShouldLogToDB() {
+        return Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE);
     }
 
     private static String locationToString(Location loc) {

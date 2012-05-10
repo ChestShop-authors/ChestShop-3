@@ -41,10 +41,14 @@ public class restrictedSign {
     }
 
     public static boolean hasPermission(Player p, String[] lines) {
-        if (Permission.has(p, Permission.ADMIN)) return true;
+        if (Permission.has(p, Permission.ADMIN)) {
+            return true;
+        }
 
-        for (int i = 1; i <= 3; i++) {
-            if (p.hasPermission(Permission.GROUP.toString() + lines[i])) return true;
+        for (String line : lines) {
+            if (p.hasPermission(Permission.GROUP.toString() + line)) {
+                return true;
+            }
         }
         return false;
     }

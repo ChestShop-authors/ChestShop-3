@@ -1,12 +1,10 @@
 package com.nijikokun.register.payment.forChestShop.methods;
 
-import com.nijikokun.register.payment.forChestShop.Method;
 import com.iCo6.iConomy;
 import com.iCo6.system.Account;
 import com.iCo6.system.Accounts;
 import com.iCo6.system.Holdings;
-
-
+import com.nijikokun.register.payment.forChestShop.Method;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -30,9 +28,9 @@ public class iCo6 implements Method {
     public String getVersion() {
         return "6";
     }
-    
+
     public int fractionalDigits() {
-    	return 2;
+        return 2;
     }
 
     public String format(double amount) {
@@ -74,13 +72,13 @@ public class iCo6 implements Method {
     }
 
     public boolean isCompatible(Plugin plugin) {
-        return plugin.getDescription().getName().equalsIgnoreCase("iconomy") 
-            && plugin.getClass().getName().equals("com.iCo6.iConomy")
-            && plugin instanceof iConomy;
+        return plugin.getDescription().getName().equalsIgnoreCase("iconomy")
+                && plugin.getClass().getName().equals("com.iCo6.iConomy")
+                && plugin instanceof iConomy;
     }
 
     public void setPlugin(Plugin plugin) {
-        iConomy = (iConomy)plugin;
+        iConomy = (iConomy) plugin;
     }
 
     public static class iCoAccount implements MethodAccount {
@@ -101,31 +99,31 @@ public class iCo6 implements Method {
         }
 
         public boolean set(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.setBalance(amount);
             return true;
         }
 
         public boolean add(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.add(amount);
             return true;
         }
 
         public boolean subtract(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.subtract(amount);
             return true;
         }
 
         public boolean multiply(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.multiply(amount);
             return true;
         }
 
         public boolean divide(double amount) {
-            if(this.holdings == null) return false;
+            if (this.holdings == null) return false;
             this.holdings.divide(amount);
             return true;
         }
@@ -147,7 +145,7 @@ public class iCo6 implements Method {
         }
 
         public boolean remove() {
-            if(this.account == null) return false;
+            if (this.account == null) return false;
             this.account.remove();
             return true;
         }

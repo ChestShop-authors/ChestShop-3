@@ -3,27 +3,28 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.ConfigObject;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.*;
-import com.Acrobot.ChestShop.Logging.FileWriterQueue;
-import com.Acrobot.ChestShop.Shop.ShopManagement;
-import com.Acrobot.ChestShop.Utils.uNumber;
+import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Event;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 /**
  * Main file of the plugin
@@ -31,38 +32,49 @@ import java.util.List;
  * @author Acrobot
  */
 public class ChestShop extends JavaPlugin {
+    public static File dataFolder = new File("plugins/ChestShop");
 
-    public static File folder = new File("plugins/ChestShop");
-    public static final String chatPrefix = "[ChestShop] ";
     private static EbeanServer DB;
-
     private static PluginDescriptionFile description;
     private static Server server;
+    private static Logger logger;
+    private static PluginManager pluginManager;
+    private static ChestShop plugin;
 
-    public static PluginManager pm;
+    private FileHandler handler;
 
     public void onEnable() {
-        pm = getServer().getPluginManager();
-        folder = getDataFolder();
+        plugin = this;
+        logger = getLogger();
+        pluginManager = getServer().getPluginManager();
+        dataFolder = getDataFolder();
+        description = getDescription();
+        server = getServer();
 
-        //Set up our config file!
-        Config.setup(new ConfigObject());
+        Config.setup();
+        Dependencies.load();
 
-        //Register our events
         registerEvents();
 
-        description = this.getDescription();  //Description of the plugin
-        server = getServer();          //Setting out server variable
+        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
+            setupDB();
+        }
+        if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
+            File htmlFolder = new File(dataFolder, "HTML");
+            scheduleTask(new Generator(htmlFolder), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
+        }
+        if (Config.getBoolean(Property.LOG_TO_FILE)) {
+            File log = loadFile(new File(ChestShop.getFolder(), "ChestShop.log"));
 
-        pluginEnable.initializePlugins();
+            FileHandler handler = loadHandler(log.getAbsolutePath());
+            handler.setFormatter(new FileFormatter());
 
-        warnAboutSpawnProtection();
-        warnAboutOldBukkit();
-
-        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) setupDB();
-        if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) scheduleTask(new Generator(), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
-        if (Config.getBoolean(Property.LOG_TO_FILE)) scheduleTask(new FileWriterQueue(), 201L, 201L);
-        playerInteract.interval = Config.getInteger(Property.SHOP_INTERACTION_INTERVAL);
+            this.handler = handler;
+            logger.addHandler(handler);
+        }
+        if (!Config.getBoolean(Property.LOG_TO_CONSOLE)) {
+            logger.setUseParentHandlers(false);
+        }
 
         //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
@@ -72,19 +84,50 @@ public class ChestShop extends JavaPlugin {
         startStatistics();
     }
 
+    private static File loadFile(File file) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return file;
+    }
+
+    private static FileHandler loadHandler(String path) {
+        FileHandler handler = null;
+
+        try {
+            handler = new FileHandler(path, true);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return handler;
+    }
+
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
+
+        if (handler != null) {
+            handler.close();
+            getLogger().removeHandler(handler);
+        }
     }
 
     //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
     private void registerEvents() {
-        PluginManager pm = getServer().getPluginManager();
+        registerEvent(new BlockBreak());
+        registerEvent(new BlockPlace());
+        registerEvent(new SignChange());
+        registerEvent(new PlayerInteract(Config.getInteger(Property.SHOP_INTERACTION_INTERVAL)));
+        registerEvent(new EntityExplode());
+    }
 
-        pm.registerEvents(new blockBreak(), this);
-        pm.registerEvents(new blockPlace(), this);
-        pm.registerEvents(new signChange(), this);
-        pm.registerEvents(new playerInteract(), this);
-        pm.registerEvents(new entityExplode(), this);
+    public void registerEvent(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
     }
 
     private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {
@@ -94,23 +137,8 @@ public class ChestShop extends JavaPlugin {
     private void startStatistics() {
         try {
             new Metrics(this).start();
-        } catch (Exception ex) {
-            System.err.println(chatPrefix + "There was an error while submitting statistics.");
-        }
-    }
-
-    /////////////////////   WARN  ///////////////////////////
-    private static void warnAboutSpawnProtection() {
-        if (getBukkitConfig().getInt("settings.spawn-radius") > 0)
-            System.err.println(ChestShop.chatPrefix + "WARNING! Your spawn-radius in bukkit.yml isn't set to 0! " +
-                    "You won't be able to sell to shops built near spawn!");
-    }
-
-    private static void warnAboutOldBukkit() {
-        String split[] = Bukkit.getBukkitVersion().split("-R");
-        if (split[0].equals("1.1") && split.length > 1 && uNumber.isInteger(split[1]) && (Integer.parseInt(split[1])) < 7) {
-            System.err.println(ChestShop.chatPrefix + "Your CraftBukkit version is outdated! Use at least 1.1-R7 or 1.2.3-R0!");
-            ShopManagement.useOldChest = true;
+        } catch (IOException ex) {
+            ChestShop.getBukkitLogger().severe("There was an error while submitting statistics.");
         }
     }
 
@@ -150,6 +178,14 @@ public class ChestShop extends JavaPlugin {
     }
     ///////////////////////////////////////////////////////////////////////////////
 
+    public static File getFolder() {
+        return dataFolder;
+    }
+
+    public static Logger getBukkitLogger() {
+        return logger;
+    }
+
     public static Server getBukkitServer() {
         return server;
     }
@@ -167,6 +203,18 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static List getDependencies() {
-        return (List) description.getSoftDepend();
+        return description.getSoftDepend();
+    }
+
+    public static PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    public static void registerListener(Listener listener) {
+        plugin.registerEvent(listener);
+    }
+
+    public static void callEvent(Event event) {
+        pluginManager.callEvent(event);
     }
 }

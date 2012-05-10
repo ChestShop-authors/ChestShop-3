@@ -29,17 +29,17 @@ public class Methods {
     }
 
     public static Method load(PluginManager pm) {
-        if (!preferred.isEmpty()){
+        if (!preferred.isEmpty()) {
             Plugin plugin = pm.getPlugin(preferred);
-            if (plugin != null){
+            if (plugin != null) {
                 Method m = createMethod(plugin);
                 if (m != null) return m;
             }
         }
 
-        for (String plugin : toLoad){
+        for (String plugin : toLoad) {
             Plugin pl = pm.getPlugin(plugin);
-            if (pl != null){
+            if (pl != null) {
                 Method m = createMethod(pl);
                 if (m != null) return m;
             }
@@ -48,7 +48,7 @@ public class Methods {
     }
 
     public static Method createMethod(Plugin plugin) {
-        for (Method method : methods){
+        for (Method method : methods) {
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;

@@ -1,65 +1,71 @@
 package com.Acrobot.ChestShop.Utils;
 
-import com.Acrobot.ChestShop.Listeners.blockBreak;
 import com.Acrobot.ChestShop.Signs.restrictedSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.material.Attachable;
 
 /**
  * @author Acrobot
  */
 public class uBlock {
-
     private static final BlockFace[] chestFaces = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
     private static final BlockFace[] shopFaces = {BlockFace.SELF, BlockFace.DOWN, BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
 
-    public static Chest findChest(Sign sign) {
+    public static Chest findConnectedChest(Sign sign) {
         Block block = sign.getBlock();
-        return findChest(block);
+        return findConnectedChest(block);
     }
 
-    public static Chest findChest(Block block) {
+    public static Chest findConnectedChest(Block block) {
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
-            if (faceBlock.getType() == Material.CHEST) return (Chest) faceBlock.getState();
-        }
-        return null;
-    }
-
-    public static void blockUpdate(Block block) {
-        for (BlockFace bf : shopFaces) {
-            block.getRelative(bf).getState().update(true);
-        }
-    }
-
-    public static Sign findSign(Block block, String originalName) {
-        for (BlockFace bf : shopFaces) {
-            Block faceBlock = block.getRelative(bf);
-            if (uSign.isSign(faceBlock)) {
-                Sign sign = (Sign) faceBlock.getState();
-                if (uSign.isValid(sign) && !sign.getLine(0).equals(originalName) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
-            }
-        }
-        for (BlockFace bf : shopFaces) {
-            Block faceBlock = block.getRelative(bf);
-            if (uSign.isSign(faceBlock)) {
-                Sign sign = (Sign) faceBlock.getState();
-                if (uSign.isValid(sign) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
+            if (faceBlock.getType() == Material.CHEST) {
+                return (Chest) faceBlock.getState();
             }
         }
         return null;
     }
 
-    //Well, I need to re-write this plugin... I hate to code like that - sorry!
-    public static Sign findSign2(Block block) {
+    public static Sign findValidShopSign(Block block, String originalName) {
+        Sign ownerShopSign = null;
+
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
-            if (uSign.isSign(faceBlock)) {
-                Sign sign = (Sign) faceBlock.getState();
-                if (uSign.isValid(sign)) return sign;
+
+            if (!uSign.isSign(faceBlock)) {
+                continue;
+            }
+
+            Sign sign = (Sign) faceBlock.getState();
+
+            if (uSign.isValid(sign) && signIsAttachedToBlock(sign, block)) {
+                if (!sign.getLine(0).equals(originalName)) {
+                    return sign;
+                } else if (ownerShopSign == null) {
+                    ownerShopSign = sign;
+                }
+            }
+        }
+
+        return ownerShopSign;
+    }
+
+    public static Sign findAnyNearbyShopSign(Block block) {
+        for (BlockFace bf : shopFaces) {
+            Block faceBlock = block.getRelative(bf);
+
+            if (!uSign.isSign(faceBlock)) {
+                continue;
+            }
+
+            Sign sign = (Sign) faceBlock.getState();
+
+            if (uSign.isValid(sign)) {
+                return sign;
             }
         }
         return null;
@@ -68,9 +74,15 @@ public class uBlock {
     public static Sign findRestrictedSign(Block block) {
         for (BlockFace bf : shopFaces) {
             Block faceBlock = block.getRelative(bf);
-            if (uSign.isSign(faceBlock)) {
-                Sign sign = (Sign) faceBlock.getState();
-                if (restrictedSign.isRestricted(sign) && (faceBlock.equals(block) || blockBreak.getAttachedFace(sign).equals(block))) return sign;
+
+            if (!uSign.isSign(faceBlock)) {
+                continue;
+            }
+
+            Sign sign = (Sign) faceBlock.getState();
+
+            if (restrictedSign.isRestricted(sign) && signIsAttachedToBlock(sign, block)) {
+                return sign;
             }
         }
         return null;
@@ -86,7 +98,11 @@ public class uBlock {
         return null;
     }
 
-    public static Chest findNeighbor(Chest chest) {
-        return findNeighbor(chest.getBlock());
+    private static boolean signIsAttachedToBlock(Sign sign, Block block) {
+        return sign.getBlock().equals(block) || getAttachedFace(sign).equals(block);
+    }
+
+    public static Block getAttachedFace(Sign sign) {
+        return sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace());
     }
 }
