@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Events;
+package com.Acrobot.ChestShop.Events.Protection;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

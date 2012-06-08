@@ -2,7 +2,7 @@ package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Events.BuildPermissionEvent;
+import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;

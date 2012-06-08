@@ -1,20 +1,17 @@
 package com.Acrobot.ChestShop.Commands;
 
-import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.MessageUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Language;
-import com.Acrobot.ChestShop.Items.Items;
-import com.Acrobot.ChestShop.Utils.uEnchantment;
-import com.Acrobot.ChestShop.Utils.uSign;
+import com.Acrobot.ChestShop.Events.ItemInfoEvent;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Map;
 
 /**
  * @author Acrobot
@@ -22,55 +19,54 @@ import java.util.Map;
 public class ItemInfo implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         ItemStack item;
+
         if (args.length == 0) {
-            if (!(sender instanceof Player)) return false;
-            item = ((Player) sender).getItemInHand();
+            if (!(sender instanceof HumanEntity)) {
+                return false;
+            }
+
+            item = ((HumanEntity) sender).getItemInHand();
         } else {
-            item = Items.getItemStack(joinArray(args));
+            item = MaterialUtil.getItem(StringUtil.joinArray(args));
         }
 
-        if (item == null || item.getType() == Material.AIR) return false;
+        if (MaterialUtil.isEmpty(item)) {
+            return false;
+        }
 
-        String durability = (item.getDurability() != 0 ? ChatColor.DARK_GREEN + ":" + item.getDurability() : "");
-        String ench = uEnchantment.getEnchantment(item);
-        String enchantment = (ench != null ? ChatColor.DARK_AQUA + "-" + ench : "");
+        String durability = getDurability(item);
+        String enchantment = getEnchantment(item);
 
-        sender.sendMessage(Config.getLocal(Language.iteminfo));
-        String itemname = Items.getName(item);
-        sender.sendMessage(ChatColor.GRAY + itemname + ChatColor.WHITE + "      "
-                + item.getTypeId() + durability + enchantment + ChatColor.WHITE);
+        MessageUtil.sendMessage(sender, Language.iteminfo);
+        sender.sendMessage(getNameAndID(item) + durability + enchantment + ChatColor.WHITE);
 
-        Map<Enchantment, Integer> map = item.getEnchantments();
-        for (Map.Entry<Enchantment, Integer> e : map.entrySet())
-            sender.sendMessage(ChatColor.DARK_GRAY + uSign.capitalizeFirstLetter(e.getKey().getName()) + ' ' + intToRoman(e.getValue()));
+        ItemInfoEvent event = new ItemInfoEvent(sender, item);
+        ChestShop.callEvent(event);
 
         return true;
-
     }
 
-    private static String intToRoman(int integer) {
-        switch (integer) {
-            case 1:
-                return "I";
-            case 2:
-                return "II";
-            case 3:
-                return "III";
-            case 4:
-                return "IV";
-            case 5:
-                return "V";
-            default:
-                return Integer.toString(integer);
+    private static String getNameAndID(ItemStack item) {
+        String itemName = MaterialUtil.getName(item);
+
+        return ChatColor.GRAY + itemName + ChatColor.WHITE + "      " + item.getTypeId();
+    }
+
+    private static String getDurability(ItemStack item) {
+        if (item.getDurability() != 0) {
+            return ChatColor.DARK_GREEN + ":" + Integer.toString(item.getDurability());
+        } else {
+            return "";
         }
     }
 
+    private static String getEnchantment(ItemStack item) {
+        String encodedEnchantments = MaterialUtil.Enchantment.encodeEnchantment(item);
 
-    private static String joinArray(String[] array) {
-        StringBuilder b = new StringBuilder(array.length);
-        for (String s : array) {
-            b.append(s).append(' ');
+        if (encodedEnchantments != null) {
+            return ChatColor.DARK_AQUA + "-" + encodedEnchantments;
+        } else {
+            return "";
         }
-        return b.toString();
     }
 }

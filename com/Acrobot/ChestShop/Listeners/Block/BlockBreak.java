@@ -1,14 +1,14 @@
-package com.Acrobot.ChestShop.Listeners;
+package com.Acrobot.ChestShop.Listeners.Block;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Signs.restrictedSign;
+import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
-import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -33,9 +33,9 @@ public class BlockBreak implements Listener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
         if (block == null) return false;
 
-        if (uSign.isSign(block)) block.getState().update(); //Show the text immediately
+        if (BlockUtil.isSign(block)) block.getState().update(); //Show the text immediately
 
-        if (restrictedSign(block)) return !restrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
+        if (restrictedSign(block)) return !RestrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
 
         Sign sign = uBlock.findValidShopSign(block, (player != null ? uName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
@@ -94,7 +94,7 @@ public class BlockBreak implements Listener {
 
     private static Block getRetractBlock(BlockPistonRetractEvent event) {
         Block block = getRetractLocationBlock(event);
-        return (block != null && !uSign.isSign(block) ? block : null);
+        return (block != null && !BlockUtil.isSign(block) ? block : null);
     }
 
     //Those are fixes for CraftBukkit's piston bug, where piston appears not to be a piston.

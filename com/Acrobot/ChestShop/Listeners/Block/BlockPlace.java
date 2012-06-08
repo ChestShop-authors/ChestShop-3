@@ -1,10 +1,11 @@
-package com.Acrobot.ChestShop.Listeners;
+package com.Acrobot.ChestShop.Listeners.Block;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Security;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -21,7 +22,7 @@ public class BlockPlace implements Listener {
     public static void onBlockPlace(BlockPlaceEvent event) {
         Block block = event.getBlockAgainst();
 
-        if (uSign.isSign(block) && uSign.isValid((Sign) block.getState())) {
+        if (BlockUtil.isSign(block) && ChestShopSign.isValid((Sign) block.getState())) {
             event.setCancelled(true);
             return;
         }

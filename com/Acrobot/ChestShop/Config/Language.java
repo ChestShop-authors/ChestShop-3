@@ -48,7 +48,7 @@ public enum Language {
 
 
     private final String text;
-    private static final Map<String, Value> values = new LinkedHashMap<String, Value>();
+    private static final Map<String, Value> LANGUAGE_STRINGS = new LinkedHashMap<String, Value>();
 
     private Language(String def) {
         text = def;
@@ -63,12 +63,12 @@ public enum Language {
     }
 
     public static Map<String, Value> getValues() {
-        return values;
+        return LANGUAGE_STRINGS;
     }
 
     static {
         for (Language property : Language.values()) {
-            values.put(property.name(), property.getValue());
+            LANGUAGE_STRINGS.put(property.name(), property.getValue());
         }
     }
 }

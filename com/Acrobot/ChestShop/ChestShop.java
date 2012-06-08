@@ -7,10 +7,21 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
-import com.Acrobot.ChestShop.Listeners.*;
+import com.Acrobot.ChestShop.Listeners.Block.BlockBreak;
+import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
+import com.Acrobot.ChestShop.Listeners.Block.EntityExplode;
+import com.Acrobot.ChestShop.Listeners.Block.SignChange;
+import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
+import com.Acrobot.ChestShop.Listeners.Player.ShortNameSaver;
+import com.Acrobot.ChestShop.Listeners.Transaction.EmptyShopDeleter;
+import com.Acrobot.ChestShop.Listeners.Transaction.TransactionLogger;
+import com.Acrobot.ChestShop.Listeners.Transaction.TransactionMessageSender;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
@@ -60,7 +71,7 @@ public class ChestShop extends JavaPlugin {
             setupDB();
         }
         if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
-            File htmlFolder = new File(dataFolder, "HTML");
+            File htmlFolder = new File(Config.getString(Property.STATISTICS_PAGE_PATH));
             scheduleTask(new Generator(htmlFolder), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
         }
         if (Config.getBoolean(Property.LOG_TO_FILE)) {
@@ -122,8 +133,18 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new BlockBreak());
         registerEvent(new BlockPlace());
         registerEvent(new SignChange());
-        registerEvent(new PlayerInteract(Config.getInteger(Property.SHOP_INTERACTION_INTERVAL)));
         registerEvent(new EntityExplode());
+        registerEvent(new PlayerConnect());
+
+        registerEvent(new ItemInfoListener());
+
+        registerEvent(new EmptyShopDeleter());
+        registerEvent(new TransactionLogger());
+        registerEvent(new TransactionMessageSender());
+
+        registerEvent(new ShortNameSaver());
+
+        registerEvent(new PlayerInteract(Config.getInteger(Property.SHOP_INTERACTION_INTERVAL)));
     }
 
     public void registerEvent(Listener listener) {
@@ -206,15 +227,15 @@ public class ChestShop extends JavaPlugin {
         return description.getSoftDepend();
     }
 
-    public static PluginManager getPluginManager() {
-        return pluginManager;
-    }
-
     public static void registerListener(Listener listener) {
         plugin.registerEvent(listener);
     }
 
     public static void callEvent(Event event) {
         pluginManager.callEvent(event);
+    }
+
+    public static void scheduleRepeating(Runnable runnable, int delay) {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, runnable, 0, delay);
     }
 }

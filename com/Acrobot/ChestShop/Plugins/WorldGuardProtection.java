@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Events.ProtectionCheckEvent;
+import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.LocalPlayer;

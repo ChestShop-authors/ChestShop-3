@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Containers;
 
+import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uInventory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -11,11 +11,11 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Acrobot
  */
-public class MinecraftChest implements Container {
+public class ShopChest implements Container {
     private final Chest chest;
-    private final BlockFace[] neighborFaces = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
+    private static final BlockFace[] NEIGHBOR_FACES = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
 
-    public MinecraftChest(Chest chest) {
+    public ShopChest(Chest chest) {
         this.chest = chest;
     }
 
@@ -29,24 +29,24 @@ public class MinecraftChest implements Container {
         return true;
     }
 
-    public void addItem(ItemStack item, int amount) {
-        uInventory.add(chest.getInventory(), item, amount);
+    public void addItem(ItemStack item) {
+        InventoryUtil.add(item, chest.getInventory());
     }
 
-    public void removeItem(ItemStack item, short durability, int amount) {
-        uInventory.remove(chest.getInventory(), item, amount, durability);
+    public void removeItem(ItemStack item) {
+        InventoryUtil.remove(item, chest.getInventory());
     }
 
-    public int amount(ItemStack item, short durability) {
-        return uInventory.amount(chest.getInventory(), item, durability);
+    public int amount(ItemStack item) {
+        return InventoryUtil.getAmount(item, chest.getInventory());
     }
 
-    public boolean hasEnough(ItemStack item, int amount, short durability) {
-        return amount(item, durability) >= amount;
+    public boolean hasEnough(ItemStack item) {
+        return amount(item) >= item.getAmount();
     }
 
-    public boolean fits(ItemStack item, int amount, short durability) {
-        return uInventory.fits(chest.getInventory(), item, amount, durability) <= 0;
+    public boolean fits(ItemStack item) {
+        return InventoryUtil.fits(item, chest.getInventory());
     }
 
     public Sign findShopSign() {
@@ -62,7 +62,7 @@ public class MinecraftChest implements Container {
     private Chest getNeighbor() {
         Block chestBlock = chest.getBlock();
 
-        for (BlockFace chestFace : neighborFaces) {
+        for (BlockFace chestFace : NEIGHBOR_FACES) {
             Block relative = chestBlock.getRelative(chestFace);
 
             if (relative.getState() instanceof Chest) {

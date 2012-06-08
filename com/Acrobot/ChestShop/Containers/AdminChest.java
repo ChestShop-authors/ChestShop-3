@@ -10,21 +10,21 @@ public class AdminChest implements Container {
         return false;
     }
 
-    public void addItem(ItemStack item, int amount) {
+    public void addItem(ItemStack item) {
     }
 
-    public void removeItem(ItemStack item, short durability, int amount) {
+    public void removeItem(ItemStack item) {
     }
 
-    public int amount(ItemStack item, short durability) {
+    public int amount(ItemStack item) {
         return Integer.MAX_VALUE;
     }
 
-    public boolean hasEnough(ItemStack item, int amount, short durability) {
+    public boolean hasEnough(ItemStack item) {
         return true;
     }
 
-    public boolean fits(ItemStack item, int amount, short durability) {
+    public boolean fits(ItemStack item) {
         return true;
     }
 }

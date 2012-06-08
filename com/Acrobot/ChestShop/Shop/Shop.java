@@ -1,215 +1,185 @@
 package com.Acrobot.ChestShop.Shop;
 
+import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Containers.AdminChest;
 import com.Acrobot.ChestShop.Containers.Container;
+import com.Acrobot.ChestShop.Containers.ShopChest;
 import com.Acrobot.ChestShop.Economy.Economy;
-import com.Acrobot.ChestShop.Logging.Logging;
+import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Utils.uInventory;
-import com.Acrobot.ChestShop.Utils.uSign;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import static com.Acrobot.Breeze.Utils.PriceUtil.*;
+import static com.Acrobot.ChestShop.Config.Language.*;
+import static com.Acrobot.ChestShop.Config.Property.ALLOW_PARTIAL_TRANSACTIONS;
+import static com.Acrobot.ChestShop.Config.Property.SHOW_MESSAGE_OUT_OF_STOCK;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.Type.BUY;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.Type.SELL;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 
 /**
  * @author Acrobot
  */
 public class Shop {
-    private final short durability;
-    private final Container chest;
+    private final Container container;
+    private final String owner;
 
-    public final ItemStack stock;
-    public int stockAmount;
-    public final String owner;
-    public final Sign sign;
+    private int stockAmount;
+    private ItemStack stock;
 
-    public Shop(Container chest, Sign sign, ItemStack... itemStacks) {
-        this.stock = itemStacks[0];
-        this.durability = stock.getDurability();
-        this.chest = chest;
-        this.owner = sign.getLine(0);
-        this.stockAmount = uSign.itemAmount(sign.getLine(1));
+    private final Sign sign;
+
+    public Shop(Container container, ItemStack stock, Sign sign) {
+        this.container = container;
+        this.owner = sign.getLine(NAME_LINE);
+
+        this.stock = stock;
+        this.stockAmount = stock.getAmount();
+
         this.sign = sign;
     }
 
-    public void buyItemFrom(Player player) {
-        double buyPrice = uSign.buyPrice(sign.getLine(2));
+    public void buyFromPlayer(Player player) {
+        Language message = sell(player);
 
-        if (chest == null) {
-            sendMessage(player, Language.NO_CHEST_DETECTED);
-            return;
-        }
-        if (Double.compare(buyPrice, 0.01D) < 0) {
-            sendMessage(player, Language.NO_BUYING_HERE);
-            return;
+        sendMessage(player, message);
+    }
+
+    public void sellToPlayer(Player player) {
+        Language message = buy(player);
+
+        sendMessage(player, message);
+    }
+
+    private Language buy(Player player) {
+        double price = getBuyPrice(sign.getLine(PRICE_LINE));
+
+        if (price == NO_PRICE) {
+            return NO_BUYING_HERE;
         }
 
-        if (!Permission.has(player, Permission.BUY) && !Permission.has(player, Permission.BUY_ID + Integer.toString(stock.getTypeId()))) {
-            sendMessage(player, Language.NO_PERMISSION);
-            return;
+        if (container == null) {
+            return NO_CHEST_DETECTED;
         }
+
+        if (!hasPermission(player, stock.getType(), true)) {
+            return NO_PERMISSION;
+        }
+
         String playerName = player.getName();
+        String itemName = StringUtil.capitalizeFirstLetter(stock.getType().name());
+        double balance = Economy.balance(playerName);
 
-        if (!Economy.hasEnough(playerName, buyPrice)) {
-            int items = calculateItemAmount(Economy.balance(playerName), buyPrice);
-            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
-                sendMessage(player, Language.NOT_ENOUGH_MONEY);
-                return;
+        if (!Economy.hasEnough(playerName, price)) {
+            int possiblePartialItemCount = calculateItemAmount(balance, price);
+
+            if (!partialTransactionAllowed(possiblePartialItemCount)) {
+                return NOT_ENOUGH_MONEY;
             } else {
-                buyPrice = (buyPrice / stockAmount) * items;
-                stockAmount = items;
+                price = (price / stockAmount) * possiblePartialItemCount;
+                stockAmount = possiblePartialItemCount;
             }
         }
+
         if (!stockFitsPlayer(player)) {
-            sendMessage(player, Language.NOT_ENOUGH_SPACE_IN_INVENTORY);
-            return;
+            return NOT_ENOUGH_SPACE_IN_INVENTORY;
         }
 
-        String materialName = uSign.capitalizeFirstLetter(stock.getType().name());
+        if (!shopHasEnoughItems()) {
+            int possiblePartialItemCount = getStockAmount(stock);
 
-        if (!hasEnoughStock()) {
-            int items = stockAmount(stock, durability);
-            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
-                sendMessage(player, Language.NOT_ENOUGH_STOCK);
-
-                if (!Config.getBoolean(Property.SHOW_MESSAGE_OUT_OF_STOCK)) {
-                    return;
+            if (!partialTransactionAllowed(possiblePartialItemCount)) {
+                if (Config.getBoolean(SHOW_MESSAGE_OUT_OF_STOCK)) {
+                    sendMessageToOwner(Config.getLocal(NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", itemName));
                 }
 
-                sendMessageToOwner(Config.getLocal(Language.NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", materialName));
-                return;
+                return NOT_ENOUGH_STOCK;
             } else {
-                buyPrice = (buyPrice / stockAmount) * items;
-                stockAmount = items;
+                price = (price / stockAmount) * possiblePartialItemCount;
+                stockAmount = possiblePartialItemCount;
             }
         }
 
-        Economy.add(getOwnerAccount(), buyPrice);
-        Economy.subtract(playerName, buyPrice);
+        Economy.add(getOwnerAccount(), price);
+        Economy.subtract(playerName, price);
 
-        chest.removeItem(stock, durability, stockAmount);
-
-
-        String formatedPrice = Economy.formatBalance(buyPrice);
-        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_CLIENT)) {
-            String message = formatMessage(Language.YOU_BOUGHT_FROM_SHOP, materialName, formatedPrice);
-            message = message.replace("%owner", owner);
-
-            player.sendMessage(message);
-        }
-
-        uInventory.add(player.getInventory(), stock, stockAmount);
-        Logging.logTransaction(true, this, buyPrice, player);
-        player.updateInventory();
-
-        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
-            String message = formatMessage(Language.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, materialName, formatedPrice);
-            message = message.replace("%buyer", player.getName());
-
-            sendMessageToOwner(message);
-        }
-
-        if (shopShouldBeRemoved()) {
-            removeShop();
-        }
-    }
-
-    public void sellItemTo(Player player) {
-        double sellPrice = uSign.sellPrice(sign.getLine(2));
-
-        if (chest == null) {
-            sendMessage(player, Language.NO_CHEST_DETECTED);
-            return;
-        }
-        if (Double.compare(sellPrice, 0.01D) < 0) {
-            sendMessage(player, Language.NO_SELLING_HERE);
-            return;
-        }
-        if (!Permission.has(player, Permission.SELL) && !Permission.has(player, Permission.SELL_ID + Integer.toString(stock.getTypeId()))) {
-            sendMessage(player, Language.NO_PERMISSION);
-            return;
-        }
-
-        String account = getOwnerAccount();
-
-        if (!Economy.hasEnough(account, sellPrice)) {
-            int items = calculateItemAmount(Economy.balance(account), sellPrice);
-            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
-                sendMessage(player, Language.NOT_ENOUGH_MONEY_SHOP);
-                return;
-            } else {
-                sellPrice = (sellPrice / stockAmount) * items;
-                stockAmount = items;
-            }
-        }
-        if (uInventory.amount(player.getInventory(), stock, durability) < stockAmount) {
-            int items = uInventory.amount(player.getInventory(), stock, durability);
-            if (!Config.getBoolean(Property.ALLOW_PARTIAL_TRANSACTIONS) || items < 1) {
-                sendMessage(player, Language.NOT_ENOUGH_ITEMS_TO_SELL);
-                return;
-            } else {
-                sellPrice = (sellPrice / stockAmount) * items;
-                stockAmount = items;
-            }
-        }
-
-        if (!stockFitsChest(chest)) {
-            sendMessage(player, Language.NOT_ENOUGH_SPACE_IN_CHEST);
-            return;
-        }
-
-        Economy.subtract(account, sellPrice);
-        Economy.add(player.getName(), sellPrice);
-
-        chest.addItem(stock, stockAmount);
-
-        String materialName = uSign.capitalizeFirstLetter(stock.getType().name());
-        String formatedBalance = Economy.formatBalance(sellPrice);
-
-        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_CLIENT)) {
-            String message = formatMessage(Language.YOU_SOLD_TO_SHOP, materialName, formatedBalance);
-            message = message.replace("%buyer", owner);
-
-            player.sendMessage(message);
-        }
-
-        uInventory.remove(player.getInventory(), stock, stockAmount, durability);
-
-        Logging.logTransaction(false, this, sellPrice, player);
+        container.removeItem(stock);
+        InventoryUtil.add(stock, player.getInventory());
 
         player.updateInventory();
 
-        if (Config.getBoolean(Property.SHOW_TRANSACTION_INFORMATION_OWNER)) {
-            String message = formatMessage(Language.SOMEBODY_SOLD_TO_YOUR_SHOP, materialName, formatedBalance);
-            message = message.replace("%seller", player.getName());
+        TransactionEvent event = new TransactionEvent(BUY, container, sign, player, this.owner, stock, stockAmount, price);
+        ChestShop.callEvent(event);
 
-            sendMessageToOwner(message);
+        return null;
+    }
+
+    private Language sell(Player player) {
+        double price = getSellPrice(sign.getLine(PRICE_LINE));
+
+        if (container == null) {
+            return NO_CHEST_DETECTED;
         }
-    }
+        if (price == PriceUtil.NO_PRICE) {
+            return NO_SELLING_HERE;
+        }
+        if (!hasPermission(player, stock.getType(), false)) {
+            return NO_PERMISSION;
+        }
 
-    private boolean shopShouldBeRemoved() {
-        return Config.getBoolean(Property.REMOVE_EMPTY_SHOPS) && shopIsEmpty();
-    }
+        String ownerAccount = getOwnerAccount();
 
-    private boolean shopIsEmpty() {
-        return chest.isEmpty();
-    }
+        if (!Economy.hasEnough(ownerAccount, price)) {
+            int possiblePartialItemCount = calculateItemAmount(Economy.balance(ownerAccount), price);
 
-    private void removeShop() {
-        sign.getBlock().setType(Material.AIR);
+            if (!partialTransactionAllowed(possiblePartialItemCount)) {
+                return NOT_ENOUGH_MONEY_SHOP;
+            } else {
+                price = (price / stockAmount) * possiblePartialItemCount;
+                stockAmount = possiblePartialItemCount;
+            }
+        }
 
-        chest.addItem(new ItemStack(Material.SIGN, 1), 1);
-    }
+        if (!playerHasEnoughItems(player)) {
+            int possiblePartialItemCount = InventoryUtil.getAmount(stock, player.getInventory());
 
-    private String formatMessage(Language message, String materialName, String price) {
-        return Config.getLocal(message)
-                .replace("%amount", String.valueOf(stockAmount))
-                .replace("%item", materialName)
-                .replace("%price", price);
+            if (!partialTransactionAllowed(possiblePartialItemCount)) {
+                return NOT_ENOUGH_ITEMS_TO_SELL;
+            } else {
+                price = (price / stockAmount) * possiblePartialItemCount;
+                stockAmount = possiblePartialItemCount;
+            }
+        }
+
+        if (!stockFitsChest()) {
+            return NOT_ENOUGH_SPACE_IN_CHEST;
+        }
+
+        Economy.subtract(ownerAccount, price);
+        Economy.add(player.getName(), price);
+
+        container.addItem(stock);
+
+        InventoryUtil.remove(stock, player.getInventory());
+        player.updateInventory();
+
+        TransactionEvent event = new TransactionEvent(SELL, container, sign, player, this.owner, stock, stockAmount, price);
+        ChestShop.callEvent(event);
+
+        return null;
     }
 
     private String getOwnerAccount() {
@@ -217,23 +187,27 @@ public class Shop {
     }
 
     private boolean isAdminShop() {
-        return uSign.isAdminShop(owner);
-    }
-
-    private boolean hasEnoughStock() {
-        return chest.hasEnough(stock, stockAmount, durability);
-    }
-
-    private int stockAmount(ItemStack item, short durability) {
-        return chest.amount(item, durability);
+        return ChestShopSign.isAdminShop(owner);
     }
 
     private boolean stockFitsPlayer(Player player) {
-        return uInventory.fits(player.getInventory(), stock, stockAmount, durability) <= 0;
+        return InventoryUtil.fits(stock, player.getInventory());
     }
 
-    private boolean stockFitsChest(Container chest) {
-        return chest.fits(stock, stockAmount, durability);
+    private boolean stockFitsChest() {
+        return container.fits(stock);
+    }
+
+    private int getStockAmount(ItemStack item) {
+        return container.amount(item);
+    }
+
+    private boolean shopHasEnoughItems() {
+        return container.hasEnough(stock);
+    }
+
+    private boolean playerHasEnoughItems(Player player) {
+        return InventoryUtil.getAmount(stock, player.getInventory()) >= stockAmount;
     }
 
     private int calculateItemAmount(double money, double basePrice) {
@@ -241,15 +215,46 @@ public class Shop {
     }
 
     private static void sendMessage(Player player, Language message) {
-        player.sendMessage(Config.getLocal(message));
+        if (message != null) {
+            player.sendMessage(Config.getLocal(message));
+        }
     }
 
     private void sendMessageToOwner(String msg) {
-        if (!isAdminShop()) {
-            Player player = ChestShop.getBukkitServer().getPlayer(owner);
-            if (player != null) {
-                player.sendMessage(msg);
-            }
+        Player player = ChestShop.getBukkitServer().getPlayer(owner);
+
+        if (player != null) {
+            player.sendMessage(msg);
+        }
+    }
+
+    public static Shop getShopFromSign(Sign sign) {
+        Chest chestMc = uBlock.findConnectedChest(sign);
+        ItemStack item = MaterialUtil.getItem(sign.getLine(ITEM_LINE));
+
+        if (item == null) {
+            return null;
+        }
+
+        int itemAmount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
+        item.setAmount(itemAmount);
+
+        if (ChestShopSign.isAdminShop(sign)) {
+            return new Shop(new AdminChest(), item, sign);
+        } else {
+            return new Shop(chestMc != null ? new ShopChest(chestMc) : null, item, sign);
+        }
+    }
+
+    private static boolean partialTransactionAllowed(int itemCount) {
+        return Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS) && itemCount > 0;
+    }
+
+    private static boolean hasPermission(Player player, Material material, boolean buying) {
+        if (buying) {
+            return Permission.has(player, Permission.BUY) || Permission.has(player, Permission.BUY_ID + Integer.toString(material.getId()));
+        } else {
+            return Permission.has(player, Permission.SELL) || Permission.has(player, Permission.SELL_ID + Integer.toString(material.getId()));
         }
     }
 }

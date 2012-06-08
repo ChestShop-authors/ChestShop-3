@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Events.ProtectionCheckEvent;
+import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

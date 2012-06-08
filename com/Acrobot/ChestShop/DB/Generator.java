@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.DB;
 
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Logging.Logging;
-import com.Acrobot.ChestShop.Utils.uSign;
 import com.avaje.ebean.ExpressionList;
 import org.bukkit.Material;
 
@@ -125,7 +124,7 @@ public class Generator implements Runnable {
         double sold = generateTotalSold(itemID);
 
         Material material = Material.getMaterial(itemID);
-        String matName = uSign.capitalizeFirstLetter(material.name(), '_');
+        String matName = StringUtil.capitalizeFirstLetter(material.name(), '_');
 
         int maxStackSize = material.getMaxStackSize();
 
@@ -162,7 +161,7 @@ public class Generator implements Runnable {
 
             fileEnd(generationTime);
         } catch (Exception e) {
-            Logging.log("Couldn't generate statistics page!");
+            ChestShop.getBukkitLogger().severe("Couldn't generate statistics page!");
             e.printStackTrace();
         }
     }

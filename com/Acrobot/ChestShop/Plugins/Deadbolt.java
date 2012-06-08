@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Events.ProtectionCheckEvent;
-import com.Acrobot.ChestShop.Utils.uName;
+import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -25,9 +24,7 @@ public class Deadbolt implements Listener {
             return;
         }
 
-        String shortPlayerName = uName.shortenName(player);
-
-        if (!com.daemitus.deadbolt.Deadbolt.getAllNames(block).contains(shortPlayerName)) {
+        if (!com.daemitus.deadbolt.Deadbolt.isAuthorized(player, block)) {
             event.setResult(Event.Result.DENY);
         }
     }

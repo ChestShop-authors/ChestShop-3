@@ -6,15 +6,16 @@ import com.Acrobot.ChestShop.Config.Property;
 
 import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Acrobot
  */
 public class Queue implements Runnable {
-    private static final ArrayList<Transaction> queue = new ArrayList<Transaction>();
+    private static final List<Transaction> queue = Collections.synchronizedList(new ArrayList<Transaction>());
 
-    public synchronized static void addToQueue(Transaction t) {
+    public static void addToQueue(Transaction t) {
         queue.add(t);
     }
 
@@ -35,7 +36,7 @@ public class Queue implements Runnable {
         }
     }
 
-    public synchronized static List getOld() throws OptimisticLockException {
+    public static List getOld() throws OptimisticLockException {
         return ChestShop
                 .getDB()
                 .find(Transaction.class)

@@ -4,6 +4,8 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Utils.uName;
 
+import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
+
 /**
  * @author Acrobot
  *         Economy management
@@ -31,7 +33,7 @@ public class Economy {
             amount -= tax;
         }
 
-        economy.add(uName.getName(name), amount);
+        economy.add(uName.getName(name), roundUp(amount));
     }
 
     public static double getTax(Property tax, double price) {
@@ -43,7 +45,7 @@ public class Economy {
             return;
         }
 
-        economy.subtract(uName.getName(name), amount);
+        economy.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {
@@ -51,7 +53,7 @@ public class Economy {
             return true;
         }
 
-        return economy.hasEnough(uName.getName(name), amount);
+        return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 
     public static double balance(String name) {
@@ -59,6 +61,6 @@ public class Economy {
     }
 
     public static String formatBalance(double amount) {
-        return economy.format(amount);
+        return economy.format(roundUp(amount));
     }
 }

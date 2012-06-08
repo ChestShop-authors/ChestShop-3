@@ -1,9 +1,10 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Containers.MinecraftChest;
-import com.Acrobot.ChestShop.Events.ProtectionCheckEvent;
+import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.ChestShop.Containers.ShopChest;
+import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
-import com.Acrobot.ChestShop.Utils.uSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -39,7 +40,7 @@ public class ChestShop implements Listener {
         if (isSign(block)) {
             Sign sign = (Sign) block.getState();
 
-            if (!uSign.isValid(sign)) {
+            if (!ChestShopSign.isValid(sign)) {
                 return true;
             }
 
@@ -49,7 +50,7 @@ public class ChestShop implements Listener {
         }
 
         if (isChest(block)) {
-            MinecraftChest chest = new MinecraftChest((Chest) block.getState());
+            ShopChest chest = new ShopChest((Chest) block.getState());
 
             Sign sign = chest.findShopSign();
 
@@ -66,7 +67,7 @@ public class ChestShop implements Listener {
     }
 
     private static boolean isSign(Block block) {
-        return uSign.isSign(block);
+        return BlockUtil.isSign(block);
     }
 
     private static boolean canBeProtected(Block block) {

@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop.Plugins;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Events.BuildPermissionEvent;
+import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;

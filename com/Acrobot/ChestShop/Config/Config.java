@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Config;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Utils.uName;
 import com.nijikokun.register.payment.forChestShop.Methods;
+import org.bukkit.ChatColor;
 
 import java.io.File;
 
@@ -10,8 +11,8 @@ import java.io.File;
  * @author Acrobot
  */
 public class Config {
-    public static BreezeConfiguration normalConfig;
-    public static BreezeConfiguration languageConfig;
+    private static BreezeConfiguration normalConfig;
+    private static BreezeConfiguration languageConfig;
 
     public static void setup() {
         File configFolder = ChestShop.getFolder();
@@ -53,7 +54,7 @@ public class Config {
     }
 
     private static String getColored(String msg) {
-        return msg.replaceAll("&([0-9a-fk-or])", "\u00A7$1");
+        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
     public static String getLocal(Language lang) {

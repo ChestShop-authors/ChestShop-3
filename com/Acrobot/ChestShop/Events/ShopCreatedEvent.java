@@ -21,7 +21,7 @@ public class ShopCreatedEvent extends Event {
         this.player = player;
         this.sign = sign;
         this.chest = chest;
-        this.signLines = signLines;
+        this.signLines = signLines.clone();
     }
 
     public String[] getSignLines() {

@@ -313,7 +313,9 @@ public abstract class Database {
 
             //Turn all the lines back into a single string
             StringBuilder newScript = new StringBuilder(5);
-            for (String newLine : scriptLines) newScript.append(newLine).append('\n');
+            for (String newLine : scriptLines) {
+                newScript.append(newLine).append('\n');
+            }
 
             //Print the new script
             System.out.println(newScript);

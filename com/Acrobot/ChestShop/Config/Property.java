@@ -31,8 +31,6 @@ public enum Property {
     ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK(false, "Do you want to allow other players to build a shop on a block where there's one already?"),
     ALLOW_PARTIAL_TRANSACTIONS(true, "Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)\n"),
 
-    STACK_UNSTACKABLES(false, "If true, ALL things (including food, etc.) will stack up to 64\n"),
-
     SHOW_MESSAGE_OUT_OF_STOCK(true, "Do you want to show \"Out of stock\" messages?"),
     SHOW_TRANSACTION_INFORMATION_CLIENT(true, "Do you want to show \"You bought/sold... \" messages?"),
     SHOW_TRANSACTION_INFORMATION_OWNER(true, "Do you want to show \"Somebody bought/sold... \" messages?\n"),
@@ -67,7 +65,7 @@ public enum Property {
     private final Object value;
     private final String comment;
 
-    private static final Map<String, Value> values = new LinkedHashMap<String, Value>();
+    private static final Map<String, Value> PROPERTIES = new LinkedHashMap<String, Value>();
 
     private Property(Object value, String comment) {
         this.value = value;
@@ -83,12 +81,12 @@ public enum Property {
     }
 
     public static Map<String, Value> getValues() {
-        return values;
+        return PROPERTIES;
     }
 
     static {
         for (Property property : Property.values()) {
-            values.put(property.name(), property.getValue());
+            PROPERTIES.put(property.name(), property.getValue());
         }
     }
 }

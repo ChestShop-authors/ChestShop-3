@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners;
+package com.Acrobot.ChestShop.Listeners.Block;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;

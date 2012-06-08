@@ -6,15 +6,15 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public interface Container {
-    public boolean isEmpty();
+    boolean isEmpty();
 
-    public void addItem(ItemStack item, int amount);
+    void addItem(ItemStack item);
 
-    public void removeItem(ItemStack item, short durability, int amount);
+    void removeItem(ItemStack item);
 
-    public int amount(ItemStack item, short durability);
+    int amount(ItemStack item);
 
-    public boolean hasEnough(ItemStack item, int amount, short durability);
+    boolean hasEnough(ItemStack item);
 
-    public boolean fits(ItemStack item, int amount, short durability);
+    boolean fits(ItemStack item);
 }
