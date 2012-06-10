@@ -25,7 +25,7 @@ public class TransactionEvent extends Event {
 
     private Type transactionType;
 
-    public TransactionEvent(Type transactionType, Container container, Sign sign, Player client, String owner, ItemStack item, int itemAmount, double price) {
+    public TransactionEvent(Type transactionType, Container container, Sign sign, Player client, String owner, ItemStack item, double price) {
         this.container = container;
         this.sign = sign;
 
@@ -33,7 +33,7 @@ public class TransactionEvent extends Event {
         this.owner = owner;
 
         this.item = item;
-        this.itemAmount = itemAmount;
+        this.itemAmount = item.getAmount();
 
         this.transactionType = transactionType;
         this.price = price;

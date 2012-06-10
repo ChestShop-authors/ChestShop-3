@@ -37,7 +37,6 @@ public class Shop {
     private final Container container;
     private final String owner;
 
-    private int stockAmount;
     private ItemStack stock;
 
     private final Sign sign;
@@ -47,7 +46,6 @@ public class Shop {
         this.owner = sign.getLine(NAME_LINE);
 
         this.stock = stock;
-        this.stockAmount = stock.getAmount();
 
         this.sign = sign;
     }
@@ -89,8 +87,8 @@ public class Shop {
             if (!partialTransactionAllowed(possiblePartialItemCount)) {
                 return NOT_ENOUGH_MONEY;
             } else {
-                price = (price / stockAmount) * possiblePartialItemCount;
-                stockAmount = possiblePartialItemCount;
+                price = (price / stock.getAmount()) * possiblePartialItemCount;
+                stock.setAmount(possiblePartialItemCount);
             }
         }
 
@@ -108,8 +106,8 @@ public class Shop {
 
                 return NOT_ENOUGH_STOCK;
             } else {
-                price = (price / stockAmount) * possiblePartialItemCount;
-                stockAmount = possiblePartialItemCount;
+                price = (price / stock.getAmount()) * possiblePartialItemCount;
+                stock.setAmount(possiblePartialItemCount);
             }
         }
 
@@ -121,7 +119,7 @@ public class Shop {
 
         player.updateInventory();
 
-        TransactionEvent event = new TransactionEvent(BUY, container, sign, player, this.owner, stock, stockAmount, price);
+        TransactionEvent event = new TransactionEvent(BUY, container, sign, player, this.owner, stock, price);
         ChestShop.callEvent(event);
 
         return null;
@@ -148,8 +146,8 @@ public class Shop {
             if (!partialTransactionAllowed(possiblePartialItemCount)) {
                 return NOT_ENOUGH_MONEY_SHOP;
             } else {
-                price = (price / stockAmount) * possiblePartialItemCount;
-                stockAmount = possiblePartialItemCount;
+                price = (price / stock.getAmount()) * possiblePartialItemCount;
+                stock.setAmount(possiblePartialItemCount);
             }
         }
 
@@ -159,8 +157,8 @@ public class Shop {
             if (!partialTransactionAllowed(possiblePartialItemCount)) {
                 return NOT_ENOUGH_ITEMS_TO_SELL;
             } else {
-                price = (price / stockAmount) * possiblePartialItemCount;
-                stockAmount = possiblePartialItemCount;
+                price = (price / stock.getAmount()) * possiblePartialItemCount;
+                stock.setAmount(possiblePartialItemCount);
             }
         }
 
@@ -176,7 +174,7 @@ public class Shop {
         InventoryUtil.remove(stock, player.getInventory());
         player.updateInventory();
 
-        TransactionEvent event = new TransactionEvent(SELL, container, sign, player, this.owner, stock, stockAmount, price);
+        TransactionEvent event = new TransactionEvent(SELL, container, sign, player, this.owner, stock, price);
         ChestShop.callEvent(event);
 
         return null;
@@ -207,11 +205,11 @@ public class Shop {
     }
 
     private boolean playerHasEnoughItems(Player player) {
-        return InventoryUtil.getAmount(stock, player.getInventory()) >= stockAmount;
+        return InventoryUtil.getAmount(stock, player.getInventory()) >= stock.getAmount();
     }
 
     private int calculateItemAmount(double money, double basePrice) {
-        return (int) Math.floor(money / (basePrice / stockAmount));
+        return (int) Math.floor(money / (basePrice / stock.getAmount()));
     }
 
     private static void sendMessage(Player player, Language message) {
