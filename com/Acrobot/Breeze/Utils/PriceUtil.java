@@ -31,7 +31,13 @@ public class PriceUtil {
             }
 
             if (NumberUtil.isDouble(part)) {
-                return Double.valueOf(part);
+                double price = Double.valueOf(part);
+
+                if (price == 0) {
+                    return NO_PRICE;
+                } else {
+                    return price;
+                }
             }
         }
 
