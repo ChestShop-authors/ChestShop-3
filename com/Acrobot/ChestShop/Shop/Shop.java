@@ -43,11 +43,10 @@ public class Shop {
 
     public Shop(Container container, ItemStack stock, Sign sign) {
         this.container = container;
-        this.owner = sign.getLine(NAME_LINE);
-
-        this.stock = stock;
-
         this.sign = sign;
+
+        this.owner = sign.getLine(NAME_LINE);
+        this.stock = stock;
     }
 
     public void buyFromPlayer(Player player) {
@@ -114,8 +113,8 @@ public class Shop {
         Economy.add(getOwnerAccount(), price);
         Economy.subtract(playerName, price);
 
-        container.removeItem(stock);
-        InventoryUtil.add(stock, player.getInventory());
+        container.removeItem(stock.clone()); //Bad bukkit! You shouldn't change ItemStacks during the process!
+        InventoryUtil.add(stock.clone(), player.getInventory());
 
         player.updateInventory();
 
@@ -131,9 +130,11 @@ public class Shop {
         if (container == null) {
             return NO_CHEST_DETECTED;
         }
+
         if (price == PriceUtil.NO_PRICE) {
             return NO_SELLING_HERE;
         }
+
         if (!hasPermission(player, stock.getType(), false)) {
             return NO_PERMISSION;
         }
@@ -169,9 +170,9 @@ public class Shop {
         Economy.subtract(ownerAccount, price);
         Economy.add(player.getName(), price);
 
-        container.addItem(stock);
+        container.addItem(stock.clone());
 
-        InventoryUtil.remove(stock, player.getInventory());
+        InventoryUtil.remove(stock.clone(), player.getInventory());
         player.updateInventory();
 
         TransactionEvent event = new TransactionEvent(SELL, container, sign, player, this.owner, stock, price);
