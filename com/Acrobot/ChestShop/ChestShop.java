@@ -130,6 +130,8 @@ public class ChestShop extends JavaPlugin {
 
     //////////////////    REGISTER EVENTS, SCHEDULER & STATS    ///////////////////////////
     private void registerEvents() {
+        registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
+
         registerEvent(new BlockBreak());
         registerEvent(new BlockPlace());
         registerEvent(new SignChange());
