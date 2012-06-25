@@ -101,4 +101,12 @@ public class Towny implements Listener {
 
         return true;
     }
+
+    public static Towny getTowny() {
+        if (!Config.getBoolean(Property.TOWNY_INTEGRATION)) {
+            return null;
+        }
+
+        return new Towny();
+    }
 }

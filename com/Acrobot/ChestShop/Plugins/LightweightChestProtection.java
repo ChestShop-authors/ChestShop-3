@@ -29,8 +29,8 @@ public class LightweightChestProtection implements Listener {
     private LWC lwc;
     private LimitsV2 limitsModule;
 
-    public LightweightChestProtection(LWC lwc) {
-        this.lwc = lwc;
+    public LightweightChestProtection() {
+        this.lwc = LWC.getInstance();
         limitsModule = new LimitsV2();
     }
 

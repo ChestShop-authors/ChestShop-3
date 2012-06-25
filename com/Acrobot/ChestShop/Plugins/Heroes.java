@@ -7,6 +7,7 @@ import com.herocraftonline.heroes.characters.Hero;
 import com.herocraftonline.heroes.characters.classes.HeroClass;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Acrobot
@@ -33,5 +34,13 @@ public class Heroes implements Listener {
         } else {
             hero.gainExp(heroExp, HeroClass.ExperienceType.EXTERNAL);
         }
+    }
+
+    public static Heroes getHeroes(Plugin plugin) {
+        if (!(plugin instanceof com.herocraftonline.heroes.Heroes)) {
+            return null;
+        }
+
+        return new Heroes((com.herocraftonline.heroes.Heroes) plugin);
     }
 }

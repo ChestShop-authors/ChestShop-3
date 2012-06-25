@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Acrobot
@@ -36,5 +37,13 @@ public class SimpleChestLock implements Listener {
         if (!scl.chests.getOwner(block).equals(playerName)) {
             event.setResult(Event.Result.DENY);
         }
+    }
+
+    public static SimpleChestLock getSimpleChestLock(Plugin plugin) {
+        if (!(plugin instanceof SCL)) {
+            return null;
+        }
+
+        return new SimpleChestLock((SCL) plugin);
     }
 }

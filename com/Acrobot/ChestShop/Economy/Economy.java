@@ -11,7 +11,7 @@ import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
  *         Economy management
  */
 public class Economy {
-    public static EcoPlugin economy;
+    private static EcoPlugin economy;
 
     public static boolean hasAccount(String p) {
         return !p.isEmpty() && economy.hasAccount(uName.getName(p));
@@ -62,5 +62,17 @@ public class Economy {
 
     public static String formatBalance(double amount) {
         return economy.format(roundUp(amount));
+    }
+
+    public static void setPlugin(EcoPlugin plugin) {
+        economy = plugin;
+    }
+
+    public static EcoPlugin getPlugin() {
+        return economy;
+    }
+
+    public static boolean isLoaded() {
+        return economy != null;
     }
 }

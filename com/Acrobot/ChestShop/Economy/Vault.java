@@ -1,10 +1,13 @@
 package com.Acrobot.ChestShop.Economy;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
 /**
  * @author Acrobot
  */
 public class Vault implements EcoPlugin {
-    public static net.milkbowl.vault.economy.Economy economy;
+    private static net.milkbowl.vault.economy.Economy economy;
 
     public boolean hasAccount(String player) {
         return economy.hasAccount(player);
@@ -28,5 +31,29 @@ public class Vault implements EcoPlugin {
 
     public String format(double amount) {
         return economy.format(amount);
+    }
+
+    public static String getPluginName() {
+        if (economy == null) {
+            return "";
+        } else {
+            return economy.getName();
+        }
+    }
+
+    public static Vault getVault() {
+        RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+
+        if (rsp == null) {
+            return null;
+        }
+
+        economy = rsp.getProvider();
+
+        if (economy == null) {
+            return null;
+        } else {
+            return new Vault();
+        }
     }
 }
