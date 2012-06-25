@@ -5,15 +5,14 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 
 import javax.persistence.OptimisticLockException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author Acrobot
  */
 public class Queue implements Runnable {
-    private static final List<Transaction> queue = Collections.synchronizedList(new ArrayList<Transaction>());
+    private static final ConcurrentLinkedQueue<Transaction> queue = new ConcurrentLinkedQueue<Transaction>();
 
     public static void addToQueue(Transaction t) {
         queue.add(t);
