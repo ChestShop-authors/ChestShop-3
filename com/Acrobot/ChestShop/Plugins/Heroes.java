@@ -32,7 +32,7 @@ public class Heroes implements Listener {
         if (hero.hasParty()) {
             hero.getParty().gainExp(heroExp, HeroClass.ExperienceType.EXTERNAL, event.getPlayer().getLocation());
         } else {
-            hero.gainExp(heroExp, HeroClass.ExperienceType.EXTERNAL);
+            hero.gainExp(heroExp, HeroClass.ExperienceType.EXTERNAL, event.getPlayer().getLocation());
         }
     }
 

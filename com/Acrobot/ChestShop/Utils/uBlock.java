@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -67,23 +66,6 @@ public class uBlock {
             Sign sign = (Sign) faceBlock.getState();
 
             if (ChestShopSign.isValid(sign)) {
-                return sign;
-            }
-        }
-        return null;
-    }
-
-    public static Sign findRestrictedSign(Block block) {
-        for (BlockFace bf : SHOP_FACES) {
-            Block faceBlock = block.getRelative(bf);
-
-            if (!BlockUtil.isSign(faceBlock)) {
-                continue;
-            }
-
-            Sign sign = (Sign) faceBlock.getState();
-
-            if (RestrictedSign.isRestricted(sign) && signIsAttachedToBlock(sign, block)) {
                 return sign;
             }
         }

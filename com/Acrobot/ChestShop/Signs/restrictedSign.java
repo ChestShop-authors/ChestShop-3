@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Permission;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -11,12 +12,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 /**
  * @author Acrobot
  */
 public class RestrictedSign implements Listener {
+    private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SELF, BlockFace.UP, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
+
+    @EventHandler(ignoreCancelled = true)
+    public static void onBlockDestroy(BlockBreakEvent event) {
+        Block destroyed = event.getBlock();
+        Sign attachedRestrictedSign = getRestrictedSign(destroyed.getLocation());
+
+        if (attachedRestrictedSign == null) {
+            return;
+        }
+
+        if (!canDestroy(event.getPlayer(), attachedRestrictedSign)) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public static void onSignChange(SignChangeEvent event) {
         String[] lines = event.getLines();
@@ -42,6 +60,35 @@ public class RestrictedSign implements Listener {
             }
         }
     }
+
+    public static Sign getRestrictedSign(Location location) {
+        Block currentBlock = location.getBlock();
+
+        if (BlockUtil.isSign(currentBlock)) {
+            return (Sign) currentBlock.getState();
+        }
+
+        for (BlockFace face : SIGN_CONNECTION_FACES) {
+            Block relative = currentBlock.getRelative(face);
+
+            if (!BlockUtil.isSign(relative)) {
+                continue;
+            }
+
+            Sign sign = (Sign) relative.getState();
+
+            if (!BlockUtil.getAttachedFace(sign).equals(currentBlock)) {
+                continue;
+            }
+
+            if (isRestricted(sign)) {
+                return sign;
+            }
+        }
+
+        return null; //No sign found
+    }
+
     public static boolean isRestrictedShop(Sign sign) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
         return BlockUtil.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
@@ -52,7 +99,7 @@ public class RestrictedSign implements Listener {
     }
 
     public static boolean isRestricted(Sign sign) {
-        return sign.getLine(0).equalsIgnoreCase("[restricted]");
+        return isRestricted(sign.getLines());
     }
 
     public static boolean canAccess(Sign sign, Player player) {

@@ -243,14 +243,14 @@ public class MaterialUtil {
 
             Map<org.bukkit.enchantments.Enchantment, Integer> map = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
 
-            StringBuilder integer = new StringBuilder(String.valueOf(Integer.parseInt(base32, 32)));
+            StringBuilder number = new StringBuilder(Long.toString(Long.parseLong(base32, 32)));
 
-            while (integer.length() % 3 != 0) {
-                integer.insert(0, '0');
+            while (number.length() % 3 != 0) {
+                number.insert(0, '0');
             }
 
-            for (int i = 0; i < integer.length() / 3; i++) {
-                String item = integer.substring(i * 3, i * 3 + 3);
+            for (int i = 0; i < number.length() / 3; i++) {
+                String item = number.substring(i * 3, i * 3 + 3);
 
                 org.bukkit.enchantments.Enchantment enchantment = org.bukkit.enchantments.Enchantment.getById(Integer.parseInt(item.substring(0, 2)));
 
@@ -279,13 +279,13 @@ public class MaterialUtil {
          * @return Encoded enchantments
          */
         public static String encodeEnchantment(Map<org.bukkit.enchantments.Enchantment, Integer> enchantments) {
-            int integer = 0;
+            long number = 0;
 
             for (Map.Entry<org.bukkit.enchantments.Enchantment, Integer> entry : enchantments.entrySet()) {
-                integer = integer * 1000 + (entry.getKey().getId()) * 10 + entry.getValue();
+                number = number * 1000 + (entry.getKey().getId()) * 10 + entry.getValue();
             }
 
-            return integer != 0 ? Integer.toString(integer, 32) : null;
+            return number != 0 ? Long.toString(number, 32) : null;
         }
 
         /**

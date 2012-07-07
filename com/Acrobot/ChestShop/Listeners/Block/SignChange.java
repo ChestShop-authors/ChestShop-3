@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
@@ -27,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import static com.Acrobot.Breeze.Utils.PriceUtil.NO_PRICE;
 import static com.Acrobot.ChestShop.Config.Language.*;
 import static com.Acrobot.ChestShop.Config.Property.SHOP_CREATION_PRICE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
@@ -123,7 +123,7 @@ public class SignChange implements Listener {
 
     private static boolean canCreateShop(Player player, Material mat, double buyPrice, double sellPrice) {
         if (Config.getBoolean(Property.BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE)) {
-            if (buyPrice != -1 && sellPrice != -1 && sellPrice > buyPrice) {
+            if (buyPrice != NO_PRICE && sellPrice != NO_PRICE && sellPrice > buyPrice) {
                 return false;
             }
         }
@@ -135,18 +135,21 @@ public class SignChange implements Listener {
             return true;
         }
 
-        if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)) return false;
-        return !(sell && !Permission.has(player, Permission.SHOP_CREATION_SELL));
+        if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)){
+            return false;
+        } else {
+            return !(sell && !Permission.has(player, Permission.SHOP_CREATION_SELL));
+        }
     }
 
     private static String formatPriceLine(String thirdLine) {
-        String line = thirdLine.toUpperCase();
+        String line = thirdLine;
         String[] split = line.split(":");
 
-        if (NumberUtil.isFloat(split[0])) {
+        if (PriceUtil.textIsPrice(split[0])) {
             line = "B " + line;
         }
-        if (split.length == 2 && NumberUtil.isFloat(split[1])) {
+        if (split.length == 2 && PriceUtil.textIsPrice(split[1])) {
             line += " S";
         }
 

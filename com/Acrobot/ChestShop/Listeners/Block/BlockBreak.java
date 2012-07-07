@@ -3,10 +3,8 @@ package com.Acrobot.ChestShop.Listeners.Block;
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
-import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Material;
@@ -26,23 +24,25 @@ import org.bukkit.material.PistonBaseMaterial;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Acrobot.ChestShop.Config.Property.SHOP_REFUND_PRICE;
+
 /**
  * @author Acrobot
  */
 public class BlockBreak implements Listener {
     public static boolean cancellingBlockBreak(Block block, Player player) {
-        if (block == null) return false;
+        if (block == null) {
+            return false;
+        }
 
         if (BlockUtil.isSign(block)) block.getState().update(); //Show the text immediately
-
-        if (restrictedSign(block)) return !RestrictedSign.canDestroy(player, uBlock.findRestrictedSign(block));
 
         Sign sign = uBlock.findValidShopSign(block, (player != null ? uName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
         if (playerIsNotOwner(player, sign)) return !isAdmin(player); //If the player isn't the owner or an admin - cancel!
 
         if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)) {
-            float refundPrice = Config.getFloat(Property.SHOP_REFUND_PRICE);
+            float refundPrice = Config.getFloat(SHOP_REFUND_PRICE);
             Economy.add(uName.getName(sign.getLine(0)), refundPrice); //Add some money
             player.sendMessage(Config.getLocal(Language.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
         }
@@ -55,12 +55,7 @@ public class BlockBreak implements Listener {
     }
 
     private static boolean weShouldReturnMoney() {
-        //We should return money when it's turned on in config, obviously
-        return Config.getFloat(Property.SHOP_REFUND_PRICE) != 0;
-    }
-
-    private static boolean restrictedSign(Block block) {
-        return uBlock.findRestrictedSign(block) != null;
+        return Config.getFloat(SHOP_REFUND_PRICE) != 0;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

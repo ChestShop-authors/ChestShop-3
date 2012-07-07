@@ -61,4 +61,17 @@ public class PriceUtil {
     public static double getSellPrice(String text) {
         return get(text, 's');
     }
+
+    /**
+     * Checks if the string is a valid price
+     * @param text Text to check
+     * @return Is the string a valid price
+     */
+    public static boolean textIsPrice(String text) {
+        if (NumberUtil.isFloat(text)) {
+            return true;
+        }
+
+        return text.trim().equalsIgnoreCase("free");
+    }
 }
