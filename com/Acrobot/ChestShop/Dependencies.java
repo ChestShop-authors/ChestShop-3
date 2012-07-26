@@ -18,6 +18,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
 
+import static com.Acrobot.ChestShop.Config.Property.TOWNY_INTEGRATION;
 import static com.Acrobot.ChestShop.Config.Property.WORLDGUARD_INTEGRATION;
 import static com.Acrobot.ChestShop.Config.Property.WORLDGUARD_USE_PROTECTION;
 
@@ -79,12 +80,15 @@ public class Dependencies {
             case SimpleChestLock:
                 listener = SimpleChestLock.getSimpleChestLock(plugin);
                 break;
+            case SecureChests:
+                listener = new SecureChests();
+                break;
 
             //Terrain protection plugins
             case Towny:
                 Towny towny = Towny.getTowny();
 
-                if (towny == null) {
+                if (towny == null || !Config.getBoolean(TOWNY_INTEGRATION)) {
                     return;
                 }
 
@@ -148,6 +152,7 @@ public class Dependencies {
         Lockette,
         Deadbolt,
         SimpleChestLock,
+        SecureChests,
 
         OddItem,
 
