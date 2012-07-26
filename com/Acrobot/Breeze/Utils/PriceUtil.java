@@ -33,7 +33,7 @@ public class PriceUtil {
             if (NumberUtil.isDouble(part)) {
                 double price = Double.valueOf(part);
 
-                if (price == 0) {
+                if (price <= 0) {
                     return NO_PRICE;
                 } else {
                     return price;
