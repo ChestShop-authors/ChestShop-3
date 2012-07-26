@@ -182,7 +182,11 @@ public class MaterialUtil {
         Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName);
 
         if (!enchantments.isEmpty()) {
-            itemStack.addEnchantments(enchantments);
+            try {
+                itemStack.addEnchantments(enchantments);
+            } catch (IllegalArgumentException exception) {
+                //Do nothing, because the enchantment can't be applied
+            }
         }
 
         return itemStack;
@@ -237,7 +241,7 @@ public class MaterialUtil {
          * @return Enchantments found
          */
         public static Map<org.bukkit.enchantments.Enchantment, Integer> getEnchantments(String base32) {
-            if (base32 == null) {
+            if (base32 == null || base32.isEmpty()) {
                 return new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
             }
 
