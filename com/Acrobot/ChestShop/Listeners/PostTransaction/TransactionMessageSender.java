@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Economy.Economy;
@@ -11,8 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.Acrobot.ChestShop.Config.Language.*;
 import static com.Acrobot.ChestShop.Config.Property.SHOW_TRANSACTION_INFORMATION_CLIENT;
@@ -78,24 +79,28 @@ public class TransactionMessageSender implements Listener {
     }
 
     private static String parseItemInformation(ItemStack[] items) {
-        Map<String, Integer> itemMap = new HashMap<String, Integer>();
+        List<ItemStack> stock = new LinkedList<ItemStack>();
 
         for (ItemStack item : items) {
-            String matName = item.getType().name();
+            boolean added = false;
 
-            if (itemMap.containsKey(matName)) {
-                int curAmount = itemMap.get(matName);
+            for (ItemStack iStack : stock) {
+                if (MaterialUtil.equals(item, iStack)) {
+                    iStack.setAmount(iStack.getAmount() + item.getAmount());
+                    added = true;
+                    break;
+                }
+            }
 
-                itemMap.put(matName, curAmount + item.getAmount());
-            } else {
-                itemMap.put(matName, item.getAmount());
+            if (!added) {
+                stock.add(item);
             }
         }
 
         StringBuilder message = new StringBuilder(15);
 
-        for (Map.Entry<String, Integer> item : itemMap.entrySet()) {
-            message.append(item.getValue()).append(' ').append(item.getKey());
+        for (ItemStack item : stock) {
+            message.append(item.getType().name()).append(' ').append(item.getAmount());
         }
 
         return message.toString();

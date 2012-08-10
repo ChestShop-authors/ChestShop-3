@@ -139,6 +139,7 @@ public class PartialTransactionModule implements Listener {
                 if (MaterialUtil.equals(item, needed)) {
                     needed.setAmount(needed.getAmount() + item.getAmount());
                     itemAdded = true;
+                    break;
                 }
             }
 
@@ -152,8 +153,8 @@ public class PartialTransactionModule implements Listener {
 
         for (ItemStack item : neededItems) {
             int amount = InventoryUtil.getAmount(item, inventory);
-            ItemStack clone = item.clone();
 
+            ItemStack clone = item.clone();
             clone.setAmount(amount > item.getAmount() ? item.getAmount() : amount);
 
             toReturn.add(clone);
@@ -168,15 +169,31 @@ public class PartialTransactionModule implements Listener {
 
         for (ItemStack stack : stock) {
             int count = stack.getAmount();
+            ItemStack toAdd;
+
             if (left > count) {
-                stacks.add(stack);
+                toAdd = stack;
                 left -= count;
             } else {
                 ItemStack clone = stack.clone();
 
                 clone.setAmount(left);
-                stacks.add(clone);
+                toAdd = clone;
                 left = 0;
+            }
+
+            boolean added = false;
+
+            for (ItemStack iStack : stacks) {
+                if (MaterialUtil.equals(toAdd, iStack)) {
+                    iStack.setAmount(iStack.getAmount() + toAdd.getAmount());
+                    added = true;
+                    break;
+                }
+            }
+
+            if (!added) {
+                stacks.add(toAdd);
             }
 
             if (left <= 0) {
