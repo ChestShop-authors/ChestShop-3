@@ -22,6 +22,7 @@ import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.EmptyShopDeleter;
 import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.TransactionLogger;
 import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.TransactionMessageSender;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
+import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import org.bukkit.Bukkit;
@@ -161,6 +162,8 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new StockFittingChecker());
         registerEvent(new ErrorMessageSender());
         registerEvent(new SpamClickProtector(Config.getInteger(SHOP_INTERACTION_INTERVAL)));
+
+        registerEvent(new RestrictedSign());
 
         if (Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS)) {
             registerEvent(new PartialTransactionModule());
