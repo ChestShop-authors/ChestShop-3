@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners.Shop.PreTransaction;
+package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;

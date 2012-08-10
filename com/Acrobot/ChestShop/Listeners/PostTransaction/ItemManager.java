@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners.Shop.PostTransaction;
+package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Events.TransactionEvent;

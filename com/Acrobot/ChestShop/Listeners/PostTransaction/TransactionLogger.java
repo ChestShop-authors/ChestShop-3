@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners.Shop.PostTransaction;
+package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
@@ -19,34 +19,27 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
  * @author Acrobot
  */
 public class TransactionLogger implements Listener {
+    private static final String BUY_MESSAGE = "%1$s bought %2$s for %3$.2f from %4$s at %5$s";
+    private static final String SELL_MESSAGE = "%1$s sold %2$s for %3$.2f to %4$s at %5$s";
+
     @EventHandler
     public static void onTransaction(TransactionEvent event) {
-        StringBuilder message = new StringBuilder(70);
+        String template = (event.getTransactionType() == BUY ? BUY_MESSAGE : SELL_MESSAGE);
 
-        message.append(event.getClient().getName());
-
-        if (event.getTransactionType() == BUY) {
-            message.append(" bought ");
-        } else {
-            message.append(" sold ");
-        }
+        StringBuilder items = new StringBuilder(50);
 
         for (ItemStack item : event.getStock()) {
-            message.append(item.getAmount()).append(' ').append(getSignName(item));
+            items.append(item.getAmount()).append(' ').append(getSignName(item));
         }
 
-        message.append(" for ").append(event.getPrice());
+        String message = String.format(template,
+                event.getClient().getName(),
+                items.toString(),
+                event.getPrice(),
+                event.getOwner().getName(),
+                locationToString(event.getSign().getLocation()));
 
-        if (event.getTransactionType() == BUY) {
-            message.append(" from ");
-        } else {
-            message.append(" to ");
-        }
-
-        message.append(event.getOwner()).append(' ');
-        message.append(locationToString(event.getSign().getLocation()));
-
-        ChestShop.getBukkitLogger().info(message.toString());
+        ChestShop.getBukkitLogger().info(message);
     }
 
     @EventHandler
@@ -60,7 +53,7 @@ public class TransactionLogger implements Listener {
         for (ItemStack item : event.getStock()) {
             Transaction transaction = new Transaction();
 
-            transaction.setAmount(event.getStock()[0].getAmount());
+            transaction.setAmount(item.getAmount());
 
             transaction.setItemID(item.getTypeId());
             transaction.setItemDurability(item.getDurability());
