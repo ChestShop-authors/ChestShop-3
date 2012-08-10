@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
@@ -39,6 +40,11 @@ public class SignChange implements Listener {
     public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
         String[] line = event.getLines();
+
+        if (!BlockUtil.isSign(signBlock)) {
+            ChestShop.getBukkitLogger().severe("Player " + event.getPlayer().getName() + " tried to create a fake sign. Hacking?");
+            return;
+        }
 
         ItemStack stock = MaterialUtil.getItem(line[ITEM_LINE]);
 
@@ -144,7 +150,7 @@ public class SignChange implements Listener {
 
     private static String formatPriceLine(String thirdLine) {
         String line = thirdLine;
-        String[] split = line.split(":");
+        String[] split = line.toUpperCase().split(":");
 
         if (PriceUtil.textIsPrice(split[0])) {
             line = "B " + line;
