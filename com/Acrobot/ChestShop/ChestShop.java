@@ -15,9 +15,12 @@ import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
 import com.Acrobot.ChestShop.Listeners.Player.ShortNameSaver;
-import com.Acrobot.ChestShop.Listeners.Transaction.EmptyShopDeleter;
-import com.Acrobot.ChestShop.Listeners.Transaction.TransactionLogger;
-import com.Acrobot.ChestShop.Listeners.Transaction.TransactionMessageSender;
+import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.EconomicModule;
+import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.ItemManager;
+import com.Acrobot.ChestShop.Listeners.Shop.PreTransaction.*;
+import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.EmptyShopDeleter;
+import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.TransactionLogger;
+import com.Acrobot.ChestShop.Listeners.Shop.PostTransaction.TransactionMessageSender;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
@@ -36,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+
+import static com.Acrobot.ChestShop.Config.Property.ALLOW_PARTIAL_TRANSACTIONS;
+import static com.Acrobot.ChestShop.Config.Property.SHOP_INTERACTION_INTERVAL;
 
 /**
  * Main file of the plugin
@@ -137,6 +143,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new SignChange());
         registerEvent(new EntityExplode());
         registerEvent(new PlayerConnect());
+        registerEvent(new PlayerInteract());
 
         registerEvent(new ItemInfoListener());
 
@@ -144,9 +151,24 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new TransactionLogger());
         registerEvent(new TransactionMessageSender());
 
-        registerEvent(new ShortNameSaver());
+        registerEvent(new EconomicModule());
+        registerEvent(new ItemManager());
 
-        registerEvent(new PlayerInteract(Config.getInteger(Property.SHOP_INTERACTION_INTERVAL)));
+        registerEvent(new CreativeModeIgnorer());
+        registerEvent(new PermissionChecker());
+        registerEvent(new PriceValidator());
+        registerEvent(new ShopValidator());
+        registerEvent(new StockFittingChecker());
+        registerEvent(new ErrorMessageSender());
+        registerEvent(new SpamClickProtector(Config.getInteger(SHOP_INTERACTION_INTERVAL)));
+
+        if (Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS)) {
+            registerEvent(new PartialTransactionModule());
+        } else {
+            registerEvent(new AmountAndPriceChecker());
+        }
+
+        registerEvent(new ShortNameSaver());
     }
 
     public void registerEvent(Listener listener) {

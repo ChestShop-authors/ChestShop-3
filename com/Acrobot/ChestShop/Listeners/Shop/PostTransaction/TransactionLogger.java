@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners.Transaction;
+package com.Acrobot.ChestShop.Listeners.Shop.PostTransaction;
 
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Config.Config;
@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.Acrobot.Breeze.Utils.MaterialUtil.getSignName;
 import static com.Acrobot.ChestShop.Config.Property.GENERATE_STATISTICS_PAGE;
 import static com.Acrobot.ChestShop.Config.Property.LOG_TO_DATABASE;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.Type.BUY;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
 /**
  * @author Acrobot
@@ -31,9 +31,11 @@ public class TransactionLogger implements Listener {
             message.append(" sold ");
         }
 
-        message.append(event.getItemAmount()).append(' ');
-        message.append(getSignName(event.getItem())).append(" for ");
-        message.append(event.getPrice());
+        for (ItemStack item : event.getStock()) {
+            message.append(item.getAmount()).append(' ').append(getSignName(item));
+        }
+
+        message.append(" for ").append(event.getPrice());
 
         if (event.getTransactionType() == BUY) {
             message.append(" from ");
@@ -42,7 +44,6 @@ public class TransactionLogger implements Listener {
         }
 
         message.append(event.getOwner()).append(' ');
-
         message.append(locationToString(event.getSign().getLocation()));
 
         ChestShop.getBukkitLogger().info(message.toString());
@@ -54,23 +55,26 @@ public class TransactionLogger implements Listener {
             return;
         }
 
-        Transaction transaction = new Transaction();
-        ItemStack item = event.getItem();
+        double pricePerStack = event.getPrice() / event.getStock().length;
 
-        transaction.setAmount(event.getItemAmount());
+        for (ItemStack item : event.getStock()) {
+            Transaction transaction = new Transaction();
 
-        transaction.setItemID(item.getTypeId());
-        transaction.setItemDurability(item.getDurability());
+            transaction.setAmount(event.getStock()[0].getAmount());
 
-        transaction.setPrice((float) event.getPrice());
+            transaction.setItemID(item.getTypeId());
+            transaction.setItemDurability(item.getDurability());
 
-        transaction.setShopOwner(event.getOwner());
-        transaction.setShopUser(event.getClient().getName());
+            transaction.setPrice((float) pricePerStack);
 
-        transaction.setSec(System.currentTimeMillis() / 1000);
-        transaction.setBuy(event.getTransactionType() == BUY);
+            transaction.setShopOwner(event.getOwner().getName());
+            transaction.setShopUser(event.getClient().getName());
 
-        Queue.addToQueue(transaction);
+            transaction.setSec(System.currentTimeMillis() / 1000);
+            transaction.setBuy(event.getTransactionType() == BUY);
+
+            Queue.addToQueue(transaction);
+        }
     }
 
     private static String locationToString(Location loc) {

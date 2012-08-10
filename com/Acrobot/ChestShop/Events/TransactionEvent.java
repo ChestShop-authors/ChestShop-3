@@ -1,10 +1,11 @@
 package com.Acrobot.ChestShop.Events;
 
-import com.Acrobot.ChestShop.Containers.Container;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -12,63 +13,79 @@ import org.bukkit.inventory.ItemStack;
  */
 public class TransactionEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
+    private final TransactionType type;
 
-    private Container container;
-    private Sign sign;
+    private final Inventory ownerInventory;
+    private final Inventory clientInventory;
 
-    private Player client;
-    private String owner;
+    private final Player client;
+    private final OfflinePlayer owner;
 
-    private ItemStack item;
-    private int itemAmount;
-    private double price;
+    private final ItemStack[] stock;
+    private final double price;
 
-    private Type transactionType;
+    private final Sign sign;
 
-    public TransactionEvent(Type transactionType, Container container, Sign sign, Player client, String owner, ItemStack item, double price) {
-        this.container = container;
+    public TransactionEvent(PreTransactionEvent event, Sign sign) {
+        this.type = event.getTransactionType();
+
+        this.ownerInventory = event.getOwnerInventory();
+        this.clientInventory = event.getClientInventory();
+
+        this.client = event.getClient();
+        this.owner = event.getOwner();
+
+        this.stock = event.getStock();
+        this.price = event.getPrice();
+
         this.sign = sign;
+    }
+
+    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, OfflinePlayer owner, ItemStack[] stock, double price, Sign sign){
+        this.type = type;
+
+        this.ownerInventory = ownerInventory;
+        this.clientInventory = clientInventory;
 
         this.client = client;
         this.owner = owner;
 
-        this.item = item;
-        this.itemAmount = item.getAmount();
-
-        this.transactionType = transactionType;
+        this.stock = stock;
         this.price = price;
+
+        this.sign = sign;
     }
 
-    public Type getTransactionType() {
-        return transactionType;
+    public TransactionType getTransactionType() {
+        return type;
     }
 
-    public Container getContainer() {
-        return container;
+    public Inventory getOwnerInventory() {
+        return ownerInventory;
     }
 
-    public Sign getSign() {
-        return sign;
+    public Inventory getClientInventory() {
+        return clientInventory;
     }
 
     public Player getClient() {
         return client;
     }
 
-    public String getOwner() {
+    public OfflinePlayer getOwner() {
         return owner;
     }
 
-    public ItemStack getItem() {
-        return item;
-    }
-
-    public int getItemAmount() {
-        return itemAmount;
+    public ItemStack[] getStock() {
+        return stock;
     }
 
     public double getPrice() {
         return price;
+    }
+
+    public Sign getSign() {
+        return sign;
     }
 
     public HandlerList getHandlers() {
@@ -79,7 +96,7 @@ public class TransactionEvent extends Event {
         return handlers;
     }
 
-    public enum Type {
+    public enum TransactionType {
         BUY,
         SELL
     }
