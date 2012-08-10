@@ -1,20 +1,22 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
+import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
-import com.Acrobot.ChestShop.Shop.Shop;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -25,15 +27,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.ChestShop.Config.Language.ACCESS_DENIED;
 import static com.Acrobot.ChestShop.Config.Property.*;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.Type.BUY;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.Type.SELL;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -41,45 +42,30 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
  * @author Acrobot
  */
 public class PlayerInteract implements Listener {
-    private static final Map<UUID, Long> TIME_OF_THE_LATEST_CLICK = new HashMap<UUID, Long>();
-    private static final String ITEM_NOT_RECOGNISED = ChatColor.RED + "[Shop] The item is not recognised!";
-
-    private final int transactionBlockInterval;
-
-    public PlayerInteract(int transactionInterval) {
-        this.transactionBlockInterval = transactionInterval;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        Action action = event.getAction();
-        if (!playerClickedBlock(action)) {
+    public static void onPlayerInteract(PlayerInteractEvent event) {
+        Block clickedBlock = event.getClickedBlock();
+
+        if (clickedBlock == null) {
             return;
         }
 
-        Block block = event.getClickedBlock();
+        Action action = event.getAction();
         Player player = event.getPlayer();
 
-        if (Config.getBoolean(USE_BUILT_IN_PROTECTION) && block.getType() == Material.CHEST) {
-            if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, block)) {
+        if (Config.getBoolean(USE_BUILT_IN_PROTECTION) && clickedBlock.getType() == Material.CHEST) {
+            if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, clickedBlock)) {
                 player.sendMessage(Config.getLocal(ACCESS_DENIED));
                 event.setCancelled(true);
                 return;
             }
         }
 
-        if (!BlockUtil.isSign(block)) return;
-        Sign sign = (Sign) block.getState();
+        if (!BlockUtil.isSign(clickedBlock)) return;
+        Sign sign = (Sign) clickedBlock.getState();
 
         if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
-        if (!ChestShopSign.isValid(sign) || !enoughTimeHasPassed(player) || player.isSneaking()) return;
-
-        if (Config.getBoolean(IGNORE_CREATIVE_MODE) && player.getGameMode() == GameMode.CREATIVE) {
-            event.setCancelled(true);
-            return;
-        }
-
-        TIME_OF_THE_LATEST_CLICK.put(player.getUniqueId(), System.currentTimeMillis());
+        if (!ChestShopSign.isValid(sign) || player.isSneaking()) return;
 
         if (action == RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
@@ -91,49 +77,44 @@ public class PlayerInteract implements Listener {
             }
 
             if (action != LEFT_CLICK_BLOCK || !Config.getBoolean(ALLOW_LEFT_CLICK_DESTROYING)) {
-                showChestGUI(player, block);
+                showChestGUI(player, clickedBlock);
             }
             return;
         }
 
-        if (RestrictedSign.isRestrictedShop(sign) && !RestrictedSign.canAccess(sign, player)) {
-            player.sendMessage(Config.getLocal(ACCESS_DENIED));
-            return;
-        }
-
-        Action buy = (Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK);
-
-        Shop shop = Shop.getShopFromSign(sign);
-
-        if (shop == null) {
-            player.sendMessage(ITEM_NOT_RECOGNISED);
-            return;
-        }
-
-        PreTransactionEvent pEvent = new PreTransactionEvent(shop, player, action == buy ? BUY : SELL);
+        PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
         Bukkit.getPluginManager().callEvent(pEvent);
 
         if (pEvent.isCancelled()) {
             return;
         }
 
-        if (action == buy) {
-            shop.sellToPlayer(player);
-        } else {
-            shop.buyFromPlayer(player);
-        }
+        TransactionEvent tEvent = new TransactionEvent(pEvent, sign);
+        Bukkit.getPluginManager().callEvent(tEvent);
     }
 
-    private boolean enoughTimeHasPassed(Player player) {
-        UUID uniqueID = player.getUniqueId();
+    private static PreTransactionEvent preparePreTransactionEvent(Sign sign, Player player, Action action) {
+        String ownerName = uName.getName(sign.getLine(NAME_LINE));
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerName);
 
-        return !TIME_OF_THE_LATEST_CLICK.containsKey(uniqueID) || (System.currentTimeMillis() - TIME_OF_THE_LATEST_CLICK.get(uniqueID)) >= transactionBlockInterval;
+        String priceLine = sign.getLine(PRICE_LINE);
+
+        Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
+        double price = (action == buy ? PriceUtil.getBuyPrice(priceLine) : PriceUtil.getSellPrice(priceLine));
+
+        Chest chest = uBlock.findConnectedChest(sign);
+        Inventory ownerInventory = (ChestShopSign.isAdminShop(sign) ? new AdminInventory() : chest != null ? chest.getInventory() : null);
+
+        ItemStack item = MaterialUtil.getItem(sign.getLine(ITEM_LINE));
+
+        int amount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
+        item.setAmount(amount);
+
+        ItemStack[] items = {item};
+
+        TransactionType transactionType = (action == buy ? BUY : SELL);
+        return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, owner, sign, transactionType);
     }
-
-    private static boolean playerClickedBlock(Action action) {
-        return action == LEFT_CLICK_BLOCK || action == RIGHT_CLICK_BLOCK;
-    }
-
 
     private static boolean canOpenOtherShops(Player player) {
         return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
