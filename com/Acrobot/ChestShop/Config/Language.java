@@ -25,14 +25,15 @@ public enum Language {
     NOT_ENOUGH_STOCK("This shop is out of stock."),
     NOT_ENOUGH_STOCK_IN_YOUR_SHOP("Your %material shop is out of stock!"),
 
-    YOU_BOUGHT_FROM_SHOP("You bought %amount %item from %owner for %price."),
-    SOMEBODY_BOUGHT_FROM_YOUR_SHOP("%buyer bought %amount %item for %price from you."),
+    YOU_BOUGHT_FROM_SHOP("You bought %item from %owner for %price."),
+    SOMEBODY_BOUGHT_FROM_YOUR_SHOP("%buyer bought %item for %price from you."),
 
-    YOU_SOLD_TO_SHOP("You sold %amount %item to %buyer for %price."),
-    SOMEBODY_SOLD_TO_YOUR_SHOP("%seller sold %amount %item for %price to you."),
+    YOU_SOLD_TO_SHOP("You sold %item to %buyer for %price."),
+    SOMEBODY_SOLD_TO_YOUR_SHOP("%seller sold %item for %price to you."),
 
     YOU_CANNOT_CREATE_SHOP("You can't create this type of shop!"),
     NO_CHEST_DETECTED("Couldn't find a chest!"),
+    INVALID_SHOP_DETECTED("The shop cannot be used! (It might lack a chest!)"),
     ANOTHER_SHOP_DETECTED("Another player's shop detected!"),
     CANNOT_ACCESS_THE_CHEST("You don't have permissions to access this chest!"),
 
