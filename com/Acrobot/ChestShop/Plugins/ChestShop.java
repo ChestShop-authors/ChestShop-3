@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.ChestShop.Containers.ShopChest;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -50,9 +50,7 @@ public class ChestShop implements Listener {
         }
 
         if (isChest(block)) {
-            ShopChest chest = new ShopChest((Chest) block.getState());
-
-            Sign sign = chest.findShopSign();
+            Sign sign = uBlock.getConnectedSign((Chest) block.getState());
 
             if (sign != null && !isShopMember(player, sign)) {
                 return false;
