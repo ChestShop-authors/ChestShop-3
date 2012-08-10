@@ -15,6 +15,31 @@ import org.bukkit.material.Attachable;
 public class uBlock {
     private static final BlockFace[] CHEST_EXTENSION_FACES = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
     private static final BlockFace[] SHOP_FACES = {BlockFace.SELF, BlockFace.DOWN, BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
+    private static final BlockFace[] NEIGHBOR_FACES = new BlockFace[]{BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
+
+    public static Sign getConnectedSign(Chest chest) {
+        Sign sign = uBlock.findAnyNearbyShopSign(chest.getBlock());
+
+        if (sign == null && getNeighbor(chest) != null) {
+            sign = uBlock.findAnyNearbyShopSign(getNeighbor(chest).getBlock());
+        }
+
+        return sign;
+    }
+
+    private static Chest getNeighbor(Chest chest) {
+        Block chestBlock = chest.getBlock();
+
+        for (BlockFace chestFace : NEIGHBOR_FACES) {
+            Block relative = chestBlock.getRelative(chestFace);
+
+            if (relative.getState() instanceof Chest) {
+                return (Chest) relative.getState();
+            }
+        }
+
+        return null;
+    }
 
     public static Chest findConnectedChest(Sign sign) {
         Block block = sign.getBlock();
