@@ -100,7 +100,7 @@ public class TransactionMessageSender implements Listener {
         StringBuilder message = new StringBuilder(15);
 
         for (ItemStack item : stock) {
-            message.append(item.getType().name()).append(' ').append(item.getAmount());
+            message.append(item.getAmount()).append(' ').append(item.getType().name());
         }
 
         return message.toString();
