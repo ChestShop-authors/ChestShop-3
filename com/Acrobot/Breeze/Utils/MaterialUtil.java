@@ -63,14 +63,14 @@ public class MaterialUtil {
             return material;
         }
 
-        name = name.toUpperCase().replace(" ", "_");
+        name = name.replace(" ", "").toUpperCase();
 
         short length = Short.MAX_VALUE;
 
         for (Material currentMaterial : Material.values()) {
             String matName = currentMaterial.name();
 
-            if (matName.startsWith(name) && matName.length() < length) {
+            if (matName.replace("_", "").startsWith(name) && matName.length() < length) {
                 length = (short) matName.length();
                 material = currentMaterial;
             }
