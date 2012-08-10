@@ -56,7 +56,7 @@ public class Economy {
         return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 
-    public static double balance(String name) {
+    public static double getBalance(String name) {
         return economy.balance(uName.getName(name));
     }
 
