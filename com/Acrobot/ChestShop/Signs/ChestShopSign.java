@@ -23,7 +23,7 @@ public class ChestShopSign {
     public static final Pattern[] SHOP_SIGN_PATTERN = {
             Pattern.compile("^$|^\\w.+$"),
             Pattern.compile("[0-9]+"),
-            Pattern.compile(".+"),
+            Pattern.compile("(?i)(((b *[0-9]+)|([0-9]+ *b))|((s *[0-9]+)|([0-9]+ *s)))|((((b *[0-9]+)|([0-9]+ *b))[ ]*:[ ]*((s *[0-9]+)|([0-9]+ *s))))"),
             Pattern.compile("[\\w : -]+")
     };
 
@@ -40,7 +40,7 @@ public class ChestShopSign {
     }
 
     public static boolean isValid(String[] line) {
-        return isValidPreparedSign(line) && (line[2].contains("B") || line[2].contains("S")) && !line[0].isEmpty();
+        return isValidPreparedSign(line) && !line[0].isEmpty();
     }
 
     public static boolean isValid(Block sign) {
@@ -60,6 +60,5 @@ public class ChestShopSign {
                 return false;
             }
         }
-        return lines[2].indexOf(':') == lines[2].lastIndexOf(':');
     }
 }
