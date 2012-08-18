@@ -17,42 +17,42 @@ public class Economy {
         return !p.isEmpty() && economy.hasAccount(uName.getName(p));
     }
 
+    public static String serverAccount() {
+        return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
+    }
+    
+    public static boolean isServerAccount(String acc) {
+        return serverAccount().equals(acc);
+    }
+
     public static void add(String name, double amount) {
-        if (!hasAccount(name)) {
-            return;
-        }
+        Property taxAmount = isServerAccount(name) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
 
-        String serverAccount = Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
-        Property taxAmount = name.equals(serverAccount) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
-
-        if (Config.getFloat(taxAmount) != 0) {
-            double tax = getTax(taxAmount, amount);
-            if (!serverAccount.isEmpty()) {
-                economy.add(serverAccount, tax);
+        double tax = getTax(taxAmount, amount);
+        if(tax != 0) {
+            if (!serverAccount().isEmpty()) {
+                economy.add(serverAccount(), tax);
             }
             amount -= tax;
         }
-
-        economy.add(uName.getName(name), roundUp(amount));
+        
+        if(name.isEmpty()) return;
+        economy.add(uName.getName(name), amount);
     }
 
     public static double getTax(Property tax, double price) {
-        return (Config.getFloat(tax) / 100F) * price;
+        return roundDown((Config.getFloat(tax) / 100F) * price);
     }
 
     public static void subtract(String name, double amount) {
-        if (!hasAccount(name)) {
-            return;
-        }
-
+        if(name.isEmpty()) return;
         economy.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {
-        if (!hasAccount(name)) {
+        if(isServerAccount(name)) {
             return true;
         }
-
         return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 
