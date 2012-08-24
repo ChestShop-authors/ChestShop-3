@@ -164,6 +164,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new SpamClickProtector(Config.getInteger(SHOP_INTERACTION_INTERVAL)));
 
         registerEvent(new RestrictedSign());
+        registerEvent(new DiscountModule());
 
         if (Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS)) {
             registerEvent(new PartialTransactionModule());

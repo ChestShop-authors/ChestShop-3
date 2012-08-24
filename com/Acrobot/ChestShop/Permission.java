@@ -21,7 +21,9 @@ public enum Permission {
     MOD("ChestShop.mod"),
     OTHER_NAME("ChestShop.name."),
     GROUP("ChestShop.group."),
-    NOFEE("ChestShop.nofee");
+
+    NOFEE("ChestShop.nofee"),
+    DISCOUNT("ChestShop.discount.");
 
     private final String permission;
 

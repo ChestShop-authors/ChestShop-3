@@ -3,7 +3,10 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -20,6 +23,11 @@ public class EmptyShopDeleter implements Listener {
         }
 
         if (shopShouldBeRemoved(event.getOwnerInventory())) {
+            if (!ChestShopSign.isAdminShop(event.getSign())) {
+                Chest connectedChest = uBlock.findConnectedChest(event.getSign());
+                connectedChest.getBlock().setType(Material.AIR);
+            }
+
             event.getSign().getBlock().setType(Material.AIR);
             event.getOwnerInventory().addItem(new ItemStack(Material.SIGN, 1));
         }
