@@ -41,7 +41,6 @@ public class ChestShopSign {
 
     public static boolean isValid(String[] line) {
         return isValidPreparedSign(line) && (line[2].toUpperCase().contains("B") || line[2].toUpperCase().contains("S")) && !line[0].isEmpty();
-
     }
 
     public static boolean isValid(Block sign) {
