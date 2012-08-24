@@ -14,7 +14,7 @@ description: >
  
  
 softdepend: [LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes,
-                iConomy, BOSEconomy, Essentials, SimpleChestLock, SecureChests]
+                iConomy, BOSEconomy, Essentials, SimpleChestLock, SecureChests, Residence]
 commands:
   iteminfo:
     aliases: [iinfo]

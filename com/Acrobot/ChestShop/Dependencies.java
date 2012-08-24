@@ -83,6 +83,9 @@ public class Dependencies {
             case SecureChests:
                 listener = new SecureChests();
                 break;
+            case Residence:
+                listener = new ResidenceChestProtection();
+                break;
 
             //Terrain protection plugins
             case Towny:
@@ -153,6 +156,7 @@ public class Dependencies {
         Deadbolt,
         SimpleChestLock,
         SecureChests,
+        Residence,
 
         OddItem,
 
