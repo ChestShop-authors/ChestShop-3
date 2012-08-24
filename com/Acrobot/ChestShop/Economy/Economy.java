@@ -17,26 +17,26 @@ public class Economy {
         return !p.isEmpty() && economy.hasAccount(uName.getName(p));
     }
 
-    public static String serverAccount() {
+    public static String getServerAccountName() {
         return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
     }
     
     public static boolean isServerAccount(String acc) {
-        return serverAccount().equals(acc);
+        return getServerAccountName().equals(acc);
     }
 
     public static void add(String name, double amount) {
         Property taxAmount = isServerAccount(name) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
 
         double tax = getTax(taxAmount, amount);
-        if(tax != 0) {
+        if (tax != 0) {
             if (!serverAccount().isEmpty()) {
-                economy.add(serverAccount(), tax);
+                economy.add(getServerAccountName(), tax);
             }
             amount -= tax;
         }
         
-        if(name.isEmpty()) return;
+        if (name.isEmpty()) return;
         economy.add(uName.getName(name), amount);
     }
 
@@ -45,12 +45,12 @@ public class Economy {
     }
 
     public static void subtract(String name, double amount) {
-        if(name.isEmpty()) return;
+        if (name.isEmpty()) return;
         economy.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {
-        if(isServerAccount(name)) {
+        if (isServerAccount(name)) {
             return true;
         }
         return economy.hasEnough(uName.getName(name), roundUp(amount));
