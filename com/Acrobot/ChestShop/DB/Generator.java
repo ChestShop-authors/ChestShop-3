@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.avaje.ebean.ExpressionList;
 import org.bukkit.Material;
 
+import javax.persistence.PersistenceException;
 import java.io.*;
 import java.util.List;
 
@@ -162,7 +163,10 @@ public class Generator implements Runnable {
             fileEnd(generationTime);
         } catch (Exception e) {
             ChestShop.getBukkitLogger().severe("Couldn't generate statistics page!");
-            e.printStackTrace();
+
+            if (!(e instanceof PersistenceException)) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -73,9 +73,10 @@ public class NumberUtil {
     public static double roundUp(double number) {
         return Math.ceil(number * 100) / 100;
     }
+
     /**
      * Rounds the number down to two decimal points
-     * 
+     *
      * @param number Number to round
      * @return Rounded number
      */
@@ -101,16 +102,12 @@ public class NumberUtil {
     }
 
     /**
-     * Converts a number to roman
+     * Converts a number to roman (only 1-9, because of the enchantment decorations)
      *
      * @param number number to convert
      * @return Converted number
      */
     public static String toRoman(int number) {
-        if (number < 1 || number > 9) {
-            throw new IllegalArgumentException("The number must be in range 1-9 (This is only for enchantment level decoration)");
-        }
-
         switch (number) {
             case 1:
                 return "I";

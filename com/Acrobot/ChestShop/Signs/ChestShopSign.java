@@ -21,14 +21,14 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[] SHOP_SIGN_PATTERN = {
-            Pattern.compile("^$|^\\w.+$"),
+            Pattern.compile("^[\\w ]*$"),
             Pattern.compile("[0-9]+"),
-            Pattern.compile(".+"),
+            Pattern.compile("^[\\dbs(free) :]+$"),
             Pattern.compile("[\\w : -]+")
     };
 
     public static boolean isAdminShop(String owner) {
-        return owner.toLowerCase().replace(" ", "").equals(Config.getString(ADMIN_SHOP_NAME).toLowerCase().replace(" ", ""));
+        return owner.replace(" ", "").equalsIgnoreCase(Config.getString(ADMIN_SHOP_NAME).replace(" ", ""));
     }
 
     public static boolean isAdminShop(Sign sign) {
