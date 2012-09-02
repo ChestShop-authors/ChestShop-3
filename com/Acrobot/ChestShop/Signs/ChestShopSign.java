@@ -23,7 +23,7 @@ public class ChestShopSign {
     public static final Pattern[] SHOP_SIGN_PATTERN = {
             Pattern.compile("^[\\w ]*$"),
             Pattern.compile("[0-9]+"),
-            Pattern.compile("^[\\dbs(free) :]+$"),
+            Pattern.compile("(?i)^[\\dbs(free) :]+$"),
             Pattern.compile("[\\w : -]+")
     };
 

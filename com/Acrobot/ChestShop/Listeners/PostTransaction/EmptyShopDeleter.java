@@ -24,8 +24,8 @@ public class EmptyShopDeleter implements Listener {
             return;
         }
 
-        if (shopShouldBeRemoved(event.getOwnerInventory())) {
-            if (Config.getBoolean(REMOVE_EMPTY_CHESTS) && !ChestShopSign.isAdminShop(event.getSign())) {
+        if (shopShouldBeRemoved(event.getOwnerInventory(), event.getStock())) {
+            if (Config.getBoolean(REMOVE_EMPTY_CHESTS) && !ChestShopSign.isAdminShop(event.getSign()) && chestIsEmpty(event.getOwnerInventory())) {
                 Chest connectedChest = uBlock.findConnectedChest(event.getSign());
                 connectedChest.getBlock().setType(Material.AIR);
             }
@@ -35,13 +35,23 @@ public class EmptyShopDeleter implements Listener {
         }
     }
 
-    private static boolean shopShouldBeRemoved(Inventory inventory) {
-        return Config.getBoolean(REMOVE_EMPTY_SHOPS) && isEmpty(inventory);
-    }
-
-    public static boolean isEmpty(Inventory inventory) {
+    private static boolean chestIsEmpty(Inventory inventory) {
         for (ItemStack item : inventory.getContents()) {
             if (item != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean shopShouldBeRemoved(Inventory inventory, ItemStack[] stock) {
+        return Config.getBoolean(REMOVE_EMPTY_SHOPS) && !hasMoreStock(inventory, stock);
+    }
+
+    private static boolean hasMoreStock(Inventory inventory, ItemStack[] stock) {
+        for (ItemStack stack : stock) {
+            if (!inventory.contains(stack, 1)) {
                 return false;
             }
         }

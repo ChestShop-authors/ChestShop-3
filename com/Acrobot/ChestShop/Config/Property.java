@@ -16,8 +16,8 @@ public enum Property {
     ALLOW_SIGN_CHEST_OPEN(true, "Can shop's chest be opened by owner with right-clicking a shop's sign?"),
     ALLOW_LEFT_CLICK_DESTROYING(true, "If true, if you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign.\n"),
 
-    REMOVE_EMPTY_SHOPS(false, "If true, if the shop is empty, the sign is destroyed and put into the chest, so the shop isn't usable anymore.\n"),
-    REMOVE_EMPTY_CHESTS(false, "If true, if the REMOVE_EMPTY_SHOPS option is turned on, the chest is also destroyed."),
+    REMOVE_EMPTY_SHOPS(false, "If true, if the shop is empty, the sign is destroyed and put into the chest, so the shop isn't usable anymore."),
+    REMOVE_EMPTY_CHESTS(false, "If true, if the REMOVE_EMPTY_SHOPS option is turned on, the chest is also destroyed.\n"),
 
     ADMIN_SHOP_NAME("Admin Shop", "First line of your Admin Shop's sign should look like this"),
     SERVER_ECONOMY_ACCOUNT("", "The economy account which Admin Shops should use and to which all taxes will go"),

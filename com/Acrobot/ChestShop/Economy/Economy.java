@@ -1,7 +1,9 @@
 package com.Acrobot.ChestShop.Economy;
 
+import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
 
 import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
@@ -20,9 +22,9 @@ public class Economy {
     public static String getServerAccountName() {
         return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
     }
-    
+
     public static boolean isServerAccount(String acc) {
-        return getServerAccountName().equals(acc);
+        return ChestShopSign.isAdminShop(acc);
     }
 
     public static void add(String name, double amount) {
@@ -30,29 +32,24 @@ public class Economy {
 
         double tax = getTax(taxAmount, amount);
         if (tax != 0) {
-            if (!serverAccount().isEmpty()) {
+            if (!getServerAccountName().isEmpty()) {
                 economy.add(getServerAccountName(), tax);
             }
             amount -= tax;
         }
-        
-        if (name.isEmpty()) return;
+
         economy.add(uName.getName(name), amount);
     }
 
     public static double getTax(Property tax, double price) {
-        return roundDown((Config.getFloat(tax) / 100F) * price);
+        return NumberUtil.roundDown((Config.getFloat(tax) / 100F) * price);
     }
 
     public static void subtract(String name, double amount) {
-        if (name.isEmpty()) return;
         economy.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {
-        if (isServerAccount(name)) {
-            return true;
-        }
         return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 
