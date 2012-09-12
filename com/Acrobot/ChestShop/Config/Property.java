@@ -13,6 +13,7 @@ public enum Property {
     SHOP_INTERACTION_INTERVAL(100, "(In 1/1000th of a second) How often can a player use the shop sign?"),
     IGNORE_CREATIVE_MODE(true, "Do you want to allow using shops to people in creative mode?"),
     REVERSE_BUTTONS(false, "If true, people will buy with left-click and sell with right-click."),
+    SHIFT_SELLS_EVERYTHING(false, "If true, people will be able to sell/buy everything available of the same type."),
     ALLOW_SIGN_CHEST_OPEN(true, "Can shop's chest be opened by owner with right-clicking a shop's sign?"),
     ALLOW_LEFT_CLICK_DESTROYING(true, "If true, if you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign.\n"),
 
@@ -42,6 +43,9 @@ public enum Property {
     RECORD_TIME_TO_LIVE(600, "How long should transaction information be stored in the database (in seconds, -1 means forever)?\n"),
 
     USE_BUILT_IN_PROTECTION(true, "Do you want to use built-in protection against chest destruction?"),
+    STICK_SIGNS_TO_CHESTS(false, "Do you want to have shop signs \"stick\" to chests?"),
+    TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY(false, "EXPERIMENTAL: Do you want to turn off the default protection when another plugin is protecting the block? (Will leave the chest visually open - CraftBukkit bug!)"),
+    TURN_OFF_SIGN_PROTECTION(false, "Do you want to turn off the default sign protection? Warning! Other players will be able to destroy other people's shops!"),
     PROTECT_CHEST_WITH_LWC(false, "Do you want to protect shop chests with LWC?"),
     PROTECT_SIGN_WITH_LWC(false, "Do you want to protect shop signs with LWC?\n"),
 
@@ -75,10 +79,6 @@ public enum Property {
 
     public Value getValue() {
         return new Value(value, comment);
-    }
-
-    public String toString() {
-        return name();
     }
 
     public static Map<String, Value> getValues() {

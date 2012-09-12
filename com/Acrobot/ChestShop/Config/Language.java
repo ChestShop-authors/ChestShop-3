@@ -41,6 +41,8 @@ public enum Language {
     SHOP_CREATED("Shop successfully created!"),
     SHOP_REFUNDED("You have been refunded %amount."),
 
+    RESTRICTED_SIGN_CREATED("Sign succesfully created!"),
+
     NO_PERMISSION("You don't have permissions to do that!"),
     INCORRECT_ITEM_ID("You have specified invalid item id!"),
     NOT_ENOUGH_PROTECTIONS("You have reached the protection limit!"),
@@ -53,10 +55,6 @@ public enum Language {
 
     private Language(String def) {
         text = def;
-    }
-
-    public String toString() {
-        return text;
     }
 
     public Value getValue() {

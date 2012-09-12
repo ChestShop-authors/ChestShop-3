@@ -1,12 +1,15 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,20 +21,26 @@ import static com.Acrobot.ChestShop.Config.Property.REMOVE_EMPTY_SHOPS;
  * @author Acrobot
  */
 public class EmptyShopDeleter implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public static void onTransaction(TransactionEvent event) {
         if (event.getTransactionType() != TransactionEvent.TransactionType.BUY) {
             return;
         }
 
-        if (shopShouldBeRemoved(event.getOwnerInventory(), event.getStock())) {
-            if (Config.getBoolean(REMOVE_EMPTY_CHESTS) && !ChestShopSign.isAdminShop(event.getSign()) && chestIsEmpty(event.getOwnerInventory())) {
-                Chest connectedChest = uBlock.findConnectedChest(event.getSign());
-                connectedChest.getBlock().setType(Material.AIR);
-            }
+        Inventory ownerInventory = event.getOwnerInventory();
+        Sign sign = event.getSign();
 
-            event.getSign().getBlock().setType(Material.AIR);
-            event.getOwnerInventory().addItem(new ItemStack(Material.SIGN, 1));
+        if (!shopShouldBeRemoved(ownerInventory, event.getStock())) {
+            return;
+        }
+
+        sign.getBlock().setType(Material.AIR);
+
+        if (Config.getBoolean(REMOVE_EMPTY_CHESTS) && !ChestShopSign.isAdminShop(sign) && chestIsEmpty(event.getOwnerInventory())) {
+            Chest connectedChest = uBlock.findConnectedChest(sign);
+            connectedChest.getBlock().setType(Material.AIR);
+        } else {
+            ownerInventory.addItem(new ItemStack(Material.SIGN, 1));
         }
     }
 
@@ -51,11 +60,11 @@ public class EmptyShopDeleter implements Listener {
 
     private static boolean hasMoreStock(Inventory inventory, ItemStack[] stock) {
         for (ItemStack stack : stock) {
-            if (!inventory.contains(stack, 1)) {
-                return false;
+            if (InventoryUtil.getAmount(stack, inventory) > 0) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

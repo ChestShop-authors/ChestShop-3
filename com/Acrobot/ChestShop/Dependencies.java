@@ -80,9 +80,6 @@ public class Dependencies {
             case SimpleChestLock:
                 listener = SimpleChestLock.getSimpleChestLock(plugin);
                 break;
-            case SecureChests:
-                listener = new SecureChests();
-                break;
             case Residence:
                 listener = new ResidenceChestProtection();
                 break;
@@ -155,7 +152,6 @@ public class Dependencies {
         Lockette,
         Deadbolt,
         SimpleChestLock,
-        SecureChests,
         Residence,
 
         OddItem,

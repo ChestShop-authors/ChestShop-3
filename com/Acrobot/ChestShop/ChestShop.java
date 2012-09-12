@@ -9,11 +9,13 @@ import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Listeners.Block.BlockBreak;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
+import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.EntityExplode;
 import com.Acrobot.ChestShop.Listeners.Block.SignChange;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
 import com.Acrobot.ChestShop.Listeners.Player.ShortNameSaver;
 import com.Acrobot.ChestShop.Listeners.PostTransaction.EconomicModule;
 import com.Acrobot.ChestShop.Listeners.PostTransaction.ItemManager;
@@ -140,11 +142,13 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
 
         registerEvent(new BlockBreak());
+        registerEvent(new ChestBreak());
         registerEvent(new BlockPlace());
         registerEvent(new SignChange());
         registerEvent(new EntityExplode());
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
+        registerEvent(new PlayerInventory());
 
         registerEvent(new ItemInfoListener());
 

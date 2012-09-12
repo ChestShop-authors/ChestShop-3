@@ -19,6 +19,7 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.Acrobot.Breeze.Utils.PriceUtil.NO_PRICE;
 import static com.Acrobot.ChestShop.Config.Language.*;
 import static com.Acrobot.ChestShop.Config.Property.SHOP_CREATION_PRICE;
+import static com.Acrobot.ChestShop.Config.Property.STICK_SIGNS_TO_CHESTS;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 
 /**
@@ -123,8 +125,45 @@ public class SignChange implements Listener {
             player.sendMessage(Config.getLocal(SHOP_CREATED));
         }
 
+        if (!isAdminShop(line[NAME_LINE]) && Config.getBoolean(STICK_SIGNS_TO_CHESTS)) {
+            stickSign(signBlock, event);
+        }
+
         ShopCreatedEvent sEvent = new ShopCreatedEvent(player, (Sign) signBlock.getState(), connectedChest, event.getLines());
         ChestShop.callEvent(sEvent);
+    }
+
+    private static void stickSign(Block block, SignChangeEvent event) {
+        if (block.getType() != Material.SIGN_POST) {
+            return;
+        }
+
+        BlockFace chestFace = null;
+
+        for (BlockFace face : uBlock.CHEST_EXTENSION_FACES) {
+            if (block.getRelative(face).getType() == Material.CHEST) {
+                chestFace = face;
+                break;
+            }
+        }
+
+        if (chestFace == null) {
+            return;
+        }
+
+        org.bukkit.material.Sign signMaterial = new org.bukkit.material.Sign(Material.WALL_SIGN);
+        signMaterial.setFacingDirection(chestFace.getOppositeFace());
+
+        block.setType(Material.WALL_SIGN);
+        block.setData(signMaterial.getData());
+
+        Sign sign = (Sign) block.getState();
+
+        for (int i = 0; i < event.getLines().length; ++i) {
+            sign.setLine(i, event.getLine(i));
+        }
+
+        sign.update(true);
     }
 
     private static boolean canCreateShop(Player player, Material mat, double buyPrice, double sellPrice) {

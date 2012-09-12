@@ -30,7 +30,11 @@ public class Security {
     }
 
     public static boolean canAccess(Player player, Block block) {
-        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player);
+        return canAccess(player, block, false);
+    }
+
+    public static boolean canAccess(Player player, Block block, boolean ignoreDefault) {
+        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefault);
         ChestShop.callEvent(event);
 
         return event.getResult() != Event.Result.DENY;

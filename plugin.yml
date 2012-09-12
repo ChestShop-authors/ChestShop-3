@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.50t0005
+version: 3.50t0007
 
 #for CButD
 dev-url: http://dev.bukkit.org/server-mods/chestshop/
@@ -14,7 +14,7 @@ description: >
  
  
 softdepend: [LWC, Lockette, Deadbolt, OddItem, Towny, WorldGuard, Vault, Heroes,
-                iConomy, BOSEconomy, Essentials, SimpleChestLock, SecureChests, Residence]
+                iConomy, BOSEconomy, Essentials, SimpleChestLock, Residence]
 commands:
   iteminfo:
     aliases: [iinfo]

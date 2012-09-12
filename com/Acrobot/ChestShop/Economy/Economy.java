@@ -50,6 +50,10 @@ public class Economy {
     }
 
     public static boolean hasEnough(String name, double amount) {
+        if (amount <= 0) {
+            return true;
+        }
+
         return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 

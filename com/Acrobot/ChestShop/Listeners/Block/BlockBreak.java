@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.Acrobot.ChestShop.Config.Property.SHOP_REFUND_PRICE;
+import static com.Acrobot.ChestShop.Config.Property.TURN_OFF_SIGN_PROTECTION;
 
 /**
  * @author Acrobot
@@ -39,7 +40,7 @@ public class BlockBreak implements Listener {
 
         Sign sign = uBlock.findValidShopSign(block, (player != null ? uName.stripName(player.getName()) : null));
         if (!isCorrectSign(sign, block)) return false; //It's not a correct shop sign, so don't cancel it
-        if (playerIsNotOwner(player, sign)) return !isAdmin(player); //If the player isn't the owner or an admin - cancel!
+        if (playerIsNotOwner(player, sign)) return !isAdmin(player) && (!BlockUtil.isSign(block) || !Config.getBoolean(TURN_OFF_SIGN_PROTECTION)); //If the player isn't the owner or an admin - cancel!
 
         if (weShouldReturnMoney() && !Permission.has(player, Permission.NOFEE)) {
             float refundPrice = Config.getFloat(SHOP_REFUND_PRICE);

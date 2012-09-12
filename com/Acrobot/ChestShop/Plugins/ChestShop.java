@@ -20,7 +20,7 @@ import org.bukkit.event.Listener;
 public class ChestShop implements Listener {
     @EventHandler
     public static void onProtectionCheck(ProtectionCheckEvent event) {
-        if (event.getResult() == Event.Result.DENY) {
+        if (event.getResult() == Event.Result.DENY || event.isBuiltInProtectionIgnored()) {
             return;
         }
 

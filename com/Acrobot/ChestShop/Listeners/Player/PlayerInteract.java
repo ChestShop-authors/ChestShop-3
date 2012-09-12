@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Config.Config;
@@ -54,18 +55,23 @@ public class PlayerInteract implements Listener {
         Player player = event.getPlayer();
 
         if (Config.getBoolean(USE_BUILT_IN_PROTECTION) && clickedBlock.getType() == Material.CHEST) {
+            if (Config.getBoolean(TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
+                return;
+            }
+
             if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, clickedBlock)) {
                 player.sendMessage(Config.getLocal(ACCESS_DENIED));
                 event.setCancelled(true);
-                return;
             }
+
+            return; //The else doesn't matter, because the clicked block is a chest
         }
 
         if (!BlockUtil.isSign(clickedBlock)) return;
         Sign sign = (Sign) clickedBlock.getState();
 
         if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
-        if (!ChestShopSign.isValid(sign) || player.isSneaking()) return;
+        if (!ChestShopSign.isValid(sign) || (ChestShopSign.canAccess(player, sign) && player.isSneaking())) return;
 
         if (action == RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
@@ -108,6 +114,15 @@ public class PlayerInteract implements Listener {
         ItemStack item = MaterialUtil.getItem(sign.getLine(ITEM_LINE));
 
         int amount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
+
+        if (Config.getBoolean(SHIFT_SELLS_EVERYTHING) && player.isSneaking() && price != PriceUtil.NO_PRICE) {
+            int newAmount = getItemAmount(item, ownerInventory, player, action);
+            if (newAmount > 0) {
+                price = (price / amount) * newAmount;
+                amount = newAmount;
+            }
+        }
+
         item.setAmount(amount);
 
         ItemStack[] items = {item};
@@ -116,7 +131,20 @@ public class PlayerInteract implements Listener {
         return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, owner, sign, transactionType);
     }
 
-    private static boolean canOpenOtherShops(Player player) {
+    private static int getItemAmount(ItemStack item, Inventory inventory, Player player, Action action) {
+        int amount;
+        Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
+
+        if (action == buy) {
+            amount = InventoryUtil.getAmount(item, inventory);
+        } else {
+            amount = InventoryUtil.getAmount(item, player.getInventory());
+        }
+
+        return amount;
+    }
+
+    public static boolean canOpenOtherShops(Player player) {
         return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
     }
 

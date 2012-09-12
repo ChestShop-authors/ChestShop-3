@@ -12,12 +12,23 @@ public class ProtectionCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private Result result = Result.DEFAULT;
+    private boolean ignoreBuiltInProtection = false;
     private Block block;
     private Player player;
 
     public ProtectionCheckEvent(Block block, Player player) {
         this.block = block;
         this.player = player;
+    }
+
+    public ProtectionCheckEvent(Block block, Player player, boolean ignoreBuiltInProtection) {
+        this.block = block;
+        this.player = player;
+        this.ignoreBuiltInProtection = ignoreBuiltInProtection;
+    }
+
+    public boolean isBuiltInProtectionIgnored() {
+        return ignoreBuiltInProtection;
     }
 
     public Result getResult() {

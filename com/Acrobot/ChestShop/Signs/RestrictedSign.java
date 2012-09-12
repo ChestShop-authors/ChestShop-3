@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Language;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import org.bukkit.Location;
@@ -16,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
+import static com.Acrobot.ChestShop.Config.Language.ACCESS_DENIED;
+import static com.Acrobot.ChestShop.Config.Language.RESTRICTED_SIGN_CREATED;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.SHOP_IS_RESTRICTED;
 
 /**
@@ -45,7 +46,7 @@ public class RestrictedSign implements Listener {
 
         if (isRestricted(lines)) {
             if (!hasPermission(player, lines)) {
-                player.sendMessage(Config.getLocal(Language.ACCESS_DENIED));
+                player.sendMessage(Config.getLocal(ACCESS_DENIED));
                 dropSignAndCancelEvent(event);
                 return;
             }
@@ -61,6 +62,8 @@ public class RestrictedSign implements Listener {
             if (!ChestShopSign.isValid(sign) || !ChestShopSign.canAccess(player, sign)) {
                 dropSignAndCancelEvent(event);
             }
+
+            player.sendMessage(Config.getLocal(RESTRICTED_SIGN_CREATED));
         }
     }
 
