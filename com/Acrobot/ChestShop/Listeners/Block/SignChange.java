@@ -97,7 +97,7 @@ public class SignChange implements Listener {
                 return;
             }
 
-            if (!Security.canAccess(player, connectedChest.getBlock())) {
+            if (!isAdmin && !Security.canAccess(player, connectedChest.getBlock())) {
                 sendMessageAndExit(CANNOT_ACCESS_THE_CHEST, event);
                 return;
             }
