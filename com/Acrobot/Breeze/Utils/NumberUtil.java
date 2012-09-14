@@ -65,6 +65,21 @@ public class NumberUtil {
     }
 
     /**
+     * Checks if the string is a long
+     *
+     * @param string string to check
+     * @return Is the string long?
+     */
+    public static boolean isLong(String string) {
+        try {
+            Long.parseLong(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
      * Rounds the number up to two decimal points (Can be inaccurate due to using decimal-points)
      *
      * @param number Number to round
