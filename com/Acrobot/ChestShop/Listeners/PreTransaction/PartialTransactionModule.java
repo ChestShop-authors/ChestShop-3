@@ -77,7 +77,7 @@ public class PartialTransactionModule implements Listener {
         double pricePerItem = event.getPrice() / getItemCount(stock);
         double walletMoney = Economy.getBalance(ownerName);
 
-        if (!Economy.hasEnough(ownerName, price)) {
+        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory()) && !Economy.hasEnough(ownerName, price)) {
             int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
 
             if (amountAffordable < 1) {

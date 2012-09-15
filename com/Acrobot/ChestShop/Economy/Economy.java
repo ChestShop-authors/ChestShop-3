@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
+import org.bukkit.inventory.Inventory;
 
 import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
 
@@ -14,6 +15,10 @@ import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
  */
 public class Economy {
     private static EcoPlugin economy;
+
+    public static boolean isOwnerEconomicallyActive(Inventory inventory) {
+        return !ChestShopSign.isAdminShop(inventory) || getServerAccountName().isEmpty();
+    }
 
     public static boolean hasAccount(String p) {
         return !p.isEmpty() && economy.hasAccount(uName.getName(p));

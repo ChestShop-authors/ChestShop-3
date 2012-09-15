@@ -2,10 +2,12 @@ package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.regex.Pattern;
 
@@ -26,6 +28,10 @@ public class ChestShopSign {
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
             Pattern.compile("[\\w : -]+")
     };
+
+    public static boolean isAdminShop(Inventory ownerInventory) {
+        return ownerInventory instanceof AdminInventory;
+    }
 
     public static boolean isAdminShop(String owner) {
         return owner.replace(" ", "").equalsIgnoreCase(Config.getString(ADMIN_SHOP_NAME).replace(" ", ""));

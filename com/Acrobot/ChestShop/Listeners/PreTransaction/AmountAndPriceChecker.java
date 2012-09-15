@@ -1,9 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
-import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.event.EventHandler;
@@ -47,7 +44,7 @@ public class AmountAndPriceChecker implements Listener {
         ItemStack[] stock = event.getStock();
         Inventory clientInventory = event.getClientInventory();
 
-        if (isOwnerEconomicalyActive(event) && !Economy.hasEnough(event.getOwner().getName(), event.getPrice())) {
+        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory()) && !Economy.hasEnough(event.getOwner().getName(), event.getPrice())) {
             event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
             return;
         }
@@ -55,18 +52,6 @@ public class AmountAndPriceChecker implements Listener {
         if (!hasItems(clientInventory, stock)) {
             event.setCancelled(NOT_ENOUGH_STOCK_IN_INVENTORY);
         }
-    }
-
-    public static String getServerAccountName() {
-        return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
-    }
-
-    public static boolean isServerShop(Inventory inventory) {
-        return inventory instanceof AdminInventory;
-    }
-
-    public static boolean isOwnerEconomicalyActive(PreTransactionEvent event) {
-        return !isServerShop(event.getOwnerInventory()) || !getServerAccountName().isEmpty();
     }
 
     private static boolean hasItems(Inventory inventory, ItemStack[] items) {
