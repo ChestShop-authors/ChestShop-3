@@ -23,10 +23,10 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[] SHOP_SIGN_PATTERN = {
-            Pattern.compile("^[\\w ]*$"),
-            Pattern.compile("[0-9]+"),
+            Pattern.compile("^[\\w -]*$"),
+            Pattern.compile("^[0-9]+$"),
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
-            Pattern.compile("[\\w : -]+")
+            Pattern.compile("^[\\w : -]+$")
     };
 
     public static boolean isAdminShop(Inventory ownerInventory) {
