@@ -136,7 +136,11 @@ public class PlayerInteract implements Listener {
         Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
 
         if (action == buy) {
-            amount = InventoryUtil.getAmount(item, inventory);
+            if (inventory instanceof AdminInventory) {
+                amount = Integer.MAX_VALUE;
+            } else {
+                amount = InventoryUtil.getAmount(item, inventory);
+            }
         } else {
             amount = InventoryUtil.getAmount(item, player.getInventory());
         }

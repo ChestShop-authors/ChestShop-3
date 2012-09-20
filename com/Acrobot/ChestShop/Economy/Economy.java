@@ -17,7 +17,7 @@ public class Economy {
     private static EcoPlugin economy;
 
     public static boolean isOwnerEconomicallyActive(Inventory inventory) {
-        return !ChestShopSign.isAdminShop(inventory) || getServerAccountName().isEmpty();
+        return !ChestShopSign.isAdminShop(inventory) || !getServerAccountName().isEmpty();
     }
 
     public static boolean hasAccount(String p) {
