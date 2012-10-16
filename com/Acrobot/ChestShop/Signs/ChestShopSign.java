@@ -3,8 +3,11 @@ package com.Acrobot.ChestShop.Signs;
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Config.Config;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +27,7 @@ public class ChestShopSign {
 
     public static final Pattern[] SHOP_SIGN_PATTERN = {
             Pattern.compile("^[\\w -]*$"),
-            Pattern.compile("^[0-9]+$"),
+            Pattern.compile("^[1-9][0-9]*$"),
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
             Pattern.compile("^[\\w : -]+$")
     };
@@ -51,6 +54,14 @@ public class ChestShopSign {
 
     public static boolean isValid(Block sign) {
         return BlockUtil.isSign(sign) && isValid((Sign) sign.getState());
+    }
+
+    public static boolean isShopChest(Block chest) {
+        if (chest.getType() != Material.CHEST) {
+            return false;
+        }
+
+        return uBlock.getConnectedSign((Chest) chest.getState()) != null;
     }
 
     public static boolean canAccess(Player player, Sign sign) {

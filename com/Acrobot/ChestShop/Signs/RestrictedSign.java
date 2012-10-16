@@ -18,6 +18,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import static com.Acrobot.ChestShop.Config.Language.ACCESS_DENIED;
 import static com.Acrobot.ChestShop.Config.Language.RESTRICTED_SIGN_CREATED;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.SHOP_IS_RESTRICTED;
+import static com.Acrobot.ChestShop.Permission.ADMIN;
 
 /**
  * @author Acrobot
@@ -52,14 +53,14 @@ public class RestrictedSign implements Listener {
             }
             Block connectedSign = event.getBlock().getRelative(BlockFace.DOWN);
 
-            if (!Permission.has(player, Permission.ADMIN) || !BlockUtil.isSign(connectedSign) || !ChestShopSign.isValid(connectedSign)) {
+            if (!Permission.has(player, ADMIN) || !ChestShopSign.isValid(connectedSign)) {
                 dropSignAndCancelEvent(event);
                 return;
             }
 
             Sign sign = (Sign) connectedSign.getState();
 
-            if (!ChestShopSign.isValid(sign) || !ChestShopSign.canAccess(player, sign)) {
+            if (!ChestShopSign.canAccess(player, sign) && !Permission.has(player, ADMIN)) {
                 dropSignAndCancelEvent(event);
             }
 
@@ -84,7 +85,13 @@ public class RestrictedSign implements Listener {
         Block currentBlock = location.getBlock();
 
         if (BlockUtil.isSign(currentBlock)) {
-            return (Sign) currentBlock.getState();
+            Sign sign = (Sign) currentBlock.getState();
+
+            if (isRestricted(sign)) {
+                return sign;
+            } else {
+                return null;
+            }
         }
 
         for (BlockFace face : SIGN_CONNECTION_FACES) {
@@ -138,7 +145,7 @@ public class RestrictedSign implements Listener {
     }
 
     public static boolean hasPermission(Player p, String[] lines) {
-        if (Permission.has(p, Permission.ADMIN)) {
+        if (Permission.has(p, ADMIN)) {
             return true;
         }
 

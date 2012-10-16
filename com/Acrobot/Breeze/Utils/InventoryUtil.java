@@ -22,6 +22,10 @@ public class InventoryUtil {
             return 0;
         }
 
+        if (inventory.getType() == null) {
+            return Integer.MAX_VALUE;
+        }
+
         HashMap<Integer, ? extends ItemStack> items = inventory.all(item.getType());
         int itemAmount = 0;
 
@@ -34,6 +38,39 @@ public class InventoryUtil {
         }
 
         return itemAmount;
+    }
+
+    /**
+     * Tells if the inventory is empty
+     *
+     * @param inventory inventory
+     * @return Is the inventory empty?
+     */
+    public static boolean isEmpty(Inventory inventory) {
+        for (ItemStack stack : inventory.getContents()) {
+            if (!MaterialUtil.isEmpty(stack)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the inventory has stock of this type
+     *
+     * @param items     items
+     * @param inventory inventory
+     * @return Does the inventory contain stock of this type?
+     */
+    public static boolean hasItems(ItemStack[] items, Inventory inventory) {
+        for (ItemStack item : items) {
+            if (InventoryUtil.getAmount(item, inventory) < item.getAmount()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -50,7 +87,7 @@ public class InventoryUtil {
             if (left <= 0) {
                 return true;
             }
-            
+
             if (MaterialUtil.isEmpty(iStack)) {
                 left -= inventory.getMaxStackSize();
                 continue;

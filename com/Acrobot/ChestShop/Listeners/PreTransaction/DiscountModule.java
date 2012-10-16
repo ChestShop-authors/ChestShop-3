@@ -51,7 +51,7 @@ public class DiscountModule implements Listener {
             return;
         }
 
-        if (PriceUtil.getSellPrice(event.getSign().getLine(PRICE_LINE)) != NO_PRICE) {
+        if (PriceUtil.getBuyPrice(event.getSign().getLine(PRICE_LINE)) == NO_PRICE) {
             return;
         }
 

@@ -7,22 +7,18 @@ import com.Acrobot.ChestShop.Config.Property;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
-import com.Acrobot.ChestShop.Listeners.Block.BlockBreak;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
-import com.Acrobot.ChestShop.Listeners.Block.EntityExplode;
+import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignChange;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
 import com.Acrobot.ChestShop.Listeners.Player.ShortNameSaver;
-import com.Acrobot.ChestShop.Listeners.PostTransaction.EconomicModule;
-import com.Acrobot.ChestShop.Listeners.PostTransaction.ItemManager;
+import com.Acrobot.ChestShop.Listeners.PostTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
-import com.Acrobot.ChestShop.Listeners.PostTransaction.EmptyShopDeleter;
-import com.Acrobot.ChestShop.Listeners.PostTransaction.TransactionLogger;
-import com.Acrobot.ChestShop.Listeners.PostTransaction.TransactionMessageSender;
+import com.Acrobot.ChestShop.Listeners.ShopRefundListener;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.avaje.ebean.EbeanServer;
@@ -141,11 +137,11 @@ public class ChestShop extends JavaPlugin {
     private void registerEvents() {
         registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
 
-        registerEvent(new BlockBreak());
+        registerEvent(new SignBreak());
         registerEvent(new ChestBreak());
+
         registerEvent(new BlockPlace());
         registerEvent(new SignChange());
-        registerEvent(new EntityExplode());
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
@@ -169,6 +165,7 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new RestrictedSign());
         registerEvent(new DiscountModule());
+        registerEvent(new ShopRefundListener());
 
         if (Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS)) {
             registerEvent(new PartialTransactionModule());

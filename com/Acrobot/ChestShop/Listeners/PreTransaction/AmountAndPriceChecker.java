@@ -30,7 +30,7 @@ public class AmountAndPriceChecker implements Listener {
             return;
         }
 
-        if (!hasItems(ownerInventory, stock)) {
+        if (!InventoryUtil.hasItems(stock, ownerInventory)) {
             event.setCancelled(NOT_ENOUGH_STOCK_IN_CHEST);
         }
     }
@@ -49,18 +49,8 @@ public class AmountAndPriceChecker implements Listener {
             return;
         }
 
-        if (!hasItems(clientInventory, stock)) {
+        if (!InventoryUtil.hasItems(stock, clientInventory)) {
             event.setCancelled(NOT_ENOUGH_STOCK_IN_INVENTORY);
         }
-    }
-
-    private static boolean hasItems(Inventory inventory, ItemStack[] items) {
-        for (ItemStack item : items) {
-            if (InventoryUtil.getAmount(item, inventory) < item.getAmount()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

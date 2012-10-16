@@ -202,6 +202,8 @@ public class SignChange implements Listener {
             line = line.replace(" ", "");
         }
 
+        line = line.replace('b', 'B').replace('s', 'S');
+
         return (line.length() > 15 ? null : line);
     }
 

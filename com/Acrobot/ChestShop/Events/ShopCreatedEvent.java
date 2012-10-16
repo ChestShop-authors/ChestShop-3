@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Acrobot
  */
@@ -13,11 +15,12 @@ public class ShopCreatedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private Player player;
+
     private Sign sign;
     private Chest chest;
     private String[] signLines;
 
-    public ShopCreatedEvent(Player player, Sign sign, Chest chest, String[] signLines) {
+    public ShopCreatedEvent(Player player, Sign sign, @Nullable Chest chest, String[] signLines) {
         this.player = player;
         this.sign = sign;
         this.chest = chest;
@@ -36,7 +39,7 @@ public class ShopCreatedEvent extends Event {
         return sign;
     }
 
-    public Chest getChest() {
+    @Nullable public Chest getChest() {
         return chest;
     }
 

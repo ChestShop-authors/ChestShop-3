@@ -50,7 +50,7 @@ public class PartialTransactionModule implements Listener {
 
         stock = event.getStock();
 
-        if (!hasItems(event.getOwnerInventory(), stock)) {
+        if (!InventoryUtil.hasItems(stock, event.getOwnerInventory())) {
             ItemStack[] itemsHad = getItems(stock, event.getOwnerInventory());
             int posessedItemCount = getItemCount(itemsHad);
 
@@ -91,7 +91,7 @@ public class PartialTransactionModule implements Listener {
 
         stock = event.getStock();
 
-        if (!hasItems(event.getClientInventory(), stock)) {
+        if (!InventoryUtil.hasItems(stock, event.getClientInventory())) {
             ItemStack[] itemsHad = getItems(stock, event.getClientInventory());
             int posessedItemCount = getItemCount(itemsHad);
 
@@ -103,16 +103,6 @@ public class PartialTransactionModule implements Listener {
             event.setPrice(pricePerItem * posessedItemCount);
             event.setStock(itemsHad);
         }
-    }
-
-    private static boolean hasItems(Inventory inventory, ItemStack[] items) {
-        for (ItemStack item : items) {
-            if (!inventory.contains(item, item.getAmount())) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private static int getAmountOfAffordableItems(double walletMoney, double pricePerItem) {

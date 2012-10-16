@@ -88,6 +88,16 @@ public class AdminInventory implements Inventory {
     }
 
     public HashMap<Integer, ? extends ItemStack> all(Material material) {
+        if (material.getMaxDurability() != 0) {
+            HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
+
+            for (short currentDurability = 0; currentDurability < material.getMaxDurability(); currentDurability++) {
+                items.put((int) currentDurability, new ItemStack(material, Integer.MAX_VALUE, currentDurability));
+            }
+
+            return items;
+        }
+
         return all(material.getId());
     }
 

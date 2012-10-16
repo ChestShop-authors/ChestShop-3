@@ -115,6 +115,10 @@ public class PlayerInteract implements Listener {
 
         int amount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
 
+        if (amount < 1) {
+            amount = 1;
+        }
+
         if (Config.getBoolean(SHIFT_SELLS_EVERYTHING) && player.isSneaking() && price != PriceUtil.NO_PRICE) {
             int newAmount = getItemAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
@@ -132,20 +136,13 @@ public class PlayerInteract implements Listener {
     }
 
     private static int getItemAmount(ItemStack item, Inventory inventory, Player player, Action action) {
-        int amount;
         Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
 
         if (action == buy) {
-            if (inventory instanceof AdminInventory) {
-                amount = Integer.MAX_VALUE;
-            } else {
-                amount = InventoryUtil.getAmount(item, inventory);
-            }
+            return InventoryUtil.getAmount(item, inventory);
         } else {
-            amount = InventoryUtil.getAmount(item, player.getInventory());
+            return InventoryUtil.getAmount(item, player.getInventory());
         }
-
-        return amount;
     }
 
     public static boolean canOpenOtherShops(Player player) {
