@@ -1,5 +1,8 @@
 package com.Acrobot.Breeze.Utils;
 
+import com.google.common.base.Joiner;
+import org.apache.commons.lang.WordUtils;
+
 /**
  * @author Acrobot
  */
@@ -13,16 +16,9 @@ public class StringUtil {
      * @return Reformatted string
      */
     public static String capitalizeFirstLetter(String string, char separator) {
-        string = string.toLowerCase();
+        char[] separators = new char[] {separator};
 
-        String[] split = string.split(Character.toString(separator));
-        StringBuilder total = new StringBuilder(string.length());
-
-        for (String s : split) {
-            total.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).append(' ');
-        }
-
-        return total.toString().trim();
+        return WordUtils.capitalizeFully(string, separators);
     }
 
     /**
@@ -43,12 +39,6 @@ public class StringUtil {
      * @return Joined array
      */
     public static String joinArray(String[] array) {
-        StringBuilder b = new StringBuilder(array.length * 15);
-
-        for (String str : array) {
-            b.append(str).append(' ');
-        }
-
-        return b.toString();
+        return Joiner.on(' ').join(array);
     }
 }
