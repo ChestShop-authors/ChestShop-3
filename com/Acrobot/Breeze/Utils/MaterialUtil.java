@@ -18,8 +18,8 @@ import java.util.regex.Pattern;
  * @author Acrobot
  */
 public class MaterialUtil {
-    private static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
-    private static final Pattern ENCHANTMENT = Pattern.compile("-([0-9a-zA-Z])*");
+    public static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
+    public static final Pattern ENCHANTMENT = Pattern.compile("-([0-9a-zA-Z])*");
 
     /**
      * Checks if the itemStack is empty or null
@@ -213,7 +213,7 @@ public class MaterialUtil {
 
         data = data.substring(1);
 
-        return NumberUtil.isInteger(data) ? Short.valueOf(data) : 0;
+        return NumberUtil.isShort(data) ? Short.valueOf(data) : 0;
     }
 
     /**

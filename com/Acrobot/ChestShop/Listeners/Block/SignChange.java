@@ -207,28 +207,37 @@ public class SignChange implements Listener {
         return (line.length() > 15 ? null : line);
     }
 
-    private static String formatItemLine(String line, ItemStack itemStack) {
+    private static String formatItemLine(String line, ItemStack item) {
+        String formatted, data = "";
         String[] split = line.split(":|-", 2);
-        StringBuilder formatted = new StringBuilder(15);
-        String itemName = MaterialUtil.getName(itemStack, false);
 
-        short dataLength = (short) (line.length() - split[0].length());
-
-        if (itemName.length() > (15 - dataLength)) {
-            itemName = itemName.substring(0, 15 - dataLength);
+        if (MaterialUtil.ENCHANTMENT.matcher(line).matches()) {
+            data = '-' + MaterialUtil.ENCHANTMENT.matcher(line).group();
         }
 
-        if (MaterialUtil.getItem(itemName).getType() != itemStack.getType()) {
-            itemName = String.valueOf(itemStack.getTypeId());
+        String longItemName = MaterialUtil.getName(item, true);
+
+        if (longItemName.length() < (15 - data.length()) && MaterialUtil.equals(MaterialUtil.getItem(longItemName + data), item)) {
+            return StringUtil.capitalizeFirstLetter(longItemName + data);
         }
 
-        formatted.append(itemName);
+        formatted = MaterialUtil.getName(item, false);
+        data = (split.length == 2 ? split[1] : "");
+
+        if (formatted.length() > (15 - data.length())) {
+            formatted = formatted.substring(0, (15 - data.length()));
+        }
+
+        if (MaterialUtil.getItem(formatted).getType() != item.getType()) {
+            formatted = String.valueOf(item.getTypeId());
+        }
+
         if (split.length == 2) {
             int dataValuePos = line.indexOf(split[1], split[0].length());
-            formatted.append(line.charAt(dataValuePos - 1)).append(split[1]);
+            formatted += line.charAt(dataValuePos - 1) + split[1];
         }
 
-        return StringUtil.capitalizeFirstLetter(formatted.toString());
+        return StringUtil.capitalizeFirstLetter(formatted);
     }
 
     private static boolean playerCanUseName(Player player, String name) {
