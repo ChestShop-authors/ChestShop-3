@@ -80,6 +80,21 @@ public class NumberUtil {
     }
 
     /**
+     * Checks if the string is an enchantment
+     *
+     * @param string String to check
+     * @return Is the string an enchantment?
+     */
+    public static boolean isEnchantment(String string) {
+        try {
+            Long.parseLong(string, 32);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
      * Rounds the number up to two decimal points (Can be inaccurate due to using decimal-points)
      *
      * @param number Number to round
