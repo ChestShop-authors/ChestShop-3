@@ -241,13 +241,16 @@ public class MaterialUtil {
          * @return Enchantments found
          */
         public static Map<org.bukkit.enchantments.Enchantment, Integer> getEnchantments(String base32) {
+<<<<<<< HEAD
             if (base32 == null || base32.isEmpty() || NumberUtil.isLong(base32)) {
+=======
+            if (base32 == null || base32.isEmpty() || !NumberUtil.isEnchantment(base32)) {
+>>>>>>> Fixed enchantments -.-
                 return new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
             }
 
-            Map<org.bukkit.enchantments.Enchantment, Integer> map = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
-
             StringBuilder number = new StringBuilder(Long.toString(Long.parseLong(base32, 32)));
+            Map<org.bukkit.enchantments.Enchantment, Integer> map = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
 
             while (number.length() % 3 != 0) {
                 number.insert(0, '0');
