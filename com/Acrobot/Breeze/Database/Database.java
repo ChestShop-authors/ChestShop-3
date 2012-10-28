@@ -1,5 +1,6 @@
 package com.Acrobot.Breeze.Database;
 
+import javax.persistence.Entity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,6 +30,27 @@ public class Database {
      */
     public Table getTable(String name) {
         return new Table(this, name);
+    }
+
+    /**
+     * Creates a table from a given class
+     *
+     * @param clazz Class with fields
+     * @return If table was succesfully created
+     */
+    public boolean createFromClass(Class clazz) {
+        if (!clazz.isAnnotationPresent(Entity.class) || !clazz.isAnnotationPresent(javax.persistence.Table.class)) {
+            return false;
+        }
+
+        String tableName = ((javax.persistence.Table) clazz.getAnnotation(javax.persistence.Table.class)).name();
+        Table table = getTable(tableName);
+
+        EntityParser parser = new EntityParser(clazz);
+
+        //TODO Finish this
+
+        return true;
     }
 
     /**

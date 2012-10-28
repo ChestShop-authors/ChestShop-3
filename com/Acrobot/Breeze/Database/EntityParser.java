@@ -46,6 +46,6 @@ public class EntityParser {
      * @return SQL type
      */
     public String convertToSQL(Field field) {
-        return null;
+        return null; //TODO Finish this
     }
 }
