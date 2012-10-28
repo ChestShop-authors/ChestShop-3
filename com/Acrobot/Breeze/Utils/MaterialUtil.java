@@ -241,7 +241,7 @@ public class MaterialUtil {
          * @return Enchantments found
          */
         public static Map<org.bukkit.enchantments.Enchantment, Integer> getEnchantments(String base32) {
-            if (base32 == null || base32.isEmpty() || !NumberUtil.isLong(base32)) {
+            if (base32 == null || base32.isEmpty() || NumberUtil.isLong(base32)) {
                 return new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
             }
 
