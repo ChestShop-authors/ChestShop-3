@@ -50,7 +50,14 @@ public class Database {
 
         EntityParser parser = new EntityParser(clazz);
 
-        //TODO Finish this
+        String fields = parser.parseToString();
+
+        try {
+            table.create(fields);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 
         return true;
     }

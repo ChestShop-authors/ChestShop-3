@@ -46,28 +46,24 @@ public class EntityParser {
      * @param field Java's field
      * @return SQL type
      */
-    public String convertToSQL(Field field) {
+    public static String convertToSQL(Field field) {
         String sqlType = "";
         Class<?> type = field.getType();
 
-        if (type.isAssignableFrom(String.class)) {
-            sqlType += "VARCHAR(255)";
-        } else if (type.isAssignableFrom(boolean.class)) {
+        if (type.isAssignableFrom(boolean.class)) {
             sqlType += "BOOLEAN";
         } else if (type.isAssignableFrom(int.class)) {
             sqlType += "INTEGER";
-        } else if (type.isAssignableFrom(double.class)) {
-            sqlType += "DOUBLE";
-        } else if (type.isAssignableFrom(float.class)) {
-            sqlType += "FLOAT";
+        } else if (type.isAssignableFrom(double.class) || type.isAssignableFrom(float.class)) {
+            sqlType += "REAL";
         } else {
             sqlType += "TEXT";
         }
 
         if (field.isAnnotationPresent(Id.class)) {
-            sqlType += " AUTO INCREMENT";
+            sqlType += " PRIMARY KEY";
         }
 
-        return null; //TODO Finish this
+        return sqlType;
     }
 }
