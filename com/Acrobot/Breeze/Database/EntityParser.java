@@ -3,6 +3,7 @@ package com.Acrobot.Breeze.Database;
 import com.google.common.base.Joiner;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -46,6 +47,27 @@ public class EntityParser {
      * @return SQL type
      */
     public String convertToSQL(Field field) {
+        String sqlType = "";
+        Class<?> type = field.getType();
+
+        if (type.isAssignableFrom(String.class)) {
+            sqlType += "VARCHAR(255)";
+        } else if (type.isAssignableFrom(boolean.class)) {
+            sqlType += "BOOLEAN";
+        } else if (type.isAssignableFrom(int.class)) {
+            sqlType += "INTEGER";
+        } else if (type.isAssignableFrom(double.class)) {
+            sqlType += "DOUBLE";
+        } else if (type.isAssignableFrom(float.class)) {
+            sqlType += "FLOAT";
+        } else {
+            sqlType += "TEXT";
+        }
+
+        if (field.isAnnotationPresent(Id.class)) {
+            sqlType += " AUTO INCREMENT";
+        }
+
         return null; //TODO Finish this
     }
 }
