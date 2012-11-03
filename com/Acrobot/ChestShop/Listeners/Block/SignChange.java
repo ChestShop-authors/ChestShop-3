@@ -106,6 +106,11 @@ public class SignChange implements Listener {
         double buyPrice = PriceUtil.getBuyPrice(formattedPrice);
         double sellPrice = PriceUtil.getSellPrice(formattedPrice);
 
+        if (buyPrice == 0 && sellPrice == 0) {
+            sendMessageAndExit(YOU_CANNOT_CREATE_SHOP, event);
+            return;
+        }
+
         if (!isAdmin && (!canCreateShop(player, stock.getType(), buyPrice, sellPrice) || !MaxPrice.canCreate(buyPrice, sellPrice, stock.getType()))) {
             sendMessageAndExit(YOU_CANNOT_CREATE_SHOP, event);
             return;
@@ -180,7 +185,7 @@ public class SignChange implements Listener {
             return true;
         }
 
-        if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)){
+        if (buy && !Permission.has(player, Permission.SHOP_CREATION_BUY)) {
             return false;
         } else {
             return !(sell && !Permission.has(player, Permission.SHOP_CREATION_SELL));
@@ -228,7 +233,9 @@ public class SignChange implements Listener {
             formatted = formatted.substring(0, (15 - data.length()));
         }
 
-        if (MaterialUtil.getItem(formatted).getType() != item.getType()) {
+        ItemStack formattedItem = MaterialUtil.getItem(formatted);
+
+        if (formattedItem == null || formattedItem.getType() != item.getType()) {
             formatted = String.valueOf(item.getTypeId());
         }
 
