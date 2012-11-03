@@ -33,6 +33,10 @@ public class Economy {
     }
 
     public static void add(String name, double amount) {
+        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
+            name = getServerAccountName();
+        }
+
         Property taxAmount = isServerAccount(name) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
 
         double tax = getTax(taxAmount, amount);
@@ -51,6 +55,10 @@ public class Economy {
     }
 
     public static void subtract(String name, double amount) {
+        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
+            name = getServerAccountName();
+        }
+
         economy.subtract(uName.getName(name), roundUp(amount));
     }
 
@@ -58,11 +66,18 @@ public class Economy {
         if (amount <= 0) {
             return true;
         }
+        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
+            name = getServerAccountName();
+        }
 
         return economy.hasEnough(uName.getName(name), roundUp(amount));
     }
 
     public static double getBalance(String name) {
+        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
+            name = getServerAccountName();
+        }
+
         return economy.balance(uName.getName(name));
     }
 
