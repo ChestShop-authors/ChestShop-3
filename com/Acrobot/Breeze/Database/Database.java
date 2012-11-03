@@ -33,8 +33,6 @@ public class Database {
     }
 
     /**
-     * @Deprecated - Not ready yet
-     *
      * Creates a table from a given class
      *
      * @param clazz Class with fields

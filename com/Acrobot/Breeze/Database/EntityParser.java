@@ -47,17 +47,17 @@ public class EntityParser {
      * @return SQL type
      */
     public static String convertToSQL(Field field) {
-        String sqlType = "";
+        String sqlType = field.getName();
         Class<?> type = field.getType();
 
         if (type.isAssignableFrom(boolean.class)) {
-            sqlType += "BOOLEAN";
+            sqlType += " BOOLEAN";
         } else if (type.isAssignableFrom(int.class)) {
-            sqlType += "INTEGER";
+            sqlType += " INTEGER";
         } else if (type.isAssignableFrom(double.class) || type.isAssignableFrom(float.class)) {
-            sqlType += "REAL";
+            sqlType += " REAL";
         } else {
-            sqlType += "TEXT";
+            sqlType += " TEXT";
         }
 
         if (field.isAnnotationPresent(Id.class)) {

@@ -25,6 +25,13 @@ public class Table {
         this.name = name;
     }
 
+    /**
+     * Executes a select statement
+     *
+     * @param criteria Criteria to select
+     * @return RowSet of results
+     * @throws SQLException
+     */
     private RowSet select(String criteria) throws SQLException {
         Connection connection = database.getConnection();
 
@@ -107,7 +114,7 @@ public class Table {
      * @throws SQLException exception
      */
     public void insertRow(Row row, String condition) throws SQLException {
-        String statement = "";
+        String statement;
 
         if (condition == null || condition.isEmpty()) {
             statement = String.format(INSERT_VALUES, row.stringOfValues());
