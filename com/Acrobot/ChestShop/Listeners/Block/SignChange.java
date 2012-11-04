@@ -221,8 +221,9 @@ public class SignChange implements Listener {
         }
 
         String longItemName = MaterialUtil.getName(item, true);
+        ItemStack formattedItem = MaterialUtil.getItem(longItemName + data);
 
-        if (longItemName.length() < (15 - data.length()) && MaterialUtil.equals(MaterialUtil.getItem(longItemName + data), item)) {
+        if (longItemName.length() < (15 - data.length()) && formattedItem != null && MaterialUtil.equals(formattedItem, item)) {
             return StringUtil.capitalizeFirstLetter(longItemName + data);
         }
 
@@ -233,7 +234,7 @@ public class SignChange implements Listener {
             formatted = formatted.substring(0, (15 - data.length()));
         }
 
-        ItemStack formattedItem = MaterialUtil.getItem(formatted);
+        formattedItem = MaterialUtil.getItem(formatted);
 
         if (formattedItem == null || formattedItem.getType() != item.getType()) {
             formatted = String.valueOf(item.getTypeId());
