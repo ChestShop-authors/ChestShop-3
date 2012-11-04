@@ -1,5 +1,7 @@
 package com.Acrobot.Breeze.Database;
 
+import com.google.common.base.Joiner;
+
 import java.sql.*;
 
 /**
@@ -117,22 +119,11 @@ public class Table {
         String statement;
 
         if (condition == null || condition.isEmpty()) {
-            statement = String.format(INSERT_VALUES, row.stringOfValues());
+            String format = '\'' + Joiner.on("', ").join(row.getValues()) + '\'';
+            statement = String.format(INSERT_VALUES, format);
         } else {
-            StringBuilder builder = new StringBuilder(30);
-
-            for (int i = 0; i < row.getSize(); ++i) {
-                String key = row.getKey(i);
-                String value = row.get(i);
-
-                builder.append(key).append("= '").append(value).append('\'');
-
-                if (i != row.getSize() - 1) {
-                    builder.append(", ");
-                }
-            }
-
-            statement = String.format(UPDATE, builder.toString(), condition);
+            String format = Joiner.on("', ").withKeyValueSeparator("= '").join(row.getKeysAndValues()) + '\'';
+            statement = String.format(UPDATE, format, condition);
         }
 
         Connection connection = database.getConnection();

@@ -252,7 +252,7 @@ public class ChestShop extends JavaPlugin {
         return DB;
     }
 
-    public static List getDependencies() {
+    public static List<String> getDependencies() {
         return description.getSoftDepend();
     }
 

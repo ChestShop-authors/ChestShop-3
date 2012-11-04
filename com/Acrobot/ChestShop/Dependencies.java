@@ -16,11 +16,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-import java.util.List;
-
-import static com.Acrobot.ChestShop.Config.Property.TOWNY_INTEGRATION;
-import static com.Acrobot.ChestShop.Config.Property.WORLDGUARD_INTEGRATION;
-import static com.Acrobot.ChestShop.Config.Property.WORLDGUARD_USE_PROTECTION;
+import static com.Acrobot.ChestShop.Config.Property.*;
 
 /**
  * @author Acrobot
@@ -29,7 +25,7 @@ public class Dependencies {
     public static void load() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        for (String dependency : (List<String>) ChestShop.getDependencies()) {
+        for (String dependency : ChestShop.getDependencies()) {
             Plugin plugin = pluginManager.getPlugin(dependency);
 
             if (plugin != null) {

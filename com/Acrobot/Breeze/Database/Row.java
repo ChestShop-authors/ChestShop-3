@@ -66,22 +66,44 @@ public class Row {
     }
 
     /**
-     * Returns a string of all values separated by a comma
+     * Returns the keys with values
      *
-     * @return String
+     * @return Key and value pairs
      */
-    public String stringOfValues() {
-        StringBuilder builder = new StringBuilder(30);
+    public Map<String, String> getKeysAndValues() {
+        return values;
+    }
 
-        for (int i = 0; i < values.size(); i++) {
-            builder.append('\'').append(get(i)).append('\'');
+    /**
+     * Returns this row as a class
+     *
+     * @param clazz Class which will be represented
+     * @return Representation
+     */
+    public <T> T getAsClass(Class<T> clazz) {
+        T object;
 
-            if (i != (values.size() - 1)) {
-                builder.append(',');
+        try {
+            object = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        for (Map.Entry<String, String> value : values.entrySet()) {
+            try {
+                clazz.getDeclaredField(value.getKey()).set(object, value.getValue());
+            } catch (NoSuchFieldException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
             }
         }
 
-        return builder.toString();
+        return object;
     }
 
     /**
