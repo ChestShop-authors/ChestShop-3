@@ -4,6 +4,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -130,12 +132,40 @@ public class InventoryUtil {
     }
 
     /**
+     * If items in arguments are similar, this function merges them into stacks of the same type
+     *
+     * @param items Items to merge
+     * @return Merged stack array
+     */
+    public static ItemStack[] mergeSimilarStacks(ItemStack... items) {
+        List<ItemStack> itemList = new LinkedList<ItemStack>();
+
+        for (ItemStack item : items) {
+            boolean added = false;
+
+            for (ItemStack iStack : itemList) {
+                if (MaterialUtil.equals(item, iStack)) {
+                    iStack.setAmount(iStack.getAmount() + item.getAmount());
+                    added = true;
+                    break;
+                }
+            }
+
+            if (!added) {
+                itemList.add(item);
+            }
+        }
+
+        return itemList.toArray(new ItemStack[itemList.size()]);
+    }
+
+    /**
      * Counts leftovers from a map
      *
      * @param items Leftovers
      * @return Number of leftovers
      */
-    private static int countItems(Map<Integer, ?> items) {
+    public static int countItems(Map<Integer, ?> items) {
         int totalLeft = 0;
 
         for (int left : items.keySet()) {
