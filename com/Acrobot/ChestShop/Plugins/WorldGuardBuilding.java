@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -30,7 +29,7 @@ public class WorldGuardBuilding implements Listener {
     public WorldGuardBuilding(WorldGuardPlugin plugin) {
         this.worldGuard = plugin;
 
-        if (Config.getBoolean(Property.WORLDGUARD_USE_FLAG)) {
+        if (Properties.WORLDGUARD_USE_FLAG) {
             ChestShopFlag.injectHax();
         }
     }
@@ -39,7 +38,7 @@ public class WorldGuardBuilding implements Listener {
     public void canBuild(BuildPermissionEvent event) {
         ApplicableRegionSet regions = getApplicableRegions(event.getSign().getBlock().getLocation());
 
-        if (Config.getBoolean(Property.WORLDGUARD_USE_FLAG)) {
+        if (Properties.WORLDGUARD_USE_FLAG) {
             event.allow(ChestShopFlag.setAllowsFlag(regions));
         } else {
             event.allow(regions.size() != 0);

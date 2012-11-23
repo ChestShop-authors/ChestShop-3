@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
@@ -28,7 +27,7 @@ public class Towny implements Listener {
 
         boolean allow;
 
-        if (Config.getBoolean(Property.TOWNY_SHOPS_FOR_OWNERS_ONLY)) {
+        if (Properties.TOWNY_SHOPS_FOR_OWNERS_ONLY) {
             allow = isPlotOwner(event.getPlayer(), chest, sign);
         } else {
             allow = isResident(event.getPlayer(), chest, sign);
@@ -103,7 +102,7 @@ public class Towny implements Listener {
     }
 
     public static Towny getTowny() {
-        if (!Config.getBoolean(Property.TOWNY_INTEGRATION)) {
+        if (!Properties.TOWNY_INTEGRATION) {
             return null;
         }
 

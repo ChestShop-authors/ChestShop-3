@@ -1,10 +1,9 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.MessageUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,6 +11,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
+
+import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo;
 
 /**
  * @author Acrobot
@@ -37,7 +38,7 @@ public class ItemInfo implements CommandExecutor {
         String durability = getDurability(item);
         String enchantment = getEnchantment(item);
 
-        MessageUtil.sendMessage(sender, Language.iteminfo);
+        sender.sendMessage(Messages.prefix(iteminfo));
         sender.sendMessage(getNameAndID(item) + durability + enchantment + ChatColor.WHITE);
 
         ItemInfoEvent event = new ItemInfoEvent(sender, item);

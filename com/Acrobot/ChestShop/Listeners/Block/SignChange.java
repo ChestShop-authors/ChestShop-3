@@ -5,10 +5,9 @@ import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Language;
-import com.Acrobot.ChestShop.Config.MaxPrice;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.MaxPrice;
+import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
@@ -29,9 +28,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.Breeze.Utils.PriceUtil.NO_PRICE;
-import static com.Acrobot.ChestShop.Config.Language.*;
-import static com.Acrobot.ChestShop.Config.Property.SHOP_CREATION_PRICE;
-import static com.Acrobot.ChestShop.Config.Property.STICK_SIGNS_TO_CHESTS;
+import static com.Acrobot.ChestShop.Configuration.Messages.*;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 
 /**
@@ -116,7 +113,7 @@ public class SignChange implements Listener {
             return;
         }
 
-        float shopCreationPrice = Config.getFloat(SHOP_CREATION_PRICE);
+        double shopCreationPrice = Properties.SHOP_CREATION_PRICE;
         if (shopCreationPrice != 0 && !ChestShopSign.isAdminShop(line[NAME_LINE]) && !Permission.has(player, Permission.NOFEE)) {
             if (!Economy.hasEnough(player.getName(), shopCreationPrice)) {
                 sendMessageAndExit(NOT_ENOUGH_MONEY, event);
@@ -125,12 +122,12 @@ public class SignChange implements Listener {
 
             Economy.subtract(player.getName(), shopCreationPrice);
 
-            player.sendMessage(Config.getLocal(SHOP_CREATED) + " - " + Economy.formatBalance(shopCreationPrice));
+            player.sendMessage(Messages.prefix(Messages.SHOP_CREATED + " - " + Economy.formatBalance(shopCreationPrice)));
         } else {
-            player.sendMessage(Config.getLocal(SHOP_CREATED));
+            player.sendMessage(Messages.prefix(Messages.SHOP_CREATED));
         }
 
-        if (!isAdminShop(line[NAME_LINE]) && Config.getBoolean(STICK_SIGNS_TO_CHESTS)) {
+        if (!isAdminShop(line[NAME_LINE]) && Properties.STICK_SIGNS_TO_CHESTS) {
             stickSign(signBlock, event);
         }
 
@@ -172,7 +169,7 @@ public class SignChange implements Listener {
     }
 
     private static boolean canCreateShop(Player player, Material mat, double buyPrice, double sellPrice) {
-        if (Config.getBoolean(Property.BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE)) {
+        if (Properties.BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE) {
             if (buyPrice != NO_PRICE && sellPrice != NO_PRICE && sellPrice > buyPrice) {
                 return false;
             }
@@ -230,8 +227,8 @@ public class SignChange implements Listener {
         formatted = MaterialUtil.getName(item, false);
         data = (split.length == 2 ? split[1] : "");
 
-        if (formatted.length() > (15 - data.length())) {
-            formatted = formatted.substring(0, (15 - data.length()));
+        if (formatted.length() > (15 - 1 - data.length())) {
+            formatted = formatted.substring(0, (15 - 1 - data.length()));
         }
 
         formattedItem = MaterialUtil.getItem(formatted);
@@ -252,8 +249,8 @@ public class SignChange implements Listener {
         return !name.isEmpty() && (uName.canUseName(player, name) || Permission.has(player, Permission.ADMIN));
     }
 
-    private static void sendMessageAndExit(Language message, SignChangeEvent event) {
-        event.getPlayer().sendMessage(Config.getLocal(message));
+    private static void sendMessageAndExit(String message, SignChangeEvent event) {
+        event.getPlayer().sendMessage(message);
 
         dropSign(event);
     }

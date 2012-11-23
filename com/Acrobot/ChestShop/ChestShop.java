@@ -1,9 +1,10 @@
 package com.Acrobot.ChestShop;
 
+import com.Acrobot.Breeze.Configuration.Configuration;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Version;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
@@ -21,15 +22,16 @@ import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
 import com.Acrobot.ChestShop.Listeners.ShopRefundListener;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
+import com.Acrobot.ChestShop.Utils.uName;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
+import com.nijikokun.register.payment.forChestShop.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -39,9 +41,6 @@ import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-import static com.Acrobot.ChestShop.Config.Property.ALLOW_PARTIAL_TRANSACTIONS;
-import static com.Acrobot.ChestShop.Config.Property.SHOP_INTERACTION_INTERVAL;
-
 /**
  * Main file of the plugin
  *
@@ -50,11 +49,10 @@ import static com.Acrobot.ChestShop.Config.Property.SHOP_INTERACTION_INTERVAL;
 public class ChestShop extends JavaPlugin {
     public static File dataFolder = new File("plugins/ChestShop");
 
-    private static EbeanServer DB;
+    private static EbeanServer database;
     private static PluginDescriptionFile description;
     private static Server server;
     private static Logger logger;
-    private static PluginManager pluginManager;
     private static ChestShop plugin;
 
     private FileHandler handler;
@@ -62,25 +60,31 @@ public class ChestShop extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         logger = getLogger();
-        pluginManager = getServer().getPluginManager();
         dataFolder = getDataFolder();
         description = getDescription();
         server = getServer();
 
-        Config.setup();
+        Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
+        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
+
+        uName.file = loadFile("longName.storage");
+        uName.load();
+
+        Methods.setPreferred(Properties.PREFERRED_ECONOMY_PLUGIN);
+
         Dependencies.load();
 
         registerEvents();
 
-        if (Config.getBoolean(Property.LOG_TO_DATABASE) || Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
+        if (Properties.LOG_TO_DATABASE || Properties.GENERATE_STATISTICS_PAGE) {
             setupDB();
         }
-        if (Config.getBoolean(Property.GENERATE_STATISTICS_PAGE)) {
-            File htmlFolder = new File(Config.getString(Property.STATISTICS_PAGE_PATH));
-            scheduleTask(new Generator(htmlFolder), 300L, (long) Config.getDouble(Property.STATISTICS_PAGE_GENERATION_INTERVAL) * 20L);
+        if (Properties.GENERATE_STATISTICS_PAGE) {
+            File htmlFolder = new File(Properties.STATISTICS_PAGE_PATH);
+            scheduleTask(new Generator(htmlFolder), 300L, Properties.STATISTICS_PAGE_GENERATION_INTERVAL * 20L);
         }
-        if (Config.getBoolean(Property.LOG_TO_FILE)) {
-            File log = loadFile(new File(ChestShop.getFolder(), "ChestShop.log"));
+        if (Properties.LOG_TO_FILE) {
+            File log = loadFile("ChestShop.log");
 
             FileHandler handler = loadHandler(log.getAbsolutePath());
             handler.setFormatter(new FileFormatter());
@@ -88,16 +92,20 @@ public class ChestShop extends JavaPlugin {
             this.handler = handler;
             logger.addHandler(handler);
         }
-        if (!Config.getBoolean(Property.LOG_TO_CONSOLE)) {
+        if (!Properties.LOG_TO_CONSOLE) {
             logger.setUseParentHandlers(false);
         }
 
-        //Register our commands!
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("csVersion").setExecutor(new Version());
 
-        //Start the statistics pinger
         startStatistics();
+    }
+
+    public static File loadFile(String string) {
+        File file = new File(dataFolder, string);
+
+        return loadFile(file);
     }
 
     private static File loadFile(File file) {
@@ -161,13 +169,13 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ShopValidator());
         registerEvent(new StockFittingChecker());
         registerEvent(new ErrorMessageSender());
-        registerEvent(new SpamClickProtector(Config.getInteger(SHOP_INTERACTION_INTERVAL)));
+        registerEvent(new SpamClickProtector());
 
         registerEvent(new RestrictedSign());
         registerEvent(new DiscountModule());
         registerEvent(new ShopRefundListener());
 
-        if (Config.getBoolean(ALLOW_PARTIAL_TRANSACTIONS)) {
+        if (Properties.ALLOW_PARTIAL_TRANSACTIONS) {
             registerEvent(new PartialTransactionModule());
         } else {
             registerEvent(new AmountAndPriceChecker());
@@ -193,14 +201,10 @@ public class ChestShop extends JavaPlugin {
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
-    private static YamlConfiguration getBukkitConfig() {
-        return YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
-    }
-
-    private static Database database;
-
     private void setupDB() {
-        database = new Database(this) {
+        Database DB;
+
+        DB = new Database(this) {
             protected java.util.List<Class<?>> getDatabaseClasses() {
                 List<Class<?>> list = new ArrayList<Class<?>>();
                 list.add(Transaction.class);
@@ -208,9 +212,9 @@ public class ChestShop extends JavaPlugin {
             }
         };
 
-        YamlConfiguration config = getBukkitConfig();
+        FileConfiguration config = getConfig();
 
-        database.initializeDatabase(
+        DB.initializeDatabase(
                 config.getString("database.driver"),
                 config.getString("database.url"),
                 config.getString("database.username"),
@@ -218,13 +222,13 @@ public class ChestShop extends JavaPlugin {
                 config.getString("database.isolation")
         );
 
-        DB = database.getDatabase();
+        database = DB.getDatabase();
         getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
     }
 
     @Override
     public EbeanServer getDatabase() {
-        return database.getDatabase();
+        return database;
     }
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -249,7 +253,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static EbeanServer getDB() {
-        return DB;
+        return database;
     }
 
     public static List<String> getDependencies() {
@@ -261,10 +265,6 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static void callEvent(Event event) {
-        pluginManager.callEvent(event);
-    }
-
-    public static void scheduleRepeating(Runnable runnable, int delay) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, runnable, 0, delay);
+        Bukkit.getPluginManager().callEvent(event);
     }
 }

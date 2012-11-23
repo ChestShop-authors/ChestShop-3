@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Block.Break;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedFace;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
-import static com.Acrobot.ChestShop.Config.Property.TURN_OFF_SIGN_PROTECTION;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
 import static com.Acrobot.ChestShop.Permission.MOD;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
@@ -70,7 +68,7 @@ public class SignBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public static void onExplosion(EntityExplodeEvent event) {
-        if (event.blockList() == null || !Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) {
+        if (event.blockList() == null || !Properties.USE_BUILT_IN_PROTECTION) {
             return;
         }
 
@@ -95,7 +93,7 @@ public class SignBreak implements Listener {
                 continue;
             }
 
-            if (Config.getBoolean(TURN_OFF_SIGN_PROTECTION) || canDestroyShop(breaker, sign.getLine(NAME_LINE))) {
+            if (Properties.TURN_OFF_SIGN_PROTECTION || canDestroyShop(breaker, sign.getLine(NAME_LINE))) {
                 brokenBlocks.add(sign);
             } else {
                 canBeBroken = false;

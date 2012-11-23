@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -43,7 +42,7 @@ public class BlockPlace implements Listener {
         }
 
         if (!Security.canAccess(player, placed)) {
-            event.getPlayer().sendMessage(Config.getLocal(Language.ACCESS_DENIED));
+            event.getPlayer().sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             event.setCancelled(true);
         }
 
@@ -54,7 +53,7 @@ public class BlockPlace implements Listener {
         }
 
         if (!Security.canAccess(event.getPlayer(), neighbor.getBlock())) {
-            event.getPlayer().sendMessage(Config.getLocal(Language.ACCESS_DENIED));
+            event.getPlayer().sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             event.setCancelled(true);
         }
 

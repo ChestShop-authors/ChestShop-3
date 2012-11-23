@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.Breeze.Utils.MaterialUtil.getSignName;
-import static com.Acrobot.ChestShop.Config.Property.GENERATE_STATISTICS_PAGE;
-import static com.Acrobot.ChestShop.Config.Property.LOG_TO_DATABASE;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
 /**
@@ -44,7 +42,7 @@ public class TransactionLogger implements Listener {
 
     @EventHandler
     public static void onTransactionLogToDB(TransactionEvent event) {
-        if (!Config.getBoolean(LOG_TO_DATABASE) && !Config.getBoolean(GENERATE_STATISTICS_PAGE)) {
+        if (!Properties.LOG_TO_DATABASE && !Properties.GENERATE_STATISTICS_PAGE) {
             return;
         }
 

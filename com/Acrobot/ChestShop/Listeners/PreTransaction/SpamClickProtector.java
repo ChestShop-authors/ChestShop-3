@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,11 +17,6 @@ import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcom
  */
 public class SpamClickProtector implements Listener {
     private final Map<Player, Long> TIME_OF_LATEST_CLICK = new WeakHashMap<Player, Long>();
-    private final int interval;
-
-    public SpamClickProtector(int interval) {
-        this.interval = interval;
-    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onClick(PreTransactionEvent event) {
@@ -30,7 +26,7 @@ public class SpamClickProtector implements Listener {
 
         Player clicker = event.getClient();
 
-        if (TIME_OF_LATEST_CLICK.containsKey(clicker) && (System.currentTimeMillis() - TIME_OF_LATEST_CLICK.get(clicker)) < interval) {
+        if (TIME_OF_LATEST_CLICK.containsKey(clicker) && (System.currentTimeMillis() - TIME_OF_LATEST_CLICK.get(clicker)) < Properties.SHOP_INTERACTION_INTERVAL) {
             event.setCancelled(SPAM_CLICKING_PROTECTION);
             return;
         }

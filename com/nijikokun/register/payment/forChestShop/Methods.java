@@ -58,7 +58,7 @@ public class Methods {
     }
 
     private static Method getPreferredMethod() {
-        if (preferredPlugin.isEmpty()) {
+        if (preferredPlugin == null || preferredPlugin.isEmpty()) {
             return null;
         }
 

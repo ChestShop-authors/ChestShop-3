@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -61,7 +60,7 @@ public class Security {
 
     private static boolean anotherShopFound(Block baseBlock, Block signBlock, Player p) {
         String shortName = uName.stripName(p.getName());
-        if (Config.getBoolean(Property.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK)) return false;
+        if (Properties.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK) return false;
 
         for (BlockFace bf : SIGN_CONNECTION_FACES) {
             Block block = baseBlock.getRelative(bf);

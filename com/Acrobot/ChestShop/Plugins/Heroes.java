@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.herocraftonline.heroes.characters.Hero;
 import com.herocraftonline.heroes.characters.classes.HeroClass;
@@ -21,7 +20,7 @@ public class Heroes implements Listener {
 
     @EventHandler
     public void shopCreated(ShopCreatedEvent event) {
-        double heroExp = Config.getDouble(Property.HEROES_EXP);
+        double heroExp = Properties.HEROES_EXP;
 
         if (heroExp == 0) {
             return;

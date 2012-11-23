@@ -4,8 +4,8 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
@@ -30,8 +30,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static com.Acrobot.ChestShop.Config.Language.ACCESS_DENIED;
-import static com.Acrobot.ChestShop.Config.Property.*;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
@@ -54,13 +52,13 @@ public class PlayerInteract implements Listener {
         Action action = event.getAction();
         Player player = event.getPlayer();
 
-        if (Config.getBoolean(USE_BUILT_IN_PROTECTION) && clickedBlock.getType() == Material.CHEST) {
-            if (Config.getBoolean(TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
+        if (Properties.USE_BUILT_IN_PROTECTION && clickedBlock.getType() == Material.CHEST) {
+            if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
                 return;
             }
 
             if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, clickedBlock)) {
-                player.sendMessage(Config.getLocal(ACCESS_DENIED));
+                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
                 event.setCancelled(true);
             }
 
@@ -78,11 +76,11 @@ public class PlayerInteract implements Listener {
         }
 
         if (ChestShopSign.canAccess(player, sign)) {
-            if (!Config.getBoolean(ALLOW_SIGN_CHEST_OPEN)) {
+            if (!Properties.ALLOW_SIGN_CHEST_OPEN) {
                 return;
             }
 
-            if (action != LEFT_CLICK_BLOCK || !Config.getBoolean(ALLOW_LEFT_CLICK_DESTROYING)) {
+            if (action != LEFT_CLICK_BLOCK || !Properties.ALLOW_LEFT_CLICK_DESTROYING) {
                 showChestGUI(player, clickedBlock);
             }
             return;
@@ -105,7 +103,7 @@ public class PlayerInteract implements Listener {
 
         String priceLine = sign.getLine(PRICE_LINE);
 
-        Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
+        Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(priceLine) : PriceUtil.getSellPrice(priceLine));
 
         Chest chest = uBlock.findConnectedChest(sign);
@@ -119,7 +117,7 @@ public class PlayerInteract implements Listener {
             amount = 1;
         }
 
-        if (Config.getBoolean(SHIFT_SELLS_EVERYTHING) && player.isSneaking() && price != PriceUtil.NO_PRICE) {
+        if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && price != PriceUtil.NO_PRICE) {
             int newAmount = getItemAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
                 price = (price / amount) * newAmount;
@@ -136,7 +134,7 @@ public class PlayerInteract implements Listener {
     }
 
     private static int getItemAmount(ItemStack item, Inventory inventory, Player player, Action action) {
-        Action buy = Config.getBoolean(REVERSE_BUTTONS) ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
+        Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
 
         if (action == buy) {
             return InventoryUtil.getAmount(item, inventory);
@@ -153,7 +151,7 @@ public class PlayerInteract implements Listener {
         Chest chest = uBlock.findConnectedChest(block);
 
         if (chest == null) {
-            player.sendMessage(Config.getLocal(Language.NO_CHEST_DETECTED));
+            player.sendMessage(Messages.prefix(Messages.NO_CHEST_DETECTED));
             return;
         }
 

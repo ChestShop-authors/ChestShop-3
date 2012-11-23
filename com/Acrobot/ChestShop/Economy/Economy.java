@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.Economy;
 
 import com.Acrobot.Breeze.Utils.NumberUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.inventory.Inventory;
@@ -25,7 +24,7 @@ public class Economy {
     }
 
     public static String getServerAccountName() {
-        return Config.getString(Property.SERVER_ECONOMY_ACCOUNT);
+        return Properties.SERVER_ECONOMY_ACCOUNT;
     }
 
     public static boolean isServerAccount(String acc) {
@@ -37,7 +36,7 @@ public class Economy {
             name = getServerAccountName();
         }
 
-        Property taxAmount = isServerAccount(name) ? Property.SERVER_TAX_AMOUNT : Property.TAX_AMOUNT;
+        float taxAmount = isServerAccount(name) ? Properties.SERVER_TAX_AMOUNT : Properties.TAX_AMOUNT;
 
         double tax = getTax(taxAmount, amount);
         if (tax != 0) {
@@ -50,8 +49,8 @@ public class Economy {
         economy.add(uName.getName(name), amount);
     }
 
-    public static double getTax(Property tax, double price) {
-        return NumberUtil.roundDown((Config.getFloat(tax) / 100F) * price);
+    public static double getTax(float tax, double price) {
+        return NumberUtil.roundDown((tax / 100F) * price);
     }
 
     public static void subtract(String name, double amount) {

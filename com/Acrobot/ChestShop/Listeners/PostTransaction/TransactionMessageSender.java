@@ -1,23 +1,18 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Language;
+import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.Acrobot.ChestShop.Config.Language.*;
-import static com.Acrobot.ChestShop.Config.Property.SHOW_TRANSACTION_INFORMATION_CLIENT;
-import static com.Acrobot.ChestShop.Config.Property.SHOW_TRANSACTION_INFORMATION_OWNER;
 
 /**
  * @author Acrobot
@@ -40,15 +35,15 @@ public class TransactionMessageSender implements Listener {
 
         String price = Economy.formatBalance(event.getPrice());
 
-        if (Config.getBoolean(SHOW_TRANSACTION_INFORMATION_CLIENT)) {
-            String message = formatMessage(YOU_BOUGHT_FROM_SHOP, itemName, price);
+        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
+            String message = formatMessage(Messages.YOU_BOUGHT_FROM_SHOP, itemName, price);
             message = message.replace("%owner", owner);
 
             player.sendMessage(message);
         }
 
-        if (Config.getBoolean(SHOW_TRANSACTION_INFORMATION_OWNER)) {
-            String message = formatMessage(SOMEBODY_BOUGHT_FROM_YOUR_SHOP, itemName, price);
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER) {
+            String message = formatMessage(Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, itemName, price);
             message = message.replace("%buyer", player.getName());
 
             sendMessageToOwner(message, event);
@@ -63,15 +58,15 @@ public class TransactionMessageSender implements Listener {
 
         String price = Economy.formatBalance(event.getPrice());
 
-        if (Config.getBoolean(SHOW_TRANSACTION_INFORMATION_CLIENT)) {
-            String message = formatMessage(YOU_SOLD_TO_SHOP, itemName, price);
+        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
+            String message = formatMessage(Messages.YOU_SOLD_TO_SHOP, itemName, price);
             message = message.replace("%buyer", owner);
 
             player.sendMessage(message);
         }
 
-        if (Config.getBoolean(SHOW_TRANSACTION_INFORMATION_OWNER)) {
-            String message = formatMessage(SOMEBODY_SOLD_TO_YOUR_SHOP, itemName, price);
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER) {
+            String message = formatMessage(Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, itemName, price);
             message = message.replace("%seller", player.getName());
 
             sendMessageToOwner(message, event);
@@ -79,28 +74,13 @@ public class TransactionMessageSender implements Listener {
     }
 
     private static String parseItemInformation(ItemStack[] items) {
-        List<ItemStack> stock = new LinkedList<ItemStack>();
-
-        for (ItemStack item : items) {
-            boolean added = false;
-
-            for (ItemStack iStack : stock) {
-                if (MaterialUtil.equals(item, iStack)) {
-                    iStack.setAmount(iStack.getAmount() + item.getAmount());
-                    added = true;
-                    break;
-                }
-            }
-
-            if (!added) {
-                stock.add(item);
-            }
-        }
+        ItemStack[] stock = InventoryUtil.mergeSimilarStacks(items);
 
         StringBuilder message = new StringBuilder(15);
+        Joiner joiner = Joiner.on(' ');
 
         for (ItemStack item : stock) {
-            message.append(item.getAmount()).append(' ').append(item.getType().name());
+            joiner.appendTo(message, item.getAmount(), MaterialUtil.getSignName(item));
         }
 
         return message.toString();
@@ -116,8 +96,8 @@ public class TransactionMessageSender implements Listener {
         }
     }
 
-    private static String formatMessage(Language message, String item, String price) {
-        return Config.getLocal(message)
+    private static String formatMessage(String message, String item, String price) {
+        return Messages.prefix(message)
                 .replace("%item", item)
                 .replace("%price", price);
     }

@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
@@ -13,8 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.regex.Pattern;
-
-import static com.Acrobot.ChestShop.Config.Property.ADMIN_SHOP_NAME;
 
 /**
  * @author Acrobot
@@ -37,7 +35,7 @@ public class ChestShopSign {
     }
 
     public static boolean isAdminShop(String owner) {
-        return owner.replace(" ", "").equalsIgnoreCase(Config.getString(ADMIN_SHOP_NAME).replace(" ", ""));
+        return owner.replace(" ", "").equalsIgnoreCase(Properties.ADMIN_SHOP_NAME.replace(" ", ""));
     }
 
     public static boolean isAdminShop(Sign sign) {

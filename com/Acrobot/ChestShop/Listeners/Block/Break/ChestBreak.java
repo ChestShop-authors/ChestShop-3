@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Block.Break;
 
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -12,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import static com.Acrobot.ChestShop.Config.Property.USE_BUILT_IN_PROTECTION;
 import static org.bukkit.Material.CHEST;
 
 /**
@@ -28,7 +26,7 @@ public class ChestBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public static void onExplosion(EntityExplodeEvent event) {
-        if (event.blockList() == null || !Config.getBoolean(Property.USE_BUILT_IN_PROTECTION)) {
+        if (event.blockList() == null || !Properties.USE_BUILT_IN_PROTECTION) {
             return;
         }
 
@@ -41,7 +39,7 @@ public class ChestBreak implements Listener {
     }
 
     private static boolean canChestBeBroken(Block chest, Player breaker) {
-        if (chest.getType() != CHEST || !Config.getBoolean(USE_BUILT_IN_PROTECTION) || ChestShopSign.isShopChest(chest)) {
+        if (chest.getType() != CHEST || !Properties.USE_BUILT_IN_PROTECTION || ChestShopSign.isShopChest(chest)) {
             return true;
         }
 

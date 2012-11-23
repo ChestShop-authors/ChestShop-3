@@ -1,8 +1,7 @@
 package com.Acrobot.ChestShop.DB;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Config.Config;
-import com.Acrobot.ChestShop.Config.Property;
+import com.Acrobot.ChestShop.Configuration.Properties;
 
 import javax.persistence.OptimisticLockException;
 import java.util.List;
@@ -19,7 +18,7 @@ public class Queue implements Runnable {
     }
 
     public synchronized void run() {
-        if (Config.getInteger(Property.RECORD_TIME_TO_LIVE) != -1)
+        if (Properties.RECORD_TIME_TO_LIVE != -1)
             deleteOld();
 
         ChestShop.getDB().save(queue);
@@ -40,7 +39,7 @@ public class Queue implements Runnable {
                 .getDB()
                 .find(Transaction.class)
                 .where()
-                .lt("sec", (System.currentTimeMillis() / 1000L) - Config.getInteger(Property.RECORD_TIME_TO_LIVE))
+                .lt("sec", (System.currentTimeMillis() / 1000L) - Properties.RECORD_TIME_TO_LIVE)
                 .findList();
     }
 }

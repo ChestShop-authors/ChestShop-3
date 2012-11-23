@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Economy.NoProvider;
 import com.Acrobot.ChestShop.Economy.Register;
@@ -15,8 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-
-import static com.Acrobot.ChestShop.Config.Property.*;
 
 /**
  * @author Acrobot
@@ -84,7 +82,7 @@ public class Dependencies {
             case Towny:
                 Towny towny = Towny.getTowny();
 
-                if (towny == null || !Config.getBoolean(TOWNY_INTEGRATION)) {
+                if (towny == null || !Properties.TOWNY_INTEGRATION) {
                     return;
                 }
 
@@ -93,17 +91,17 @@ public class Dependencies {
                 break;
             case WorldGuard:
                 WorldGuardPlugin worldGuard = (WorldGuardPlugin) plugin;
-                boolean inUse = Config.getBoolean(WORLDGUARD_USE_PROTECTION) || Config.getBoolean(WORLDGUARD_INTEGRATION);
+                boolean inUse = Properties.WORLDGUARD_USE_PROTECTION || Properties.WORLDGUARD_INTEGRATION;
 
                 if (!inUse) {
                     return;
                 }
 
-                if (Config.getBoolean(WORLDGUARD_USE_PROTECTION)) {
+                if (Properties.WORLDGUARD_USE_PROTECTION) {
                     ChestShop.registerListener(new WorldGuardProtection(worldGuard));
                 }
 
-                if (Config.getBoolean(WORLDGUARD_INTEGRATION)) {
+                if (Properties.WORLDGUARD_INTEGRATION) {
                     listener = new WorldGuardBuilding(worldGuard);
                 }
 
