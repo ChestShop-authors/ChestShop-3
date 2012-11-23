@@ -1,5 +1,7 @@
 package com.Acrobot.Breeze.Utils;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import info.somethingodd.bukkit.OddItem.OddItem;
 import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
@@ -63,7 +65,7 @@ public class MaterialUtil {
             return material;
         }
 
-        name = name.replace(" ", "").toUpperCase();
+        name = name.replaceAll(" |_", "").toUpperCase();
 
         short length = Short.MAX_VALUE;
 
@@ -125,7 +127,7 @@ public class MaterialUtil {
             name.append('-').append(MaterialUtil.Enchantment.encodeEnchantment(itemStack));
         }
 
-        return name.toString();
+        return StringUtil.capitalizeFirstLetter(name.toString(), '_');
     }
 
     /**
@@ -141,21 +143,18 @@ public class MaterialUtil {
             return itemStack;
         }
 
-        String[] split = itemName.trim().split(":|-");
-
-        if (split.length == 0) {
-            return null;
-        }
+        String[] split = Iterables.toArray(Splitter.onPattern(":|-").trimResults().split(itemName), String.class);
 
         Material material = getMaterial(split[0]);
 
         boolean onlyPartiallyChecked = false;
 
         if (material == null) {
-            int index = split[0].indexOf(' ');
-            if (index == -1) {
+            if (!split[0].contains(" ")) {
                 return null;
             }
+
+            int index = split[0].indexOf(' ');
 
             material = getMaterial(split[0].substring(index + 1));
 
