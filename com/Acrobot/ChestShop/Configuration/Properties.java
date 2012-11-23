@@ -12,7 +12,7 @@ public class Properties {
     public static byte NEWLINE_1; ///////////////////////////////////////////////////
 
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
-    public static int SHOP_INTERACTION_INTERVAL = 100;
+    public static int SHOP_INTERACTION_INTERVAL = 250;
 
     @ConfigurationComment("Do you want to allow using shops to people in creative mode?")
     public static boolean IGNORE_CREATIVE_MODE = true;

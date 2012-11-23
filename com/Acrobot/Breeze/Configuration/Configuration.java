@@ -1,5 +1,6 @@
 package com.Acrobot.Breeze.Configuration;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,14 +12,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
+ * A class which can be used to make configs easier to load
+ *
  * @author Acrobot
  */
 public class Configuration {
-    public static void loadFileIntoClass(File file, Class clazz) {
+    /**
+     * Loads a YAML-formatted file into a class and modifies the file if some of class's fields are missing
+     *
+     * @param file  File to load
+     * @param clazz Class to modify
+     */
+    public static void pairFileAndClass(File file, Class clazz) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
             for (Field field : clazz.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers())) {
@@ -28,45 +37,46 @@ public class Configuration {
                 String path = field.getName();
 
                 try {
-                    if (config.isSet(path)) {
-                        field.set(null, config.get(path));
-                    } else {
-                        configureProperty(bw, field);
+                    if (path.toLowerCase().replace("_", "").startsWith("newline")) {
+                        writer.write('\n');
+                        continue;
                     }
-                } catch (IllegalAccessException ignored) {
+
+                    if (config.isSet(path)) {
+                        field.set(null, ValueParser.parseToJava(config.get(path)));
+                    } else {
+                        writer.write('\n' + FieldParser.parse(field));
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
 
-            bw.close();
+            writer.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void configureProperty(BufferedWriter writer, Field field) {
-        try {
-            writer.write('\n' + field.getName() + ": " + retrieveValue(field.get(null)));
-
-            if (field.isAnnotationPresent(ConfigurationComment.class)) {
-                writer.write('\n' + "#" + field.getAnnotation(ConfigurationComment.class).value());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Converts a java value to config-compatible value
+     *
+     * @param value Value to parse
+     * @return Parsed output
+     */
+    public static String parseToConfig(Object value) {
+        return ValueParser.parseToYAML(value);
     }
 
-    private static String retrieveValue(Object value) {
-        StringBuilder toReturn = new StringBuilder(30);
-
-        if (value instanceof Number || value instanceof Boolean) {
-            toReturn.append(String.valueOf(value));
-        } else {
-            toReturn.append('\"').append(String.valueOf(value)).append('\"');
-        }
-
-        return toReturn.toString();
+    /**
+     * Colourises a string (using '&' character)
+     * @param string String to colourise
+     * @return Colourised string
+     */
+    public static String getColoured(String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 }
