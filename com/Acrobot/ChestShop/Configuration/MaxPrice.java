@@ -1,11 +1,16 @@
-package com.Acrobot.ChestShop.Config;
+package com.Acrobot.ChestShop.Configuration;
 
+import com.Acrobot.ChestShop.ChestShop;
 import org.bukkit.Material;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Acrobot
  */
 public class MaxPrice {
+    private static Configuration config = YamlConfiguration.loadConfiguration(ChestShop.loadFile("config.yml"));
+
     public static boolean canCreate(double buyPrice, double sellPrice, Material mat) {
         return buyPriceWithinRange(buyPrice, mat) && sellPriceWithinRange(sellPrice, mat);
     }
@@ -46,7 +51,7 @@ public class MaxPrice {
 
     public static double getPrice(Price price, int itemID) {
         String node = "max-" + price + "-price" + (itemID > 0 ? "-" + itemID : "");
-        return Config.exists(node) ? Config.getDouble(node) : Double.MAX_VALUE;
+        return config.isSet(node) ? config.getDouble(node) : Double.MAX_VALUE;
     }
 
     private static enum Price {
