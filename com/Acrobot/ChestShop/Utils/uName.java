@@ -1,14 +1,18 @@
 package com.Acrobot.ChestShop.Utils;
 
-import com.Acrobot.ChestShop.Config.BreezeConfiguration;
 import com.Acrobot.ChestShop.Permission;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Acrobot
  */
 public class uName {
-    public static BreezeConfiguration config;
+    public static YamlConfiguration config;
+    public static File file;
 
     public static String getName(String shortName) {
         return config.getString(shortName, shortName);
@@ -20,7 +24,7 @@ public class uName {
         }
 
         config.set(stripName(name), name);
-        config.reload();
+        reload();
     }
 
     public static String stripName(String name) {
@@ -33,5 +37,18 @@ public class uName {
 
     public static boolean canUseName(Player player, String name) {
         return shortenName(player).equals(name) || Permission.otherName(player, name);
+    }
+
+    public static void load() {
+        config = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public static void reload() {
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        load();
     }
 }
