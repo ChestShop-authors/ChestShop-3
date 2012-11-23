@@ -18,7 +18,7 @@ public class StringUtil {
     public static String capitalizeFirstLetter(String string, char separator) {
         char[] separators = new char[] {separator};
 
-        return WordUtils.capitalizeFully(string, separators);
+        return WordUtils.capitalizeFully(string, separators).replace(String.valueOf(separator), " ");
     }
 
     /**
