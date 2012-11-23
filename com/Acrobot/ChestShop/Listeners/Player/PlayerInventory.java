@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.ChestShop.Config.Config;
+import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -13,9 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 
-import static com.Acrobot.ChestShop.Config.Language.ACCESS_DENIED;
-import static com.Acrobot.ChestShop.Config.Property.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY;
-
 /**
  * @author Acrobot
  */
@@ -26,7 +24,7 @@ public class PlayerInventory implements Listener {
             return;
         }
 
-        if (!Config.getBoolean(TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
+        if (!Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
             return;
         }
 
@@ -37,10 +35,16 @@ public class PlayerInventory implements Listener {
         }
 
         Player player = (Player) entity;
-        Block chest = ((BlockState) event.getInventory().getHolder()).getBlock();
+        Block chest;
+
+        if (event.getInventory().getHolder() instanceof Chest) {
+            chest = ((BlockState) event.getInventory().getHolder()).getBlock();
+        } else {
+            chest = ((DoubleChest) event.getInventory().getHolder()).getLocation().getBlock();
+        }
 
         if (!PlayerInteract.canOpenOtherShops(player) && !ChestShop.canAccess(player, chest)) {
-            player.sendMessage(Config.getLocal(ACCESS_DENIED));
+            player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             event.setCancelled(true);
         }
     }
