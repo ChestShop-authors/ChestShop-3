@@ -47,7 +47,7 @@ public class ChestShopSign {
     }
 
     public static boolean isValid(String[] line) {
-        return isValidPreparedSign(line) && (line[2].toUpperCase().contains("B") || line[2].toUpperCase().contains("S")) && !line[0].isEmpty();
+        return isValidPreparedSign(line) && (line[PRICE_LINE].toUpperCase().contains("B") || line[PRICE_LINE].toUpperCase().contains("S")) && !line[NAME_LINE].isEmpty();
     }
 
     public static boolean isValid(Block sign) {
@@ -75,6 +75,6 @@ public class ChestShopSign {
                 return false;
             }
         }
-        return lines[2].indexOf(':') == lines[2].lastIndexOf(':');
+        return lines[PRICE_LINE].indexOf(':') == lines[PRICE_LINE].lastIndexOf(':');
     }
 }

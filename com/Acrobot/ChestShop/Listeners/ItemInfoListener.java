@@ -56,7 +56,7 @@ public class ItemInfoListener implements Listener {
         }
 
         message.append("Potion of ");
-        message.append(capitalizeFirstLetter(potion.getType().name(), '_'));
+        message.append(capitalizeFirstLetter(potion.getType().name(), '_')).append(' ');
         message.append(toRoman(potion.getLevel()));
 
         CommandSender sender = event.getSender();

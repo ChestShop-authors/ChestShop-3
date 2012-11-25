@@ -160,6 +160,22 @@ public class InventoryUtil {
     }
 
     /**
+     * Counts the amount of items in ItemStacks
+     *
+     * @param items ItemStacks of items to count
+     * @return How many items are there?
+     */
+    public static int countItems(ItemStack... items) {
+        int count = 0;
+
+        for (ItemStack item : items) {
+            count += item.getAmount();
+        }
+
+        return count;
+    }
+
+    /**
      * Counts leftovers from a map
      *
      * @param items Leftovers

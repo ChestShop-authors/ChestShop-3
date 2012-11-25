@@ -5,7 +5,7 @@ import com.Acrobot.ChestShop.ChestShop;
 /**
  * @author Acrobot
  */
-public class NoProvider implements EcoPlugin {
+public class EconomyManager {
     public boolean hasAccount(String player) {
         printError();
         return false;

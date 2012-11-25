@@ -29,6 +29,7 @@ import com.nijikokun.register.payment.forChestShop.Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -111,6 +112,7 @@ public class ChestShop extends JavaPlugin {
     private static File loadFile(File file) {
         if (!file.exists()) {
             try {
+                file.getParentFile().mkdirs();
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -212,7 +214,7 @@ public class ChestShop extends JavaPlugin {
             }
         };
 
-        FileConfiguration config = getConfig();
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
 
         DB.initializeDatabase(
                 config.getString("database.driver"),

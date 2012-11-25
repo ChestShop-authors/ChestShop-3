@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.material.Attachable;
 
 /**
  * @author Acrobot
@@ -108,10 +107,6 @@ public class uBlock {
     }
 
     private static boolean signIsAttachedToBlock(Sign sign, Block block) {
-        return sign.getBlock().equals(block) || getAttachedFace(sign).equals(block);
-    }
-
-    public static Block getAttachedFace(Sign sign) {
-        return sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace());
+        return sign.getBlock().equals(block) || BlockUtil.getAttachedFace(sign).equals(block);
     }
 }

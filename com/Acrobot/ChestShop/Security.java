@@ -5,7 +5,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,7 +39,7 @@ public class Security {
     }
 
     public static boolean canPlaceSign(Player p, Sign sign) {
-        return !anotherShopFound(uBlock.getAttachedFace(sign), sign.getBlock(), p) && canBePlaced(p, sign.getBlock());
+        return !anotherShopFound(BlockUtil.getAttachedFace(sign), sign.getBlock(), p) && canBePlaced(p, sign.getBlock());
     }
 
     private static boolean canBePlaced(Player player, Block signBlock) {
@@ -70,7 +69,7 @@ public class Security {
             }
 
             Sign s = (Sign) block.getState();
-            if (ChestShopSign.isValid(s) && !block.equals(signBlock) && uBlock.getAttachedFace(s).equals(baseBlock) && !s.getLine(0).equals(shortName))
+            if (ChestShopSign.isValid(s) && !block.equals(signBlock) && BlockUtil.getAttachedFace(s).equals(baseBlock) && !s.getLine(0).equals(shortName))
                 return true;
         }
         return false;

@@ -13,14 +13,14 @@ import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
  *         Economy management
  */
 public class Economy {
-    private static EcoPlugin economy;
+    private static EconomyManager manager = new EconomyManager();
 
     public static boolean isOwnerEconomicallyActive(Inventory inventory) {
         return !ChestShopSign.isAdminShop(inventory) || !getServerAccountName().isEmpty();
     }
 
-    public static boolean hasAccount(String p) {
-        return !p.isEmpty() && economy.hasAccount(uName.getName(p));
+    public static boolean hasAccount(String player) {
+        return !player.isEmpty() && manager.hasAccount(uName.getName(player));
     }
 
     public static String getServerAccountName() {
@@ -41,12 +41,12 @@ public class Economy {
         double tax = getTax(taxAmount, amount);
         if (tax != 0) {
             if (!getServerAccountName().isEmpty()) {
-                economy.add(getServerAccountName(), tax);
+                manager.add(getServerAccountName(), tax);
             }
             amount -= tax;
         }
 
-        economy.add(uName.getName(name), amount);
+        manager.add(uName.getName(name), amount);
     }
 
     public static double getTax(float tax, double price) {
@@ -58,18 +58,19 @@ public class Economy {
             name = getServerAccountName();
         }
 
-        economy.subtract(uName.getName(name), roundUp(amount));
+        manager.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {
         if (amount <= 0) {
             return true;
         }
+
         if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
             name = getServerAccountName();
         }
 
-        return economy.hasEnough(uName.getName(name), roundUp(amount));
+        return manager.hasEnough(uName.getName(name), roundUp(amount));
     }
 
     public static double getBalance(String name) {
@@ -77,22 +78,22 @@ public class Economy {
             name = getServerAccountName();
         }
 
-        return economy.balance(uName.getName(name));
+        return manager.balance(uName.getName(name));
     }
 
     public static String formatBalance(double amount) {
-        return economy.format(roundUp(amount));
+        return manager.format(roundUp(amount));
     }
 
-    public static void setPlugin(EcoPlugin plugin) {
-        economy = plugin;
+    public static void setPlugin(EconomyManager plugin) {
+        manager = plugin;
     }
 
-    public static EcoPlugin getPlugin() {
-        return economy;
+    public static EconomyManager getManager() {
+        return manager;
     }
 
     public static boolean isLoaded() {
-        return economy != null;
+        return manager.getClass() != EconomyManager.class;
     }
 }

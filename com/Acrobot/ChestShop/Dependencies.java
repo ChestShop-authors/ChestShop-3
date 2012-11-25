@@ -2,8 +2,8 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Economy.EconomyManager;
 import com.Acrobot.ChestShop.Economy.Economy;
-import com.Acrobot.ChestShop.Economy.NoProvider;
 import com.Acrobot.ChestShop.Economy.Register;
 import com.Acrobot.ChestShop.Economy.Vault;
 import com.Acrobot.ChestShop.Plugins.*;
@@ -40,7 +40,7 @@ public class Dependencies {
         Method method = Methods.load();
 
         if (method == null) {
-            Economy.setPlugin(new NoProvider());
+            Economy.setPlugin(new EconomyManager());
             return;
         }
 

@@ -33,7 +33,7 @@ public class PartialTransactionModule implements Listener {
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();
-        double pricePerItem = event.getPrice() / getItemCount(stock);
+        double pricePerItem = event.getPrice() / InventoryUtil.countItems(stock);
         double walletMoney = Economy.getBalance(clientName);
 
         if (!Economy.hasEnough(clientName, price)) {
@@ -52,7 +52,7 @@ public class PartialTransactionModule implements Listener {
 
         if (!InventoryUtil.hasItems(stock, event.getOwnerInventory())) {
             ItemStack[] itemsHad = getItems(stock, event.getOwnerInventory());
-            int posessedItemCount = getItemCount(itemsHad);
+            int posessedItemCount = InventoryUtil.countItems(itemsHad);
 
             if (posessedItemCount <= 0) {
                 event.setCancelled(NOT_ENOUGH_STOCK_IN_CHEST);
@@ -74,7 +74,7 @@ public class PartialTransactionModule implements Listener {
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();
-        double pricePerItem = event.getPrice() / getItemCount(stock);
+        double pricePerItem = event.getPrice() / InventoryUtil.countItems(stock);
         double walletMoney = Economy.getBalance(ownerName);
 
         if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory()) && !Economy.hasEnough(ownerName, price)) {
@@ -93,7 +93,7 @@ public class PartialTransactionModule implements Listener {
 
         if (!InventoryUtil.hasItems(stock, event.getClientInventory())) {
             ItemStack[] itemsHad = getItems(stock, event.getClientInventory());
-            int posessedItemCount = getItemCount(itemsHad);
+            int posessedItemCount = InventoryUtil.countItems(itemsHad);
 
             if (posessedItemCount <= 0) {
                 event.setCancelled(NOT_ENOUGH_STOCK_IN_INVENTORY);
@@ -109,37 +109,10 @@ public class PartialTransactionModule implements Listener {
         return (int) Math.floor(walletMoney / pricePerItem);
     }
 
-    private static int getItemCount(ItemStack[] items) {
-        int count = 0;
-
-        for (ItemStack item : items) {
-            count += item.getAmount();
-        }
-
-        return count;
-    }
-
     private static ItemStack[] getItems(ItemStack[] stock, Inventory inventory) {
-        List<ItemStack> neededItems = new LinkedList<ItemStack>();
-
-        boolean itemAdded = false;
-
-        for (ItemStack item : stock) {
-            for (ItemStack needed : neededItems) {
-                if (MaterialUtil.equals(item, needed)) {
-                    needed.setAmount(needed.getAmount() + item.getAmount());
-                    itemAdded = true;
-                    break;
-                }
-            }
-
-            if (!itemAdded) {
-                neededItems.add(item);
-                itemAdded = false;
-            }
-        }
-
         List<ItemStack> toReturn = new LinkedList<ItemStack>();
+
+        ItemStack[] neededItems = InventoryUtil.mergeSimilarStacks(stock);
 
         for (ItemStack item : neededItems) {
             int amount = InventoryUtil.getAmount(item, inventory);
@@ -150,7 +123,7 @@ public class PartialTransactionModule implements Listener {
             toReturn.add(clone);
         }
 
-        return toReturn.toArray(stock);
+        return toReturn.toArray(new ItemStack[toReturn.size()]);
     }
 
     private static ItemStack[] getCountedItemStack(ItemStack[] stock, int numberOfItems) {
@@ -191,6 +164,6 @@ public class PartialTransactionModule implements Listener {
             }
         }
 
-        return stacks.toArray(stock);
+        return stacks.toArray(new ItemStack[stacks.size()]);
     }
 }

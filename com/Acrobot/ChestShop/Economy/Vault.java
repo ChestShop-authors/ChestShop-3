@@ -6,38 +6,38 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 /**
  * @author Acrobot
  */
-public class Vault implements EcoPlugin {
-    private static net.milkbowl.vault.economy.Economy economy;
+public class Vault extends EconomyManager {
+    private static net.milkbowl.vault.economy.Economy vaultPlugin;
 
     public boolean hasAccount(String player) {
-        return economy.hasAccount(player);
+        return vaultPlugin.hasAccount(player);
     }
 
     public void add(String player, double amount) {
-        economy.depositPlayer(player, amount);
+        vaultPlugin.depositPlayer(player, amount);
     }
 
     public void subtract(String player, double amount) {
-        economy.withdrawPlayer(player, amount);
+        vaultPlugin.withdrawPlayer(player, amount);
     }
 
     public boolean hasEnough(String player, double amount) {
-        return economy.has(player, amount);
+        return vaultPlugin.has(player, amount);
     }
 
     public double balance(String player) {
-        return economy.getBalance(player);
+        return vaultPlugin.getBalance(player);
     }
 
     public String format(double amount) {
-        return economy.format(amount);
+        return vaultPlugin.format(amount);
     }
 
     public static String getPluginName() {
-        if (economy == null) {
+        if (vaultPlugin == null) {
             return "";
         } else {
-            return economy.getName();
+            return vaultPlugin.getName();
         }
     }
 
@@ -48,9 +48,9 @@ public class Vault implements EcoPlugin {
             return null;
         }
 
-        economy = rsp.getProvider();
+        vaultPlugin = rsp.getProvider();
 
-        if (economy == null) {
+        if (vaultPlugin == null) {
             return null;
         } else {
             return new Vault();

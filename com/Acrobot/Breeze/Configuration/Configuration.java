@@ -30,7 +30,7 @@ public class Configuration {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
             for (Field field : clazz.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers())) {
+                if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || !Modifier.isPublic(field.getModifiers())) {
                     continue;
                 }
 

@@ -5,34 +5,34 @@ import com.nijikokun.register.payment.forChestShop.Method;
 /**
  * @author Acrobot
  */
-public class Register implements EcoPlugin {
-    public Method eco;
+public class Register extends EconomyManager {
+    public Method method;
 
-    public Register(Method eco) {
-        this.eco = eco;
+    public Register(Method method) {
+        this.method = method;
     }
 
     public boolean hasAccount(String player) {
-        return eco.hasAccount(player);
+        return method.hasAccount(player);
     }
 
     public void add(String player, double amount) {
-        eco.getAccount(player).add(amount);
+        method.getAccount(player).add(amount);
     }
 
     public void subtract(String player, double amount) {
-        eco.getAccount(player).subtract(amount);
+        method.getAccount(player).subtract(amount);
     }
 
     public boolean hasEnough(String player, double amount) {
-        return eco.getAccount(player).hasEnough(amount);
+        return method.getAccount(player).hasEnough(amount);
     }
 
     public double balance(String player) {
-        return eco.getAccount(player).balance();
+        return method.getAccount(player).balance();
     }
 
     public String format(double amount) {
-        return eco.format(amount);
+        return method.format(amount);
     }
 }
