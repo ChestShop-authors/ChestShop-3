@@ -210,6 +210,10 @@ public class SignChange implements Listener {
     }
 
     private static String formatItemLine(String line, ItemStack item) {
+        if (MaterialUtil.Odd.getFromString(line) != null) {
+            return line;
+        }
+
         String formatted, data = "";
         String[] split = line.split(":|-", 2);
 
