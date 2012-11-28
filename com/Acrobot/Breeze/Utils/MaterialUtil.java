@@ -383,7 +383,9 @@ public class MaterialUtil {
             if (data instanceof TexturedMaterial) {
                 return ((TexturedMaterial) data).getMaterial().name();
             } else if (data instanceof Colorable) {
-                return ((Colorable) data).getColor().name();
+                DyeColor color = ((Colorable) data).getColor();
+
+                return (color != null ? color.name() : null);
             } else if (data instanceof Tree) {
                 //TreeSpecies specie = TreeSpecies.getByData((byte) (data.getData() & 3)); //This works, but not as intended
                 TreeSpecies specie = ((Tree) data).getSpecies();
