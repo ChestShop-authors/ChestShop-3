@@ -41,7 +41,7 @@ public class TransactionEvent extends Event {
         this.sign = sign;
     }
 
-    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, OfflinePlayer owner, ItemStack[] stock, double price, Sign sign){
+    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, OfflinePlayer owner, ItemStack[] stock, double price, Sign sign) {
         this.type = type;
 
         this.ownerInventory = ownerInventory;

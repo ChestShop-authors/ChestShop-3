@@ -47,7 +47,7 @@ public class AdminInventory implements Inventory {
     }
 
     public ItemStack[] getContents() {
-        return new ItemStack[] {
+        return new ItemStack[]{
                 new ItemStack(Material.CHEST, 1),
                 new ItemStack(Material.AIR, Integer.MAX_VALUE)
         };

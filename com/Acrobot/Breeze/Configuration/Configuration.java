@@ -73,6 +73,7 @@ public class Configuration {
 
     /**
      * Colourises a string (using '&' character)
+     *
      * @param string String to colourise
      * @return Colourised string
      */

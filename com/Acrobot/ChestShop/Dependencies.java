@@ -2,8 +2,8 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Economy.EconomyManager;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Economy.EconomyManager;
 import com.Acrobot.ChestShop.Economy.Register;
 import com.Acrobot.ChestShop.Economy.Vault;
 import com.Acrobot.ChestShop.Plugins.*;
@@ -60,7 +60,7 @@ public class Dependencies {
 
         Listener listener = null;
 
-        switch(dependency) {
+        switch (dependency) {
             //Protection plugins
             case LWC:
                 listener = new LightweightChestProtection();

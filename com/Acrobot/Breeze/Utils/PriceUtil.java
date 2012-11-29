@@ -11,7 +11,8 @@ public class PriceUtil {
 
     /**
      * Gets the price from the text
-     * @param text Text to check
+     *
+     * @param text      Text to check
      * @param indicator Price indicator (for example, B for buy)
      * @return price
      */
@@ -46,6 +47,7 @@ public class PriceUtil {
 
     /**
      * Gets the buy price from te text
+     *
      * @param text Text to check
      * @return Buy price
      */
@@ -55,6 +57,7 @@ public class PriceUtil {
 
     /**
      * Gets the sell price from te text
+     *
      * @param text Text to check
      * @return Sell price
      */
@@ -64,6 +67,7 @@ public class PriceUtil {
 
     /**
      * Checks if the string is a valid price
+     *
      * @param text Text to check
      * @return Is the string a valid price
      */

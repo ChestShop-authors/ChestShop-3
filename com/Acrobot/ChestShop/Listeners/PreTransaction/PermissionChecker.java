@@ -32,7 +32,7 @@ public class PermissionChecker implements Listener {
             if (transactionType == BUY) {
                 hasPerm = Permission.has(client, Permission.BUY) || Permission.has(client, Permission.BUY_ID + matID);
             } else {
-                hasPerm =  Permission.has(client, Permission.SELL) || Permission.has(client, Permission.SELL_ID + matID);
+                hasPerm = Permission.has(client, Permission.SELL) || Permission.has(client, Permission.SELL_ID + matID);
             }
 
             if (!hasPerm) {
