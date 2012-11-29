@@ -107,15 +107,45 @@ public class InventoryUtil {
 
     /**
      * Adds an item to the inventory
+     * (it currently uses a custom method of adding items, because Bukkit hasn't fixed it for 6 months now)
      *
      * @param item      Item to add
      * @param inventory Inventory
      * @return Number of leftover items
      */
     public static int add(ItemStack item, Inventory inventory) {
-        Map<Integer, ItemStack> leftovers = inventory.addItem(item);
+        if (item.getAmount() < 1) {
+            return 0;
+        }
 
-        return countItems(leftovers);
+        int amountLeft = item.getAmount();
+        int maxStackSize = item.getMaxStackSize();
+
+        for (int currentSlot = 0; currentSlot < inventory.getSize() && amountLeft > 0; currentSlot++) {
+            ItemStack currentItem = inventory.getItem(currentSlot);
+            ItemStack duplicate = item.clone();
+
+            if (MaterialUtil.isEmpty(currentItem)) {
+                duplicate.setAmount(Math.min(duplicate.getAmount(), maxStackSize));
+                duplicate.addEnchantments(item.getEnchantments());
+
+                amountLeft -= duplicate.getAmount();
+
+                inventory.setItem(currentSlot, duplicate);
+            } else if (currentItem.getAmount() < maxStackSize && MaterialUtil.equals(currentItem, item)) {
+                int currentAmount = currentItem.getAmount();
+                int neededToAdd = Math.min(maxStackSize - currentAmount, amountLeft);
+
+                duplicate.setAmount(currentAmount + neededToAdd);
+                duplicate.addEnchantments(item.getEnchantments());
+
+                amountLeft -= duplicate.getAmount();
+
+                inventory.setItem(currentSlot, duplicate);
+            }
+        }
+
+        return amountLeft;
     }
 
     /**
@@ -140,20 +170,16 @@ public class InventoryUtil {
     public static ItemStack[] mergeSimilarStacks(ItemStack... items) {
         List<ItemStack> itemList = new LinkedList<ItemStack>();
 
+        Iterating:
         for (ItemStack item : items) {
-            boolean added = false;
-
             for (ItemStack iStack : itemList) {
                 if (MaterialUtil.equals(item, iStack)) {
                     iStack.setAmount(iStack.getAmount() + item.getAmount());
-                    added = true;
-                    break;
+                    continue Iterating;
                 }
             }
 
-            if (!added) {
-                itemList.add(item);
-            }
+            itemList.add(item);
         }
 
         return itemList.toArray(new ItemStack[itemList.size()]);
