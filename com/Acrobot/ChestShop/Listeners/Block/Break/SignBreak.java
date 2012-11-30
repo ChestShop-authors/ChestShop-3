@@ -112,7 +112,7 @@ public class SignBreak implements Listener {
     }
 
     private static boolean canDestroyShop(Player player, String name) {
-        return player == null || hasShopBreakingPermission(player) || canUseName(player, name);
+        return player != null && (hasShopBreakingPermission(player) || canUseName(player, name));
     }
 
     private static boolean canUseName(Player player, String name) {
