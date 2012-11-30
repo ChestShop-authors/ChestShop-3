@@ -85,13 +85,17 @@ public class InventoryUtil {
     public static boolean fits(ItemStack item, Inventory inventory) {
         int left = item.getAmount();
 
+        if (inventory.getMaxStackSize() == Integer.MAX_VALUE) {
+            return true;
+        }
+
         for (ItemStack iStack : inventory.getContents()) {
             if (left <= 0) {
                 return true;
             }
 
             if (MaterialUtil.isEmpty(iStack)) {
-                left -= inventory.getMaxStackSize();
+                left -= item.getMaxStackSize();
                 continue;
             }
 

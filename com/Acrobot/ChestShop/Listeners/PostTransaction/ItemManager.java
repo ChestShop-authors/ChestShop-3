@@ -46,7 +46,7 @@ public class ItemManager implements Listener {
 
     private static void addItems(Inventory inventory, ItemStack[] items) {
         for (ItemStack item : items) {
-            inventory.addItem(item.clone());
+            InventoryUtil.add(item, inventory);
         }
     }
 }
