@@ -75,7 +75,7 @@ public class BOSE7 implements Method {
 
     public MethodAccount getAccount(String name) {
         if (!hasAccount(name))
-            return null;
+            createAccount(name);
 
         return new BOSEAccount(name, this.BOSEconomy);
     }
