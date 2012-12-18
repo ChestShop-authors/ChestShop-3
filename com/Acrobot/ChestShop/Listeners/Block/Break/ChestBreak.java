@@ -39,7 +39,7 @@ public class ChestBreak implements Listener {
     }
 
     private static boolean canChestBeBroken(Block chest, Player breaker) {
-        if (chest.getType() != CHEST || !Properties.USE_BUILT_IN_PROTECTION || ChestShopSign.isShopChest(chest)) {
+        if (chest.getType() != CHEST || !Properties.USE_BUILT_IN_PROTECTION || !ChestShopSign.isShopChest(chest)) {
             return true;
         }
 
