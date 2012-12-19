@@ -1,7 +1,6 @@
 package com.nijikokun.register.payment.forChestShop;
 
 import com.nijikokun.register.payment.forChestShop.methods.BOSE7;
-import com.nijikokun.register.payment.forChestShop.methods.EE17;
 import com.nijikokun.register.payment.forChestShop.methods.iCo5;
 import com.nijikokun.register.payment.forChestShop.methods.iCo6;
 import org.bukkit.Bukkit;
@@ -19,7 +18,6 @@ public class Methods {
         put(new iCo5(), "iConomy");
         put(new iCo6(), "iConomy");
         put(new BOSE7(), "BOSEconomy");
-        put(new EE17(), "Essentials");
     }};
     private static String preferredPlugin;
 

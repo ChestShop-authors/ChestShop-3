@@ -35,6 +35,7 @@ public class EconomyManager {
     }
 
     private static void printError() {
-        ChestShop.getBukkitLogger().severe("You haven't got any economy plugin!");
+        ChestShop.getBukkitLogger().severe("You haven't got any economy plugin or your economical plugin is not supported by the build-in system!");
+        ChestShop.getBukkitLogger().severe("Please download an economy plugin or, if your plugin is not recognised, download Vault.");
     }
 }
