@@ -80,10 +80,12 @@ public class ChestShop extends JavaPlugin {
         if (Properties.LOG_TO_DATABASE || Properties.GENERATE_STATISTICS_PAGE) {
             setupDB();
         }
+
         if (Properties.GENERATE_STATISTICS_PAGE) {
             File htmlFolder = new File(Properties.STATISTICS_PAGE_PATH);
             scheduleTask(new Generator(htmlFolder), 300L, Properties.STATISTICS_PAGE_GENERATION_INTERVAL * 20L);
         }
+
         if (Properties.LOG_TO_FILE) {
             File log = loadFile("ChestShop.log");
 
@@ -93,6 +95,7 @@ public class ChestShop extends JavaPlugin {
             this.handler = handler;
             logger.addHandler(handler);
         }
+
         if (!Properties.LOG_TO_CONSOLE) {
             logger.setUseParentHandlers(false);
         }
