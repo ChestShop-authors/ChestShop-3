@@ -191,7 +191,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {
-        server.getScheduler().scheduleAsyncRepeatingTask(this, runnable, startTime, repetetionTime);
+        server.getScheduler().runTaskTimerAsynchronously(this, runnable, startTime, repetetionTime);
     }
 
     private void startStatistics() {
@@ -225,7 +225,8 @@ public class ChestShop extends JavaPlugin {
         );
 
         database = DB.getDatabase();
-        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Queue(), 200L, 200L);
+
+        scheduleTask(new Queue(), 200L, 200L);
     }
 
     @Override

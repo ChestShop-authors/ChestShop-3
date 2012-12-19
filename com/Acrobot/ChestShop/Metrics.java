@@ -367,7 +367,7 @@ public class Metrics {
         // END server software specific section -- all code below does not use any code outside of this class / Java
 
         // Construct the post data
-        final StringBuilder data = new StringBuilder();
+        final StringBuilder data = new StringBuilder(50);
 
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
         data.append(encode("guid")).append('=').append(encode(guid));
