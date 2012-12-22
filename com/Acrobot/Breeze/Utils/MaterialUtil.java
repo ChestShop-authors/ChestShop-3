@@ -41,15 +41,7 @@ public class MaterialUtil {
      * @return Are they equal?
      */
     public static boolean equals(ItemStack one, ItemStack two) {
-        if (one.getType() != two.getType()) {
-            return false;
-        }
-
-        if (one.getDurability() != two.getDurability()) {
-            return false;
-        }
-
-        return one.getEnchantments().equals(two.getEnchantments());
+        return one.isSimilar(two);
     }
 
     /**

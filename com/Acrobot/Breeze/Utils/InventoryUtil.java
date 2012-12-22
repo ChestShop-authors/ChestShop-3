@@ -67,7 +67,7 @@ public class InventoryUtil {
      */
     public static boolean hasItems(ItemStack[] items, Inventory inventory) {
         for (ItemStack item : items) {
-            if (InventoryUtil.getAmount(item, inventory) < item.getAmount()) {
+            if (!inventory.containsAtLeast(item, item.getAmount())) {
                 return false;
             }
         }
