@@ -80,6 +80,10 @@ public class AdminInventory implements Inventory {
         return true;
     }
 
+    public boolean containsAtLeast(ItemStack itemStack, int i) {
+        return true;
+    }
+
     public HashMap<Integer, ? extends ItemStack> all(int i) {
         HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
         items.put(1, new ItemStack(i, Integer.MAX_VALUE));

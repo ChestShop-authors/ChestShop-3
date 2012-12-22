@@ -48,7 +48,7 @@ import java.util.logging.Logger;
  * @author Acrobot
  */
 public class ChestShop extends JavaPlugin {
-    public static File dataFolder = new File("plugins/ChestShop");
+    public static File dataFolder;
 
     private static EbeanServer database;
     private static PluginDescriptionFile description;
