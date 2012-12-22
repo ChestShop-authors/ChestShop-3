@@ -1,11 +1,9 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -13,6 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
+import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 
 /**
  * @author Acrobot
@@ -58,14 +59,6 @@ public class ChestShop implements Listener {
         }
 
         return true;
-    }
-
-    private static boolean isChest(Block block) {
-        return block.getType() == Material.CHEST;
-    }
-
-    private static boolean isSign(Block block) {
-        return BlockUtil.isSign(block);
     }
 
     private static boolean canBeProtected(Block block) {
