@@ -130,7 +130,7 @@ public class InventoryUtil {
             ItemStack duplicate = item.clone();
 
             if (MaterialUtil.isEmpty(currentItem)) {
-                duplicate.setAmount(Math.min(duplicate.getAmount(), maxStackSize));
+                duplicate.setAmount(Math.min(amountLeft, maxStackSize));
                 duplicate.addEnchantments(item.getEnchantments());
 
                 amountLeft -= duplicate.getAmount();
