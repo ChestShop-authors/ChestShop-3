@@ -41,6 +41,70 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
  * @author Acrobot
  */
 public class PlayerInteract implements Listener {
+
+    /*@EventHandler(priority = EventPriority.HIGHEST)
+    public static void onInteract(PlayerInteractEvent event) {
+        Block block = event.getClickedBlock();
+
+        if (block == null) {
+            return;
+        }
+
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+
+        if (isChest(block) && Properties.USE_BUILT_IN_PROTECTION) {
+            if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+                return;
+            }
+
+            if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, block)) {
+                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+                event.setCancelled(true);
+            }
+
+            return;
+        }
+
+        if (!isSign(block) || player.getItemInHand().getType() == Material.SIGN) { // Blocking accidental sign edition
+            return;
+        }
+
+        Sign sign = (Sign) block.getState();
+
+        if (!ChestShopSign.isValid(sign)) {
+            return;
+        }
+
+        if (ChestShopSign.canAccess(player, sign)) {
+            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking()) {
+                return;
+            }
+
+            if (!Properties.ALLOW_LEFT_CLICK_DESTROYING || action != LEFT_CLICK_BLOCK) {
+                event.setCancelled(true);
+                showChestGUI(player, block);
+            }
+
+            return;
+        }
+
+        if (action == RIGHT_CLICK_BLOCK) {
+            event.setCancelled(true);
+        }
+
+        PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
+        Bukkit.getPluginManager().callEvent(pEvent);
+
+        if (pEvent.isCancelled()) {
+            return;
+        }
+
+        TransactionEvent tEvent = new TransactionEvent(pEvent, sign);
+        Bukkit.getPluginManager().callEvent(tEvent);
+    }*/
+
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void onPlayerInteract(PlayerInteractEvent event) {
         Block clickedBlock = event.getClickedBlock();
@@ -147,23 +211,18 @@ public class PlayerInteract implements Listener {
         return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
     }
 
-    private static void showChestGUI(Player player, Block block) {
-        Chest chest = uBlock.findConnectedChest(block);
+    private static void showChestGUI(Player player, Block signBlock) {
+        Chest chest = uBlock.findConnectedChest(signBlock);
 
         if (chest == null) {
             player.sendMessage(Messages.prefix(Messages.NO_CHEST_DETECTED));
             return;
         }
 
-        if (!canOpenOtherShops(player) && !Security.canAccess(player, block)) {
+        if (!canOpenOtherShops(player) && !Security.canAccess(player, signBlock)) {
             return;
         }
 
-        if (chest.getBlock().getType() != Material.CHEST) {
-            return; //To prevent people from breaking the chest and instantly clicking the sign
-        }
-
-        Inventory chestInv = chest.getInventory();
-        player.openInventory(chestInv);
+        BlockUtil.openBlockGUI(chest.getBlock(), player);
     }
 }
