@@ -74,7 +74,7 @@ public class RestrictedSign implements Listener {
 
         Sign sign = event.getSign();
 
-        if (isRestricted(sign) && !canAccess(sign, event.getClient())) {
+        if (isRestrictedShop(sign) && !canAccess(sign, event.getClient())) {
             event.setCancelled(SHOP_IS_RESTRICTED);
         }
     }
@@ -132,9 +132,13 @@ public class RestrictedSign implements Listener {
 
     }
 
-    public static boolean canDestroy(Player p, Sign sign) {
+    public static boolean canDestroy(Player player, Sign sign) {
+        if (Permission.has(player, ADMIN)) {
+            return true;
+        }
+
         Sign shopSign = getAssociatedSign(sign);
-        return ChestShopSign.canAccess(p, shopSign);
+        return ChestShopSign.canAccess(player, shopSign);
     }
 
     public static Sign getAssociatedSign(Sign restricted) {
