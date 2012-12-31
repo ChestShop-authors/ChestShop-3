@@ -143,7 +143,7 @@ public class InventoryUtil {
                 duplicate.setAmount(currentAmount + neededToAdd);
                 duplicate.addEnchantments(item.getEnchantments());
 
-                amountLeft -= duplicate.getAmount();
+                amountLeft -= neededToAdd;
 
                 inventory.setItem(currentSlot, duplicate);
             }
