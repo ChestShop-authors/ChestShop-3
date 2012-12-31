@@ -86,6 +86,13 @@ public class LightweightChestProtection implements Listener {
 
         String worldName = block.getWorld().getName();
 
+        Protection existingProtection = lwc.getPhysicalDatabase().loadProtection(worldName, x, y, z);
+
+        if (existingProtection != null) {
+            event.setProtected(true);
+            return;
+        }
+
         Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), Protection.Type.PRIVATE, worldName, event.getName(), "", x, y, z);
 
         if (protection != null) {
