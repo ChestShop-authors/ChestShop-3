@@ -30,9 +30,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import static com.Acrobot.Breeze.Utils.BlockUtil.*;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.*;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -42,7 +42,7 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
  */
 public class PlayerInteract implements Listener {
 
-    /*@EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public static void onInteract(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
 
@@ -91,63 +91,6 @@ public class PlayerInteract implements Listener {
 
         if (action == RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
-        }
-
-        PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
-        Bukkit.getPluginManager().callEvent(pEvent);
-
-        if (pEvent.isCancelled()) {
-            return;
-        }
-
-        TransactionEvent tEvent = new TransactionEvent(pEvent, sign);
-        Bukkit.getPluginManager().callEvent(tEvent);
-    }*/
-
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public static void onPlayerInteract(PlayerInteractEvent event) {
-        Block clickedBlock = event.getClickedBlock();
-
-        if (clickedBlock == null) {
-            return;
-        }
-
-        Action action = event.getAction();
-        Player player = event.getPlayer();
-
-        if (Properties.USE_BUILT_IN_PROTECTION && clickedBlock.getType() == Material.CHEST) {
-            if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
-                return;
-            }
-
-            if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, clickedBlock)) {
-                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
-                event.setCancelled(true);
-            }
-
-            return; //The else doesn't matter, because the clicked block is a chest
-        }
-
-        if (!BlockUtil.isSign(clickedBlock)) return;
-        Sign sign = (Sign) clickedBlock.getState();
-
-        if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.SIGN) return;
-        if (!ChestShopSign.isValid(sign) || (ChestShopSign.canAccess(player, sign) && player.isSneaking())) return;
-
-        if (action == RIGHT_CLICK_BLOCK) {
-            event.setCancelled(true);
-        }
-
-        if (ChestShopSign.canAccess(player, sign)) {
-            if (!Properties.ALLOW_SIGN_CHEST_OPEN) {
-                return;
-            }
-
-            if (action != LEFT_CLICK_BLOCK || !Properties.ALLOW_LEFT_CLICK_DESTROYING) {
-                showChestGUI(player, clickedBlock);
-            }
-            return;
         }
 
         PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
@@ -223,6 +166,6 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        BlockUtil.openBlockGUI(chest.getBlock(), player);
+        BlockUtil.openBlockGUI(chest, player);
     }
 }
