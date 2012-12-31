@@ -18,8 +18,23 @@ public class ShopValidator implements Listener {
             return;
         }
 
+        if (isEmpty(event.getStock())) {
+            event.setCancelled(INVALID_SHOP);
+            return;
+        }
+
         if (!ChestShopSign.isAdminShop(event.getSign()) && event.getOwnerInventory() == null) {
             event.setCancelled(INVALID_SHOP);
         }
+    }
+
+    private static <A> boolean isEmpty(A[] array) {
+        for (A element : array) {
+            if (element != null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
