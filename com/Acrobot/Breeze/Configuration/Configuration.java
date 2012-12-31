@@ -4,10 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -38,7 +35,6 @@ public class Configuration {
 
                 try {
                     if (path.toLowerCase().replace("_", "").startsWith("newline")) {
-                        writer.write('\n');
                         continue;
                     }
 
@@ -46,11 +42,17 @@ public class Configuration {
                         field.set(null, ValueParser.parseToJava(config.get(path)));
                     } else {
                         writer.write('\n' + FieldParser.parse(field));
+
+                        if (clazz.getDeclaredField("NEWLINE_" + path) != null) {
+                            writer.write('\n');
+                        }
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (NoSuchFieldException e) {
+                    continue;
                 }
             }
 
