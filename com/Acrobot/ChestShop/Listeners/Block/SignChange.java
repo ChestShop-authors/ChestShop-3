@@ -254,7 +254,7 @@ public class SignChange implements Listener {
     }
 
     private static void sendMessageAndExit(String message, SignChangeEvent event) {
-        event.getPlayer().sendMessage(message);
+        event.getPlayer().sendMessage(Messages.prefix(message));
 
         dropSign(event);
     }
