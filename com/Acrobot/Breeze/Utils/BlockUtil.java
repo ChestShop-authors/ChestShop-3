@@ -43,18 +43,14 @@ public class BlockUtil {
     }
 
     /**
-     * Opens the block's inventory's GUI
+     * Opens the holder's inventory GUI
      *
-     * @param block  Block
+     * @param holder Inventory holder
      * @param player Player on whose screen the GUI is going to be shown
      * @return Was the opening successful?
      */
-    public static boolean openBlockGUI(Block block, Player player) {
-        if (!(block instanceof InventoryHolder)) {
-            return false;
-        }
-
-        Inventory inventory = ((InventoryHolder) block).getInventory();
+    public static boolean openBlockGUI(InventoryHolder holder, Player player) {
+        Inventory inventory = holder.getInventory();
         player.openInventory(inventory);
 
         return true;
