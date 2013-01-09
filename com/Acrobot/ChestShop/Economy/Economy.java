@@ -31,7 +31,7 @@ public class Economy {
         return ChestShopSign.isAdminShop(acc);
     }
 
-    public static void add(String name, double amount) {
+    public static boolean add(String name, double amount) {
         if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
             name = getServerAccountName();
         }
@@ -46,19 +46,19 @@ public class Economy {
             amount -= tax;
         }
 
-        manager.add(uName.getName(name), amount);
+        return manager.add(uName.getName(name), amount);
     }
 
     public static double getTax(float tax, double price) {
         return NumberUtil.roundDown((tax / 100F) * price);
     }
 
-    public static void subtract(String name, double amount) {
+    public static boolean subtract(String name, double amount) {
         if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
             name = getServerAccountName();
         }
 
-        manager.subtract(uName.getName(name), roundUp(amount));
+        return manager.subtract(uName.getName(name), roundUp(amount));
     }
 
     public static boolean hasEnough(String name, double amount) {

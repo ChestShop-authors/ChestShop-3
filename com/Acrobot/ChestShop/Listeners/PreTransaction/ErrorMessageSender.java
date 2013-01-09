@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_STOCK_IN_YOUR_SHOP;
+import static com.Acrobot.ChestShop.Configuration.Messages.*;
 
 /**
  * @author Acrobot
@@ -58,12 +58,27 @@ public class ErrorMessageSender implements Listener {
                 sendMessageToOwner(event.getOwner(), messageOutOfStock);
                 message = Messages.NOT_ENOUGH_STOCK;
                 break;
+            case SHOP_DEPOSIT_FAILED:
+            	String messageDepositFailed = Messages.prefix(DEPOSIT_FAILED);
+                sendMessageToOwner(event.getOwner(), messageDepositFailed);
+                message = DEPOSIT_FAILED;
+                break;
             case SHOP_IS_RESTRICTED:
                 message = Messages.ACCESS_DENIED;
                 break;
             case INVALID_SHOP:
                 message = Messages.INVALID_SHOP_DETECTED;
                 break;
+			case CREATIVE_MODE_PROTECTION:
+				break;
+			case OTHER:
+				break;
+			case SPAM_CLICKING_PROTECTION:
+				break;
+			case TRANSACTION_SUCCESFUL:
+				break;
+			default:
+				break;
         }
 
         if (message != null) {
