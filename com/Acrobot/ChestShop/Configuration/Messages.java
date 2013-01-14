@@ -17,6 +17,9 @@ public class Messages {
 
     public static String NOT_ENOUGH_MONEY = "You don't have enough money!";
     public static String NOT_ENOUGH_MONEY_SHOP = "Shop owner doesn't have enough money!";
+    
+    public static String DEPOSIT_FAILED = "Money deposit to shop owner failed!";
+    public static String DEPOSIT_FAILED_OWNER = "Money deposit to your account failed, shop transaction aborted!";
 
     public static byte NEWLINE_NOT_ENOUGH_MONEY_SHO; ///////////////////////////////////////////////////
 

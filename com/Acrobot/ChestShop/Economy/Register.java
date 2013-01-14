@@ -16,12 +16,12 @@ public class Register extends EconomyManager {
         return method.hasAccount(player);
     }
 
-    public void add(String player, double amount) {
-        method.getAccount(player).add(amount);
+    public boolean add(String player, double amount) {
+        return method.getAccount(player).add(amount);
     }
 
-    public void subtract(String player, double amount) {
-        method.getAccount(player).subtract(amount);
+    public boolean subtract(String player, double amount) {
+        return method.getAccount(player).subtract(amount);
     }
 
     public boolean hasEnough(String player, double amount) {

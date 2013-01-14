@@ -125,6 +125,8 @@ public class PreTransactionEvent extends Event {
 
         CLIENT_DOES_NOT_HAVE_ENOUGH_MONEY,
         SHOP_DOES_NOT_HAVE_ENOUGH_MONEY,
+        /** not enough space in shop's account for money deposit on sell */
+        SHOP_DEPOSIT_FAILED,
 
         NOT_ENOUGH_SPACE_IN_CHEST,
         NOT_ENOUGH_SPACE_IN_INVENTORY,
