@@ -29,56 +29,56 @@ public class ErrorMessageSender implements Listener {
         String message = null;
 
         switch (event.getTransactionOutcome()) {
-            case SHOP_DOES_NOT_BUY_THIS_ITEM:
-                message = Messages.NO_BUYING_HERE;
-                break;
-            case SHOP_DOES_NOT_SELL_THIS_ITEM:
-                message = Messages.NO_SELLING_HERE;
-                break;
-            case CLIENT_DOES_NOT_HAVE_PERMISSION:
-                message = Messages.NO_PERMISSION;
-                break;
-            case CLIENT_DOES_NOT_HAVE_ENOUGH_MONEY:
-                message = Messages.NOT_ENOUGH_MONEY;
-                break;
-            case SHOP_DOES_NOT_HAVE_ENOUGH_MONEY:
-                message = Messages.NOT_ENOUGH_MONEY_SHOP;
-                break;
-            case NOT_ENOUGH_SPACE_IN_CHEST:
-                message = Messages.NOT_ENOUGH_SPACE_IN_CHEST;
-                break;
-            case NOT_ENOUGH_SPACE_IN_INVENTORY:
-                message = Messages.NOT_ENOUGH_SPACE_IN_INVENTORY;
-                break;
-            case NOT_ENOUGH_STOCK_IN_INVENTORY:
-                message = Messages.NOT_ENOUGH_ITEMS_TO_SELL;
-                break;
-            case NOT_ENOUGH_STOCK_IN_CHEST:
-                String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", getItemNames(event.getStock()));
-                sendMessageToOwner(event.getOwner(), messageOutOfStock);
-                message = Messages.NOT_ENOUGH_STOCK;
-                break;
-            case SHOP_DEPOSIT_FAILED:
-            	String messageDepositFailed = Messages.prefix(DEPOSIT_FAILED);
-                sendMessageToOwner(event.getOwner(), messageDepositFailed);
-                message = DEPOSIT_FAILED;
-                break;
-            case SHOP_IS_RESTRICTED:
-                message = Messages.ACCESS_DENIED;
-                break;
-            case INVALID_SHOP:
-                message = Messages.INVALID_SHOP_DETECTED;
-                break;
-			case CREATIVE_MODE_PROTECTION:
-				break;
-			case OTHER:
-				break;
-			case SPAM_CLICKING_PROTECTION:
-				break;
-			case TRANSACTION_SUCCESFUL:
-				break;
-			default:
-				break;
+	        case SHOP_DOES_NOT_BUY_THIS_ITEM:
+	        	message = Messages.NO_BUYING_HERE;
+	        	break;
+	        case SHOP_DOES_NOT_SELL_THIS_ITEM:
+	        	message = Messages.NO_SELLING_HERE;
+	        	break;
+	        case CLIENT_DOES_NOT_HAVE_PERMISSION:
+	        	message = Messages.NO_PERMISSION;
+	        	break;
+	        case CLIENT_DOES_NOT_HAVE_ENOUGH_MONEY:
+	        	message = Messages.NOT_ENOUGH_MONEY;
+	        	break;
+	        case SHOP_DOES_NOT_HAVE_ENOUGH_MONEY:
+	        	message = Messages.NOT_ENOUGH_MONEY_SHOP;
+	        	break;
+	        case NOT_ENOUGH_SPACE_IN_CHEST:
+	        	message = Messages.NOT_ENOUGH_SPACE_IN_CHEST;
+	        	break;
+	        case NOT_ENOUGH_SPACE_IN_INVENTORY:
+	        	message = Messages.NOT_ENOUGH_SPACE_IN_INVENTORY;
+	        	break;
+	        case NOT_ENOUGH_STOCK_IN_INVENTORY:
+	        	message = Messages.NOT_ENOUGH_ITEMS_TO_SELL;
+	        	break;
+	        case NOT_ENOUGH_STOCK_IN_CHEST:
+	        	String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", getItemNames(event.getStock()));
+	        	sendMessageToOwner(event.getOwner(), messageOutOfStock);
+	        	message = Messages.NOT_ENOUGH_STOCK;
+	        	break;
+	        case SHOP_DEPOSIT_FAILED:
+	        	String messageDepositFailed = Messages.prefix(DEPOSIT_FAILED);
+	        	sendMessageToOwner(event.getOwner(), messageDepositFailed);
+	        	message = DEPOSIT_FAILED;
+	        	break;
+	        case SHOP_IS_RESTRICTED:
+	        	message = Messages.ACCESS_DENIED;
+	        	break;
+	        case INVALID_SHOP:
+	        	message = Messages.INVALID_SHOP_DETECTED;
+	        	break;
+	        case CREATIVE_MODE_PROTECTION:
+	        	break;
+	        case OTHER:
+	        	break;
+	        case SPAM_CLICKING_PROTECTION:
+	        	break;
+	        case TRANSACTION_SUCCESFUL:
+	        	break;
+	        default:
+	        	break;
         }
 
         if (message != null) {
