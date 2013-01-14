@@ -11,12 +11,14 @@ public class EconomyManager {
         return false;
     }
 
-    public void add(String player, double amount) {
+    public boolean add(String player, double amount) {
         printError();
+        return false;
     }
 
-    public void subtract(String player, double amount) {
+    public boolean subtract(String player, double amount) {
         printError();
+        return false;
     }
 
     public boolean hasEnough(String player, double amount) {

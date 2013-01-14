@@ -47,6 +47,17 @@ public class PartialTransactionModule implements Listener {
             event.setPrice(amountAffordable * pricePerItem);
             event.setStock(getCountedItemStack(stock, amountAffordable));
         }
+        
+        String seller = event.getOwner().getName();
+        boolean added = Economy.add(seller, price);
+        if (added) {
+        	// added amount successfully, owner has enough space for deposit
+        	// --> undo the add, for some other event to actually do.
+        	Economy.subtract(seller, price);
+        } else {
+        	event.setCancelled(SHOP_DEPOSIT_FAILED);
+        	return;
+        }
 
         stock = event.getStock();
 
