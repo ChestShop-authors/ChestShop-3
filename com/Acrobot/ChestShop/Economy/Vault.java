@@ -13,12 +13,12 @@ public class Vault extends EconomyManager {
         return vaultPlugin.hasAccount(player);
     }
 
-    public void add(String player, double amount) {
-        vaultPlugin.depositPlayer(player, amount);
+    public boolean add(String player, double amount) {
+        return vaultPlugin.depositPlayer(player, amount).transactionSuccess();
     }
 
-    public void subtract(String player, double amount) {
-        vaultPlugin.withdrawPlayer(player, amount);
+    public boolean subtract(String player, double amount) {
+        return vaultPlugin.withdrawPlayer(player, amount).transactionSuccess();
     }
 
     public boolean hasEnough(String player, double amount) {
