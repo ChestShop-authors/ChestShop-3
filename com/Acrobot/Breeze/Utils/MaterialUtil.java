@@ -23,6 +23,9 @@ public class MaterialUtil {
     public static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
     public static final Pattern ENCHANTMENT = Pattern.compile("-([0-9a-zA-Z])*");
 
+    public static final boolean LONG_NAME = true;
+    public static final boolean SHORT_NAME = false;
+
     /**
      * Checks if the itemStack is empty or null
      *

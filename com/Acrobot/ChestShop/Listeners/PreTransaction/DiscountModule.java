@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.Acrobot.Breeze.Utils.PriceUtil.NO_PRICE;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
 
@@ -51,11 +50,7 @@ public class DiscountModule implements Listener {
 
         Player client = event.getClient();
 
-        if (Permission.has(client, Permission.ADMIN)) {
-            return;
-        }
-
-        if (PriceUtil.getBuyPrice(event.getSign().getLine(PRICE_LINE)) == NO_PRICE) {
+        if (PriceUtil.hasBuyPrice(event.getSign().getLine(PRICE_LINE))) {
             return;
         }
 

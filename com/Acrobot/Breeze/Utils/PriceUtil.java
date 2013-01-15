@@ -9,6 +9,9 @@ public class PriceUtil {
 
     public static final String FREE_TEXT = "free";
 
+    public static final char BUY_INDICATOR = 'b';
+    public static final char SELL_INDICATOR = 's';
+
     /**
      * Gets the price from the text
      *
@@ -52,7 +55,7 @@ public class PriceUtil {
      * @return Buy price
      */
     public static double getBuyPrice(String text) {
-        return get(text, 'b');
+        return get(text, BUY_INDICATOR);
     }
 
     /**
@@ -62,7 +65,38 @@ public class PriceUtil {
      * @return Sell price
      */
     public static double getSellPrice(String text) {
-        return get(text, 's');
+        return get(text, SELL_INDICATOR);
+    }
+
+    /**
+     * Tells if there is a buy price
+     *
+     * @param text Price text
+     * @return If there is a buy price
+     */
+    public static boolean hasBuyPrice(String text) {
+        return hasPrice(text, BUY_INDICATOR);
+    }
+
+    /**
+     * Tells if there is a sell price
+     *
+     * @param text Price text
+     * @return If there is a sell price
+     */
+    public static boolean hasSellPrice(String text) {
+        return hasPrice(text, SELL_INDICATOR);
+    }
+
+    /**
+     * Tells if there is a price with the specified indicator
+     *
+     * @param text      Price text
+     * @param indicator Price indicator
+     * @return If the text contains indicated price
+     */
+    public static boolean hasPrice(String text, char indicator) {
+        return get(text, indicator) != NO_PRICE;
     }
 
     /**
@@ -71,11 +105,11 @@ public class PriceUtil {
      * @param text Text to check
      * @return Is the string a valid price
      */
-    public static boolean textIsPrice(String text) {
+    public static boolean isPrice(String text) {
         if (NumberUtil.isFloat(text)) {
             return true;
         }
 
-        return text.trim().equalsIgnoreCase("free");
+        return text.trim().equalsIgnoreCase(FREE_TEXT);
     }
 }

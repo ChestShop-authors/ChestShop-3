@@ -193,10 +193,10 @@ public class SignChange implements Listener {
         String line = thirdLine;
         String[] split = line.toUpperCase().split(":");
 
-        if (PriceUtil.textIsPrice(split[0])) {
+        if (PriceUtil.isPrice(split[0])) {
             line = "B " + line;
         }
-        if (split.length == 2 && PriceUtil.textIsPrice(split[1])) {
+        if (split.length == 2 && PriceUtil.isPrice(split[1])) {
             line += " S";
         }
 

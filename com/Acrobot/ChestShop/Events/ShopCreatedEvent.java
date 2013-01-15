@@ -14,14 +14,14 @@ import javax.annotation.Nullable;
 public class ShopCreatedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private Player player;
+    private final Player creator;
 
-    private Sign sign;
-    private Chest chest;
-    private String[] signLines;
+    private final Sign sign;
+    private final String[] signLines;
+    @Nullable private final Chest chest;
 
-    public ShopCreatedEvent(Player player, Sign sign, @Nullable Chest chest, String[] signLines) {
-        this.player = player;
+    public ShopCreatedEvent(Player creator, Sign sign, @Nullable Chest chest, String[] signLines) {
+        this.creator = creator;
         this.sign = sign;
         this.chest = chest;
         this.signLines = signLines.clone();
@@ -32,7 +32,7 @@ public class ShopCreatedEvent extends Event {
     }
 
     public Player getPlayer() {
-        return player;
+        return creator;
     }
 
     public Sign getSign() {

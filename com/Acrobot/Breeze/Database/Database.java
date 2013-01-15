@@ -21,6 +21,12 @@ public class Database {
         this.password = password;
     }
 
+    public Database(String uri) {
+        this.uri = uri;
+        this.username = null;
+        this.password = null;
+    }
+
 
     /**
      * Gets the table with given name, even if it doesn't exist in the database

@@ -49,6 +49,7 @@ import java.util.logging.Logger;
  */
 public class ChestShop extends JavaPlugin {
     public static File dataFolder;
+    public static com.Acrobot.Breeze.Database.Database data;
 
     private static EbeanServer database;
     private static PluginDescriptionFile description;

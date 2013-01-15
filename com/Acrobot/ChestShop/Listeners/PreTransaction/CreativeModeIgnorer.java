@@ -13,6 +13,7 @@ import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcom
  * @author Acrobot
  */
 public class CreativeModeIgnorer implements Listener {
+
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreTransaction(PreTransactionEvent event) {
         if (event.isCancelled()) {
