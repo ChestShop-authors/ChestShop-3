@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
+import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -11,10 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.Acrobot.ChestShop.Configuration.Messages.*;
+import static com.Acrobot.ChestShop.Configuration.Messages.CLIENT_DEPOSIT_FAILED;
+import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_STOCK_IN_YOUR_SHOP;
 
 /**
  * @author Acrobot
@@ -58,26 +57,19 @@ public class ErrorMessageSender implements Listener {
                 sendMessageToOwner(event.getOwner(), messageOutOfStock);
                 message = Messages.NOT_ENOUGH_STOCK;
                 break;
+            case CLIENT_DEPOSIT_FAILED:
+                message = Messages.CLIENT_DEPOSIT_FAILED;
+                break;
             case SHOP_DEPOSIT_FAILED:
-                String messageDepositFailed = Messages.prefix(DEPOSIT_FAILED);
+                String messageDepositFailed = Messages.prefix(CLIENT_DEPOSIT_FAILED);
                 sendMessageToOwner(event.getOwner(), messageDepositFailed);
-                message = DEPOSIT_FAILED;
+                message = Messages.SHOP_DEPOSIT_FAILED;
                 break;
             case SHOP_IS_RESTRICTED:
                 message = Messages.ACCESS_DENIED;
                 break;
             case INVALID_SHOP:
                 message = Messages.INVALID_SHOP_DETECTED;
-                break;
-            case CREATIVE_MODE_PROTECTION:
-                break;
-            case OTHER:
-                break;
-            case SPAM_CLICKING_PROTECTION:
-                break;
-            case TRANSACTION_SUCCESFUL:
-                break;
-            default:
                 break;
         }
 
@@ -87,22 +79,7 @@ public class ErrorMessageSender implements Listener {
     }
 
     private static String getItemNames(ItemStack[] stock) {
-        List<ItemStack> items = new LinkedList<ItemStack>();
-
-        for (ItemStack stack : stock) {
-            boolean hadItem = false;
-
-            for (ItemStack item : items) {
-                if (MaterialUtil.equals(stack, item)) {
-                    item.setAmount(item.getAmount() + stack.getAmount());
-                    hadItem = true;
-                }
-            }
-
-            if (!hadItem) {
-                items.add(stack.clone());
-            }
-        }
+        ItemStack[] items = InventoryUtil.mergeSimilarStacks(stock);
 
         StringBuilder names = new StringBuilder(50);
 

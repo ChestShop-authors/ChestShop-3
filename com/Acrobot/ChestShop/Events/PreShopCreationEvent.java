@@ -27,6 +27,10 @@ public class PreShopCreationEvent extends Event {
         return outcome != CreationOutcome.SHOP_CREATED_SUCCESSFULLY;
     }
 
+    public CreationOutcome getOutcome() {
+        return outcome;
+    }
+
     public void setOutcome(CreationOutcome outcome) {
         this.outcome = outcome;
     }

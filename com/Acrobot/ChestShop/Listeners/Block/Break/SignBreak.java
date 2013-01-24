@@ -40,7 +40,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
  * @author Acrobot
  */
 public class SignBreak implements Listener {
-    private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST};
+    private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
 
     @EventHandler(ignoreCancelled = true)
     public static void onSignBreak(BlockBreakEvent event) {

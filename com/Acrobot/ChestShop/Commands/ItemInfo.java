@@ -36,10 +36,10 @@ public class ItemInfo implements CommandExecutor {
         }
 
         String durability = getDurability(item);
-        String enchantment = getEnchantment(item);
+        String metadata = getMetadata(item);
 
         sender.sendMessage(Messages.prefix(iteminfo));
-        sender.sendMessage(getNameAndID(item) + durability + enchantment + ChatColor.WHITE);
+        sender.sendMessage(getNameAndID(item) + durability + metadata + ChatColor.WHITE);
 
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
@@ -61,13 +61,11 @@ public class ItemInfo implements CommandExecutor {
         }
     }
 
-    private static String getEnchantment(ItemStack item) {
-        String encodedEnchantments = MaterialUtil.Enchantment.encodeEnchantment(item);
-
-        if (encodedEnchantments != null) {
-            return ChatColor.DARK_AQUA + "-" + encodedEnchantments;
-        } else {
+    private static String getMetadata(ItemStack item) {
+        if (!item.hasItemMeta()) {
             return "";
         }
+
+        return ChatColor.GOLD + "#" + MaterialUtil.Metadata.getItemCode(item);
     }
 }

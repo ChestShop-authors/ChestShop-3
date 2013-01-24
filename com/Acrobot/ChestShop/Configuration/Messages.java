@@ -17,11 +17,13 @@ public class Messages {
 
     public static String NOT_ENOUGH_MONEY = "You don't have enough money!";
     public static String NOT_ENOUGH_MONEY_SHOP = "Shop owner doesn't have enough money!";
-    
-    public static String DEPOSIT_FAILED = "Money deposit to shop owner failed!";
-    public static String DEPOSIT_FAILED_OWNER = "Money deposit to your account failed, shop transaction aborted!";
 
-    public static byte NEWLINE_NOT_ENOUGH_MONEY_SHO; ///////////////////////////////////////////////////
+    public static byte NEWLINE_NOT_ENOUGH_MONEY_SHOP; ///////////////////////////////////////////////////
+
+    public static String CLIENT_DEPOSIT_FAILED = "Money deposit to your account failed!";
+    public static String SHOP_DEPOSIT_FAILED = "Money deposit to shop owner failed!";
+
+    public static byte NEWLINE_SHOP_DEPOSIT_FAILED; ///////////////////////////////////////////////////
 
     public static String NO_BUYING_HERE = "You can't buy here!";
     public static String NO_SELLING_HERE = "You can't sell here!";
@@ -58,6 +60,7 @@ public class Messages {
 
     public static String PROTECTED_SHOP = "Successfully protected the shop with LWC!";
     public static String SHOP_CREATED = "Shop successfully created!";
+    public static String SHOP_FEE_PAID = "You have been charged %amount";
     public static String SHOP_REFUNDED = "You have been refunded %amount.";
 
     public static byte NEWLINE_SHOP_REFUNDED; ///////////////////////////////////////////////////

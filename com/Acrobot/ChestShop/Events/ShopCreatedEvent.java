@@ -27,6 +27,10 @@ public class ShopCreatedEvent extends Event {
         this.signLines = signLines.clone();
     }
 
+    public String getSignLine(short line) {
+        return signLines[line];
+    }
+
     public String[] getSignLines() {
         return signLines;
     }

@@ -10,21 +10,29 @@ import java.sql.*;
  * @author Acrobot
  */
 public class Table {
-    private Database database;
-    private String name;
+    private final Database database;
+    private final String name;
 
-    private final String SELECT_ALL = "SELECT * FROM " + name;
-    private final String SELECT_STATEMENT = "SELECT * FROM " + name + " WHERE 's'";
+    private final String SELECT_ALL;
+    private final String SELECT_STATEMENT;
 
-    private final String INSERT_VALUES = "INSERT INTO " + name + " VALUES ('s')";
-    private final String UPDATE = "UPDATE " + name + " SET 's' WHERE 's'";
+    private final String INSERT_VALUES;
+    private final String UPDATE;
 
-    private final String CREATE = "CREATE TABLE IF NOT EXISTS " + name + " ('s')";
+    private final String CREATE;
 
 
     public Table(Database database, String name) {
         this.database = database;
         this.name = name;
+
+        SELECT_ALL = "SELECT * FROM " + name;
+        SELECT_STATEMENT = "SELECT * FROM " + name + " WHERE %s";
+
+        INSERT_VALUES = "INSERT OR IGNORE INTO " + name + " VALUES (%s)";
+        UPDATE = "UPDATE " + name + " SET %s WHERE %s";
+
+        CREATE = "CREATE TABLE IF NOT EXISTS " + name + " (%s)";
     }
 
     /**
@@ -74,7 +82,7 @@ public class Table {
      */
     public Row getRow(String criteria) throws SQLException {
         RowSet rs = select(criteria);
-        return rs.get(0);
+        return (rs.size() > 0 ? rs.get(0) : new Row());
     }
 
     /**
@@ -133,6 +141,36 @@ public class Table {
     }
 
     /**
+     * Inserts a row into the table
+     *
+     * @param statement Row to insert
+     * @throws SQLException exception
+     */
+    public void insertRow(String statement) throws SQLException {
+        insertRow(statement, null);
+    }
+
+    /**
+     * Inserts a row into the table
+     *
+     * @param statement Row to insert
+     * @param condition If the conditions are present, the row is updated when the conditions are met
+     * @throws SQLException exception
+     */
+    public void insertRow(String statement, String condition) throws SQLException {
+        if (condition == null || condition.isEmpty()) {
+            statement = String.format(INSERT_VALUES, statement);
+        } else {
+            statement = String.format(UPDATE, statement, condition);
+        }
+
+        Connection connection = database.getConnection();
+        Statement stm = connection.createStatement();
+
+        stm.executeUpdate(statement);
+    }
+
+    /**
      * Creates a table with given fields. If the table already exists, nothing happens
      *
      * @param fields Fields of the table
@@ -144,5 +182,14 @@ public class Table {
         Statement stm = connection.createStatement();
 
         stm.executeUpdate(statement);
+    }
+
+    /**
+     * Returns this table's name
+     *
+     * @return Table's name
+     */
+    public String getName() {
+        return name;
     }
 }

@@ -1,5 +1,6 @@
 package com.Acrobot.Breeze.Utils;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import info.somethingodd.bukkit.OddItem.OddItem;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.*;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import java.util.regex.Pattern;
 public class MaterialUtil {
     public static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
     public static final Pattern ENCHANTMENT = Pattern.compile("-([0-9a-zA-Z])*");
+    public static final Pattern METADATA = Pattern.compile("#([0-9a-zA-Z])*");
 
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
@@ -118,8 +121,8 @@ public class MaterialUtil {
             name.append(':').append(itemStack.getDurability());
         }
 
-        if (!itemStack.getEnchantments().isEmpty()) {
-            name.append('-').append(MaterialUtil.Enchantment.encodeEnchantment(itemStack));
+        if (!itemStack.hasItemMeta()) {
+            name.append('#').append(Metadata.getItemCode(itemStack));
         }
 
         return StringUtil.capitalizeFirstLetter(name.toString(), '_');
@@ -138,7 +141,7 @@ public class MaterialUtil {
             return itemStack;
         }
 
-        String[] split = Iterables.toArray(Splitter.onPattern(":|-").trimResults().split(itemName), String.class);
+        String[] split = Iterables.toArray(Splitter.onPattern(":|-|#").trimResults().split(itemName), String.class);
 
         Material material = getMaterial(split[0]);
 
@@ -173,7 +176,7 @@ public class MaterialUtil {
 
         itemStack.setDurability(durability);
 
-        Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName);
+        Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName); //TODO - it's obsolete, left only for backward compatibility
 
         if (!enchantments.isEmpty()) {
             try {
@@ -181,6 +184,12 @@ public class MaterialUtil {
             } catch (IllegalArgumentException exception) {
                 //Do nothing, because the enchantment can't be applied
             }
+        }
+
+        ItemMeta meta = getMetadata(itemName);
+
+        if (meta != null) {
+            itemStack.setItemMeta(meta);
         }
 
         return itemStack;
@@ -225,6 +234,23 @@ public class MaterialUtil {
 
         String group = m.group().substring(1);
         return Enchantment.getEnchantments(group);
+    }
+
+    /**
+     * Returns metadata from a string
+     *
+     * @param itemName Item name
+     * @return Metadata found
+     */
+    public static ItemMeta getMetadata(String itemName) {
+        Matcher m = METADATA.matcher(itemName);
+
+        if (!m.find()) {
+            return null;
+        }
+
+        String group = m.group().substring(1);
+        return Metadata.getFromCode(group);
     }
 
     public static class Enchantment {
@@ -394,6 +420,34 @@ public class MaterialUtil {
             } else {
                 return null;
             }
+        }
+    }
+
+    public static class Metadata {
+        /**
+         * Returns the ItemStack represented by this code
+         *
+         * @param code Code representing the item
+         * @return Item represented by code
+         */
+        public static ItemMeta getFromCode(String code) {
+            ItemStack item = ChestShop.getItemDatabase().getFromCode(code);
+
+            if (item == null) {
+                return null;
+            } else {
+                return item.getItemMeta();
+            }
+        }
+
+        /**
+         * Returns the code for this item
+         *
+         * @param item Item being represented
+         * @return Code representing the item
+         */
+        public static String getItemCode(ItemStack item) {
+            return ChestShop.getItemDatabase().getItemCode(item);
         }
     }
 

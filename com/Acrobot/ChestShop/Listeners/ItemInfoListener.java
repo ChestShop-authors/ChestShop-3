@@ -41,7 +41,13 @@ public class ItemInfoListener implements Listener {
             return;
         }
 
-        Potion potion = Potion.fromItemStack(item);
+        Potion potion;
+
+        try {
+            potion = Potion.fromItemStack(item);
+        } catch (IllegalArgumentException ex) {
+            return;
+        }
 
         StringBuilder message = new StringBuilder(50);
 

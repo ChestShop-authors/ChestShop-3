@@ -1,25 +1,25 @@
-package com.Acrobot.ChestShop.Listeners.PreShopCreation;
+package com.Acrobot.ChestShop.Listeners.PostShopCreation;
 
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
-import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.NOT_ENOUGH_MONEY;
 import static com.Acrobot.ChestShop.Permission.NOFEE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
  */
-public class MoneyChecker implements Listener {
+public class CreationFeeGetter implements Listener {
 
     @EventHandler
-    public static void onPreShopCreation(PreShopCreationEvent event) {
+    public static void onShopCreation(ShopCreatedEvent event) {
         double shopCreationPrice = Properties.SHOP_CREATION_PRICE;
 
         if (shopCreationPrice == 0) {
@@ -36,8 +36,8 @@ public class MoneyChecker implements Listener {
             return;
         }
 
-        if (!Economy.hasEnough(player.getName(), shopCreationPrice)) {
-            event.setOutcome(NOT_ENOUGH_MONEY);
-        }
+        Economy.subtract(player.getName(), shopCreationPrice);
+
+        player.sendMessage(Messages.prefix(Messages.SHOP_FEE_PAID.replace("%amount", Double.toString(shopCreationPrice))));
     }
 }

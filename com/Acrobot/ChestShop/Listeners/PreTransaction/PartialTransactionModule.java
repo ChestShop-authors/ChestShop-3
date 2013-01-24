@@ -47,16 +47,14 @@ public class PartialTransactionModule implements Listener {
             event.setPrice(amountAffordable * pricePerItem);
             event.setStock(getCountedItemStack(stock, amountAffordable));
         }
-        
+
         String seller = event.getOwner().getName();
-        boolean added = Economy.add(seller, price);
-        if (added) {
-        	// added amount successfully, owner has enough space for deposit
-        	// --> undo the add, for some other event to actually do.
-        	Economy.subtract(seller, price);
+
+        if (Economy.add(seller, price)) {
+            Economy.subtract(seller, price); //Cash can be safely deposited
         } else {
-        	event.setCancelled(SHOP_DEPOSIT_FAILED);
-        	return;
+            event.setCancelled(SHOP_DEPOSIT_FAILED);
+            return;
         }
 
         stock = event.getStock();
@@ -81,6 +79,7 @@ public class PartialTransactionModule implements Listener {
             return;
         }
 
+        String player = event.getClient().getName();
         String ownerName = event.getOwner().getName();
         ItemStack[] stock = event.getStock();
 
@@ -101,6 +100,13 @@ public class PartialTransactionModule implements Listener {
         }
 
         stock = event.getStock();
+
+        if (Economy.add(player, price)) {
+            Economy.subtract(player, price); //Cash can be safely deposited
+        } else {
+            event.setCancelled(CLIENT_DEPOSIT_FAILED);
+            return;
+        }
 
         if (!InventoryUtil.hasItems(stock, event.getClientInventory())) {
             ItemStack[] itemsHad = getItems(stock, event.getClientInventory());

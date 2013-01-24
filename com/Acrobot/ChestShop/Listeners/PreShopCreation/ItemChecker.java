@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.regex.Matcher;
+
 import static com.Acrobot.Breeze.Utils.MaterialUtil.*;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.INVALID_ITEM;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
@@ -32,12 +34,12 @@ public class ItemChecker implements Listener {
             return; // The OddItem name is OK
         }
 
-        String enchantment = getEnchantment(itemCode);
+        String metadata = getMetadata(itemCode);
         String longName = MaterialUtil.getName(item, LONG_NAME);
 
-        if (longName.length() <= (MAXIMUM_SIGN_LETTERS - enchantment.length())) {
-            if (isStillValidItem(longName + enchantment, item)) {
-                String itemName = StringUtil.capitalizeFirstLetter(longName + enchantment);
+        if (longName.length() <= (MAXIMUM_SIGN_LETTERS - metadata.length())) {
+            if (isStillValidItem(longName + metadata, item)) {
+                String itemName = StringUtil.capitalizeFirstLetter(longName + metadata);
 
                 event.setSignLine(ITEM_LINE, itemName);
                 return;
@@ -46,10 +48,10 @@ public class ItemChecker implements Listener {
 
         String code = MaterialUtil.getName(item, SHORT_NAME);
 
-        String[] parts = itemCode.split("(?=:|-)", 2);
+        String[] parts = itemCode.split("(?=:|-|#)", 2);
         String data = (parts.length > 1 ? parts[1] : "");
 
-        if (code.length() > (MAXIMUM_SIGN_LETTERS - 1 - data.length())) {
+        if (!data.isEmpty() && code.length() >= (MAXIMUM_SIGN_LETTERS - 1 - data.length())) {
             code = code.substring(0, MAXIMUM_SIGN_LETTERS - 1 - data.length()) + data;
         }
 
@@ -68,11 +70,13 @@ public class ItemChecker implements Listener {
         return newItem != null && MaterialUtil.equals(newItem, item);
     }
 
-    private static String getEnchantment(String itemCode) {
-        if (!ENCHANTMENT.matcher(itemCode).matches()) {
+    private static String getMetadata(String itemCode) {
+        Matcher m = METADATA.matcher(itemCode);
+
+        if (!m.find()) {
             return "";
         }
 
-        return '-' + ENCHANTMENT.matcher(itemCode).group();
+        return m.group();
     }
 }

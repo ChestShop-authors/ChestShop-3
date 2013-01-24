@@ -27,7 +27,7 @@ public class ChestShopSign {
             Pattern.compile("^[\\w -.]*$"),
             Pattern.compile("^[1-9][0-9]*$"),
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
-            Pattern.compile("^[\\w : -]+$")
+            Pattern.compile("^[\\w #:-]+$")
     };
 
     public static boolean isAdminShop(Inventory ownerInventory) {
