@@ -96,6 +96,11 @@ public class PlayerInteract implements Listener {
         }
 
         PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
+
+        if (pEvent == null) {
+            return;
+        }
+
         Bukkit.getPluginManager().callEvent(pEvent);
 
         if (pEvent.isCancelled()) {
@@ -119,6 +124,11 @@ public class PlayerInteract implements Listener {
         Inventory ownerInventory = (ChestShopSign.isAdminShop(sign) ? new AdminInventory() : chest != null ? chest.getInventory() : null);
 
         ItemStack item = MaterialUtil.getItem(sign.getLine(ITEM_LINE));
+
+        if (item == null) {
+            player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
+            return null;
+        }
 
         int amount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
 
