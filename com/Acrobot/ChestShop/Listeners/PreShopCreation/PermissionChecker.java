@@ -33,8 +33,7 @@ public class PermissionChecker implements Listener {
 
         ItemStack item = MaterialUtil.getItem(itemLine);
 
-        if (!Permission.has(player, SHOP_CREATION_ID + Integer.toString(item.getTypeId()))) {
-            event.setOutcome(NO_PERMISSION);
+        if (item == null || Permission.has(player, SHOP_CREATION_ID + Integer.toString(item.getTypeId()))) {
             return;
         }
 
