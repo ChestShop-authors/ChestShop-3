@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.50t0041
+version: 3.50 t0042
 
 #for CButD
 dev-url: http://dev.bukkit.org/server-mods/chestshop/
@@ -91,6 +91,12 @@ permissions:
       ChestShop.shop.create.322: true #GoldApple
       ChestShop.shop.create.297: true #Bread
       ChestShop.shop.create.335: true #Milk
+      ChestShop.shop.create.391: true #Carrot
+      ChestShop.shop.create.392: true #Potato
+      ChestShop.shop.create.393: true #BakedPotato
+      ChestShop.shop.create.396: true #GoldenCarrot
+      ChestShop.shop.create.400: true #PumpkinPie
+      ChestShop.shop.create.382: true #GlisteningMelon
   ChestShop.shop.create.diamondgrade:
     description: Allows to create a shop that sells diamond gear
     children:
@@ -252,12 +258,14 @@ permissions:
       ChestShop.shop.create.14: true #GoldOre
       ChestShop.shop.create.56: true #DiamondOre
       ChestShop.shop.create.74: true #RedstoneOre
+      ChestShop.shop.create.153: true #NetherQuartzOre
   ChestShop.shop.create.ingots:
     description: Allows to create a shop that sells ingots
     children:
       ChestShop.shop.create.265: true #IronIngot
       ChestShop.shop.create.266: true #GoldIngot
       ChestShop.shop.create.264: true #Diamond
+      ChestShop.shop.create.388: true #Emerald
   ChestShop.shop.create.stairs:
     description: Allows to create a shop that sells stairs
     children:
@@ -323,15 +331,23 @@ permissions:
       ChestShop.shop.create.66: true #MinecartRail
       ChestShop.shop.create.70: true #StonePlate
       ChestShop.shop.create.72: true #WoodPlate
+      ChestShop.shop.create.152: true #RedstoneBlock
+      ChestShop.shop.create.154: true #Hopper
+      ChestShop.shop.create.157: true #Activator Rail
+      ChestShop.shop.create.158: true #Dropper
+      ChestShop.shop.create.151: true #Daylight Sensor
+      ChestShop.shop.create.404: true #Redstone Comparator
   ChestShop.shop.create.netherblocks:
     descriptions: Allows to create a shop that sells netherblocks
     children:
       ChestShop.shop.create.87: true #NetherRack
       ChestShop.shop.create.88: true #SoulSand
       ChestShop.shop.create.89: true #GlowStone
-      ChestShop.shop.create.112: true #NetherBrick
+      ChestShop.shop.create.112: true #NetherBrickBlock
       ChestShop.shop.create.113: true #NetherFence
       ChestShop.shop.create.114: true #NetherStairs
+      ChestShop.shop.create.405: true #NetherBrick
+      ChestShop.shop.create.406: true #NetherQuartz
   ChestShop.shop.create.misc:
     descriptions: Allows to create a shop that sells misc items
     children:
@@ -351,6 +367,20 @@ permissions:
       ChestShop.shop.create.353: true #Sugar
       ChestShop.shop.create.355: true #Bed
       ChestShop.shop.create.381: true #EnderEye
+      ChestShop.shop.create.389: true #ClayBalls
+      ChestShop.shop.create.390: true #Paper
+      ChestShop.shop.create.395: true #Book
+      ChestShop.shop.create.397: true #GlowstoneDust
+      ChestShop.shop.create.398: true #Sugar
+      ChestShop.shop.create.399: true #Bed
+      ChestShop.shop.create.401: true #EnderEye
+      ChestShop.shop.create.403: true #ClayBalls
+      ChestShop.shop.create.402: true #Paper
+      ChestShop.shop.create.386: true #Book
+      ChestShop.shop.create.387: true #GlowstoneDust
+      ChestShop.shop.create.385: true #Sugar
+      ChestShop.shop.create.383: true #Bed
+      ChestShop.shop.create.384: true #EnderEye
   ChestShop.shop.create.steps:
     description: Allows to create a shop that sells steps
     children:
@@ -402,6 +432,8 @@ permissions:
       ChestShop.shop.create.110: true #Mycelium
       ChestShop.shop.create.121: true #EndStone
       ChestShop.shop.create.122: true #DragonEgg
+      ChestShop.shop.create.146: true #Trapped Chest
+      ChestShop.shop.create.155: true #Block of Quartz
   ChestShop.shop.create.doors:
     descriptions: Allows to create a shop that sells doors
     children:
@@ -431,6 +463,8 @@ permissions:
       ChestShop.shop.create.333: true #Boat
       ChestShop.shop.create.342: true #StorageCart
       ChestShop.shop.create.343: true #PoweredCart
+      ChestShop.shop.create.407: true #TNT cart
+      ChestShop.shop.create.408: true #Hopper Cart
   ChestShop.shop.create.wool:
     description: Allows to create a shop that sells wool and dye
     children:
@@ -451,6 +485,7 @@ permissions:
       ChestShop.shop.create.116: true #EnchantingTable
       ChestShop.shop.create.379: true #BrewingStand
       ChestShop.shop.create.380: true #Cauldron
+      ChestShop.shop.create.145: true #Anvil
   ChestShop.shop.create.unobtainables:
     description: Allows to create a shop that sells unobtainable items
     children:
