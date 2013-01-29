@@ -26,6 +26,13 @@ public class ItemDatabase {
     private Table table;
 
     public ItemDatabase() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            ChestShop.getBukkitLogger().severe("You haven't got any SQLite JDBC installed!");
+        }
+
         Database database = new Database("jdbc:sqlite:" + new File(ChestShop.getFolder(), "items.db").getAbsolutePath());
         yaml = new Yaml(new YamlConstructor(), new YamlRepresenter(), new DumperOptions());
 
