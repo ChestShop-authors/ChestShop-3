@@ -15,6 +15,10 @@ import static com.Acrobot.Breeze.Utils.NumberUtil.roundUp;
 public class Economy {
     private static EconomyManager manager = new EconomyManager();
 
+    public static boolean transactionCanFail() {
+        return manager.transactionCanFail();
+    }
+
     public static boolean isOwnerEconomicallyActive(Inventory inventory) {
         return !ChestShopSign.isAdminShop(inventory) || !getServerAccountName().isEmpty();
     }

@@ -9,6 +9,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class Vault extends EconomyManager {
     private static net.milkbowl.vault.economy.Economy vaultPlugin;
 
+    public boolean transactionCanFail() {
+        return getPluginName().equals("Gringotts") || getPluginName().equals("GoldIsMoney") || getPluginName().equals("MultiCurrency");
+    }
+
     public boolean hasAccount(String player) {
         return vaultPlugin.hasAccount(player);
     }

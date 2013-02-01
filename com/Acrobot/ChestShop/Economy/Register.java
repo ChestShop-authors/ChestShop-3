@@ -12,6 +12,10 @@ public class Register extends EconomyManager {
         this.method = method;
     }
 
+    public boolean transactionCanFail() {
+        return false;
+    }
+
     public boolean hasAccount(String player) {
         return method.hasAccount(player);
     }

@@ -6,6 +6,10 @@ import com.Acrobot.ChestShop.ChestShop;
  * @author Acrobot
  */
 public class EconomyManager {
+    public boolean transactionCanFail() {
+        return false;
+    }
+
     public boolean hasAccount(String player) {
         printError();
         return false;
