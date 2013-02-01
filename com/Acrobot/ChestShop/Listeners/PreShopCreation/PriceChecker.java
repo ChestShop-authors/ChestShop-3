@@ -41,10 +41,7 @@ public class PriceChecker implements Listener {
 
         event.setSignLine(PRICE_LINE, line);
 
-        double buyPrice = PriceUtil.getBuyPrice(line);
-        double sellPrice = PriceUtil.getSellPrice(line);
-
-        if (buyPrice == 0 && sellPrice == 0) {
+        if (!PriceUtil.hasBuyPrice(line) && !PriceUtil.hasSellPrice(line)) {
             event.setOutcome(INVALID_PRICE);
         }
     }
