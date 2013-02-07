@@ -26,6 +26,7 @@ import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.ErrorMessageSender;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.PermissionChecker;
 import com.Acrobot.ChestShop.Listeners.ShopRefundListener;
+import com.Acrobot.ChestShop.Listeners.TeleportFixListener;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
@@ -180,6 +181,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ShopRefundListener());
 
         registerEvent(new ShortNameSaver());
+        registerEvent(new TeleportFixListener());
     }
 
     private void registerPreShopCreationEvents() {
