@@ -5,12 +5,12 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
@@ -24,7 +24,7 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        String ownerName = uName.getName(event.getSign().getLine(ChestShopSign.NAME_LINE));
+        String ownerName = uName.getName(event.getSign().getLine(NAME_LINE));
         Economy.add(ownerName, refundPrice);
 
         event.getDestroyer().sendMessage(Messages.prefix(Messages.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
