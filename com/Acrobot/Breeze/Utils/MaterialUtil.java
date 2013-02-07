@@ -121,7 +121,7 @@ public class MaterialUtil {
             name.append(':').append(itemStack.getDurability());
         }
 
-        if (!itemStack.hasItemMeta()) {
+        if (itemStack.hasItemMeta()) {
             name.append('#').append(Metadata.getItemCode(itemStack));
         }
 
@@ -359,10 +359,10 @@ public class MaterialUtil {
                 }
 
                 if (material == Material.INK_SACK) {
-                    color = DyeColor.getByData((byte) (15 - color.getData()));
+                    return color.getDyeData();
                 }
 
-                return color.getData();
+                return color.getWoolData();
             } else if (materialData instanceof Tree) {
                 try {
                     return TreeSpecies.valueOf(type).getData();
