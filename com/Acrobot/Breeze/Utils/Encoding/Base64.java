@@ -33,6 +33,7 @@ package com.Acrobot.Breeze.Utils.Encoding;
  * @author rob@iharder.net
  * @version 2.3.7
  */
+@SuppressWarnings("ALL")
 public class Base64 {
     
 /* ********  P U B L I C   F I E L D S  ******** */
