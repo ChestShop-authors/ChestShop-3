@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,8 +46,14 @@ public class ItemManager implements Listener {
     }
 
     private static void addItems(Inventory inventory, ItemStack[] items) {
-        for (ItemStack item : items) {
-            InventoryUtil.add(item, inventory);
+        if (Properties.STACK_TO_64) {
+            for (ItemStack item : items) {
+                InventoryUtil.add(item, inventory, 64);
+            }
+        } else {
+            for (ItemStack item : items) {
+                InventoryUtil.add(item, inventory);
+            }
         }
     }
 }

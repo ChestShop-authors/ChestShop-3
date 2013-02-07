@@ -97,6 +97,9 @@ public class Properties {
 
     public static byte NEWLINE_RECORD_TIME_TO_LIV; ///////////////////////////////////////////////////
 
+    @ConfigurationComment("Do you want to stack all items up to 64 item stacks?")
+    public static boolean STACK_TO_64 = false;
+
     @ConfigurationComment("Do you want to use built-in protection against chest destruction?")
     public static boolean USE_BUILT_IN_PROTECTION = true;
 
