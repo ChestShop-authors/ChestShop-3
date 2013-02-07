@@ -110,20 +110,20 @@ public class InventoryUtil {
     }
 
     /**
-     * Adds an item to the inventory
+     * Adds an item to the inventory with given maximum stack size
      * (it currently uses a custom method of adding items, because Bukkit hasn't fixed it for 6 months now)
      *
-     * @param item      Item to add
-     * @param inventory Inventory
+     * @param item         Item to add
+     * @param inventory    Inventory
+     * @param maxStackSize Maximum item's stack size
      * @return Number of leftover items
      */
-    public static int add(ItemStack item, Inventory inventory) {
+    public static int add(ItemStack item, Inventory inventory, int maxStackSize) {
         if (item.getAmount() < 1) {
             return 0;
         }
 
         int amountLeft = item.getAmount();
-        int maxStackSize = item.getMaxStackSize();
 
         for (int currentSlot = 0; currentSlot < inventory.getSize() && amountLeft > 0; currentSlot++) {
             ItemStack currentItem = inventory.getItem(currentSlot);
@@ -153,6 +153,17 @@ public class InventoryUtil {
     }
 
     /**
+     * Adds an item to the inventor
+     *
+     * @param item      Item to add
+     * @param inventory Inventory
+     * @return Number of leftover items
+     */
+    public static int add(ItemStack item, Inventory inventory) {
+        return add(item, inventory, item.getMaxStackSize());
+    }
+
+    /**
      * Removes an item from the inventory
      *
      * @param item      Item to remove
@@ -172,6 +183,10 @@ public class InventoryUtil {
      * @return Merged stack array
      */
     public static ItemStack[] mergeSimilarStacks(ItemStack... items) {
+        if (items.length <= 1) {
+            return items;
+        }
+
         List<ItemStack> itemList = new LinkedList<ItemStack>();
 
         Iterating:
