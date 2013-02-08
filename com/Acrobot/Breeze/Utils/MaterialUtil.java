@@ -144,53 +144,49 @@ public class MaterialUtil {
         String[] split = Iterables.toArray(Splitter.onPattern(":|-|#").trimResults().split(itemName), String.class);
 
         Material material = getMaterial(split[0]);
-
-        boolean onlyPartiallyChecked = false;
+        short durability = getDurability(itemName);
 
         if (material == null) {
             if (!split[0].contains(" ")) {
                 return null;
             }
 
-            int index = split[0].indexOf(' ');
+            for (int index = split[0].indexOf(' '); index >= 0; index = split[0].indexOf(' ', index + 1)) {
+                material = getMaterial(split[0].substring(index));
 
-            material = getMaterial(split[0].substring(index + 1));
+                if (material != null) {
+                    if (durability == 0) {
+                        durability = DataValue.get(split[0].substring(0, index), material);
+                    }
+
+                    break;
+                }
+            }
 
             if (material == null) {
                 return null;
             }
-
-            onlyPartiallyChecked = true;
         }
 
-        itemStack = new ItemStack(material, 1);
-
-        short durability = getDurability(itemName);
-
-        if (durability == 0 && onlyPartiallyChecked) {
-            String[] spaces = itemName.split(" ");
-            if (spaces.length != 0) {
-                durability = DataValue.get(spaces[0], material);
-            }
-        }
-
+        itemStack = new ItemStack(material);
         itemStack.setDurability(durability);
-
-        Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName); //TODO - it's obsolete, left only for backward compatibility
-
-        if (!enchantments.isEmpty()) {
-            try {
-                itemStack.addEnchantments(enchantments);
-            } catch (IllegalArgumentException exception) {
-                //Do nothing, because the enchantment can't be applied
-            }
-        }
 
         ItemMeta meta = getMetadata(itemName);
 
         if (meta != null) {
             itemStack.setItemMeta(meta);
+        } else {
+            Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName); //TODO - it's obsolete, left only for backward compatibility
+
+            if (!enchantments.isEmpty()) {
+                try {
+                    itemStack.addEnchantments(enchantments);
+                } catch (IllegalArgumentException exception) {
+                    //Do nothing, because the enchantment can't be applied
+                }
+            }
         }
+
 
         return itemStack;
     }
