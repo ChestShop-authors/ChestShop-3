@@ -86,7 +86,7 @@ public class MaterialUtil {
      * @return ItemStack's name
      */
     public static String getName(ItemStack itemStack) {
-        return getName(itemStack, true);
+        return getName(itemStack, LONG_NAME);
     }
 
     /**
