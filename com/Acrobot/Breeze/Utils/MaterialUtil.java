@@ -70,7 +70,7 @@ public class MaterialUtil {
         for (Material currentMaterial : Material.values()) {
             String matName = currentMaterial.name();
 
-            if (matName.replace("_", "").startsWith(name) && matName.length() < length) {
+            if (matName.length() < length && matName.replace("_", "").startsWith(name)) {
                 length = (short) matName.length();
                 material = currentMaterial;
             }
