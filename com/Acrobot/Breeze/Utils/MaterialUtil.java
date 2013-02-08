@@ -178,7 +178,7 @@ public class MaterialUtil {
         } else {
             Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName); //TODO - it's obsolete, left only for backward compatibility
 
-            if (!enchantments.isEmpty()) {
+            if (enchantments != null) {
                 try {
                     itemStack.addEnchantments(enchantments);
                 } catch (IllegalArgumentException exception) {
@@ -225,7 +225,7 @@ public class MaterialUtil {
         Matcher m = ENCHANTMENT.matcher(itemName);
 
         if (!m.find()) {
-            return new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
+            return null;
         }
 
         String group = m.group().substring(1);
