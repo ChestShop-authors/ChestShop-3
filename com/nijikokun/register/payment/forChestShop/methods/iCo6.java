@@ -90,10 +90,6 @@ public class iCo6 implements Method {
             this.holdings = account.getHoldings();
         }
 
-        public Account getiCoAccount() {
-            return account;
-        }
-
         public double balance() {
             return this.holdings.getBalance();
         }
