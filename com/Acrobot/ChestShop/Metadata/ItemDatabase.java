@@ -39,6 +39,7 @@ public class ItemDatabase {
         try {
             Statement statement = database.getConnection().createStatement();
             statement.executeUpdate("PRAGMA user_version = 1"); //We'll be able to change it later if we need to
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

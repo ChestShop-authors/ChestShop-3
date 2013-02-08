@@ -68,6 +68,8 @@ public class Table {
             rowSet.add(row);
         }
 
+        results.close();
+        statement.close();
         connection.close();
 
         return rowSet;
@@ -138,6 +140,9 @@ public class Table {
         Statement stm = connection.createStatement();
 
         stm.executeUpdate(statement);
+
+        stm.close();
+        connection.close();
     }
 
     /**
@@ -168,6 +173,9 @@ public class Table {
         Statement stm = connection.createStatement();
 
         stm.executeUpdate(statement);
+
+        connection.close();
+        stm.close();
     }
 
     /**
@@ -182,6 +190,9 @@ public class Table {
         Statement stm = connection.createStatement();
 
         stm.executeUpdate(statement);
+
+        stm.close();
+        connection.close();
     }
 
     /**
