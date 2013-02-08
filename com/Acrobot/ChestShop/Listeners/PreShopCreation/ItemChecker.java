@@ -35,10 +35,10 @@ public class ItemChecker implements Listener {
         }
 
         String metadata = getMetadata(itemCode);
-        String longName = MaterialUtil.getName(item, LONG_NAME);
+        String longName = MaterialUtil.getName(item);
 
         if (longName.length() <= (MAXIMUM_SIGN_LETTERS - metadata.length())) {
-            if (isStillValidItem(longName + metadata, item)) {
+            if (isSameItem(longName + metadata, item)) {
                 String itemName = StringUtil.capitalizeFirstLetter(longName + metadata);
 
                 event.setSignLine(ITEM_LINE, itemName);
@@ -51,11 +51,13 @@ public class ItemChecker implements Listener {
         String[] parts = itemCode.split("(?=:|-|#)", 2);
         String data = (parts.length > 1 ? parts[1] : "");
 
-        if (!data.isEmpty() && code.length() >= (MAXIMUM_SIGN_LETTERS - 1 - data.length())) {
-            code = code.substring(0, MAXIMUM_SIGN_LETTERS - 1 - data.length()) + data;
+        if (!data.isEmpty() && code.length() > (MAXIMUM_SIGN_LETTERS - data.length())) {
+            code = code.substring(0, MAXIMUM_SIGN_LETTERS - data.length());
         }
 
-        if (!isStillValidItem(code, item)) {
+        code += data;
+
+        if (!isSameItem(code, item)) {
             code = String.valueOf(item.getTypeId()) + data;
         }
 
@@ -64,7 +66,7 @@ public class ItemChecker implements Listener {
         event.setSignLine(ITEM_LINE, code);
     }
 
-    private static boolean isStillValidItem(String newCode, ItemStack item) {
+    private static boolean isSameItem(String newCode, ItemStack item) {
         ItemStack newItem = MaterialUtil.getItem(newCode);
 
         return newItem != null && MaterialUtil.equals(newItem, item);
