@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,7 +32,7 @@ public class ItemDatabase {
             ChestShop.getBukkitLogger().severe("You haven't got any SQLite JDBC installed!");
         }
 
-        Database database = new Database("jdbc:sqlite:" + new File(ChestShop.getFolder(), "items.db").getAbsolutePath());
+        Database database = new Database("jdbc:sqlite:" + ChestShop.loadFile("items.db").getAbsolutePath());
         yaml = new Yaml(new YamlConstructor(), new YamlRepresenter(), new DumperOptions());
 
         try {

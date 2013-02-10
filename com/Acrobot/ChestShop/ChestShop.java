@@ -74,10 +74,10 @@ public class ChestShop extends JavaPlugin {
         description = getDescription();
         server = getServer();
 
-        itemDatabase = new ItemDatabase();
-
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
+
+        itemDatabase = new ItemDatabase();
 
         uName.file = loadFile("longName.storage");
         uName.load();
