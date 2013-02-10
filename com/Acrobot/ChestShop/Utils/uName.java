@@ -28,7 +28,11 @@ public class uName {
     }
 
     public static String stripName(String name) {
-        return (name.length() > 15 ? name.substring(0, 15) : name);
+        if (name.length() > 15) {
+            return name.substring(0, 15);
+        }
+
+        return name;
     }
 
     public static String shortenName(Player player) {
