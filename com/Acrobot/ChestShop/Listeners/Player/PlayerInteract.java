@@ -16,6 +16,7 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -79,7 +80,7 @@ public class PlayerInteract implements Listener {
         }
 
         if (ChestShopSign.canAccess(player, sign)) {
-            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking()) {
+            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.getGameMode() == GameMode.CREATIVE) {
                 return;
             }
 
