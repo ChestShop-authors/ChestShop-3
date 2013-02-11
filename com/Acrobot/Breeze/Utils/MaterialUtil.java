@@ -28,6 +28,8 @@ public class MaterialUtil {
 
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
+    
+    private static final Map<String, Material> materialCache = new HashMap<String, Material>();
 
     /**
      * Checks if the itemStack is empty or null
@@ -57,8 +59,14 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        Material material = Material.matchMaterial(name);
+        Material material = materialCache.get(name);
 
+        if (material != null) {
+            return material;
+        }
+        
+        material = Material.matchMaterial(name);
+        
         if (material != null) {
             return material;
         }
@@ -186,8 +194,11 @@ public class MaterialUtil {
                 }
             }
         }
-
-
+        
+        String signName = getSignName(itemStack);
+        if (!materialCache.containsKey(signName)) {
+            materialCache.put(signName, material);
+        }
         return itemStack;
     }
 
