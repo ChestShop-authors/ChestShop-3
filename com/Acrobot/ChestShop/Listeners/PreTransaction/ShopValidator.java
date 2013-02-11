@@ -12,7 +12,7 @@ import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcom
  * @author Acrobot
  */
 public class ShopValidator implements Listener {
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOWEST)
     public static void onCheck(PreTransactionEvent event) {
         if (event.isCancelled()) {
             return;
