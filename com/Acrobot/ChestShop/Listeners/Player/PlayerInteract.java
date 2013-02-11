@@ -1,9 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.Breeze.Utils.InventoryUtil;
-import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.Acrobot.Breeze.Utils.*;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -113,25 +110,28 @@ public class PlayerInteract implements Listener {
     }
 
     private static PreTransactionEvent preparePreTransactionEvent(Sign sign, Player player, Action action) {
-        String ownerName = uName.getName(sign.getLine(NAME_LINE));
+        String name = sign.getLine(NAME_LINE);
+        String quantity = sign.getLine(QUANTITY_LINE);
+        String prices = sign.getLine(PRICE_LINE);
+        String material = sign.getLine(ITEM_LINE);
+
+        String ownerName = uName.getName(name);
         OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerName);
 
-        String priceLine = sign.getLine(PRICE_LINE);
-
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
-        double price = (action == buy ? PriceUtil.getBuyPrice(priceLine) : PriceUtil.getSellPrice(priceLine));
+        double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
 
         Chest chest = uBlock.findConnectedChest(sign);
         Inventory ownerInventory = (ChestShopSign.isAdminShop(sign) ? new AdminInventory() : chest != null ? chest.getInventory() : null);
 
-        ItemStack item = MaterialUtil.getItem(sign.getLine(ITEM_LINE));
+        ItemStack item = MaterialUtil.getItem(material);
 
-        if (item == null) {
+        if (item == null || !NumberUtil.isInteger(quantity)) {
             player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
             return null;
         }
 
-        int amount = Integer.parseInt(sign.getLine(QUANTITY_LINE));
+        int amount = Integer.parseInt(quantity);
 
         if (amount < 1) {
             amount = 1;
