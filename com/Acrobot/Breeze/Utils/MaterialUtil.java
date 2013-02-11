@@ -28,8 +28,8 @@ public class MaterialUtil {
 
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
-    
-    private static final Map<String, Material> materialCache = new HashMap<String, Material>();
+
+    private static final Map<String, Material> MATERIAL_CACHE = new HashMap<String, Material>();
 
     /**
      * Checks if the itemStack is empty or null
@@ -59,30 +59,31 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        Material material = materialCache.get(name);
+        String formatted = name.replace(" |_", "").toUpperCase();
 
-        if (material != null) {
-            return material;
-        }
-        
-        material = Material.matchMaterial(name);
-        
-        if (material != null) {
-            return material;
+        if (MATERIAL_CACHE.containsKey(formatted)) {
+            return MATERIAL_CACHE.get(formatted);
         }
 
-        name = name.replaceAll(" |_", "").toUpperCase();
+        Material material = Material.matchMaterial(name);
+
+        if (material != null) {
+            MATERIAL_CACHE.put(formatted, material);
+            return material;
+        }
 
         short length = Short.MAX_VALUE;
 
         for (Material currentMaterial : Material.values()) {
             String matName = currentMaterial.name();
 
-            if (matName.length() < length && matName.replace("_", "").startsWith(name)) {
+            if (matName.length() < length && matName.replace("_", "").startsWith(formatted)) {
                 length = (short) matName.length();
                 material = currentMaterial;
             }
         }
+
+        MATERIAL_CACHE.put(formatted, material);
 
         return material;
     }
@@ -194,11 +195,7 @@ public class MaterialUtil {
                 }
             }
         }
-        
-        String signName = getSignName(itemStack);
-        if (!materialCache.containsKey(signName)) {
-            materialCache.put(signName, material);
-        }
+
         return itemStack;
     }
 
