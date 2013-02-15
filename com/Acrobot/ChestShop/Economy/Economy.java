@@ -36,8 +36,12 @@ public class Economy {
     }
 
     public static boolean add(String name, double amount) {
-        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
-            name = getServerAccountName();
+        if (isServerAccount(name)) {
+            if (!getServerAccountName().isEmpty()) {
+                name = getServerAccountName();
+            } else {
+                return true;
+            }
         }
 
         float taxAmount = isServerAccount(name) ? Properties.SERVER_TAX_AMOUNT : Properties.TAX_AMOUNT;
@@ -58,8 +62,12 @@ public class Economy {
     }
 
     public static boolean subtract(String name, double amount) {
-        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
-            name = getServerAccountName();
+        if (isServerAccount(name)) {
+            if (!getServerAccountName().isEmpty()) {
+                name = getServerAccountName();
+            } else {
+                return true;
+            }
         }
 
         return manager.subtract(uName.getName(name), roundUp(amount));
@@ -70,16 +78,24 @@ public class Economy {
             return true;
         }
 
-        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
-            name = getServerAccountName();
+        if (isServerAccount(name)) {
+            if (!getServerAccountName().isEmpty()) {
+                name = getServerAccountName();
+            } else {
+                return true;
+            }
         }
 
         return manager.hasEnough(uName.getName(name), roundUp(amount));
     }
 
     public static double getBalance(String name) {
-        if (isServerAccount(name) && !getServerAccountName().isEmpty()) {
-            name = getServerAccountName();
+        if (isServerAccount(name)) {
+            if (!getServerAccountName().isEmpty()) {
+                name = getServerAccountName();
+            } else {
+                return Double.MAX_VALUE;
+            }
         }
 
         return manager.balance(uName.getName(name));
