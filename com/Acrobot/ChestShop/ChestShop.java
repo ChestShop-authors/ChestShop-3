@@ -181,7 +181,10 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ShopRefundListener());
 
         registerEvent(new ShortNameSaver());
-        registerEvent(new TeleportFixListener());
+
+        if (!Properties.TURN_OFF_CRAFTBUKKIT_TELEPORTATION_BUGFIX) {
+            registerEvent(new TeleportFixListener());
+        }
     }
 
     private void registerPreShopCreationEvents() {
