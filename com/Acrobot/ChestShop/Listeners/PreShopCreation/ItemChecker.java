@@ -55,13 +55,12 @@ public class ItemChecker implements Listener {
             code = code.substring(0, MAXIMUM_SIGN_LETTERS - data.length());
         }
 
-        code += data;
-
-        if (!isSameItem(code, item)) {
-            code = String.valueOf(item.getTypeId()) + data;
+        if (!isSameItem(code + data, item)) {
+            code = String.valueOf(item.getTypeId());
         }
 
         code = StringUtil.capitalizeFirstLetter(code);
+        code += data;
 
         event.setSignLine(ITEM_LINE, code);
     }
