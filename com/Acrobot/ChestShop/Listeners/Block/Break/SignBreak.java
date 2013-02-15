@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Block.Break;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
@@ -8,7 +9,6 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
 import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -131,7 +131,7 @@ public class SignBreak implements Listener {
         }
 
         Event event = new ShopDestroyedEvent(player, sign, connectedChest);
-        Bukkit.getPluginManager().callEvent(event);
+        ChestShop.callEvent(event);
     }
 
     private static List<Sign> getAttachedSigns(Block block) {
