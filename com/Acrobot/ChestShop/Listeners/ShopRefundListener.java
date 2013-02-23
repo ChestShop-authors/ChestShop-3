@@ -24,9 +24,10 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        String ownerName = uName.getName(event.getSign().getLine(NAME_LINE));
-        Economy.add(ownerName, refundPrice);
+        String owner = uName.getName(event.getSign().getLine(NAME_LINE));
+        Economy.add(owner, refundPrice);
 
-        event.getDestroyer().sendMessage(Messages.prefix(Messages.SHOP_REFUNDED).replace("%amount", Economy.formatBalance(refundPrice)));
+        String message = Messages.SHOP_REFUNDED.replace("%amount", Economy.formatBalance(refundPrice));
+        event.getDestroyer().sendMessage(Messages.prefix(message));
     }
 }
