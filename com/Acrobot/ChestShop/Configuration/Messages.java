@@ -65,7 +65,7 @@ public class Messages {
 
     public static byte NEWLINE_SHOP_REFUNDED; ///////////////////////////////////////////////////
 
-    public static String RESTRICTED_SIGN_CREATED = "Sign succesfully created!";
+    public static String RESTRICTED_SIGN_CREATED = "Sign successfully created!";
 
     public static byte NEWLINE_RESTRICTED_SIGN_CREATED; ///////////////////////////////////////////////////
 
