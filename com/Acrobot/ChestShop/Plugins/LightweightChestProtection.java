@@ -74,7 +74,7 @@ public class LightweightChestProtection implements Listener {
         }
 
         Block block = event.getBlock();
-        Player player = Bukkit.getPlayer(event.getName());
+        Player player = Bukkit.getPlayerExact(event.getName());
 
         if (player == null || limitsModule.hasReachedLimit(player, block.getType())) {
             return;
