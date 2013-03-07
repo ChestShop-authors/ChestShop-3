@@ -2,7 +2,7 @@ name: ChestShop
 
 main: com.Acrobot.ChestShop.ChestShop
 
-version: 3.50 t0049
+version: 3.50 t0050
 
 #for CButD
 dev-url: http://dev.bukkit.org/server-mods/chestshop/
