@@ -50,13 +50,9 @@ public class PartialTransactionModule implements Listener {
 
         String seller = event.getOwner().getName();
 
-        if (Economy.transactionCanFail()) {
-            if (Economy.add(seller, price)) {
-                Economy.subtract(seller, price); //Cash can be safely deposited
-            } else {
-                event.setCancelled(SHOP_DEPOSIT_FAILED);
-                return;
-            }
+        if (!Economy.canHold(seller, price)) {
+            event.setCancelled(SHOP_DEPOSIT_FAILED);
+            return;
         }
 
         stock = event.getStock();
@@ -103,9 +99,7 @@ public class PartialTransactionModule implements Listener {
 
         stock = event.getStock();
 
-        if (Economy.add(player, price)) {
-            Economy.subtract(player, price); //Cash can be safely deposited
-        } else {
+        if (!Economy.canHold(player, price)) {
             event.setCancelled(CLIENT_DEPOSIT_FAILED);
             return;
         }

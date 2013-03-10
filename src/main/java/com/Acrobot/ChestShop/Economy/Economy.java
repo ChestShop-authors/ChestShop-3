@@ -73,6 +73,30 @@ public class Economy {
         return manager.subtract(uName.getName(name), roundUp(amount));
     }
 
+    public static boolean canHold(String name, double amount) {
+        if (!transactionCanFail()) {
+            return true;
+        }
+
+        if (isServerAccount(name)) {
+            if (!getServerAccountName().isEmpty()) {
+                name = getServerAccountName();
+            } else {
+                return true;
+            }
+        }
+
+        name = uName.getName(name);
+
+        if (!manager.add(name, amount)) {
+            return false;
+        } else {
+            manager.subtract(name, amount);
+        }
+
+        return true;
+    }
+
     public static boolean hasEnough(String name, double amount) {
         if (amount <= 0) {
             return true;
