@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
@@ -16,7 +17,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
  * @author Acrobot
  */
 public class ShopRefundListener implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopDestroy(ShopDestroyedEvent event) {
         double refundPrice = Properties.SHOP_REFUND_PRICE;
 
