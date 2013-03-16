@@ -8,7 +8,7 @@ import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Security;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
-import com.griefcraft.modules.limits.LimitsV2;
+import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -23,11 +23,9 @@ import org.bukkit.event.Listener;
  */
 public class LightweightChestProtection implements Listener {
     private LWC lwc;
-    private LimitsV2 limitsModule;
 
     public LightweightChestProtection() {
         this.lwc = LWC.getInstance();
-        limitsModule = new LimitsV2();
     }
 
     @EventHandler
@@ -76,7 +74,7 @@ public class LightweightChestProtection implements Listener {
         Block block = event.getBlock();
         Player player = Bukkit.getPlayerExact(event.getName());
 
-        if (player == null || limitsModule.hasReachedLimit(player, block.getType())) {
+        if (player == null) {
             return;
         }
 
@@ -90,6 +88,13 @@ public class LightweightChestProtection implements Listener {
 
         if (existingProtection != null) {
             event.setProtected(true);
+            return;
+        }
+
+        LWCProtectionRegisterEvent protectionEvent = new LWCProtectionRegisterEvent(player, block);
+        lwc.getModuleLoader().dispatchEvent(protectionEvent);
+
+        if (protectionEvent.isCancelled()) {
             return;
         }
 
