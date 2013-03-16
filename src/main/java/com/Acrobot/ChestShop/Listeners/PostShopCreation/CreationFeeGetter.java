@@ -38,6 +38,6 @@ public class CreationFeeGetter implements Listener {
 
         Economy.subtract(player.getName(), shopCreationPrice);
 
-        player.sendMessage(Messages.prefix(Messages.SHOP_FEE_PAID.replace("%amount", Double.toString(shopCreationPrice))));
+        player.sendMessage(Messages.prefix(Messages.SHOP_FEE_PAID.replace("%amount", Economy.formatBalance(shopCreationPrice))));
     }
 }
