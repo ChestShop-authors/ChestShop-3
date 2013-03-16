@@ -5,7 +5,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -55,7 +54,7 @@ public class ChestShopSign {
     }
 
     public static boolean isShopChest(Block chest) {
-        if (chest.getType() != Material.CHEST) {
+        if (!BlockUtil.isChest(chest)) {
             return false;
         }
 

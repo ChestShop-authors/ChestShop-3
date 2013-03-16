@@ -30,7 +30,7 @@ public class BlockPlace implements Listener {
 
         Block placed = event.getBlockPlaced();
 
-        if (placed.getType() != Material.CHEST) {
+        if (!BlockUtil.isChest(placed) && placed.getType() != Material.DROPPER && placed.getType() != Material.HOPPER) {
             return;
         }
 

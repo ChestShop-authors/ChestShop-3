@@ -6,7 +6,6 @@ import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uName;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -46,7 +45,7 @@ public class Security {
         for (BlockFace face : BLOCKS_AROUND) {
             Block block = signBlock.getRelative(face);
 
-            if (block.getType() != Material.CHEST) {
+            if (!BlockUtil.isChest(block)) {
                 continue;
             }
             if (!canAccess(player, block)) {

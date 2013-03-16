@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.50-t0053</version>
+    <version>3.50-t0054</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/repositories/releases/</url>
+            <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>odditem-repo</id>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.4.7-R1.0</version>
+            <version>1.5-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.palmergames.towny</groupId>

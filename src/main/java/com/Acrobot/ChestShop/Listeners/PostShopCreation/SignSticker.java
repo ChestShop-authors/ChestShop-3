@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PostShopCreation;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -39,7 +40,7 @@ public class SignSticker implements Listener {
         BlockFace chestFace = null;
 
         for (BlockFace face : uBlock.CHEST_EXTENSION_FACES) {
-            if (signBlock.getRelative(face).getType() == Material.CHEST) {
+            if (BlockUtil.isChest(signBlock.getRelative(face))) {
                 chestFace = face;
                 break;
             }

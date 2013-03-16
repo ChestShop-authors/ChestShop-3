@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Utils;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -32,7 +31,7 @@ public class uBlock {
         for (BlockFace chestFace : NEIGHBOR_FACES) {
             Block relative = chestBlock.getRelative(chestFace);
 
-            if (relative.getState() instanceof Chest) {
+            if (BlockUtil.isChest(relative)) {
                 return (Chest) relative.getState();
             }
         }
@@ -48,7 +47,7 @@ public class uBlock {
     public static Chest findConnectedChest(Block block) {
         for (BlockFace bf : SHOP_FACES) {
             Block faceBlock = block.getRelative(bf);
-            if (faceBlock.getType() == Material.CHEST) {
+            if (BlockUtil.isChest(faceBlock)) {
                 return (Chest) faceBlock.getState();
             }
         }
@@ -99,7 +98,8 @@ public class uBlock {
     public static Chest findNeighbor(Block block) {
         for (BlockFace blockFace : CHEST_EXTENSION_FACES) {
             Block neighborBlock = block.getRelative(blockFace);
-            if (neighborBlock.getType() == Material.CHEST) {
+
+            if (BlockUtil.isChest(neighborBlock)) {
                 return (Chest) neighborBlock.getState();
             }
         }

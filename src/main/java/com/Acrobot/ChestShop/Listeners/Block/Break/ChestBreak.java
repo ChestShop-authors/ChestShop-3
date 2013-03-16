@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Block.Break;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
@@ -10,8 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
-import static org.bukkit.Material.CHEST;
 
 /**
  * @author Acrobot
@@ -39,7 +38,7 @@ public class ChestBreak implements Listener {
     }
 
     private static boolean canChestBeBroken(Block chest, Player breaker) {
-        if (chest.getType() != CHEST || !Properties.USE_BUILT_IN_PROTECTION || !ChestShopSign.isShopChest(chest)) {
+        if (!BlockUtil.isChest(chest) || !Properties.USE_BUILT_IN_PROTECTION || !ChestShopSign.isShopChest(chest)) {
             return true;
         }
 
