@@ -152,10 +152,4 @@ public class Properties {
 
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
-
-    public static byte NEWLINE_HEROES_EXP; ///////////////////////////////////////////////////
-
-    @ConfigurationComment("Do you want to turn off the CraftBukkit teleportation bugfix, which closes the inventory screen on teleport? " +
-            "(If you're using xAuth, you might want to turn it on) - only applies to CraftBukkit versions lower than 1.4.7-R1.1")
-    public static boolean TURN_OFF_CRAFTBUKKIT_TELEPORTATION_BUGFIX = false;
 }
