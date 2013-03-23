@@ -46,6 +46,10 @@ public class BlockPlace implements Listener {
             event.setCancelled(true);
         }
 
+        if (!BlockUtil.isChest(placed)) {
+            return;
+        }
+
         Chest neighbor = uBlock.findNeighbor(placed);
 
         if (neighbor == null) {
