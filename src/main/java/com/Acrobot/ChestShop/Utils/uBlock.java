@@ -99,10 +99,11 @@ public class uBlock {
         for (BlockFace blockFace : CHEST_EXTENSION_FACES) {
             Block neighborBlock = block.getRelative(blockFace);
 
-            if (BlockUtil.isChest(neighborBlock)) {
+            if (neighborBlock.getType() == block.getType()) {
                 return (Chest) neighborBlock.getState();
             }
         }
+
         return null;
     }
 
