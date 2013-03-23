@@ -39,9 +39,9 @@ public class ItemChecker implements Listener {
 
         if (longName.length() <= (MAXIMUM_SIGN_LETTERS - metadata.length())) {
             if (isSameItem(longName + metadata, item)) {
-                String itemName = StringUtil.capitalizeFirstLetter(longName + metadata);
+                String itemName = StringUtil.capitalizeFirstLetter(longName);
 
-                event.setSignLine(ITEM_LINE, itemName);
+                event.setSignLine(ITEM_LINE, itemName + metadata);
                 return;
             }
         }
@@ -60,9 +60,8 @@ public class ItemChecker implements Listener {
         }
 
         code = StringUtil.capitalizeFirstLetter(code);
-        code += data;
 
-        event.setSignLine(ITEM_LINE, code);
+        event.setSignLine(ITEM_LINE, code + data);
     }
 
     private static boolean isSameItem(String newCode, ItemStack item) {
