@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.Acrobot.ChestShop.Utils.uName;
@@ -34,7 +35,7 @@ public class ChestShop implements Listener {
     }
 
     public static boolean canAccess(Player player, Block block) {
-        if (!canBeProtected(block)) {
+        if (Permission.has(player, Permission.ADMIN) || !canBeProtected(block)) {
             return true;
         }
 
