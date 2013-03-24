@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
+import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
@@ -170,6 +171,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ChestBreak());
 
         registerEvent(new BlockPlace());
+        registerEvent(new ItemMoveListener());
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
