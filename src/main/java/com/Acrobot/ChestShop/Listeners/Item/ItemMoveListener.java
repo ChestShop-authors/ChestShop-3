@@ -14,7 +14,7 @@ public class ItemMoveListener implements Listener {
 
     @EventHandler
     public static void onItemMove(InventoryMoveItemEvent event) {
-        if (!(event.getSource().getHolder() instanceof Chest)) {
+        if (event.getSource() == null || !(event.getSource().getHolder() instanceof Chest)) {
             return;
         }
 
