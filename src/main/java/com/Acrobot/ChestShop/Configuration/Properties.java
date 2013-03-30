@@ -23,6 +23,9 @@ public class Properties {
     @ConfigurationComment("If true, people will be able to sell/buy everything available of the same type.")
     public static boolean SHIFT_SELLS_EVERYTHING = false;
 
+    @ConfigurationComment("What can you do by clicking shift with SHIFT_SELLS_EVERYTHING turned on? (ALL/BUY/SELL)")
+    public static String SHIFT_ALLOWS = "ALL";
+
     @ConfigurationComment("Can shop's chest be opened by owner with right-clicking a shop's sign?")
     public static boolean ALLOW_SIGN_CHEST_OPEN = true;
 

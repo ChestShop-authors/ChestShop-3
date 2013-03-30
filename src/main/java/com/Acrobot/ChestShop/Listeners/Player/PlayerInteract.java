@@ -137,7 +137,7 @@ public class PlayerInteract implements Listener {
             amount = 1;
         }
 
-        if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && price != PriceUtil.NO_PRICE) {
+        if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
             int newAmount = getItemAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
                 price = (price / amount) * newAmount;
@@ -151,6 +151,16 @@ public class PlayerInteract implements Listener {
 
         TransactionType transactionType = (action == buy ? BUY : SELL);
         return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, owner, sign, transactionType);
+    }
+
+    private static boolean isAllowedForShift(boolean buyTransaction) {
+        String allowed = Properties.SHIFT_ALLOWS;
+
+        if (allowed.equalsIgnoreCase("ALL")) {
+            return true;
+        }
+
+        return allowed.equalsIgnoreCase(buyTransaction ? "BUY" : "SELL");
     }
 
     private static int getItemAmount(ItemStack item, Inventory inventory, Player player, Action action) {
