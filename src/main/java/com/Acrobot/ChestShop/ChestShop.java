@@ -249,6 +249,8 @@ public class ChestShop extends JavaPlugin {
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
     private void setupDB() {
+        loadFile(new File("ebean.properties"));
+
         Database DB;
 
         DB = new Database(this) {
