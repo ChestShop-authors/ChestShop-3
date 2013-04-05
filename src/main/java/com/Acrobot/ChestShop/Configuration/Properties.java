@@ -20,10 +20,10 @@ public class Properties {
     @ConfigurationComment("If true, people will buy with left-click and sell with right-click.")
     public static boolean REVERSE_BUTTONS = false;
 
-    @ConfigurationComment("If true, people will be able to sell/buy everything available of the same type.")
-    public static boolean SHIFT_SELLS_EVERYTHING = false;
+    @ConfigurationComment("If true, people will be able to buy/sell in 64 stacks while holding the crouch button.")
+    public static boolean SHIFT_SELLS_IN_STACKS = false;
 
-    @ConfigurationComment("What can you do by clicking shift with SHIFT_SELLS_EVERYTHING turned on? (ALL/BUY/SELL)")
+    @ConfigurationComment("What can you do by clicking shift with SHIFT_SELLS_IN_STACKS turned on? (ALL/BUY/SELL)")
     public static String SHIFT_ALLOWS = "ALL";
 
     @ConfigurationComment("Can shop's chest be opened by owner with right-clicking a shop's sign?")

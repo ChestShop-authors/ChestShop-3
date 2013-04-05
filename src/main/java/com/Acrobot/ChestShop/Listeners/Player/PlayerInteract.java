@@ -137,8 +137,8 @@ public class PlayerInteract implements Listener {
             amount = 1;
         }
 
-        if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
-            int newAmount = getItemAmount(item, ownerInventory, player, action);
+        if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
+            int newAmount = getStackAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
                 price = (price / amount) * newAmount;
                 amount = newAmount;
@@ -163,13 +163,14 @@ public class PlayerInteract implements Listener {
         return allowed.equalsIgnoreCase(buyTransaction ? "BUY" : "SELL");
     }
 
-    private static int getItemAmount(ItemStack item, Inventory inventory, Player player, Action action) {
+    private static int getStackAmount(ItemStack item, Inventory inventory, Player player, Action action) {
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
+        Inventory checkedInventory = (action == buy ? inventory : player.getInventory());
 
-        if (action == buy) {
-            return InventoryUtil.getAmount(item, inventory);
+        if (checkedInventory.containsAtLeast(item, item.getMaxStackSize())) {
+            return item.getMaxStackSize();
         } else {
-            return InventoryUtil.getAmount(item, player.getInventory());
+            return InventoryUtil.getAmount(item, checkedInventory);
         }
     }
 
