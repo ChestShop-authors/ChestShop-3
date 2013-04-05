@@ -126,7 +126,10 @@ public class ChestShop extends JavaPlugin {
     private static File loadFile(File file) {
         if (!file.exists()) {
             try {
-                file.getParentFile().mkdirs();
+                if (file.getParent() != null) {
+                    file.getParentFile().mkdirs();
+                }
+
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
