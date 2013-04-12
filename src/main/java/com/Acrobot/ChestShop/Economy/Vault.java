@@ -3,6 +3,8 @@ package com.Acrobot.ChestShop.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.util.List;
+
 /**
  * @author Acrobot
  */
@@ -31,6 +33,43 @@ public class Vault extends EconomyManager {
 
     public double balance(String player) {
         return vaultPlugin.getBalance(player);
+    }
+
+    public boolean hasBankSupport() {
+        return vaultPlugin.hasBankSupport() && !getPluginName().startsWith("iConomy");
+    }
+
+    public boolean bankExists(String bank) {
+        bank = bank.toLowerCase();
+        List<String> banks = vaultPlugin.getBanks();
+        for (String entry : banks) {
+            if (bank.equals(entry.toLowerCase())) return true;
+        }
+        return false;
+    }
+
+    public boolean bankAdd(String bank, double amount) {
+        return vaultPlugin.bankDeposit(bank, amount).transactionSuccess();
+    }
+
+    public boolean bankSubtract(String bank, double amount) {
+        return vaultPlugin.bankWithdraw(bank, amount).transactionSuccess();
+    }
+
+    public boolean bankHasEnough(String bank, double amount) {
+        return vaultPlugin.bankHas(bank, amount).transactionSuccess();
+    }
+
+    public double bankBalance(String bank) {
+        return vaultPlugin.bankBalance(bank).amount;
+    }
+
+    public boolean isBankOwner(String player, String bank) {
+        return vaultPlugin.isBankOwner(bank, player).transactionSuccess();
+    }
+
+    public boolean isBankMember(String player, String bank) {
+        return vaultPlugin.isBankMember(bank, player).transactionSuccess();
     }
 
     public String format(double amount) {

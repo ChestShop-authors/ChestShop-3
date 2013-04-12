@@ -35,6 +35,46 @@ public class EconomyManager {
         return 0;
     }
 
+    public boolean hasBankSupport() {
+        printError();
+        return false;
+    }
+
+    public boolean bankExists(String bank) {
+        printError();
+        return false;
+    }
+
+    public boolean bankAdd(String bank, double amount) {
+        printError();
+        return false;
+    }
+
+    public boolean bankSubtract(String bank, double amount) {
+        printError();
+        return false;
+    }
+
+    public boolean bankHasEnough(String bank, double amount) {
+        printError();
+        return false;
+    }
+
+    public double bankBalance(String bank) {
+        printError();
+        return 0;
+    }
+
+    public boolean isBankOwner(String player, String bank) {
+        printError();
+        return false;
+    }
+
+    public boolean isBankMember(String player, String bank) {
+        printError();
+        return false;
+    }
+
     public String format(double amount) {
         printError();
         return null;
