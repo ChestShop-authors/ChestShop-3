@@ -48,8 +48,14 @@ public class Properties {
     @ConfigurationComment("The economy account which Admin Shops should use and to which all taxes will go")
     public static String SERVER_ECONOMY_ACCOUNT = "";
 
+    @ConfigurationComment("Whether bank account members (if available) can create shops on its behalf")
+    public static boolean BANK_MEMBERS_ALLOWED = true;
+
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
     public static int TAX_AMOUNT = 0;
+
+    @ConfigurationComment("Percent of the price that should go to the server's account when buying from a Bank.")
+    public static int BANK_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Percent of the price that should go to the server's account when buying from an Admin Shop.")
     public static int SERVER_TAX_AMOUNT = 0;

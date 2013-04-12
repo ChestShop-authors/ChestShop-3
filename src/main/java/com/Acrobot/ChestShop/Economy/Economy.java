@@ -35,6 +35,18 @@ public class Economy {
         return ChestShopSign.isAdminShop(acc);
     }
 
+    public static boolean isBank(String name) {
+        return name.startsWith(uName.BANK_PREFIX);
+    }
+
+    public static boolean hasBankSupport() {
+        return manager.hasBankSupport();
+    }
+
+    public static boolean bankExists(String name) {
+        return manager.bankExists(name);
+    }
+
     public static boolean add(String name, double amount) {
         if (isServerAccount(name)) {
             if (!getServerAccountName().isEmpty()) {
@@ -44,7 +56,7 @@ public class Economy {
             }
         }
 
-        float taxAmount = isServerAccount(name) ? Properties.SERVER_TAX_AMOUNT : Properties.TAX_AMOUNT;
+        float taxAmount = isServerAccount(name) ? Properties.SERVER_TAX_AMOUNT : isBank(name) ? Properties.BANK_TAX_AMOUNT : Properties.TAX_AMOUNT;
 
         double tax = getTax(taxAmount, amount);
         if (tax != 0) {
@@ -54,7 +66,17 @@ public class Economy {
             amount -= tax;
         }
 
-        return manager.add(uName.getName(name), amount);
+        name = uName.getName(name);
+        amount = roundUp(amount);
+        if (isBank(name)) {
+            if (hasBankSupport()) {
+                return manager.bankAdd(uName.stripBankPrefix(name), amount);
+            } else {
+                return false;
+            }
+        } else {
+            return manager.add(name, amount);
+        }
     }
 
     public static double getTax(float tax, double price) {
@@ -70,7 +92,17 @@ public class Economy {
             }
         }
 
-        return manager.subtract(uName.getName(name), roundUp(amount));
+        name = uName.getName(name);
+        amount = roundUp(amount);
+        if (isBank(name)) {
+            if (hasBankSupport()) {
+                return manager.bankSubtract(uName.stripBankPrefix(name), amount);
+            } else {
+                return false;
+            }
+        } else {
+            return manager.subtract(name, amount);
+        }
     }
 
     public static boolean canHold(String name, double amount) {
@@ -87,11 +119,23 @@ public class Economy {
         }
 
         name = uName.getName(name);
-
-        if (!manager.add(name, amount)) {
-            return false;
+        amount = roundUp(amount);
+        if (isBank(name)) {
+            if (hasBankSupport()) {
+                if (!manager.bankAdd(name, amount)) {
+                    return false;
+                } else {
+                    manager.bankSubtract(name, amount);
+                }
+            } else {
+                return false;
+            }
         } else {
-            manager.subtract(name, amount);
+            if (!manager.add(name, amount)) {
+                return false;
+            } else {
+                manager.subtract(name, amount);
+            }
         }
 
         return true;
@@ -110,7 +154,17 @@ public class Economy {
             }
         }
 
-        return manager.hasEnough(uName.getName(name), roundUp(amount));
+        name = uName.getName(name);
+        amount = roundUp(amount);
+        if (isBank(name)) {
+            if (hasBankSupport()) {
+                return manager.bankHasEnough(uName.stripBankPrefix(name), amount);
+            } else {
+                return false;
+            }
+        } else {
+            return manager.hasEnough(name, amount);
+        }
     }
 
     public static double getBalance(String name) {
@@ -122,11 +176,36 @@ public class Economy {
             }
         }
 
-        return manager.balance(uName.getName(name));
+        name = uName.getName(name);
+        if (isBank(name)) {
+            if (hasBankSupport()) {
+                return manager.bankBalance(uName.stripBankPrefix(name));
+            } else {
+                return 0;
+            }
+        } else {
+            return manager.balance(name);
+        }
     }
 
     public static String formatBalance(double amount) {
         return manager.format(roundUp(amount));
+    }
+
+    public static boolean isBankOwner(String player, String bank) {
+        if (hasBankSupport()) {
+            return manager.isBankOwner(player, bank);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isBankMember(String player, String bank) {
+        if (hasBankSupport()) {
+            return manager.isBankMember(player, bank);
+        } else {
+            return false;
+        }
     }
 
     public static void setPlugin(EconomyManager plugin) {

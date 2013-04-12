@@ -36,6 +36,38 @@ public class Register extends EconomyManager {
         return method.getAccount(player).balance();
     }
 
+    public boolean hasBankSupport() {
+        return false;
+    }
+
+    public boolean bankExists(String bank) {
+        return false;
+    }
+
+    public boolean bankAdd(String bank, double amount) {
+        return false;
+    }
+
+    public boolean bankSubtract(String bank, double amount) {
+        return false;
+    }
+
+    public boolean bankHasEnough(String bank, double amount) {
+        return false;
+    }
+
+    public double bankBalance(String bank) {
+        return 0;
+    }
+
+    public boolean isBankOwner(String player, String bank) {
+        return false;
+    }
+
+    public boolean isBankMember(String player, String bank) {
+        return false;
+    }
+
     public String format(double amount) {
         return method.format(amount);
     }
