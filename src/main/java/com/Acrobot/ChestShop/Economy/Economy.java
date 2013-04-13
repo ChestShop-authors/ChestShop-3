@@ -44,7 +44,11 @@ public class Economy {
     }
 
     public static boolean bankExists(String name) {
-        return manager.bankExists(name);
+        if (hasBankSupport()) {
+            return manager.bankExists(name);
+        } else {
+            return false;
+        }
     }
 
     public static boolean add(String name, double amount) {
