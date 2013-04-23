@@ -14,6 +14,8 @@ import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
+import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
+import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
 import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
@@ -169,6 +171,8 @@ public class ChestShop extends JavaPlugin {
         registerPostShopCreationEvents();
         registerPostTransactionEvents();
 
+        registerModules();
+
         registerEvent(new SignBreak());
         registerEvent(new SignCreate());
         registerEvent(new ChestBreak());
@@ -217,7 +221,6 @@ public class ChestShop extends JavaPlugin {
         }
 
         registerEvent(new CreativeModeIgnorer());
-        registerEvent(new DiscountModule());
         registerEvent(new ErrorMessageSender());
         registerEvent(new PermissionChecker());
         registerEvent(new PriceValidator());
@@ -232,6 +235,11 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ItemManager());
         registerEvent(new TransactionLogger());
         registerEvent(new TransactionMessageSender());
+    }
+
+    private void registerModules() {
+        registerEvent(new DiscountModule());
+        registerEvent(new PriceRestrictionModule());
     }
 
     public void registerEvent(Listener listener) {
