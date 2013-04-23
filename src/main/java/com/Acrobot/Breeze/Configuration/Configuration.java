@@ -1,15 +1,14 @@
 package com.Acrobot.Breeze.Configuration;
 
+import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Scanner;
 
 /**
  * A class which can be used to make configs easier to load
@@ -29,6 +28,10 @@ public class Configuration {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
+            if (!endsWithSpace(file)) {
+                writer.newLine();
+            }
+
             for (Field field : clazz.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || !Modifier.isPublic(field.getModifiers())) {
                     continue;
@@ -37,25 +40,20 @@ public class Configuration {
                 String path = field.getName();
 
                 try {
-                    if (path.toLowerCase().replace("_", "").startsWith("newline")) {
-                        continue;
-                    }
-
                     if (config.isSet(path)) {
                         field.set(null, ValueParser.parseToJava(config.get(path)));
                     } else {
-                        writer.write('\n' + FieldParser.parse(field));
-
-                        if (clazz.getDeclaredField("NEWLINE_" + path) != null) {
-                            writer.write('\n');
+                        if (field.isAnnotationPresent(PrecededBySpace.class)) {
+                            writer.newLine();
                         }
+
+                        writer.write(FieldParser.parse(field));
+                        writer.newLine();
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (NoSuchFieldException e) {
-                    continue;
                 }
             }
 
@@ -63,6 +61,27 @@ public class Configuration {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks if the file ends with space
+     * @param file File to check
+     * @return If the file ends with space
+     */
+    public static boolean endsWithSpace(File file) {
+        try {
+            Scanner scanner = new Scanner(file);
+            String lastLine = "";
+
+            while (scanner.hasNextLine()) {
+                lastLine = scanner.nextLine();
+            }
+
+            return lastLine.isEmpty();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

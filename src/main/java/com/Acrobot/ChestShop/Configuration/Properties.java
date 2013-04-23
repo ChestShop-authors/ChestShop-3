@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Configuration;
 
-import com.Acrobot.Breeze.Configuration.ConfigurationComment;
+import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
+import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
 
 /**
  * @author Acrobot
@@ -9,8 +10,7 @@ public class Properties {
     @ConfigurationComment("(When not using Vault) Preferred economy plugin to use (iConomy/BOSEconomy/Essentials).")
     public static String PREFERRED_ECONOMY_PLUGIN = "";
 
-    public static byte NEWLINE_PREFERRED_ECONOMY_PLUGIN; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
     public static int SHOP_INTERACTION_INTERVAL = 250;
 
@@ -32,16 +32,14 @@ public class Properties {
     @ConfigurationComment("If true, when you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign.")
     public static boolean ALLOW_LEFT_CLICK_DESTROYING = true;
 
-    public static byte NEWLINE_ALLOW_LEFT_CLICK_DESTROYING; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("If true, if the shop is empty, the sign is destroyed and put into the chest, so the shop isn't usable anymore.")
     public static boolean REMOVE_EMPTY_SHOPS = false;
 
     @ConfigurationComment("If true, if the REMOVE_EMPTY_SHOPS option is turned on, the chest is also destroyed.")
     public static boolean REMOVE_EMPTY_CHESTS = false;
 
-    public static byte NEWLINE_REMOVE_EMPTY_CHESTS; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("First line of your Admin Shop's sign should look like this:")
     public static String ADMIN_SHOP_NAME = "Admin Shop";
 
@@ -54,7 +52,7 @@ public class Properties {
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
     public static int TAX_AMOUNT = 0;
 
-    @ConfigurationComment("Percent of the price that should go to the server's account when buying from a Bank.")
+    @ConfigurationComment("Percent of the price that should go to the server's account when buying from a bank.")
     public static int BANK_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Percent of the price that should go to the server's account when buying from an Admin Shop.")
@@ -66,21 +64,18 @@ public class Properties {
     @ConfigurationComment("How much money do you get back when destroying a sign?")
     public static double SHOP_REFUND_PRICE = 0;
 
-    public static byte NEWLINE_SHOP_REFUND_PRICE; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Should we block shops that sell things for more than they buy? (This prevents newbies from creating shops that would be exploited)")
     public static boolean BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE = true;
 
-    public static byte NEWLINE_BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Do you want to allow other players to build a shop on a block where there's one already?")
     public static boolean ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK = false;
 
     @ConfigurationComment("Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)")
     public static boolean ALLOW_PARTIAL_TRANSACTIONS = true;
 
-    public static byte NEWLINE_ALLOW_PARTIAL_TRANSACTIONS; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Do you want to show \"Out of stock\" messages?")
     public static boolean SHOW_MESSAGE_OUT_OF_STOCK = true;
 
@@ -90,8 +85,7 @@ public class Properties {
     @ConfigurationComment("Do you want to show \"Somebody bought/sold... \" messages?")
     public static boolean SHOW_TRANSACTION_INFORMATION_OWNER = true;
 
-    public static byte NEWLINE_SHOW_TRANSACTION_INFORMATION_OWNER; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("If true, plugin will log transactions in its own file")
     public static boolean LOG_TO_FILE = false;
 
@@ -104,8 +98,7 @@ public class Properties {
     @ConfigurationComment("How long should transaction information be stored in the database (in seconds, -1 means forever)?")
     public static int RECORD_TIME_TO_LIVE = 600;
 
-    public static byte NEWLINE_RECORD_TIME_TO_LIV; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Do you want to stack all items up to 64 item stacks?")
     public static boolean STACK_TO_64 = false;
 
@@ -127,8 +120,7 @@ public class Properties {
     @ConfigurationComment("Do you want to protect shop signs with LWC?")
     public static boolean PROTECT_SIGN_WITH_LWC = false;
 
-    public static byte NEWLINE_PROTECT_SIGN_WITH_LWC; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("If true, plugin will generate shop statistics webpage.")
     public static boolean GENERATE_STATISTICS_PAGE = false;
 
@@ -138,16 +130,14 @@ public class Properties {
     @ConfigurationComment("How often should the website be generated?")
     public static long STATISTICS_PAGE_GENERATION_INTERVAL = 60;
 
-    public static byte NEWLINE_STATISTICS_PAGE_GENERATION_INTERVAL; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Do you want to only let people build inside shop plots?")
     public static boolean TOWNY_INTEGRATION = false;
 
     @ConfigurationComment("If true, only plot owners are able to build inside a shop plot. If false, every town's resident is able to build there.")
     public static boolean TOWNY_SHOPS_FOR_OWNERS_ONLY = true;
 
-    public static byte NEWLINE_TOWNY_SHOPS_FOR_OWNERS_ONLY; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("Do you want to only let people build inside regions?")
     public static boolean WORLDGUARD_INTEGRATION = false;
 
@@ -157,8 +147,7 @@ public class Properties {
     @ConfigurationComment("Do you want ChestShop to respect WorldGuard's chest protection?")
     public static boolean WORLDGUARD_USE_PROTECTION = false;
 
-    public static byte NEWLINE_WORLDGUARD_USE_PROTECTION; ///////////////////////////////////////////////////
-
+    @PrecededBySpace
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
 }

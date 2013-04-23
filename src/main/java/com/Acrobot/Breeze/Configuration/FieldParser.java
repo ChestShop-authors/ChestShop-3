@@ -1,5 +1,7 @@
 package com.Acrobot.Breeze.Configuration;
 
+import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
+
 import java.lang.reflect.Field;
 
 /**
