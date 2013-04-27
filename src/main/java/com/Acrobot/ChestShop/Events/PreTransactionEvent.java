@@ -12,6 +12,8 @@ import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcom
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 
 /**
+ * Represents a state before transaction occurs
+ *
  * @author Acrobot
  */
 public class PreTransactionEvent extends Event {
@@ -45,66 +47,126 @@ public class PreTransactionEvent extends Event {
         this.transactionType = type;
     }
 
+    /**
+     * @return Shop's sign
+     */
     public Sign getSign() {
         return sign;
     }
 
+    /**
+     * @return Total price of the items
+     */
     public double getPrice() {
         return price;
     }
 
+    /**
+     * Sets the price of the items
+     *
+     * @param price Price of the items
+     */
     public void setPrice(double price) {
         this.price = price;
     }
 
+    /**
+     * Sets the stock
+     *
+     * @param stock Stock
+     */
     public void setStock(ItemStack... stock) {
         items = stock;
     }
 
+    /**
+     * @return Stock available
+     */
     public ItemStack[] getStock() {
         return items;
     }
 
+    /**
+     * @return Shop's client
+     */
     public Player getClient() {
         return client;
     }
 
+    /**
+     * @return Shop's owner
+     */
     public OfflinePlayer getOwner() {
         return owner;
     }
 
+    /**
+     * Sets the shop's owner
+     *
+     * @param owner Shop owner
+     */
     public void setOwner(OfflinePlayer owner) {
         this.owner = owner;
     }
 
+    /**
+     * @return Owner's inventory
+     */
     public Inventory getOwnerInventory() {
         return ownerInventory;
     }
 
+    /**
+     * Sets the owner's inventory
+     *
+     * @param ownerInventory Onwer's inventory
+     */
     public void setOwnerInventory(Inventory ownerInventory) {
         this.ownerInventory = ownerInventory;
     }
 
+    /**
+     * Sets the client's inventory
+     *
+     * @param clientInventory Client's inventory
+     */
     public void setClientInventory(Inventory clientInventory) {
         this.clientInventory = clientInventory;
     }
 
+    /**
+     * @return Client's inventory
+     */
     public Inventory getClientInventory() {
         return clientInventory;
     }
 
+    /**
+     * @return Transaction's type
+     */
     public TransactionType getTransactionType() {
         return transactionType;
     }
 
+    /**
+     * @return Is the transaction cancelled?
+     */
     public boolean isCancelled() {
         return transactionOutcome != TRANSACTION_SUCCESFUL;
     }
 
+    /**
+     * @return Transaction's outcome
+     */
     public TransactionOutcome getTransactionOutcome() {
         return transactionOutcome;
     }
 
+    /**
+     * Sets the outcome of the transaction
+     *
+     * @param reason Transction's outcome
+     */
     public void setCancelled(TransactionOutcome reason) {
         transactionOutcome = reason;
     }

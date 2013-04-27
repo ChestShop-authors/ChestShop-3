@@ -9,6 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Represents a state after transaction has occured
+ *
  * @author Acrobot
  */
 public class TransactionEvent extends Event {
@@ -56,34 +58,58 @@ public class TransactionEvent extends Event {
         this.sign = sign;
     }
 
+    /**
+     * @return Type of the transaction
+     */
     public TransactionType getTransactionType() {
         return type;
     }
 
+    /**
+     * @return Owner's inventory
+     */
     public Inventory getOwnerInventory() {
         return ownerInventory;
     }
 
+    /**
+     * @return Client's inventory
+     */
     public Inventory getClientInventory() {
         return clientInventory;
     }
 
+    /**
+     * @return Shop's client
+     */
     public Player getClient() {
         return client;
     }
 
+    /**
+     * @return Shop's owner
+     */
     public OfflinePlayer getOwner() {
         return owner;
     }
 
+    /**
+     * @return Stock available
+     */
     public ItemStack[] getStock() {
         return stock;
     }
 
+    /**
+     * @return Total price of the items
+     */
     public double getPrice() {
         return price;
     }
 
+    /**
+     * @return Shop's sign
+     */
     public Sign getSign() {
         return sign;
     }
@@ -96,6 +122,9 @@ public class TransactionEvent extends Event {
         return handlers;
     }
 
+    /**
+     * Possible transaction types
+     */
     public enum TransactionType {
         BUY,
         SELL

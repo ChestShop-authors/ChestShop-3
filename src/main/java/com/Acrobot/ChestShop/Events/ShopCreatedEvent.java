@@ -9,6 +9,8 @@ import org.bukkit.event.HandlerList;
 import javax.annotation.Nullable;
 
 /**
+ * Represents a state after shop creation
+ *
  * @author Acrobot
  */
 public class ShopCreatedEvent extends Event {
@@ -27,22 +29,48 @@ public class ShopCreatedEvent extends Event {
         this.signLines = signLines.clone();
     }
 
+    /**
+     * Returns the text on the sign
+     *
+     * @param line Line number (0-3)
+     * @return Text on the sign
+     */
     public String getSignLine(short line) {
         return signLines[line];
     }
 
+    /**
+     * Returns the text on the sign
+     *
+     * @return Text on the sign
+     */
     public String[] getSignLines() {
         return signLines;
     }
 
+    /**
+     * Returns the shop's creator
+     *
+     * @return Shop's creator
+     */
     public Player getPlayer() {
         return creator;
     }
 
+    /**
+     * Returns the shop's sign
+     *
+     * @return Shop's sign
+     */
     public Sign getSign() {
         return sign;
     }
 
+    /**
+     * Returns the shop's chest (if applicable)
+     *
+     * @return Shop's chest
+     */
     @Nullable public Chest getChest() {
         return chest;
     }

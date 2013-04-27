@@ -9,6 +9,8 @@ import org.bukkit.event.HandlerList;
 import javax.annotation.Nullable;
 
 /**
+ * Represents a state after shop destruction
+ *
  * @author Acrobot
  */
 public class ShopDestroyedEvent extends Event {
@@ -25,14 +27,23 @@ public class ShopDestroyedEvent extends Event {
         this.chest = chest;
     }
 
+    /**
+     * @return Shop's destroyer
+     */
     @Nullable public Player getDestroyer() {
         return destroyer;
     }
 
+    /**
+     * @return Shop's chest
+     */
     @Nullable public Chest getChest() {
         return chest;
     }
 
+    /**
+     * @return Shop's sign
+     */
     public Sign getSign() {
         return sign;
     }

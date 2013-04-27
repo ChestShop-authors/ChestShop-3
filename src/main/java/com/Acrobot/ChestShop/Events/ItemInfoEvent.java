@@ -6,6 +6,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ * Represents an /iteminfo call
+ *
  * @author Acrobot
  */
 public class ItemInfoEvent extends Event {
@@ -19,10 +21,16 @@ public class ItemInfoEvent extends Event {
         this.item = item;
     }
 
+    /**
+     * @return CommandSender who initiated the call
+     */
     public CommandSender getSender() {
         return sender;
     }
 
+    /**
+     * @return Item recognised by /iteminfo
+     */
     public ItemStack getItem() {
         return item;
     }
