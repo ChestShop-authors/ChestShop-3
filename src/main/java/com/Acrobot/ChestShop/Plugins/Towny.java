@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
  * @author Acrobot
  */
 public class Towny implements Listener {
+
     @EventHandler
     public static void canBuild(BuildPermissionEvent event) {
         Location chest = event.getChest();
@@ -79,7 +80,7 @@ public class Towny implements Listener {
 
     private static boolean isInsideShopPlot(Location... locations) {
         for (Location location : locations) {
-            if (!isInsideShopPlot(location)) {
+            if (location != null && !isInsideShopPlot(location)) {
                 return false;
             }
         }
@@ -93,7 +94,7 @@ public class Towny implements Listener {
 
     private static boolean isInWilderness(Location... locations) {
         for (Location location : locations) {
-            if (!isInWilderness(location)) {
+            if (location != null && !isInWilderness(location)) {
                 return false;
             }
         }
