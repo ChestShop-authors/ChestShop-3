@@ -21,25 +21,27 @@ public class NameChecker implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String name = event.getSignLine(NAME_LINE);
         Player player = event.getPlayer();
-        boolean isBank = name.startsWith(uName.BANK_PREFIX);
-        boolean noAccess;
-        boolean exists;
-        if (isBank) {
+
+        if (name.startsWith(uName.BANK_PREFIX)) {
             name = uName.stripBankPrefix(name);
-            exists = Economy.bankExists(name);
-            noAccess = !Economy.hasBankSupport() || !Permission.has(player, Permission.BANK);
+            boolean bankExists = Economy.bankExists(name);
+            boolean hasAccess = Economy.hasBankSupport() && Permission.has(player, Permission.BANK);
+
             if (Properties.BANK_MEMBERS_ALLOWED) {
-                noAccess = noAccess || !Economy.isBankMember(player.getName(), name);
+                hasAccess = hasAccess && Economy.isBankMember(player.getName(), name);
             } else {
-                noAccess = noAccess || !Economy.isBankOwner(player.getName(), name);
+                hasAccess = hasAccess && Economy.isBankOwner(player.getName(), name);
             }
-        } else {
-            noAccess = !uName.canUseName(player, name);
-            exists = Economy.hasAccount(name);
+
+            if (!bankExists || (!hasAccess && !Permission.has(player, Permission.ADMIN))) {
+                event.setSignLine(NAME_LINE, uName.stripName(player));
+            }
+
+            return;
         }
 
-        if (name.isEmpty() || !exists || (noAccess && !Permission.has(player, Permission.ADMIN))) {
-            String shortName = uName.shortenName(player);
+        if (name.isEmpty() || (!uName.canUseName(player, name) && !Permission.has(player, Permission.ADMIN))) {
+            String shortName = uName.stripName(player);
             event.setSignLine(NAME_LINE, shortName);
         }
     }
