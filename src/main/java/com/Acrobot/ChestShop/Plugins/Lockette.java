@@ -25,7 +25,7 @@ public class Lockette implements Listener {
             return;
         }
 
-        String shortPlayerName = uName.shortenName(player);
+        String shortPlayerName = uName.stripName(player);
 
         if (!org.yi.acru.bukkit.Lockette.Lockette.isUser(block, shortPlayerName, true)) {
             event.setResult(Event.Result.DENY);

@@ -17,7 +17,7 @@ public class uName {
 
     public static final String BANK_PREFIX = "$";
     public static final String BANK_PREFIX_QUOTED = Pattern.quote(BANK_PREFIX);
-    public static final String BANK_PREFIX_REPLACE = "^" + BANK_PREFIX_QUOTED;
+    public static final String BANK_PREFIX_REPLACE = '^' + BANK_PREFIX_QUOTED;
 
     public static String getName(String shortName) {
         return config.getString(shortName, shortName);
@@ -40,12 +40,12 @@ public class uName {
         return name;
     }
 
-    public static String shortenName(Player player) {
+    public static String stripName(Player player) {
         return stripName(player.getName());
     }
 
     public static boolean canUseName(Player player, String name) {
-        return shortenName(player).equals(name) || Permission.otherName(player, name);
+        return stripName(player).equals(name) || Permission.otherName(player, name);
     }
 
     public static String stripBankPrefix(String name) {
