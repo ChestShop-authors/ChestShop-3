@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.50</version>
+    <version>3.52</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -29,6 +29,10 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
+            <id>vault-repo</id>
+            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+        </repository>
+        <repository>
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
         </repository>
@@ -47,8 +51,8 @@
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
-            <artifactId>vault</artifactId>
-            <version>1.2.24</version>
+            <artifactId>Vault</artifactId>
+            <version>1.2.25-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.iCo6</groupId>
