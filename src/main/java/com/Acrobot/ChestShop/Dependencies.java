@@ -2,13 +2,9 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Economy.Economy;
-import com.Acrobot.ChestShop.Economy.EconomyManager;
-import com.Acrobot.ChestShop.Economy.Register;
-import com.Acrobot.ChestShop.Economy.Vault;
+import com.Acrobot.ChestShop.Listeners.Economy.RegisterListener;
+import com.Acrobot.ChestShop.Listeners.Economy.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
-import com.nijikokun.register.payment.forChestShop.Method;
-import com.nijikokun.register.payment.forChestShop.Methods;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -20,7 +16,7 @@ import org.bukkit.plugin.PluginManager;
  * @author Acrobot
  */
 public class Dependencies {
-    public static void load() {
+    public static void loadPlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         for (String dependency : ChestShop.getDependencies()) {
@@ -31,22 +27,24 @@ public class Dependencies {
             }
         }
 
-        if (!Economy.isLoaded()) {
-            loadRegister();
-        }
+        loadEconomy();
     }
 
-    private static void loadRegister() {
-        Method method = Methods.load();
+    private static void loadEconomy() {
+        String plugin = "Vault";
+        Listener economy = VaultListener.initializeVault();
 
-        if (method == null) {
-            Economy.setPlugin(new EconomyManager());
+        if (economy == null) {
+            plugin = "Register";
+            economy = RegisterListener.initializeRegister();
+        }
+
+        if (economy == null) {
             return;
         }
 
-        Economy.setPlugin(new Register(method));
-
-        ChestShop.getBukkitLogger().info(method.getName() + " version " + method.getVersion() + " loaded.");
+        ChestShop.registerListener(economy);
+        ChestShop.getBukkitLogger().info(plugin + " loaded! Found economy plugin!");
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
@@ -108,17 +106,6 @@ public class Dependencies {
                 break;
 
             //Other plugins
-            case Vault:
-                Vault vault = Vault.getVault();
-
-                if (vault == null) {
-                    return;
-                }
-
-                Economy.setPlugin(vault);
-
-                ChestShop.getBukkitLogger().info("Vault loaded - using " + Vault.getPluginName());
-                return;
             case Heroes:
                 Heroes heroes = Heroes.getHeroes(plugin);
 
@@ -153,7 +140,6 @@ public class Dependencies {
         Towny,
         WorldGuard,
 
-        Vault,
         Heroes
     }
 }
