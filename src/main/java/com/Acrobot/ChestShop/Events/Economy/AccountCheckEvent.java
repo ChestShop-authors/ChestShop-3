@@ -12,6 +12,8 @@ import org.bukkit.event.HandlerList;
 public class AccountCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    boolean outcome;
+
     private String account;
     private World world;
 
@@ -22,6 +24,22 @@ public class AccountCheckEvent extends Event {
 
     public AccountCheckEvent(String account) {
         this.account = account;
+    }
+
+    /**
+     * @return Event's outcome (does the account exist?)
+     */
+    public boolean getOutcome() {
+        return outcome;
+    }
+
+    /**
+     * Sets the event's outcome
+     *
+     * @param outcome Outcome of the check
+     */
+    public void setOutcome(boolean outcome) {
+        this.outcome = outcome;
     }
 
     /**

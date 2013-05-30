@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 public class CurrencyCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    boolean outcome;
+
     private BigDecimal amount;
     private String account;
     private World world;
@@ -22,6 +24,22 @@ public class CurrencyCheckEvent extends Event {
         this.amount = amount;
         this.account = account;
         this.world = world;
+    }
+
+    /**
+     * @return Does the account have enough currency available?
+     */
+    public boolean getOutcome() {
+        return outcome;
+    }
+
+    /**
+     * Sets if the account holds enough currency
+     *
+     * @param outcome Outcome of the currency check
+     */
+    public void hasEnough(boolean outcome) {
+        this.outcome = outcome;
     }
 
     /**
@@ -70,6 +88,15 @@ public class CurrencyCheckEvent extends Event {
      */
     public String getAccount() {
         return account;
+    }
+
+    /**
+     * Sets the account name
+     *
+     * @param account Account name
+     */
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public HandlerList getHandlers() {
