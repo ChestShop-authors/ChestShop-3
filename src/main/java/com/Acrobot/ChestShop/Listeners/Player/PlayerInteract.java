@@ -77,7 +77,7 @@ public class PlayerInteract implements Listener {
         }
 
         if (ChestShopSign.canAccess(player, sign)) {
-            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.getGameMode() == GameMode.CREATIVE) {
+            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.isInsideVehicle() || player.getGameMode() == GameMode.CREATIVE) {
                 return;
             }
 
