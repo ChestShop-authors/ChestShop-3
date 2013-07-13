@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners.Economy;
+package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
 import com.Acrobot.ChestShop.Events.Economy.*;
 import net.milkbowl.vault.economy.Economy;
@@ -46,6 +46,10 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
+        if (event.hasEnough()) {
+            return;
+        }
+
         World world = event.getWorld();
 
         if (!provider.has(event.getAccount(), world.getName(), event.getDoubleAmount())) {
@@ -55,15 +59,23 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onAccountCheck(AccountCheckEvent event) {
+        if (event.hasAccount()) {
+            return;
+        }
+
         World world = event.getWorld();
 
         if (!provider.hasAccount(event.getAccount(), world.getName())) {
-            event.setOutcome(false);
+            event.hasAccount(false);
         }
     }
 
     @EventHandler
     public void onCurrencyFormat(CurrencyFormatEvent event) {
+        if (!event.getFormattedAmount().isEmpty()) {
+            return;
+        }
+
         String formatted = provider.format(event.getDoubleAmount());
 
         event.setFormattedAmount(formatted);
@@ -71,6 +83,10 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyAdd(CurrencyAddEvent event) {
+        if (event.isAdded()) {
+            return;
+        }
+
         World world = event.getWorld();
 
         provider.depositPlayer(event.getTarget(), world.getName(), event.getDoubleAmount());
@@ -78,6 +94,10 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencySubtraction(CurrencySubtractEvent event) {
+        if (event.isSubtracted()) {
+            return;
+        }
+
         World world = event.getWorld();
 
         provider.withdrawPlayer(event.getTarget(), world.getName(), event.getDoubleAmount());
@@ -85,6 +105,10 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyTransfer(CurrencyTransferEvent event) {
+        if (event.hasBeenTransferred()) {
+            return;
+        }
+
         World world = event.getWorld();
 
         EconomyResponse response = provider.withdrawPlayer(event.getSender(), world.getName(), event.getDoubleAmount());

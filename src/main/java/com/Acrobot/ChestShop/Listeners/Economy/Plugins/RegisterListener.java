@@ -1,5 +1,6 @@
-package com.Acrobot.ChestShop.Listeners.Economy;
+package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import com.nijikokun.register.payment.forChestShop.Method;
 import com.nijikokun.register.payment.forChestShop.Methods;
@@ -32,37 +33,67 @@ public class RegisterListener implements Listener {
 
     @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
-        paymentMethod.getAccount(event.getAccount()).hasEnough(event.getDoubleAmount());
+        if (event.hasEnough()) {
+            return;
+        }
+
+        boolean check = paymentMethod.getAccount(event.getAccount()).hasEnough(event.getDoubleAmount());
+        event.hasEnough(check);
     }
 
     @EventHandler
     public void onAccountCheck(AccountCheckEvent event) {
-        paymentMethod.hasAccount(event.getAccount());
+        if (event.hasAccount()) {
+            return;
+        }
+
+        boolean check = paymentMethod.hasAccount(event.getAccount());
+        event.hasAccount(check);
     }
 
     @EventHandler
     public void onCurrencyFormat(CurrencyFormatEvent event) {
-        String formatted = paymentMethod.format(event.getDoubleAmount());
+        if (!event.getFormattedAmount().isEmpty()) {
+            return;
+        }
 
+        String formatted = paymentMethod.format(event.getDoubleAmount());
         event.setFormattedAmount(formatted);
     }
 
     @EventHandler
     public void onCurrencyAdd(CurrencyAddEvent event) {
+        if (event.isAdded()) {
+            return;
+        }
+
         paymentMethod.getAccount(event.getTarget()).add(event.getDoubleAmount());
+        event.setAdded(true);
     }
 
     @EventHandler
     public void onCurrencySubtract(CurrencySubtractEvent event) {
+        if (event.isSubtracted()) {
+            return;
+        }
+
         paymentMethod.getAccount(event.getTarget()).subtract(event.getDoubleAmount());
     }
 
     @EventHandler
-    public void onCurrencyTransfer(CurrencyTransferEvent event) {
-        boolean subtracted = paymentMethod.getAccount(event.getSender()).subtract(event.getDoubleAmount());
-
-        if (subtracted) {
-            paymentMethod.getAccount(event.getReceiver()).add(event.getDoubleAmount());
+    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
+        if (event.hasBeenTransferred()) {
+            return;
         }
+
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
+        ChestShop.callEvent(currencySubtractEvent);
+
+        if (!currencySubtractEvent.isSubtracted()) {
+            return;
+        }
+
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), event.getReceiver(), event.getWorld());
+        ChestShop.callEvent(currencyAddEvent);
     }
 }

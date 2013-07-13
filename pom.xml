@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.52</version>
+    <version>3.60</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.5.1-R0.1-SNAPSHOT</version>
+            <version>1.6.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.palmergames.towny</groupId>
