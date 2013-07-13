@@ -2,8 +2,8 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Listeners.Economy.RegisterListener;
-import com.Acrobot.ChestShop.Listeners.Economy.VaultListener;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.RegisterListener;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import org.bukkit.Bukkit;
@@ -44,7 +44,7 @@ public class Dependencies {
         }
 
         ChestShop.registerListener(economy);
-        ChestShop.getBukkitLogger().info(plugin + " loaded! Found economy plugin!");
+        ChestShop.getBukkitLogger().info(plugin + " loaded! Found an economy plugin!");
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
