@@ -337,6 +337,7 @@ permissions:
       ChestShop.shop.create.158: true #Dropper
       ChestShop.shop.create.151: true #Daylight Sensor
       ChestShop.shop.create.404: true #Redstone Comparator
+      ChestShop.shop.create.123: true #Redstone Lamp
   ChestShop.shop.create.netherblocks:
     descriptions: Allows to create a shop that sells netherblocks
     children:
@@ -527,3 +528,4 @@ permissions:
       ChestShop.shop.create.118: true #PlacedCauldron
       ChestShop.shop.create.119: true #EndPortal
       ChestShop.shop.create.120: true #EndPortalBlock
+      ChestShop.shop.create.124: true #Redstone Lamp On
