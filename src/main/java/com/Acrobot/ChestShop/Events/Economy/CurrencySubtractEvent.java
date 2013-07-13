@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 public class CurrencySubtractEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    boolean subtracted;
+
     private BigDecimal amount;
     private String target;
     private World world;
@@ -61,6 +63,22 @@ public class CurrencySubtractEvent extends Event {
      */
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
+    }
+
+    /**
+     * @return Was the money already subtracted?
+     */
+    public boolean isSubtracted() {
+        return subtracted;
+    }
+
+    /**
+     * Set if the money was subtracted from the account
+     *
+     * @param subtracted Was the money subtracted?
+     */
+    public void setSubtracted(boolean subtracted) {
+        this.subtracted = subtracted;
     }
 
     /**

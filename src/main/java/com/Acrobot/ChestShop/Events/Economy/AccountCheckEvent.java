@@ -29,7 +29,7 @@ public class AccountCheckEvent extends Event {
     /**
      * @return Event's outcome (does the account exist?)
      */
-    public boolean getOutcome() {
+    public boolean hasAccount() {
         return outcome;
     }
 
@@ -38,7 +38,7 @@ public class AccountCheckEvent extends Event {
      *
      * @param outcome Outcome of the check
      */
-    public void setOutcome(boolean outcome) {
+    public void hasAccount(boolean outcome) {
         this.outcome = outcome;
     }
 

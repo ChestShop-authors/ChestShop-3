@@ -1,12 +1,16 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.*;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
@@ -16,8 +20,9 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL
  * @author Acrobot
  */
 public class AmountAndPriceChecker implements Listener {
+
     @EventHandler
-    public static void onItemCheck(PreTransactionEvent event) {
+    public static void onBuyItemCheck(PreTransactionEvent event) {
         if (event.isCancelled() || event.getTransactionType() != BUY) {
             return;
         }
@@ -25,7 +30,10 @@ public class AmountAndPriceChecker implements Listener {
         ItemStack[] stock = event.getStock();
         Inventory ownerInventory = event.getOwnerInventory();
 
-        if (!Economy.hasEnough(event.getClient().getName(), event.getPrice())) {
+        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
+        ChestShop.callEvent(currencyCheckEvent);
+
+        if (!currencyCheckEvent.hasEnough()) {
             event.setCancelled(CLIENT_DOES_NOT_HAVE_ENOUGH_MONEY);
             return;
         }
@@ -44,7 +52,10 @@ public class AmountAndPriceChecker implements Listener {
         ItemStack[] stock = event.getStock();
         Inventory clientInventory = event.getClientInventory();
 
-        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory()) && !Economy.hasEnough(event.getOwner().getName(), event.getPrice())) {
+        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(event.getPrice()), event.getOwner().getName(), event.getSign().getWorld());
+        ChestShop.callEvent(currencyCheckEvent);
+
+        if (!currencyCheckEvent.hasEnough()) {
             event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
             return;
         }

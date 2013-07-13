@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 
 /**
  * Represents a Vault connector
@@ -45,6 +47,15 @@ public class VaultListener implements Listener {
     }
 
     @EventHandler
+    public void onAmountCheck(CurrencyAmountEvent event) {
+        if (!event.getAmount().equals(BigDecimal.ZERO)) {
+            return;
+        }
+
+        event.setAmount(provider.getBalance(event.getAccount(), event.getWorld().getName()));
+    }
+
+    @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
         if (event.hasEnough()) {
             return;
@@ -52,8 +63,8 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (!provider.has(event.getAccount(), world.getName(), event.getDoubleAmount())) {
-            event.hasEnough(false);
+        if (provider.has(event.getAccount(), world.getName(), event.getDoubleAmount())) {
+            event.hasEnough(true);
         }
     }
 
@@ -104,17 +115,30 @@ public class VaultListener implements Listener {
     }
 
     @EventHandler
-    public void onCurrencyTransfer(CurrencyTransferEvent event) {
+    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
         if (event.hasBeenTransferred()) {
             return;
         }
 
-        World world = event.getWorld();
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
+        ChestShop.callEvent(currencySubtractEvent);
 
-        EconomyResponse response = provider.withdrawPlayer(event.getSender(), world.getName(), event.getDoubleAmount());
-
-        if (response.transactionSuccess()) {
-            provider.depositPlayer(event.getReceiver(), world.getName(), event.getDoubleAmount());
+        if (!currencySubtractEvent.isSubtracted()) {
+            return;
         }
+
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
+        ChestShop.callEvent(currencyAddEvent);
+    }
+
+    @EventHandler
+    public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
+        EconomyResponse response = provider.depositPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
+
+        if (!response.transactionSuccess()) {
+            event.canHold(false);
+        }
+
+        provider.withdrawPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
     }
 }

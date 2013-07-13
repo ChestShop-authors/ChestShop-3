@@ -22,24 +22,6 @@ public class NameChecker implements Listener {
         String name = event.getSignLine(NAME_LINE);
         Player player = event.getPlayer();
 
-        if (name.startsWith(uName.BANK_PREFIX)) {
-            name = uName.stripBankPrefix(name);
-            boolean bankExists = Economy.bankExists(name);
-            boolean hasAccess = Economy.hasBankSupport() && Permission.has(player, Permission.BANK);
-
-            if (Properties.BANK_MEMBERS_ALLOWED) {
-                hasAccess = hasAccess && Economy.isBankMember(player.getName(), name);
-            } else {
-                hasAccess = hasAccess && Economy.isBankOwner(player.getName(), name);
-            }
-
-            if (!bankExists || (!hasAccess && !Permission.has(player, Permission.ADMIN))) {
-                event.setSignLine(NAME_LINE, uName.stripName(player));
-            }
-
-            return;
-        }
-
         if (name.isEmpty() || (!uName.canUseName(player, name) && !Permission.has(player, Permission.ADMIN))) {
             String shortName = uName.stripName(player);
             event.setSignLine(NAME_LINE, shortName);

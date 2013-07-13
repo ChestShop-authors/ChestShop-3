@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 public class CurrencyAddEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    boolean added;
+
     private BigDecimal amount;
     private String target;
     private World world;
@@ -61,6 +63,22 @@ public class CurrencyAddEvent extends Event {
      */
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
+    }
+
+    /**
+     * @return Was the money already added to the account?
+     */
+    public boolean isAdded() {
+        return added;
+    }
+
+    /**
+     * Set if the money was added to the account
+     *
+     * @param added Was the money added?
+     */
+    public void setAdded(boolean added) {
+        this.added = added;
     }
 
     /**

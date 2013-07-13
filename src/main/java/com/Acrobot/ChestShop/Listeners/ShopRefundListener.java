@@ -1,14 +1,18 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.uName;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
@@ -26,7 +30,9 @@ public class ShopRefundListener implements Listener {
         }
 
         String owner = uName.getName(event.getSign().getLine(NAME_LINE));
-        Economy.add(owner, refundPrice);
+
+        CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());
+        ChestShop.callEvent(currencyEvent);
 
         String message = Messages.SHOP_REFUNDED.replace("%amount", Economy.formatBalance(refundPrice));
         event.getDestroyer().sendMessage(Messages.prefix(message));

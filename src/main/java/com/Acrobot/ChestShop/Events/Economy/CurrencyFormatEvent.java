@@ -14,7 +14,7 @@ public class CurrencyFormatEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final BigDecimal amount;
-    private String formattedAmount;
+    private String formattedAmount = "";
 
     public CurrencyFormatEvent(BigDecimal amount) {
         this.amount = amount;

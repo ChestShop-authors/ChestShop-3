@@ -1,13 +1,14 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
 /**
- * Represents a check for the existance of specified currency amount
+ * Represents a check for the existence of specified currency amount
  *
  * @author Acrobot
  */
@@ -26,10 +27,14 @@ public class CurrencyCheckEvent extends Event {
         this.world = world;
     }
 
+    public CurrencyCheckEvent(BigDecimal amount, Player player) {
+        this(amount, player.getName(), player.getWorld());
+    }
+
     /**
      * @return Does the account have enough currency available?
      */
-    public boolean getOutcome() {
+    public boolean hasEnough() {
         return outcome;
     }
 

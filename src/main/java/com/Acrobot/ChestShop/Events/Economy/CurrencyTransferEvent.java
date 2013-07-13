@@ -18,6 +18,7 @@ public class CurrencyTransferEvent extends Event {
     private World world;
     private String sender;
     private String receiver;
+    private boolean success;
 
     public CurrencyTransferEvent(BigDecimal amount, String sender, String receiver, World world) {
         this.amount = amount;
@@ -63,6 +64,22 @@ public class CurrencyTransferEvent extends Event {
      */
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
+    }
+
+    /**
+     * @return If the currency has been successfully transferred
+     */
+    public boolean hasBeenTransferred() {
+        return success;
+    }
+
+    /**
+     * Sets the transaction's outcome
+     *
+     * @param success If the currency has been successfully transferred
+     */
+    public void setTransferred(boolean success) {
+        this.success = success;
     }
 
     /**

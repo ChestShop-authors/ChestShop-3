@@ -1,9 +1,14 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
@@ -18,11 +23,11 @@ public class EconomicModule implements Listener {
             return;
         }
 
-        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
-            Economy.add(event.getOwner().getName(), event.getPrice());
-        }
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getOwner().getName(), event.getSign().getWorld());
+        ChestShop.callEvent(currencyAddEvent);
 
-        Economy.subtract(event.getClient().getName(), event.getPrice());
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
+        ChestShop.callEvent(currencySubtractEvent);
     }
 
     @EventHandler
@@ -31,10 +36,10 @@ public class EconomicModule implements Listener {
             return;
         }
 
-        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
-            Economy.subtract(event.getOwner().getName(), event.getPrice());
-        }
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getOwner().getName(), event.getSign().getWorld());
+        ChestShop.callEvent(currencySubtractEvent);
 
-        Economy.add(event.getClient().getName(), event.getPrice());
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
+        ChestShop.callEvent(currencyAddEvent);
     }
 }

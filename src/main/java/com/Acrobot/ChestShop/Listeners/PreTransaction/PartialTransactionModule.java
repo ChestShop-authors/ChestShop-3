@@ -2,7 +2,11 @@ package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +27,7 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL
  * @author Acrobot
  */
 public class PartialTransactionModule implements Listener {
+
     @EventHandler(priority = EventPriority.LOW)
     public static void onPreBuyTransaction(PreTransactionEvent event) {
         if (event.isCancelled() || event.getTransactionType() != BUY) {
@@ -29,14 +35,20 @@ public class PartialTransactionModule implements Listener {
         }
 
         Player client = event.getClient();
-        String clientName = client.getName();
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();
         double pricePerItem = event.getPrice() / InventoryUtil.countItems(stock);
-        double walletMoney = Economy.getBalance(clientName);
 
-        if (!Economy.hasEnough(clientName, price)) {
+        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(client);
+        ChestShop.callEvent(currencyAmountEvent);
+
+        BigDecimal walletMoney = currencyAmountEvent.getAmount();
+
+        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), client);
+        ChestShop.callEvent(currencyCheckEvent);
+
+        if (!currencyCheckEvent.hasEnough()) {
             int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
 
             if (amountAffordable < 1) {
@@ -50,7 +62,10 @@ public class PartialTransactionModule implements Listener {
 
         String seller = event.getOwner().getName();
 
-        if (!Economy.canHold(seller, price)) {
+        CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), seller, client.getWorld());
+        ChestShop.callEvent(currencyHoldEvent);
+
+        if (!currencyHoldEvent.canHold()) {
             event.setCancelled(SHOP_DEPOSIT_FAILED);
             return;
         }
@@ -77,29 +92,41 @@ public class PartialTransactionModule implements Listener {
             return;
         }
 
-        String player = event.getClient().getName();
+        Player client = event.getClient();
         String ownerName = event.getOwner().getName();
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();
         double pricePerItem = event.getPrice() / InventoryUtil.countItems(stock);
-        double walletMoney = Economy.getBalance(ownerName);
 
-        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory()) && !Economy.hasEnough(ownerName, price)) {
-            int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
+        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(ownerName, client.getWorld());
+        ChestShop.callEvent(currencyAmountEvent);
 
-            if (amountAffordable < 1) {
-                event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
-                return;
+        BigDecimal walletMoney = currencyAmountEvent.getAmount();
+
+        if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
+            CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), ownerName, client.getWorld());
+            ChestShop.callEvent(currencyCheckEvent);
+
+            if (!currencyCheckEvent.hasEnough()) {
+                int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
+
+                if (amountAffordable < 1) {
+                    event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
+                    return;
+                }
+
+                event.setPrice(amountAffordable * pricePerItem);
+                event.setStock(getCountedItemStack(stock, amountAffordable));
             }
-
-            event.setPrice(amountAffordable * pricePerItem);
-            event.setStock(getCountedItemStack(stock, amountAffordable));
         }
 
         stock = event.getStock();
 
-        if (!Economy.canHold(player, price)) {
+        CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), client);
+        ChestShop.callEvent(currencyHoldEvent);
+
+        if (!currencyHoldEvent.canHold()) {
             event.setCancelled(CLIENT_DEPOSIT_FAILED);
             return;
         }
@@ -118,8 +145,8 @@ public class PartialTransactionModule implements Listener {
         }
     }
 
-    private static int getAmountOfAffordableItems(double walletMoney, double pricePerItem) {
-        return (int) Math.floor(walletMoney / pricePerItem);
+    private static int getAmountOfAffordableItems(BigDecimal walletMoney, double pricePerItem) {
+        return (int) Math.floor(walletMoney.doubleValue() / pricePerItem);
     }
 
     private static ItemStack[] getItems(ItemStack[] stock, Inventory inventory) {

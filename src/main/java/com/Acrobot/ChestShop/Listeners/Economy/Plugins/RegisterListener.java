@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 
 /**
  * Represents a Register connector
@@ -29,6 +30,15 @@ public class RegisterListener implements Listener {
         }
 
         return new RegisterListener(method);
+    }
+
+    @EventHandler
+    public void onAmountCheck(CurrencyAmountEvent event) {
+        if (!event.getAmount().equals(BigDecimal.ZERO)) {
+            return;
+        }
+
+        event.setAmount(paymentMethod.getAccount(event.getAccount()).balance());
     }
 
     @EventHandler
@@ -93,7 +103,7 @@ public class RegisterListener implements Listener {
             return;
         }
 
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), event.getReceiver(), event.getWorld());
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
         ChestShop.callEvent(currencyAddEvent);
     }
 }

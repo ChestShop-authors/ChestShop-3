@@ -12,6 +12,9 @@ import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.RegisterListener;
+import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
+import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
@@ -240,6 +243,13 @@ public class ChestShop extends JavaPlugin {
     private void registerModules() {
         registerEvent(new DiscountModule());
         registerEvent(new PriceRestrictionModule());
+
+        registerEconomicalModules();
+    }
+
+    private void registerEconomicalModules() {
+        registerEvent(new ServerAccountCorrector());
+        registerEvent(new TaxModule());
     }
 
     public void registerEvent(Listener listener) {
