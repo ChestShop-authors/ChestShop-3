@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation indicating that the value should be followed by a blank space
+ *
  * @author Acrobot
  */
 @Retention(RetentionPolicy.RUNTIME)

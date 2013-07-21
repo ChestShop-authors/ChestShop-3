@@ -18,6 +18,7 @@ import java.sql.Statement;
 
 /**
  * Saves items with Metadata in database, which allows for saving items on signs easily.
+ *
  * @author Acrobot
  */
 public class ItemDatabase {

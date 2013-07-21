@@ -66,6 +66,7 @@ public class Configuration {
 
     /**
      * Checks if the file ends with space
+     *
      * @param file File to check
      * @return If the file ends with space
      */

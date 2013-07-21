@@ -1,7 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
-import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Utils.uName;
