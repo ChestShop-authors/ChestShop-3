@@ -79,6 +79,18 @@ public class ServerAccountCorrector implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public static void onCurrencyHoldCheck(CurrencyHoldEvent event) {
+        String target = event.getAccount();
+
+        if (!ChestShopSign.isAdminShop(target)) {
+            return;
+        }
+
+        event.canHold(true);
+        event.setAccount("");
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public static void onBalanceCheck(CurrencyAmountEvent event) {
         String target = event.getAccount();
 

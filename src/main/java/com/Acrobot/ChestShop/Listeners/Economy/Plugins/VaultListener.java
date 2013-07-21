@@ -25,6 +25,10 @@ public class VaultListener implements Listener {
         this.provider = provider;
     }
 
+    public boolean transactionCanFail() {
+        return provider.getName().equals("Gringotts") || provider.getName().equals("GoldIsMoney") || provider.getName().equals("MultiCurrency");
+    }
+
     /**
      * Creates a new VaultListener and returns it (if possible)
      *
@@ -133,10 +137,20 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
+        if (event.getAccount().isEmpty() || !transactionCanFail()) {
+            return;
+        }
+
+        if (!provider.hasAccount(event.getAccount(), event.getWorld().getName())) {
+            event.canHold(false);
+            return;
+        }
+
         EconomyResponse response = provider.depositPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
 
         if (!response.transactionSuccess()) {
             event.canHold(false);
+            return;
         }
 
         provider.withdrawPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
