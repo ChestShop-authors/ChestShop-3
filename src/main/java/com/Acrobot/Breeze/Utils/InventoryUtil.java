@@ -141,7 +141,7 @@ public class InventoryUtil {
                 int neededToAdd = Math.min(maxStackSize - currentAmount, amountLeft);
 
                 duplicate.setAmount(currentAmount + neededToAdd);
-                duplicate.addEnchantments(item.getEnchantments());
+                duplicate.addUnsafeEnchantments(item.getEnchantments());
 
                 amountLeft -= neededToAdd;
 
