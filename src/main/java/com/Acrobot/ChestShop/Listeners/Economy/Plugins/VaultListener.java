@@ -35,6 +35,10 @@ public class VaultListener implements Listener {
      * @return VaultListener
      */
     public static @Nullable VaultListener initializeVault() {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            return null;
+        }
+
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 
         if (rsp == null) {
