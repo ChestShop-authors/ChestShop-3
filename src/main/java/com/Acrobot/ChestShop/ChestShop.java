@@ -18,10 +18,7 @@ import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
-import com.Acrobot.ChestShop.Listeners.Player.ShortNameSaver;
+import com.Acrobot.ChestShop.Listeners.Player.*;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.SignSticker;
@@ -184,6 +181,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
+        registerEvent(new PlayerTeleport());
 
         registerEvent(new ItemInfoListener());
 
