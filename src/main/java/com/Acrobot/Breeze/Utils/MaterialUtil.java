@@ -3,7 +3,7 @@ package com.Acrobot.Breeze.Utils;
 import com.Acrobot.ChestShop.ChestShop;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import info.somethingodd.bukkit.OddItem.OddItem;
+import info.somethingodd.OddItem.OddItem;
 import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
