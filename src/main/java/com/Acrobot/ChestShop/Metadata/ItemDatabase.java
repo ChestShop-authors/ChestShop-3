@@ -15,6 +15,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Saves items with Metadata in database, which allows for saving items on signs easily.
@@ -22,7 +24,9 @@ import java.sql.Statement;
  * @author Acrobot
  */
 public class ItemDatabase {
-    private Yaml yaml;
+    private static final Map<String, ItemStack> METADATA_CACHE = new HashMap<String, ItemStack>();
+
+    private final Yaml yaml;
     private Table table;
 
     public ItemDatabase() {
@@ -81,6 +85,10 @@ public class ItemDatabase {
      * @return ItemStack represented by this code
      */
     public ItemStack getFromCode(String code) {
+        if (METADATA_CACHE.containsKey(code)) {
+            return METADATA_CACHE.get(code);
+        }
+
         try {
             Row row = table.getRow("id='" + Base62.decode(code) + '\'');
 
@@ -90,7 +98,10 @@ public class ItemDatabase {
 
             String serialized = row.get("code");
 
-            return (ItemStack) yaml.load((String) Base64.decodeToObject(serialized));
+            ItemStack item = (ItemStack) yaml.load((String) Base64.decodeToObject(serialized));
+            METADATA_CACHE.put(code, item);
+
+            return item;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
