@@ -53,7 +53,7 @@ public class PlayerInteract implements Listener {
         Action action = event.getAction();
         Player player = event.getPlayer();
 
-        if (isChest(block) && Properties.USE_BUILT_IN_PROTECTION) {
+        if (Properties.USE_BUILT_IN_PROTECTION && isChest(block)) {
             if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
                 return;
             }

@@ -25,12 +25,12 @@ public class EmptyShopDeleter implements Listener {
         }
 
         Inventory ownerInventory = event.getOwnerInventory();
-        Sign sign = event.getSign();
 
         if (!shopShouldBeRemoved(ownerInventory, event.getStock())) {
             return;
         }
 
+        Sign sign = event.getSign();
         sign.getBlock().setType(Material.AIR);
 
         if (Properties.REMOVE_EMPTY_CHESTS && !ChestShopSign.isAdminShop(ownerInventory) && InventoryUtil.isEmpty(ownerInventory)) {
