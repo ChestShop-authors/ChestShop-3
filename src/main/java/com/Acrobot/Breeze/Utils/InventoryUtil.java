@@ -111,7 +111,7 @@ public class InventoryUtil {
 
     /**
      * Adds an item to the inventory with given maximum stack size
-     * (it currently uses a custom method of adding items, because Bukkit hasn't fixed it for 6 months now)
+     * (it currently uses a custom method of adding items, because Bukkit hasn't fixed it for a year now - not even kidding)
      *
      * @param item         Item to add
      * @param inventory    Inventory
