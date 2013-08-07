@@ -21,13 +21,15 @@ import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
 import com.Acrobot.ChestShop.Listeners.Player.*;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
+import com.Acrobot.ChestShop.Listeners.PostShopCreation.ShopCreationLogger;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.SignSticker;
 import com.Acrobot.ChestShop.Listeners.PostTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreShopCreation.*;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.ErrorMessageSender;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.PermissionChecker;
-import com.Acrobot.ChestShop.Listeners.ShopRefundListener;
+import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRefundListener;
+import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRemovalLogger;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
@@ -169,6 +171,7 @@ public class ChestShop extends JavaPlugin {
         registerPreTransactionEvents();
         registerPostShopCreationEvents();
         registerPostTransactionEvents();
+        registerShopRemovalEvents();
 
         registerModules();
 
@@ -186,9 +189,12 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ItemInfoListener());
 
         registerEvent(new RestrictedSign());
-        registerEvent(new ShopRefundListener());
-
         registerEvent(new ShortNameSaver());
+    }
+
+    private void registerShopRemovalEvents() {
+        registerEvent(new ShopRefundListener());
+        registerEvent(new ShopRemovalLogger());
     }
 
     private void registerPreShopCreationEvents() {
@@ -211,6 +217,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new CreationFeeGetter());
         registerEvent(new MessageSender());
         registerEvent(new SignSticker());
+        registerEvent(new ShopCreationLogger());
     }
 
     private void registerPreTransactionEvents() {

@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.Breeze.Utils.LocationUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Queue;
@@ -38,7 +39,7 @@ public class TransactionLogger implements Listener {
                         items.toString(),
                         event.getPrice(),
                         event.getOwner().getName(),
-                        locationToString(event.getSign().getLocation()));
+                        LocationUtil.locationToString(event.getSign().getLocation()));
 
                 ChestShop.getBukkitLogger().info(message);
             }
@@ -71,9 +72,5 @@ public class TransactionLogger implements Listener {
 
             Queue.addToQueue(transaction);
         }
-    }
-
-    private static String locationToString(Location loc) {
-        return '[' + loc.getWorld().getName() + "] " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
     }
 }

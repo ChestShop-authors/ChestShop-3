@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners;
+package com.Acrobot.ChestShop.Listeners.ShopRemoval;
 
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
