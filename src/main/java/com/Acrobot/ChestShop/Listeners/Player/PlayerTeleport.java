@@ -6,12 +6,15 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * A fix for a CraftBukkit bug.
+ *
  * @author Acrobot
  */
 public class PlayerTeleport implements Listener {
 
     @EventHandler
     public static void onPlayerTeleport(PlayerTeleportEvent event) {
-        event.getPlayer().closeInventory();
+        if (!event.getPlayer().isConversing()) {
+            event.getPlayer().closeInventory();
+        }
     }
 }
