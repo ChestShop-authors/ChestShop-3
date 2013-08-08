@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.61</version>
+    <version>3.62</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -29,6 +29,10 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
+            <id>mcstats-releases</id>
+            <url>http://repo.mcstats.org/content/repositories/releases/</url>
+        </repository>
+        <repository>
             <id>vault-repo</id>
             <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
         </repository>
@@ -45,6 +49,11 @@
             <version>1.6.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>R7</version>
+        </dependency>
+        <dependency>
             <groupId>com.palmergames.towny</groupId>
             <artifactId>towny</artifactId>
             <version>0.82.1.0</version>
@@ -52,7 +61,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.25-SNAPSHOT</version>
+            <version>1.2.27</version>
         </dependency>
         <dependency>
             <groupId>com.iCo6</groupId>
@@ -121,6 +130,32 @@
                     <finalName>ChestShop</finalName>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.mcstats.bukkit</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.mcstats</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <resources>
@@ -130,5 +165,5 @@
             </resource>
         </resources>
     </build>
-    
+
 </project>
