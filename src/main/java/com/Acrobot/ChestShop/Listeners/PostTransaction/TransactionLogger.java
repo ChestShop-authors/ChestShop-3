@@ -6,7 +6,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Economy;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.EventHandler;
