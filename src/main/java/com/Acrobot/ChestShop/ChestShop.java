@@ -181,7 +181,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ChestBreak());
 
         registerEvent(new BlockPlace());
-        registerEvent(new ItemMoveListener());
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
@@ -191,6 +190,10 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new RestrictedSign());
         registerEvent(new ShortNameSaver());
+
+        if (!Properties.TURN_OFF_HOPPER_PROTECTION) {
+            registerEvent(new ItemMoveListener());
+        }
     }
 
     private void registerShopRemovalEvents() {

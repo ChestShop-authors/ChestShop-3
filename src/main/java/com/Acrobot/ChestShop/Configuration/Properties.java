@@ -114,6 +114,9 @@ public class Properties {
     @ConfigurationComment("Do you want to turn off the default sign protection? Warning! Other players will be able to destroy other people's shops!")
     public static boolean TURN_OFF_SIGN_PROTECTION = false;
 
+    @ConfigurationComment("Do you want to disable the hopper protection, which prevents the hoppers from taking items out of chests?")
+    public static boolean TURN_OFF_HOPPER_PROTECTION = false;
+
     @ConfigurationComment("Do you want to protect shop chests with LWC?")
     public static boolean PROTECT_CHEST_WITH_LWC = false;
 
