@@ -60,7 +60,13 @@ public class VaultListener implements Listener {
             return;
         }
 
-        event.setAmount(provider.getBalance(event.getAccount(), event.getWorld().getName()));
+        double balance = provider.getBalance(event.getAccount(), event.getWorld().getName());
+
+        if (balance > Double.MAX_VALUE) {
+            balance = Double.MAX_VALUE;
+        }
+
+        event.setAmount(balance);
     }
 
     @EventHandler
