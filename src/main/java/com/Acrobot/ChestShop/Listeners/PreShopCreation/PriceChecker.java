@@ -20,6 +20,12 @@ public class PriceChecker implements Listener {
         String line = event.getSignLine(PRICE_LINE).toUpperCase();
         String[] part = line.split(":");
 
+        System.out.println(isInvalid(part[0]) + " " + isInvalid(part[1]));
+        if (part.length > 1 && (isInvalid(part[0]) ^ isInvalid(part[1]))) {
+            line = line.replace(':', ' ');
+            part = new String[]{line};
+        }
+
         if (isPrice(part[0])) {
             line = "B " + line;
         }
@@ -27,8 +33,6 @@ public class PriceChecker implements Listener {
         if (part.length > 1 && isPrice(part[1])) {
             line += " S";
         }
-
-        line = line.replace('b', 'B').replace('s', 'S');
 
         if (line.length() > 15) {
             line = line.replace(" ", "");
@@ -44,5 +48,17 @@ public class PriceChecker implements Listener {
         if (!PriceUtil.hasBuyPrice(line) && !PriceUtil.hasSellPrice(line)) {
             event.setOutcome(INVALID_PRICE);
         }
+    }
+
+    private static boolean isInvalid(String part) {
+        char characters[] = {'B', 'S'};
+
+        for (char character : characters) {
+            if (part.contains(Character.toString(character))) {
+                return !PriceUtil.hasPrice(part, character);
+            }
+        }
+
+        return false;
     }
 }

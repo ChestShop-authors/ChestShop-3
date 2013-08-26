@@ -21,7 +21,7 @@ public class PriceUtil {
      */
     public static double get(String text, char indicator) {
         String[] split = text.replace(" ", "").toLowerCase().split(":");
-        String character = String.valueOf(indicator);
+        String character = String.valueOf(indicator).toLowerCase();
 
         for (String part : split) {
             if (!part.contains(character)) {
