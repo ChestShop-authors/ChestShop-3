@@ -20,7 +20,6 @@ public class PriceChecker implements Listener {
         String line = event.getSignLine(PRICE_LINE).toUpperCase();
         String[] part = line.split(":");
 
-        System.out.println(isInvalid(part[0]) + " " + isInvalid(part[1]));
         if (part.length > 1 && (isInvalid(part[0]) ^ isInvalid(part[1]))) {
             line = line.replace(':', ' ');
             part = new String[]{line};
