@@ -21,10 +21,6 @@
             <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>odditem-repo</id>
-            <url>http://repo.somethingodd.info/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
