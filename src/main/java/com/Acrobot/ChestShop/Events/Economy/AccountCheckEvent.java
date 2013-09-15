@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Checks for the existance of an account
+ * Checks for the existence of an account
  *
  * @author Acrobot
  */
