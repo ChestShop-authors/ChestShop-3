@@ -31,7 +31,7 @@ public class uBlock {
         for (BlockFace chestFace : NEIGHBOR_FACES) {
             Block relative = chestBlock.getRelative(chestFace);
 
-            if (BlockUtil.isChest(relative)) {
+            if (relative.getType() == chestBlock.getType()) {
                 return (Chest) relative.getState();
             }
         }
