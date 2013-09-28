@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * @author Acrobot
@@ -14,10 +13,6 @@ import java.util.regex.Pattern;
 public class uName {
     public static YamlConfiguration config;
     public static File file;
-
-    public static final String BANK_PREFIX = "$";
-    public static final String BANK_PREFIX_QUOTED = Pattern.quote(BANK_PREFIX);
-    public static final String BANK_PREFIX_REPLACE = '^' + BANK_PREFIX_QUOTED;
 
     public static String getName(String shortName) {
         return config.getString(shortName, shortName);
@@ -46,10 +41,6 @@ public class uName {
 
     public static boolean canUseName(Player player, String name) {
         return stripName(player).equals(name) || Permission.otherName(player, name);
-    }
-
-    public static String stripBankPrefix(String name) {
-        return name.replaceFirst(BANK_PREFIX_REPLACE, "");
     }
 
     public static void load() {
