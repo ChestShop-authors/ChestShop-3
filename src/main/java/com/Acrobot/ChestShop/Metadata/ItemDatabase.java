@@ -64,7 +64,10 @@ public class ItemDatabase {
      */
     public String getItemCode(ItemStack item) {
         try {
-            String code = Base64.encodeObject(yaml.dump(item));
+            ItemStack clone = item.clone();
+            clone.setAmount(1);
+
+            String code = Base64.encodeObject(yaml.dump(clone));
             table.insertRow("null, '" + code + '\'');
 
             int id = Integer.parseInt(table.getRow("code='" + code + '\'').get("id"));
