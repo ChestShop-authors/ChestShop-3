@@ -21,7 +21,6 @@ public enum Permission {
     MOD("ChestShop.mod"),
     OTHER_NAME("ChestShop.name."),
     GROUP("ChestShop.group."),
-    BANK("ChestShop.bank"),
 
     NOFEE("ChestShop.nofee"),
     DISCOUNT("ChestShop.discount.");
