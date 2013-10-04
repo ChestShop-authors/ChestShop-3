@@ -7,7 +7,6 @@ import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.Acrobot.ChestShop.Utils.uName;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,11 +18,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,12 +36,30 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
 import static com.Acrobot.ChestShop.Permission.MOD;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
+import static com.Acrobot.ChestShop.Utils.uName.canUseName;
 
 /**
  * @author Acrobot
  */
 public class SignBreak implements Listener {
     private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
+    private static final String METADATA_NAME = "shop_destroyer";
+
+    @EventHandler(ignoreCancelled = true)
+    public static void onSign(BlockPhysicsEvent event) {
+        Block block = event.getBlock();
+
+        if (!BlockUtil.isSign(block)) {
+            return;
+        }
+
+        Sign sign = (Sign) block.getState();
+        Block attachedBlock = BlockUtil.getAttachedFace(sign);
+
+        if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
+            sendShopDestroyedEvent(sign, (Player) block.getMetadata(METADATA_NAME).get(0).value());
+        }
+    }
 
     @EventHandler(ignoreCancelled = true)
     public static void onSignBreak(BlockBreakEvent event) {
@@ -105,7 +124,7 @@ public class SignBreak implements Listener {
         }
 
         for (Sign sign : brokenBlocks) {
-            sendShopDestroyedEvent(sign, breaker);
+            sign.setMetadata(METADATA_NAME, new FixedMetadataValue(ChestShop.getPlugin(), breaker));
         }
 
         return true;
@@ -113,10 +132,6 @@ public class SignBreak implements Listener {
 
     private static boolean canDestroyShop(Player player, String name) {
         return player != null && (hasShopBreakingPermission(player) || canUseName(player, name));
-    }
-
-    private static boolean canUseName(Player player, String name) {
-        return uName.canUseName(player, name);
     }
 
     private static boolean hasShopBreakingPermission(Player player) {
