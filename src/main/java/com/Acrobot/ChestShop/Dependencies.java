@@ -77,16 +77,6 @@ public class Dependencies {
                 break;
 
             //Terrain protection plugins
-            case Towny:
-                Towny towny = Towny.getTowny();
-
-                if (towny == null || !Properties.TOWNY_INTEGRATION) {
-                    return;
-                }
-
-                listener = towny;
-
-                break;
             case WorldGuard:
                 WorldGuardPlugin worldGuard = (WorldGuardPlugin) plugin;
                 boolean inUse = Properties.WORLDGUARD_USE_PROTECTION || Properties.WORLDGUARD_INTEGRATION;
@@ -137,7 +127,6 @@ public class Dependencies {
 
         OddItem,
 
-        Towny,
         WorldGuard,
 
         Heroes

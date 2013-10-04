@@ -134,13 +134,6 @@ public class Properties {
     public static long STATISTICS_PAGE_GENERATION_INTERVAL = 60;
 
     @PrecededBySpace
-    @ConfigurationComment("Do you want to only let people build inside shop plots?")
-    public static boolean TOWNY_INTEGRATION = false;
-
-    @ConfigurationComment("If true, only plot owners are able to build inside a shop plot. If false, every town's resident is able to build there.")
-    public static boolean TOWNY_SHOPS_FOR_OWNERS_ONLY = true;
-
-    @PrecededBySpace
     @ConfigurationComment("Do you want to only let people build inside regions?")
     public static boolean WORLDGUARD_INTEGRATION = false;
 
