@@ -64,7 +64,7 @@ public class ItemDatabase {
      */
     public String getItemCode(ItemStack item) {
         try {
-            ItemStack clone = item.clone();
+            ItemStack clone = new ItemStack(item);
             clone.setAmount(1);
 
             String code = Base64.encodeObject(yaml.dump(clone));
@@ -77,6 +77,8 @@ public class ItemDatabase {
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
