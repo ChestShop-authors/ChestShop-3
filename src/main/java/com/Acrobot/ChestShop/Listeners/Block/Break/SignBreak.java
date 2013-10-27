@@ -26,6 +26,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +59,12 @@ public class SignBreak implements Listener {
         Block attachedBlock = BlockUtil.getAttachedFace(sign);
 
         if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
+            List <MetadataValue> values = block.getMetadata(METADATA_NAME);
+
+            if (values.size() < 1) {
+                return;
+            }
+
             sendShopDestroyedEvent(sign, (Player) block.getMetadata(METADATA_NAME).get(0).value());
         }
     }
