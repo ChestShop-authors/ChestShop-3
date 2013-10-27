@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
+import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Security;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
@@ -102,6 +103,25 @@ public class LightweightChestProtection implements Listener {
 
         if (protection != null) {
             event.setProtected(true);
+        }
+    }
+
+    @EventHandler
+    public void onShopRemove(ShopDestroyedEvent event) {
+        Protection signProtection = lwc.findProtection(event.getSign().getBlock());
+
+        if (signProtection != null) {
+            signProtection.remove();
+        }
+
+        if (event.getChest() == null) {
+            return;
+        }
+
+        Protection chestProtection = lwc.findProtection(event.getChest().getBlock());
+
+        if (chestProtection != null) {
+            chestProtection.remove();
         }
     }
 }
