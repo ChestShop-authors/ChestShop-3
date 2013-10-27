@@ -53,11 +53,13 @@ public class Messages {
     public static String SHOP_CREATED = "Shop successfully created!";
     public static String SHOP_FEE_PAID = "You have been charged %amount";
     public static String SHOP_REFUNDED = "You have been refunded %amount.";
+    public static String ITEM_GIVEN = "Given %item to %player.";
 
     @PrecededBySpace
     public static String RESTRICTED_SIGN_CREATED = "Sign successfully created!";
 
     @PrecededBySpace
+    public static String PLAYER_NOT_FOUND = "Player not found!";
     public static String NO_PERMISSION = "You don't have permissions to do that!";
     public static String INCORRECT_ITEM_ID = "You have specified invalid item id!";
     public static String NOT_ENOUGH_PROTECTIONS = "Could not create a protection!";
