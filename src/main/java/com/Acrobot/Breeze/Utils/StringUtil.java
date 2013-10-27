@@ -41,4 +41,14 @@ public class StringUtil {
     public static String joinArray(String[] array) {
         return Joiner.on(' ').join(array);
     }
+
+    /**
+     * Joins an iterable
+     *
+     * @param array Iterable
+     * @return Joined iterable
+     */
+    public static String joinArray(Iterable<?> array) {
+        return Joiner.on(' ').join(array);
+    }
 }
