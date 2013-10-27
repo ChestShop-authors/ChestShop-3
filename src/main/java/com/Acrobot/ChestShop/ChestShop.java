@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Configuration.Configuration;
+import com.Acrobot.ChestShop.Commands.Give;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Configuration.Messages;
@@ -117,6 +118,7 @@ public class ChestShop extends JavaPlugin {
 
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("csVersion").setExecutor(new Version());
+        getCommand("csGive").setExecutor(new Give());
 
         startStatistics();
     }
