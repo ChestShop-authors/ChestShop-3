@@ -1,7 +1,9 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -18,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class EmptyShopDeleter implements Listener {
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void onTransaction(TransactionEvent event) {
         if (event.getTransactionType() != TransactionEvent.TransactionType.BUY) {
@@ -25,16 +28,19 @@ public class EmptyShopDeleter implements Listener {
         }
 
         Inventory ownerInventory = event.getOwnerInventory();
+        Sign sign = event.getSign();
+        Chest connectedChest = uBlock.findConnectedChest(sign);
 
         if (!shopShouldBeRemoved(ownerInventory, event.getStock())) {
             return;
         }
 
-        Sign sign = event.getSign();
+        ShopDestroyedEvent destroyedEvent = new ShopDestroyedEvent(null, event.getSign(), connectedChest);
+        ChestShop.callEvent(destroyedEvent);
+
         sign.getBlock().setType(Material.AIR);
 
         if (Properties.REMOVE_EMPTY_CHESTS && !ChestShopSign.isAdminShop(ownerInventory) && InventoryUtil.isEmpty(ownerInventory)) {
-            Chest connectedChest = uBlock.findConnectedChest(sign);
             connectedChest.getBlock().setType(Material.AIR);
         } else {
             ownerInventory.addItem(new ItemStack(Material.SIGN, 1));
