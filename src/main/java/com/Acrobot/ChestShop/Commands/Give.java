@@ -21,13 +21,17 @@ public class Give implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length < 1) {
+            return false;
+        }
+
         Player receiver = (sender instanceof Player ? (Player) sender : null);
         int quantity = 1;
 
         List<Integer> disregardedIndexes = new ArrayList<Integer>();
 
         if (args.length > 1) {
-            for (int index = args.length - 1; index > 0; ++index) {
+            for (int index = args.length - 1; index >= 0; --index) {
                 Player target = Bukkit.getPlayer(args[index]);
 
                 if (target == null) {
@@ -39,8 +43,8 @@ public class Give implements CommandExecutor {
                 break;
             }
 
-            for (int index = args.length - 1; index > 0; ++index) {
-                if (!NumberUtil.isInteger(args[index]) && Integer.parseInt(args[index]) > 0) {
+            for (int index = args.length - 1; index >= 0; --index) {
+                if (!NumberUtil.isInteger(args[index]) || Integer.parseInt(args[index]) < 0) {
                     continue;
                 }
 
@@ -58,7 +62,7 @@ public class Give implements CommandExecutor {
 
         ItemStack item = getItem(args, disregardedIndexes);
 
-        if (item == null) {
+        if (MaterialUtil.isEmpty(item)) {
             sender.sendMessage(Messages.prefix(Messages.INCORRECT_ITEM_ID));
             return true;
         }
@@ -68,7 +72,7 @@ public class Give implements CommandExecutor {
 
         sender.sendMessage(Messages.prefix(Messages.ITEM_GIVEN
                 .replace("%item", MaterialUtil.getName(item))
-                .replace("player", receiver.getName())));
+                .replace("%player", receiver.getName())));
 
         return true;
     }

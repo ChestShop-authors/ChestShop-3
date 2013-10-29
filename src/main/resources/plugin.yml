@@ -27,7 +27,7 @@ commands:
   csGive:
     aliases: [give]
     description: Gives an item to the appropriate player
-    usage: /<command> <item code> (player) (amount)
+    usage: /<command> <item code> (amount) (player)
     permission: ChestShop.admin
   csVersion:
     aliases: [chestshop]
