@@ -36,4 +36,13 @@ public class RowSet {
     public int size() {
         return rowList.size();
     }
+
+    /**
+     * Returns if the RowSet is empty
+     *
+     * @return Is the RowSet empty?
+     */
+    public boolean isEmpty() {
+        return size() == 0;
+    }
 }

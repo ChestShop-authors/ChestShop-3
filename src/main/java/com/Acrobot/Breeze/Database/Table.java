@@ -84,7 +84,7 @@ public class Table {
      */
     public Row getRow(String criteria) throws SQLException {
         RowSet rs = select(criteria);
-        return (rs.size() > 0 ? rs.get(0) : new Row());
+        return (!rs.isEmpty() ? rs.get(0) : new Row());
     }
 
     /**
