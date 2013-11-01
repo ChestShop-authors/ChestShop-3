@@ -25,6 +25,11 @@ public class PriceChecker implements Listener {
             part = new String[]{line};
         }
 
+        if (part[0].split(" ").length > 2) {
+            event.setOutcome(INVALID_PRICE);
+            return;
+        }
+
         if (isPrice(part[0])) {
             line = "B " + line;
         }
