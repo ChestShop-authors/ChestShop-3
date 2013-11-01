@@ -26,7 +26,7 @@ public class Give implements CommandExecutor {
             sender.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             return true;
         }
-        
+
         if (args.length < 1) {
             return false;
         }
