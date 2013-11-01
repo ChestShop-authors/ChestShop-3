@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
  */
 public class MaterialUtil {
     public static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
-    public static final Pattern ENCHANTMENT = Pattern.compile("-([0-9a-zA-Z])*");
     public static final Pattern METADATA = Pattern.compile("#([0-9a-zA-Z])*");
 
     public static final boolean LONG_NAME = true;
@@ -184,16 +183,6 @@ public class MaterialUtil {
 
         if (meta != null) {
             itemStack.setItemMeta(meta);
-        } else {
-            Map<org.bukkit.enchantments.Enchantment, Integer> enchantments = getEnchantments(itemName); //TODO - it's obsolete, left only for backward compatibility
-
-            if (enchantments != null) {
-                try {
-                    itemStack.addEnchantments(enchantments);
-                } catch (IllegalArgumentException exception) {
-                    //Do nothing, because the enchantment can't be applied
-                }
-            }
         }
 
         return itemStack;
@@ -224,23 +213,6 @@ public class MaterialUtil {
     }
 
     /**
-     * Returns enchantments from a string
-     *
-     * @param itemName Item name
-     * @return Enchantments found
-     */
-    public static Map<org.bukkit.enchantments.Enchantment, Integer> getEnchantments(String itemName) {
-        Matcher m = ENCHANTMENT.matcher(itemName);
-
-        if (!m.find()) {
-            return null;
-        }
-
-        String group = m.group().substring(1);
-        return Enchantment.getEnchantments(group);
-    }
-
-    /**
      * Returns metadata from a string
      *
      * @param itemName Item name
@@ -255,77 +227,6 @@ public class MaterialUtil {
 
         String group = m.group().substring(1);
         return Metadata.getFromCode(group);
-    }
-
-    public static class Enchantment {
-        /**
-         * Returns enchantments this itemName contains
-         *
-         * @param base32 The encoded enchantment
-         * @return Enchantments found
-         */
-        public static Map<org.bukkit.enchantments.Enchantment, Integer> getEnchantments(String base32) {
-            if (base32 == null || base32.isEmpty() || !NumberUtil.isEnchantment(base32)) {
-                return new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
-            }
-
-            StringBuilder number = new StringBuilder(Long.toString(Long.parseLong(base32, 32)));
-            Map<org.bukkit.enchantments.Enchantment, Integer> map = new HashMap<org.bukkit.enchantments.Enchantment, Integer>();
-
-            while (number.length() % 3 != 0) {
-                number.insert(0, '0');
-            }
-
-            for (int i = 0; i < number.length() / 3; i++) {
-                String item = number.substring(i * 3, i * 3 + 3);
-
-                org.bukkit.enchantments.Enchantment enchantment = org.bukkit.enchantments.Enchantment.getById(Integer.parseInt(item.substring(0, 2)));
-
-                if (enchantment == null) {
-                    continue;
-                }
-
-                int level = Integer.parseInt(item.substring(2));
-
-                if (level > enchantment.getMaxLevel() || level < enchantment.getStartLevel()) {
-                    continue;
-                }
-
-                map.put(enchantment, level);
-            }
-
-            return map;
-        }
-
-        /**
-         * Encodes enchantments
-         * They are being encoded in a string like XXL (XXLXXL), where L is the enchantment level and XX is the ID
-         * Then the string is being encoded in base-32 string
-         *
-         * @param enchantments Enchantments to encode
-         * @return Encoded enchantments
-         */
-        public static String encodeEnchantment(Map<org.bukkit.enchantments.Enchantment, Integer> enchantments) {
-            long number = 0;
-
-            for (Map.Entry<org.bukkit.enchantments.Enchantment, Integer> entry : enchantments.entrySet()) {
-                number = number * 1000 + (entry.getKey().getId()) * 10 + entry.getValue();
-            }
-
-            return number != 0 ? Long.toString(number, 32) : null;
-        }
-
-        /**
-         * Encodes enchantments
-         * They are being encoded in a string like XXL (XXLXXL), where L is the enchantment level and XX is the ID
-         * Then the string is being encoded in base-32 string
-         *
-         * @param item Item to encode
-         * @return Encoded enchantments
-         */
-        public static String encodeEnchantment(ItemStack item) {
-            return encodeEnchantment(item.getEnchantments());
-        }
     }
 
     public static class DataValue {
