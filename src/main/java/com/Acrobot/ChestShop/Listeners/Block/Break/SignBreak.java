@@ -61,7 +61,7 @@ public class SignBreak implements Listener {
         if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
             List <MetadataValue> values = block.getMetadata(METADATA_NAME);
 
-            if (values.size() < 1) {
+            if (values.isEmpty()) {
                 return;
             }
 
