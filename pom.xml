@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+            <url>http://repo.bukkit.org/content/repositories/releases/</url>
         </repository>
         <repository>
             <id>sk89q-repo</id>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.2-R1.0</version>
+            <version>1.6.4-R2.0</version>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
