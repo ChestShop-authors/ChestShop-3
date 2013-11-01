@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +22,11 @@ public class Give implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!Permission.has(sender, Permission.ADMIN)) {
+            sender.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+            return true;
+        }
+        
         if (args.length < 1) {
             return false;
         }

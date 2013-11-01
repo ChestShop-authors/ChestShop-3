@@ -28,7 +28,6 @@ commands:
     aliases: [give]
     description: Gives an item to the appropriate player
     usage: /<command> <item code> (amount) (player)
-    permission: ChestShop.admin
   csVersion:
     aliases: [chestshop]
     description: Shows the ChestShop's version

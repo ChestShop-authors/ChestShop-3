@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,25 +32,25 @@ public enum Permission {
         this.permission = permission;
     }
 
-    public static boolean has(Player player, Permission permission) {
-        return has(player, permission.permission);
+    public static boolean has(CommandSender sender, Permission permission) {
+        return has(sender, permission.permission);
     }
 
-    public static boolean has(Player player, String node) {
-        return player.hasPermission(node) || player.hasPermission(node.toLowerCase());
+    public static boolean has(CommandSender sender, String node) {
+        return sender.hasPermission(node) || sender.hasPermission(node.toLowerCase());
     }
 
-    public static boolean otherName(Player p, String name) {
-        if (has(p, Permission.ADMIN)) {
+    public static boolean otherName(Player player, String name) {
+        if (has(player, Permission.ADMIN)) {
             return false;
         }
 
         String node = OTHER_NAME + name;
-        return hasPermissionSet(p, node) || hasPermissionSet(p, node.toLowerCase());
+        return hasPermissionSet(player, node) || hasPermissionSet(player, node.toLowerCase());
     }
 
-    private static boolean hasPermissionSet(Player p, String perm) {
-        return p.isPermissionSet(perm) && p.hasPermission(perm);
+    private static boolean hasPermissionSet(CommandSender sender, String permission) {
+        return sender.isPermissionSet(permission) && sender.hasPermission(permission);
     }
 
     public String toString() {
