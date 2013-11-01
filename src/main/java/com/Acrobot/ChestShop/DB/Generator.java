@@ -65,14 +65,14 @@ public class Generator implements Runnable {
         }
     }
 
-    private static double generateItemTotal(int itemID, boolean bought, boolean sold) {
+    private static double generateItemTotal(Material item, boolean bought, boolean sold) {
         List<Transaction> list;
         ExpressionList<Transaction> checkIf = ChestShop.getDB().find(Transaction.class).where();
 
         if (bought || sold) {
-            list = checkIf.eq("buy", bought ? 1 : 0).eq("itemID", itemID).findList();
+            list = checkIf.eq("buy", bought ? 1 : 0).eq("itemID", item.getId()).findList();
         } else {
-            list = checkIf.eq("itemID", itemID).findList();
+            list = checkIf.eq("itemID", item.getId()).findList();
         }
 
         return countTransactionAmount(list);
@@ -88,21 +88,21 @@ public class Generator implements Runnable {
         return amount;
     }
 
-    private static double generateTotalBought(int itemID) {
-        return generateItemTotal(itemID, true, false);
+    private static double generateTotalBought(Material item) {
+        return generateItemTotal(item, true, false);
     }
 
-    private static double generateTotalSold(int itemID) {
-        return generateItemTotal(itemID, false, true);
+    private static double generateTotalSold(Material item) {
+        return generateItemTotal(item, false, true);
     }
 
-    private static double generateItemTotal(int itemID) {
-        return generateItemTotal(itemID, false, false);
+    private static double generateItemTotal(Material item) {
+        return generateItemTotal(item, false, false);
     }
 
-    private static float generateAveragePrice(int itemID) {
+    private static float generateAveragePrice(Material item) {
         float price = 0;
-        List<Transaction> prices = ChestShop.getDB().find(Transaction.class).where().eq("itemID", itemID).eq("buy", true).findList();
+        List<Transaction> prices = ChestShop.getDB().find(Transaction.class).where().eq("itemID", item.getId()).eq("buy", true).findList();
 
         for (Transaction t : prices) {
             price += t.getAveragePricePerItem();
@@ -112,24 +112,23 @@ public class Generator implements Runnable {
         return (!Float.isNaN(toReturn) ? toReturn : 0);
     }
 
-    private static float generateAverageBuyPrice(int itemID) {
-        return generateAveragePrice(itemID);
+    private static float generateAverageBuyPrice(Material item) {
+        return generateAveragePrice(item);
     }
 
-    private static void generateItemStats(int itemID) throws IOException {
-        double total = generateItemTotal(itemID);
+    private static void generateItemStats(Material material) throws IOException {
+        double total = generateItemTotal(material);
 
         if (total == 0) return;
 
-        double bought = generateTotalBought(itemID);
-        double sold = generateTotalSold(itemID);
+        double bought = generateTotalBought(material);
+        double sold = generateTotalSold(material);
 
-        Material material = Material.getMaterial(itemID);
         String matName = StringUtil.capitalizeFirstLetter(material.name(), '_');
 
         int maxStackSize = material.getMaxStackSize();
 
-        float buyPrice = generateAverageBuyPrice(itemID);
+        float buyPrice = generateAverageBuyPrice(material);
 
         buf.write(row.replace("%material", matName)
                 .replace("%total", String.valueOf(total))
@@ -153,7 +152,7 @@ public class Generator implements Runnable {
 
             long genTime = System.currentTimeMillis();
             for (Material m : Material.values()) {
-                generateItemStats(m.getId());
+                generateItemStats(m);
             }
 
             buf.close();
