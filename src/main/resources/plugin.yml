@@ -25,7 +25,6 @@ commands:
            /<command> §7log§f §2(what's the item ID of §7LOG§2?)
 
   csGive:
-    aliases: [give]
     description: Gives an item to the appropriate player
     usage: /<command> <item code> (amount) (player)
   csVersion:
