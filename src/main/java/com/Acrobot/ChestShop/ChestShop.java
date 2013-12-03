@@ -266,8 +266,8 @@ public class ChestShop extends JavaPlugin {
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
-    private void scheduleTask(Runnable runnable, long startTime, long repetetionTime) {
-        server.getScheduler().runTaskTimerAsynchronously(this, runnable, startTime, repetetionTime);
+    private void scheduleTask(Runnable runnable, long startTime, long repetitionTime) {
+        server.getScheduler().runTaskTimerAsynchronously(this, runnable, startTime, repetitionTime);
     }
 
     private void startStatistics() {
