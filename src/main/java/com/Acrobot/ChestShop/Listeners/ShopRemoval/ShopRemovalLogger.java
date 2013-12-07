@@ -18,6 +18,10 @@ public class ShopRemovalLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopRemoval(final ShopDestroyedEvent event) {
+        if (event.getDestroyer() != null) {
+            return;
+        }
+
         ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
             @Override public void run() {
                 String shopOwner = event.getSign().getLine(NAME_LINE);
