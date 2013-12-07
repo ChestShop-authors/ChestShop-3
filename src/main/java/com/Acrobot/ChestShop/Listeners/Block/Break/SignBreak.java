@@ -78,7 +78,7 @@ public class SignBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public static void onBrokenSign(BlockBreakEvent event) {
-        if (BlockUtil.isSign(event.getBlock()) && !event.isCancelled()) {
+        if (ChestShopSign.isValid(event.getBlock()) && !event.isCancelled()) {
             sendShopDestroyedEvent((Sign) event.getBlock().getState(), event.getPlayer());
         }
     }
