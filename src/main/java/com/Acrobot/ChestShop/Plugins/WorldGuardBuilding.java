@@ -37,7 +37,7 @@ public class WorldGuardBuilding implements Listener {
         ApplicableRegionSet regions = getApplicableRegions(event.getSign().getBlock().getLocation());
 
         if (Properties.WORLDGUARD_USE_FLAG) {
-            regions.allows(DefaultFlag.ENABLE_SHOP);
+            event.allow(regions.allows(DefaultFlag.ENABLE_SHOP));
         } else {
             event.allow(regions.size() != 0);
         }
