@@ -4,6 +4,8 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.BuildPermissionEvent;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.bukkit.BukkitPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.GlobalRegionManager;
@@ -28,10 +30,6 @@ public class WorldGuardBuilding implements Listener {
 
     public WorldGuardBuilding(WorldGuardPlugin plugin) {
         this.worldGuard = plugin;
-
-        if (Properties.WORLDGUARD_USE_FLAG) {
-            ChestShopFlag.injectHax();
-        }
     }
 
     @EventHandler
@@ -39,7 +37,7 @@ public class WorldGuardBuilding implements Listener {
         ApplicableRegionSet regions = getApplicableRegions(event.getSign().getBlock().getLocation());
 
         if (Properties.WORLDGUARD_USE_FLAG) {
-            event.allow(ChestShopFlag.setAllowsFlag(regions));
+            regions.allows(DefaultFlag.ENABLE_SHOP);
         } else {
             event.allow(regions.size() != 0);
         }
@@ -47,54 +45,5 @@ public class WorldGuardBuilding implements Listener {
 
     private ApplicableRegionSet getApplicableRegions(Location location) {
         return worldGuard.getGlobalRegionManager().get(location.getWorld()).getApplicableRegions(BukkitUtil.toVector(location));
-    }
-
-    public static class ChestShopFlag extends StateFlag {
-        public static ChestShopFlag flag = new ChestShopFlag();
-
-        public ChestShopFlag() {
-            super("chestshop", false);
-        }
-
-        public static boolean setAllowsFlag(ApplicableRegionSet set) {
-            return set.allows(flag);
-        }
-
-        private static List elements() {
-            List<Flag> elements = new ArrayList(Arrays.asList(DefaultFlag.getFlags()));
-            elements.add(flag);
-            return elements;
-        }
-
-        public static void injectHax() {
-            try {
-                Field field = DefaultFlag.class.getDeclaredField("flagsList");
-
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
-                modifiersField.setAccessible(true);
-                modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-                field.setAccessible(true);
-
-                List<Flag> elements = elements();
-
-                Flag<?> list[] = new Flag<?>[elements.size()];
-                for (int i = 0; i < elements.size(); i++) {
-                    list[i] = elements.get(i);
-                }
-
-                field.set(null, list);
-
-                Field grm = WorldGuardPlugin.class.getDeclaredField("globalRegionManager");
-                grm.setAccessible(true);
-                GlobalRegionManager globalRegionManager = (GlobalRegionManager) grm.get(ChestShop.getBukkitServer().getPluginManager().getPlugin("WorldGuard"));
-
-                globalRegionManager.preload();
-
-            } catch (Exception e) {
-                ChestShop.getBukkitLogger().severe("Oh noes! Something wrong happened! Be sure to paste that in your bug report:");
-                e.printStackTrace();
-            }
-        }
     }
 }
