@@ -1,12 +1,12 @@
 package com.Acrobot.Breeze.Utils;
 
-import org.bukkit.block.Block;
+import org.bukkit.block.*;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.material.Attachable;
+import org.bukkit.material.*;
 
 /**
  * @author Acrobot
@@ -30,6 +30,16 @@ public class BlockUtil {
      */
     public static boolean isChest(Block block) {
         return block.getState() instanceof Chest;
+    }
+
+    /**
+     * Checks if the InventoryHolder is a chest
+     *
+     * @param holder Inventory holder to check
+     * @return Is this holder a chest?
+     */
+    public static boolean isChest(InventoryHolder holder) {
+        return holder instanceof Chest || holder instanceof DoubleChest;
     }
 
     /**
