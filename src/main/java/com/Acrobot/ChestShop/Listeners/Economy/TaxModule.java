@@ -26,6 +26,10 @@ public class TaxModule implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public static void onCurrencyAdd(CurrencyAddEvent event) {
+        if (event.isAdded()) {
+            return;
+        }
+
         String target = event.getTarget();
 
         if (target.equals(Economy.getServerAccountName())) {
