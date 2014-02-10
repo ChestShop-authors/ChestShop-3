@@ -51,7 +51,7 @@ public class ItemChecker implements Listener {
         String[] parts = itemCode.split("(?=:|-|#)", 2);
         String data = (parts.length > 1 ? parts[1] : "");
 
-        if (!data.isEmpty() && code.length() > (MAXIMUM_SIGN_LETTERS - data.length())) {
+        if (code.length() > (MAXIMUM_SIGN_LETTERS - data.length())) {
             code = code.substring(0, MAXIMUM_SIGN_LETTERS - data.length());
         }
 
