@@ -2,7 +2,9 @@ package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,19 +21,38 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
  */
 public class ItemChecker implements Listener {
     private static final short MAXIMUM_SIGN_LETTERS = 15;
+    private static final String AUTOFILL_CODE = "?";
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String itemCode = event.getSignLine(ITEM_LINE);
         ItemStack item = MaterialUtil.getItem(itemCode);
 
-        if (item == null) {
-            event.setOutcome(INVALID_ITEM);
-            return;
-        }
-
         if (Odd.getFromString(itemCode) != null) {
             return; // The OddItem name is OK
+        }
+
+        if (item == null) {
+            boolean foundItem = false;
+
+            if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE) && uBlock.findConnectedChest(event.getSign()) != null) {
+                for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getBlockInventory().getContents()) {
+                    if (!MaterialUtil.isEmpty(stack)) {
+                        item = stack;
+                        itemCode = MaterialUtil.getSignName(stack);
+
+                        event.setSignLine(ITEM_LINE, itemCode);
+                        foundItem = true;
+
+                        break;
+                    }
+                }
+            }
+
+            if (!foundItem) {
+                event.setOutcome(INVALID_ITEM);
+                return;
+            }
         }
 
         String metadata = getMetadata(itemCode);

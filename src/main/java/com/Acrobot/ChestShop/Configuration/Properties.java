@@ -75,6 +75,9 @@ public class Properties {
     @ConfigurationComment("Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)")
     public static boolean ALLOW_PARTIAL_TRANSACTIONS = true;
 
+    @ConfigurationComment("Can '?' be put in place of item name in order for the sign to be auto-filled?")
+    public static boolean ALLOW_AUTO_ITEM_FILL = true;
+
     @PrecededBySpace
     @ConfigurationComment("Do you want to show \"Out of stock\" messages?")
     public static boolean SHOW_MESSAGE_OUT_OF_STOCK = true;
