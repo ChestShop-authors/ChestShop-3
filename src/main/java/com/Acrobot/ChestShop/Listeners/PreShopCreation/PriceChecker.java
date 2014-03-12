@@ -30,6 +30,11 @@ public class PriceChecker implements Listener {
             return;
         }
 
+        if (line.indexOf('B') != line.lastIndexOf('B') || line.indexOf('S') != line.lastIndexOf('S')) {
+            event.setOutcome(INVALID_PRICE);
+            return;
+        }
+
         if (isPrice(part[0])) {
             line = "B " + line;
         }
