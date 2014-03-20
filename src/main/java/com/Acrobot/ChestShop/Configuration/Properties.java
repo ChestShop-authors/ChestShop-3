@@ -10,6 +10,9 @@ public class Properties {
     @ConfigurationComment("(When not using Vault) Preferred economy plugin to use (iConomy/BOSEconomy/Essentials).")
     public static String PREFERRED_ECONOMY_PLUGIN = "";
 
+    @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
+    public static boolean TURN_OFF_UPDATES = false;
+
     @PrecededBySpace
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
     public static int SHOP_INTERACTION_INTERVAL = 250;
