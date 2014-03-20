@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.7.6</version>
+    <version>3.7.7</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -31,6 +31,10 @@
         <repository>
             <id>vault-repo</id>
             <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+        </repository>
+        <repository>
+            <id>gravity-repo</id>
+            <url>http://repo.gravitydevelopment.net</url>
         </repository>
         <repository>
             <id>local_repo</id>
@@ -116,6 +120,11 @@
             <artifactId>residence</artifactId>
             <version>2.6.6.3</version>
         </dependency>
+        <dependency>
+            <groupId>net.gravitydevelopment.updater</groupId>
+            <artifactId>updater</artifactId>
+            <version>2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -142,11 +151,16 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.mcstats.bukkit</include>
+                                    <include>net.gravitydevelopment.updater</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>org.mcstats</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.gravitydevelopment.updater</pattern>
                                     <shadedPattern>com.Acrobot.ChestShop</shadedPattern>
                                 </relocation>
                             </relocations>
