@@ -37,7 +37,7 @@ public class PriceUtil {
             if (NumberUtil.isDouble(part)) {
                 double price = Double.valueOf(part);
 
-                if (price <= 0) {
+                if (Double.isInfinite(price) || price <= 0) {
                     return NO_PRICE;
                 } else {
                     return price;
@@ -106,7 +106,7 @@ public class PriceUtil {
      * @return Is the string a valid price
      */
     public static boolean isPrice(String text) {
-        if (NumberUtil.isFloat(text)) {
+        if (NumberUtil.isDouble(text)) {
             return true;
         }
 
