@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "[Dependency installer]"
 read -p "What is your dependency's file name? " filename
