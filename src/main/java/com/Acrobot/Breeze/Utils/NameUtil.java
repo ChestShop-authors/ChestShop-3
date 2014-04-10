@@ -69,6 +69,14 @@ public class NameUtil {
         }
     }
 
+    public static String stripUsername(String username) {
+        if (username.length() > 15) {
+            return username.substring(0, 15);
+        }
+
+        return username;
+    }
+
     public static boolean isInvalid(UUID uuid) {
         return uuid.equals(INVALID_UUID);
     }

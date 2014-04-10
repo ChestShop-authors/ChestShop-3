@@ -2,6 +2,13 @@ package com.Acrobot.ChestShop.UUIDs;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Database.ConnectionManager;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,63 +17,89 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
+
+import static com.Acrobot.Breeze.Utils.NameUtil.*;
 
 /**
  * Lets you save/cache username and UUID relations
  * @author Andrzej Pomirski (Acrobot)
  */
 public class UUIDSaver {
-    private static FileConfiguration uuidStorage;
+    private static Dao<Account, String> accounts;
 
-    public static UUID getUUID(Player player) {
-        if (uuidStorage.getString(player.getUniqueId().toString()) == null) {
-            uuidStorage.set(player.getUniqueId().toString(), player.getPlayer());
+    public static UUID getUUID(String username) {
+        String shortenedName = NameUtil.stripUsername(username);
+
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().selectColumns("uuid").where().eq("shortName", shortenedName).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
 
-        return player.getUniqueId();
+        if (account == null) {
+            return null;
+        }
+
+        return account.getUuid();
     }
 
-    public static String getUsername(Player player) {
-        if (uuidStorage.getString(player.getUniqueId().toString()) != null) {
-            uuidStorage.set(player.getUniqueId().toString(), player.getName());
+    public static String getUsername(UUID uuid) {
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().selectColumns("name").where().eq("uuid", uuid).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
 
-        return uuidStorage.getString(player.getUniqueId().toString());
+        return account.getName();
     }
 
-    public static String getUsername(final UUID uuid) {
-        String username = uuidStorage.getString(uuid.toString());
+    public static void storeUsername(Player player) {
+        UUID uuid = player.getUniqueId();
 
-        if (username != null) {
-            return username;
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().selectColumns("name").where().eq("uuid", uuid).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                String name = NameUtil.getName(uuid);
+        if (account != null) {
+            return;
+        }
 
-                if (name != null) {
-                    uuidStorage.set(uuid.toString(), name);
-                }
-            }
-        });
+        account = new Account(player.getName(), player.getUniqueId());
 
-        return uuidStorage.getString(uuid.toString());
+        try {
+            accounts.create(account);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void load() {
-        File uuidStorageFile = ChestShop.loadFile("uuid.storage");
-        uuidStorage = YamlConfiguration.loadConfiguration(uuidStorageFile);
-    }
-
-    public static void save() {
-        File uuidStorageFile = ChestShop.loadFile("uuid.storage");
+        File databaseFile = ChestShop.loadFile("users.db");
+        String uri = ConnectionManager.getURI(databaseFile);
+        ConnectionSource connection;
 
         try {
-            uuidStorage.save(uuidStorageFile);
-        } catch (IOException e) {
+            connection = new JdbcConnectionSource(uri);
+            accounts = DaoManager.createDao(connection, Account.class);
+
+            TableUtils.createTable(connection, Account.class);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

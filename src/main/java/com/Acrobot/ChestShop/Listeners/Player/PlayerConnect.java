@@ -1,10 +1,13 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
+import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
@@ -24,5 +27,10 @@ public class PlayerConnect implements Listener {
 
             ChestShop.getBukkitLogger().severe(event.getAddress() + " tried to log in on Admin Shop's account!");
         }
+    }
+
+    @EventHandler
+    public static void onPlayerConnect(PlayerJoinEvent event) {
+        UUIDSaver.storeUsername(event.getPlayer());
     }
 }
