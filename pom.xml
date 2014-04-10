@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.7.8</version>
+    <version>3.7.9</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -18,7 +18,7 @@
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/repositories/releases/</url>
+            <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>sk89q-repo</id>
@@ -30,7 +30,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>gravity-repo</id>
@@ -51,9 +51,15 @@
         </dependency>
 
         <dependency>
+            <groupId>com.j256.ormlite</groupId>
+            <artifactId>ormlite-jdbc</artifactId>
+            <version>4.48</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.4-R2.0</version>
+            <version>1.7.5-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
@@ -152,6 +158,7 @@
                                 <includes>
                                     <include>org.mcstats.bukkit</include>
                                     <include>net.gravitydevelopment.updater</include>
+                                    <include>com.j256.ormlite</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -161,7 +168,11 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>net.gravitydevelopment.updater</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop</shadedPattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Updater</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.j256.ormlite</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.ORMlite</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
