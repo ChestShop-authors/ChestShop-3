@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import com.Acrobot.ChestShop.Utils.uName;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
@@ -14,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 /**
  * @author Acrobot
@@ -89,7 +92,7 @@ public class TransactionMessageSender implements Listener {
 
     private static void sendMessageToOwner(String message, TransactionEvent event) {
         String owner = event.getOwner().getName();
-        owner = uName.getName(owner);
+        owner = UUIDSaver.getFullUsername(owner);
 
         Player player = Bukkit.getPlayerExact(owner);
 

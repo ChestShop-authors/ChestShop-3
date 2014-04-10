@@ -64,6 +64,20 @@ public class UUIDSaver {
         return account.getName();
     }
 
+    public static String getFullUsername(String username) {
+        String shortName = NameUtil.stripUsername(username);
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().selectColumns("name").where().eq("shortName", shortName).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return account.getName();
+    }
+
     public static void storeUsername(Player player) {
         UUID uuid = player.getUniqueId();
 

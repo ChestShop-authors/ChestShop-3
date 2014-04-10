@@ -34,6 +34,7 @@ import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRemovalLogger;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import com.Acrobot.ChestShop.Utils.uName;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
@@ -87,6 +88,8 @@ public class ChestShop extends JavaPlugin {
 
         uName.file = loadFile("longName.storage");
         uName.load();
+
+        UUIDSaver.load();
 
         Methods.setPreferred(Properties.PREFERRED_ECONOMY_PLUGIN);
 
