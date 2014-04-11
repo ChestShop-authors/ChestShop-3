@@ -2,8 +2,6 @@ package com.Acrobot.ChestShop.Listeners.Item;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;

@@ -3,7 +3,6 @@ package com.Acrobot.Breeze.Utils;
 import com.Acrobot.Breeze.Utils.MojangAPI.NameFetcher;
 import com.Acrobot.Breeze.Utils.MojangAPI.UUIDFetcher;
 import com.google.common.collect.ImmutableMap;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
