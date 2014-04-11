@@ -9,24 +9,15 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.UUID;
-
-import static com.Acrobot.Breeze.Utils.NameUtil.*;
 
 /**
  * Lets you save/cache username and UUID relations
+ *
  * @author Andrzej Pomirski (Acrobot)
  */
 public class UUIDSaver {
