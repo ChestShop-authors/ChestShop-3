@@ -61,6 +61,10 @@ public class UUIDSaver {
             return null;
         }
 
+        if (account == null) {
+            return null;
+        }
+
         return account.getName();
     }
 
@@ -73,6 +77,10 @@ public class UUIDSaver {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+
+        if (account == null) {
+            return username;
         }
 
         return account.getName();
