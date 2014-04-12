@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -22,7 +23,9 @@ public class EconomicModule implements Listener {
             return;
         }
 
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getOwner().getName(), event.getSign().getWorld());
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()),
+                                                            UUIDSaver.getUsername(event.getOwner().getUniqueId()),
+                                                            event.getSign().getWorld());
         ChestShop.callEvent(currencyAddEvent);
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
@@ -35,7 +38,9 @@ public class EconomicModule implements Listener {
             return;
         }
 
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getOwner().getName(), event.getSign().getWorld());
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()),
+                                                                            UUIDSaver.getUsername(event.getOwner().getUniqueId()),
+                                                                            event.getSign().getWorld());
         ChestShop.callEvent(currencySubtractEvent);
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());

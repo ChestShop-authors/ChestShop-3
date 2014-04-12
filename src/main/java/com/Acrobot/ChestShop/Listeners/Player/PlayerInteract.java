@@ -116,7 +116,7 @@ public class PlayerInteract implements Listener {
         String material = sign.getLine(ITEM_LINE);
 
         String ownerName = UUIDSaver.getFullUsername(name);
-        OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerName);
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(UUIDSaver.getUUID(ownerName));
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));

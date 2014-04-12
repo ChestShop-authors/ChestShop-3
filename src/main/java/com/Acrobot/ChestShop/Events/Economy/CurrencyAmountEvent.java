@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -25,7 +26,7 @@ public class CurrencyAmountEvent extends Event {
     }
 
     public CurrencyAmountEvent(Player player) {
-        this(player.getName(), player.getWorld());
+        this(UUIDSaver.getUsername(player.getUniqueId()), player.getWorld());
     }
 
     /**
