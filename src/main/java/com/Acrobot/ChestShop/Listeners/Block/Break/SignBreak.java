@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedFace;
+import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
 import static com.Acrobot.ChestShop.Permission.MOD;
@@ -56,7 +56,7 @@ public class SignBreak implements Listener {
         }
 
         Sign sign = (Sign) block.getState();
-        Block attachedBlock = BlockUtil.getAttachedFace(sign);
+        Block attachedBlock = BlockUtil.getAttachedBlock(sign);
 
         if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
             List <MetadataValue> values = block.getMetadata(METADATA_NAME);
@@ -183,7 +183,7 @@ public class SignBreak implements Listener {
 
                 Sign sign = (Sign) relative.getState();
 
-                if (getAttachedFace(sign).equals(block)) {
+                if (getAttachedBlock(sign).equals(block)) {
                     attachedSigns.add(sign);
                 }
             }
