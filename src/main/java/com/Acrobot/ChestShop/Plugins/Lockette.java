@@ -1,7 +1,8 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
-import com.Acrobot.ChestShop.Utils.uName;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -25,7 +26,7 @@ public class Lockette implements Listener {
             return;
         }
 
-        String shortPlayerName = uName.stripName(player);
+        String shortPlayerName = NameUtil.stripUsername(NameManager.getUsername(player.getUniqueId()));
 
         if (!org.yi.acru.bukkit.Lockette.Lockette.isUser(block, shortPlayerName, true)) {
             event.setResult(Event.Result.DENY);

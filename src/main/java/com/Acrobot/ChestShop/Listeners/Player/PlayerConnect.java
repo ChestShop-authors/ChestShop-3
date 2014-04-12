@@ -3,7 +3,7 @@ package com.Acrobot.ChestShop.Listeners.Player;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -30,6 +30,6 @@ public class PlayerConnect implements Listener {
 
     @EventHandler
     public static void onPlayerConnect(PlayerJoinEvent event) {
-        UUIDSaver.storeUsername(event.getPlayer());
+        NameManager.storeUsername(event.getPlayer());
     }
 }

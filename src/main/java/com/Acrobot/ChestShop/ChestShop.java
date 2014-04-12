@@ -19,7 +19,10 @@ import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
-import com.Acrobot.ChestShop.Listeners.Player.*;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
+import com.Acrobot.ChestShop.Listeners.Player.PlayerTeleport;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.ShopCreationLogger;
@@ -34,8 +37,7 @@ import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRemovalLogger;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
-import com.Acrobot.ChestShop.Utils.uName;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import com.nijikokun.register.payment.forChestShop.Methods;
@@ -86,10 +88,7 @@ public class ChestShop extends JavaPlugin {
 
         itemDatabase = new ItemDatabase();
 
-        uName.file = loadFile("longName.storage");
-        uName.load();
-
-        UUIDSaver.load();
+        NameManager.load();
 
         Methods.setPreferred(Properties.PREFERRED_ECONOMY_PLUGIN);
 
@@ -196,7 +195,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ItemInfoListener());
 
         registerEvent(new RestrictedSign());
-        registerEvent(new ShortNameSaver());
 
         if (!Properties.TURN_OFF_HOPPER_PROTECTION) {
             registerEvent(new ItemMoveListener());

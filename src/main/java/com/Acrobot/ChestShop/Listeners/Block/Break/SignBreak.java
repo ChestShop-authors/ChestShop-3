@@ -38,7 +38,7 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
 import static com.Acrobot.ChestShop.Permission.MOD;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
-import static com.Acrobot.ChestShop.Utils.uName.canUseName;
+import static com.Acrobot.ChestShop.UUIDs.NameManager.canUseName;
 
 /**
  * @author Acrobot

@@ -6,7 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -64,7 +64,7 @@ public class Security {
     }
 
     private static boolean anotherShopFound(Block baseBlock, Block signBlock, Player player) {
-        String playerName = UUIDSaver.getUsername(player.getUniqueId());
+        String playerName = NameManager.getUsername(player.getUniqueId());
         String shortName = NameUtil.stripUsername(playerName);
 
         for (BlockFace face : SIGN_CONNECTION_FACES) {

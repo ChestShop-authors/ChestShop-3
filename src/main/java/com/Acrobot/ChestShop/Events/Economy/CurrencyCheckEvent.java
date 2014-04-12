@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -29,7 +29,7 @@ public class CurrencyCheckEvent extends Event {
     }
 
     public CurrencyCheckEvent(BigDecimal amount, Player player) {
-        this(amount, UUIDSaver.getUsername(player.getUniqueId()), player.getWorld());
+        this(amount, NameManager.getUsername(player.getUniqueId()), player.getWorld());
     }
 
     /**

@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.ConnectionManager;
+import com.Acrobot.ChestShop.Permission;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -20,7 +21,7 @@ import java.util.UUID;
  *
  * @author Andrzej Pomirski (Acrobot)
  */
-public class UUIDSaver {
+public class NameManager {
     private static Dao<Account, String> accounts;
 
     public static UUID getUUID(String username) {
@@ -100,6 +101,12 @@ public class UUIDSaver {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean canUseName(Player player, String name) {
+        String shortenedName = NameUtil.stripUsername(getUsername(player.getUniqueId()));
+
+        return shortenedName.equals(name) || Permission.otherName(player, name);
     }
 
     public static void load() {

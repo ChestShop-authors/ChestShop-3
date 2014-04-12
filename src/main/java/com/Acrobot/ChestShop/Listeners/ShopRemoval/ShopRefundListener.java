@@ -7,7 +7,7 @@ import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,7 +29,7 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        String owner = UUIDSaver.getFullUsername(event.getSign().getLine(NAME_LINE));
+        String owner = NameManager.getFullUsername(event.getSign().getLine(NAME_LINE));
 
         CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());
         ChestShop.callEvent(currencyEvent);

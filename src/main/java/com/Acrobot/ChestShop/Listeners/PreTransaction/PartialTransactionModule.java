@@ -8,7 +8,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,7 +61,7 @@ public class PartialTransactionModule implements Listener {
             event.setStock(getCountedItemStack(stock, amountAffordable));
         }
 
-        String seller = UUIDSaver.getUsername(event.getOwner().getUniqueId());
+        String seller = NameManager.getUsername(event.getOwner().getUniqueId());
 
         CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), seller, client.getWorld());
         ChestShop.callEvent(currencyHoldEvent);
@@ -94,7 +94,7 @@ public class PartialTransactionModule implements Listener {
         }
 
         Player client = event.getClient();
-        String ownerName = UUIDSaver.getUsername(event.getOwner().getUniqueId());
+        String ownerName = NameManager.getUsername(event.getOwner().getUniqueId());
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();

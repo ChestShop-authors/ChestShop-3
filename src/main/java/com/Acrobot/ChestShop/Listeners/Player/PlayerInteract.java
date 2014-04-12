@@ -10,7 +10,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -115,8 +115,8 @@ public class PlayerInteract implements Listener {
         String prices = sign.getLine(PRICE_LINE);
         String material = sign.getLine(ITEM_LINE);
 
-        String ownerName = UUIDSaver.getFullUsername(name);
-        OfflinePlayer owner = Bukkit.getOfflinePlayer(UUIDSaver.getUUID(ownerName));
+        String ownerName = NameManager.getFullUsername(name);
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(NameManager.getUUID(ownerName));
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));

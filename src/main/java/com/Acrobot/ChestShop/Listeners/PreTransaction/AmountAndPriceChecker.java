@@ -4,7 +4,7 @@ import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -53,7 +53,7 @@ public class AmountAndPriceChecker implements Listener {
         Inventory clientInventory = event.getClientInventory();
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(event.getPrice()),
-                                                        UUIDSaver.getUsername(event.getOwner().getUniqueId()),
+                                                        NameManager.getUsername(event.getOwner().getUniqueId()),
                                                         event.getSign().getWorld());
         ChestShop.callEvent(currencyCheckEvent);
 
