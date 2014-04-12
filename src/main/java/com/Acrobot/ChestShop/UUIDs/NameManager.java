@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.UUIDs;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.ConnectionManager;
 import com.Acrobot.ChestShop.Permission;
@@ -10,6 +11,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -119,6 +121,9 @@ public class NameManager {
             accounts = DaoManager.createDao(connection, Account.class);
 
             TableUtils.createTableIfNotExists(connection, Account.class);
+
+            Account adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            accounts.createIfNotExists(adminAccount);
         } catch (SQLException e) {
             e.printStackTrace();
         }
