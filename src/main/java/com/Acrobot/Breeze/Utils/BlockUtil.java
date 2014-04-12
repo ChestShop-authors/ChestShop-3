@@ -48,7 +48,7 @@ public class BlockUtil {
      * @param sign Sign which is attached
      * @return Block to which the sign is attached
      */
-    public static Block getAttachedFace(Sign sign) {
+    public static Block getAttachedBlock(Sign sign) {
         return sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace());
     }
 
