@@ -1,11 +1,12 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.Utils.uName;
+import com.Acrobot.ChestShop.UUIDs.UUIDSaver;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -30,20 +31,26 @@ public class Security {
         return canAccess(player, block, false);
     }
 
-    public static boolean canAccess(Player player, Block block, boolean ignoreDefault) {
-        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefault);
+    public static boolean canAccess(Player player, Block block, boolean ignoreDefaultProtection) {
+        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefaultProtection);
         ChestShop.callEvent(event);
 
         return event.getResult() != Event.Result.DENY;
     }
 
-    public static boolean canPlaceSign(Player p, Sign sign) {
-        return !anotherShopFound(BlockUtil.getAttachedFace(sign), sign.getBlock(), p) && canBePlaced(p, sign.getBlock());
+    public static boolean canPlaceSign(Player player, Sign sign) {
+        Block baseBlock = BlockUtil.getAttachedBlock(sign);
+
+        if (!Properties.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK && anotherShopFound(baseBlock, sign.getBlock(), player)) {
+            return false;
+        }
+
+        return canBePlaced(player, sign.getBlock());
     }
 
-    private static boolean canBePlaced(Player player, Block signBlock) {
+    private static boolean canBePlaced(Player player, Block sign) {
         for (BlockFace face : BLOCKS_AROUND) {
-            Block block = signBlock.getRelative(face);
+            Block block = sign.getRelative(face);
 
             if (!BlockUtil.isChest(block)) {
                 continue;
@@ -56,20 +63,26 @@ public class Security {
         return true;
     }
 
-    private static boolean anotherShopFound(Block baseBlock, Block signBlock, Player p) {
-        String shortName = uName.stripName(p.getName());
-        if (Properties.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK) return false;
+    private static boolean anotherShopFound(Block baseBlock, Block signBlock, Player player) {
+        String playerName = UUIDSaver.getUsername(player.getUniqueId());
+        String shortName = NameUtil.stripUsername(playerName);
 
-        for (BlockFace bf : SIGN_CONNECTION_FACES) {
-            Block block = baseBlock.getRelative(bf);
+        for (BlockFace face : SIGN_CONNECTION_FACES) {
+            Block block = baseBlock.getRelative(face);
 
-            if (!BlockUtil.isSign(block)) {
+            if (block.equals(signBlock) || !BlockUtil.isSign(block)) {
                 continue;
             }
 
-            Sign s = (Sign) block.getState();
-            if (ChestShopSign.isValid(s) && !block.equals(signBlock) && BlockUtil.getAttachedFace(s).equals(baseBlock) && !s.getLine(0).equals(shortName))
+            Sign sign = (Sign) block.getState();
+
+            if (!ChestShopSign.isValid(sign) || !BlockUtil.getAttachedBlock(sign).equals(baseBlock)) {
+                continue;
+            }
+
+            if (!sign.getLine(ChestShopSign.NAME_LINE).equals(shortName)) {
                 return true;
+            }
         }
         return false;
     }
