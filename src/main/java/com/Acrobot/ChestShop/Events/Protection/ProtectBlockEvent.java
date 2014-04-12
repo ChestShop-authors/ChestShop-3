@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Events.Protection;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,14 +12,14 @@ import org.bukkit.event.HandlerList;
 public class ProtectBlockEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    private Player player;
     private Block block;
-    private String name;
 
     boolean isProtected = false;
 
-    public ProtectBlockEvent(Block block, String name) {
+    public ProtectBlockEvent(Block block, Player player) {
         this.block = block;
-        this.name = name;
+        this.player = player;
     }
 
     public boolean isProtected() {
@@ -33,8 +34,8 @@ public class ProtectBlockEvent extends Event {
         return block;
     }
 
-    public String getName() {
-        return name;
+    public Player getPlayer() {
+        return player;
     }
 
     public HandlerList getHandlers() {

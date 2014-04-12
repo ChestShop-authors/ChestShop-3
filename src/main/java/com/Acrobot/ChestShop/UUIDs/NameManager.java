@@ -54,7 +54,7 @@ public class NameManager {
         }
 
         if (account == null) {
-            return null;
+            return "";
         }
 
         return account.getName();
@@ -118,7 +118,7 @@ public class NameManager {
             connection = new JdbcConnectionSource(uri);
             accounts = DaoManager.createDao(connection, Account.class);
 
-            TableUtils.createTable(connection, Account.class);
+            TableUtils.createTableIfNotExists(connection, Account.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

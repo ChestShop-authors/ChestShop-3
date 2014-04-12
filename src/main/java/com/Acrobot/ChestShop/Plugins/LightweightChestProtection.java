@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Security;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
@@ -36,12 +37,12 @@ public class LightweightChestProtection implements Listener {
         Chest connectedChest = event.getChest();
 
         if (Properties.PROTECT_SIGN_WITH_LWC) {
-            if (!Security.protect(player.getName(), sign.getBlock())) {
+            if (!Security.protect(player, sign.getBlock())) {
                 player.sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
             }
         }
 
-        if (Properties.PROTECT_CHEST_WITH_LWC && connectedChest != null && Security.protect(player.getName(), connectedChest.getBlock())) {
+        if (Properties.PROTECT_CHEST_WITH_LWC && connectedChest != null && Security.protect(player, connectedChest.getBlock())) {
             player.sendMessage(Messages.prefix(Messages.PROTECTED_SHOP));
         }
     }
@@ -73,7 +74,7 @@ public class LightweightChestProtection implements Listener {
         }
 
         Block block = event.getBlock();
-        Player player = Bukkit.getPlayerExact(event.getName());
+        Player player = event.getPlayer();
 
         if (player == null) {
             return;
@@ -99,7 +100,7 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
-        Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), Protection.Type.PRIVATE, worldName, event.getName(), "", x, y, z);
+        Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), Protection.Type.PRIVATE, worldName, player.getName(), "", x, y, z);
 
         if (protection != null) {
             event.setProtected(true);

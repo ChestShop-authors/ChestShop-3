@@ -15,6 +15,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 /**
  * @author Acrobot
  */
@@ -30,7 +32,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendBuyMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
-        String owner = event.getOwner().getName();
+        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
 
         Player player = event.getClient();
 
@@ -53,7 +55,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendSellMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
-        String owner = event.getOwner().getName();
+        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
 
         Player player = event.getClient();
 
@@ -88,10 +90,9 @@ public class TransactionMessageSender implements Listener {
     }
 
     private static void sendMessageToOwner(String message, TransactionEvent event) {
-        String owner = event.getOwner().getName();
-        owner = NameManager.getFullUsername(owner);
+        UUID owner = event.getOwner().getUniqueId();
 
-        Player player = Bukkit.getPlayerExact(owner);
+        Player player = Bukkit.getPlayer(owner);
 
         if (player != null) {
             player.sendMessage(message);

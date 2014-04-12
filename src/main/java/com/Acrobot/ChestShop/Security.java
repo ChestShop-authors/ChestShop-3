@@ -20,8 +20,8 @@ public class Security {
     private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.UP, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     private static final BlockFace[] BLOCKS_AROUND = {BlockFace.UP, BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
 
-    public static boolean protect(String playerName, Block block) {
-        ProtectBlockEvent event = new ProtectBlockEvent(block, playerName);
+    public static boolean protect(Player player, Block block) {
+        ProtectBlockEvent event = new ProtectBlockEvent(block, player);
         ChestShop.callEvent(event);
 
         return event.isProtected();

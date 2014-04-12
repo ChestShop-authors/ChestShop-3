@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -63,8 +64,8 @@ public class TransactionLogger implements Listener {
 
             transaction.setPrice((float) pricePerStack);
 
-            transaction.setShopOwner(event.getOwner().getName());
-            transaction.setShopUser(event.getClient().getName());
+            transaction.setShopOwner(NameManager.getUsername(event.getOwner().getUniqueId()));
+            transaction.setShopUser(NameManager.getUsername(event.getClient().getUniqueId()));
 
             transaction.setSec(System.currentTimeMillis() / 1000);
             transaction.setBuy(event.getTransactionType() == BUY);
