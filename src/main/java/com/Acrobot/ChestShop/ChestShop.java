@@ -86,6 +86,8 @@ public class ChestShop extends JavaPlugin {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
+        handleMigrations();
+
         itemDatabase = new ItemDatabase();
 
         NameManager.load();
@@ -125,6 +127,24 @@ public class ChestShop extends JavaPlugin {
 
         startStatistics();
         startUpdater();
+    }
+
+    private final int CURRENT_DATABASE_VERSION = 1;
+
+    private void handleMigrations() {
+        YamlConfiguration previousVersion = YamlConfiguration.loadConfiguration(loadFile("version"));
+
+        if (previousVersion.get("version") == null) {
+            previousVersion.set("version", CURRENT_DATABASE_VERSION);
+        }
+
+        int lastVersion = previousVersion.getInt("version");
+
+        switch(lastVersion){
+            case CURRENT_DATABASE_VERSION:
+            default:
+                //do nothing
+        }
     }
 
     public static File loadFile(String string) {
