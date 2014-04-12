@@ -101,7 +101,7 @@ public class RestrictedSign implements Listener {
 
             Sign sign = (Sign) relative.getState();
 
-            if (!BlockUtil.getAttachedFace(sign).equals(currentBlock)) {
+            if (!BlockUtil.getAttachedBlock(sign).equals(currentBlock)) {
                 continue;
             }
 

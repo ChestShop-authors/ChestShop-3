@@ -108,6 +108,6 @@ public class uBlock {
     }
 
     private static boolean signIsAttachedToBlock(Sign sign, Block block) {
-        return sign.getBlock().equals(block) || BlockUtil.getAttachedFace(sign).equals(block);
+        return sign.getBlock().equals(block) || BlockUtil.getAttachedBlock(sign).equals(block);
     }
 }
