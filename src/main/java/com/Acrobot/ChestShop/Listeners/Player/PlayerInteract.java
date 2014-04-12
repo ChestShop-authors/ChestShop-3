@@ -28,6 +28,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
@@ -116,7 +118,13 @@ public class PlayerInteract implements Listener {
         String material = sign.getLine(ITEM_LINE);
 
         String ownerName = NameManager.getFullUsername(name);
-        OfflinePlayer owner = Bukkit.getOfflinePlayer(NameManager.getUUID(ownerName));
+        UUID uuid = NameManager.getUUID(ownerName);
+
+        if (uuid == null) {
+            return null;
+        }
+
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
