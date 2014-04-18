@@ -42,6 +42,14 @@ import com.Acrobot.ChestShop.Updater.Updater;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
 import com.nijikokun.register.payment.forChestShop.Methods;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.filter.AbstractFilter;
+import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -86,6 +94,7 @@ public class ChestShop extends JavaPlugin {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
+        turnOffDatabaseLogging();
         handleMigrations();
 
         itemDatabase = new ItemDatabase();
@@ -129,6 +138,46 @@ public class ChestShop extends JavaPlugin {
         startUpdater();
     }
 
+    private void turnOffDatabaseLogging() {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        org.apache.logging.log4j.core.config.Configuration config = ctx.getConfiguration();
+        LoggerConfig loggerConfig = config.getLoggerConfig("");
+
+        loggerConfig.addFilter(new AbstractFilter() {
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, String msg, Object... params) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Object msg, Throwable t) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Message msg, Throwable t) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(LogEvent event) {
+                return filter(event.getLoggerName(), event.getLevel());
+            }
+
+            private Result filter(String classname, Level level) {
+                if (level.isAtLeastAsSpecificAs(Level.ERROR) && !classname.contains("SqliteDatabaseType")) {
+                    return Result.NEUTRAL;
+                }
+
+                if (classname.contains("SqliteDatabaseType") || classname.contains("TableUtils")) {
+                    return Result.DENY;
+                } else {
+                    return Result.NEUTRAL;
+                }
+            }
+        });
+    }
+
     private final int CURRENT_DATABASE_VERSION = 1;
 
     private void handleMigrations() {
@@ -140,7 +189,7 @@ public class ChestShop extends JavaPlugin {
 
         int lastVersion = previousVersion.getInt("version");
 
-        switch(lastVersion){
+        switch (lastVersion) {
             case CURRENT_DATABASE_VERSION:
             default:
                 //do nothing
