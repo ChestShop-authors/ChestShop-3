@@ -23,7 +23,6 @@ public class SignCreate implements Listener {
         String[] line = event.getLines();
 
         if (!BlockUtil.isSign(signBlock)) {
-            ChestShop.getBukkitLogger().severe("Player " + event.getPlayer().getName() + " tried to create a fake sign. Hacking?");
             return;
         }
 
