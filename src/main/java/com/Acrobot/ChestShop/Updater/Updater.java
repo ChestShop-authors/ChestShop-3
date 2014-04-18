@@ -466,7 +466,7 @@ public class Updater {
             if (title.split(delimiter).length == 2) {
                 final String remoteVersion = title.split(delimiter)[1].split(" ")[0]; // Get the newest file's version number
 
-                if (remoteVersion.split("-")[0].equals(localVersion) || this.hasTag(remoteVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
+                if (remoteVersion.split("-")[0].equals(localVersion) || this.hasTag(remoteVersion) || this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
                     // We already have the latest version, or this build is tagged for no-update
                     this.result = Updater.UpdateResult.NO_UPDATE;
                     return false;
