@@ -181,10 +181,17 @@ public class ChestShop extends JavaPlugin {
     private final int CURRENT_DATABASE_VERSION = 1;
 
     private void handleMigrations() {
-        YamlConfiguration previousVersion = YamlConfiguration.loadConfiguration(loadFile("version"));
+        File versionFile = loadFile("version");
+        YamlConfiguration previousVersion = YamlConfiguration.loadConfiguration(versionFile);
 
         if (previousVersion.get("version") == null) {
             previousVersion.set("version", CURRENT_DATABASE_VERSION);
+
+            try {
+                previousVersion.save(versionFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         int lastVersion = previousVersion.getInt("version");
