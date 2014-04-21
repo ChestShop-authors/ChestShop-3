@@ -36,7 +36,7 @@ public class ItemChecker implements Listener {
             boolean foundItem = false;
 
             if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE) && uBlock.findConnectedChest(event.getSign()) != null) {
-                for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getBlockInventory().getContents()) {
+                for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getInventory().getContents()) {
                     if (!MaterialUtil.isEmpty(stack)) {
                         item = stack;
                         itemCode = MaterialUtil.getSignName(stack);
