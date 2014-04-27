@@ -46,7 +46,13 @@ public class PartialTransactionModule implements Listener {
 
         BigDecimal walletMoney = currencyAmountEvent.getAmount();
 
-        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), client);
+        CurrencyCheckEvent currencyCheckEvent = null;
+        try {
+            currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), client);
+        }catch(NumberFormatException ex){
+            event.setCancelled(INVALID_SHOP);
+            return;
+        }
         ChestShop.callEvent(currencyCheckEvent);
 
         if (!currencyCheckEvent.hasEnough()) {
@@ -63,7 +69,13 @@ public class PartialTransactionModule implements Listener {
 
         String seller = NameManager.getUsername(event.getOwner().getUniqueId());
 
-        CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), seller, client.getWorld());
+        CurrencyHoldEvent currencyHoldEvent = null;
+        try {
+            currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), seller, client.getWorld());
+        }catch (NumberFormatException ex){
+            event.setCancelled(INVALID_SHOP);
+            return;
+        }
         ChestShop.callEvent(currencyHoldEvent);
 
         if (!currencyHoldEvent.canHold()) {
@@ -106,7 +118,13 @@ public class PartialTransactionModule implements Listener {
         BigDecimal walletMoney = currencyAmountEvent.getAmount();
 
         if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
-            CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), ownerName, client.getWorld());
+            CurrencyCheckEvent currencyCheckEvent = null;
+            try {
+                currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), ownerName, client.getWorld());
+            }catch (NumberFormatException ex){
+                event.setCancelled(INVALID_SHOP);
+                return;
+            }
             ChestShop.callEvent(currencyCheckEvent);
 
             if (!currencyCheckEvent.hasEnough()) {
@@ -124,7 +142,13 @@ public class PartialTransactionModule implements Listener {
 
         stock = event.getStock();
 
-        CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), client);
+        CurrencyHoldEvent currencyHoldEvent = null;
+        try {
+            currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), client);
+        }catch (NumberFormatException ex){
+            event.setCancelled(INVALID_SHOP);
+            return;
+        }
         ChestShop.callEvent(currencyHoldEvent);
 
         if (!currencyHoldEvent.canHold()) {
