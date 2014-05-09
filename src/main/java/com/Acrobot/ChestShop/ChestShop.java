@@ -133,6 +133,7 @@ public class ChestShop extends JavaPlugin {
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("csVersion").setExecutor(new Version());
         getCommand("csGive").setExecutor(new Give());
+        getCommand("cstoggle").setExecutor(new Toggle());
 
         startStatistics();
         startUpdater();
