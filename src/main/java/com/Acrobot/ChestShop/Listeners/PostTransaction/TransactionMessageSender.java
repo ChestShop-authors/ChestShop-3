@@ -38,7 +38,7 @@ public class TransactionMessageSender implements Listener {
 
         String price = Economy.formatBalance(event.getPrice());
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT && !Toggle.isIgnoringOthersMessages()) {
             String message = formatMessage(Messages.YOU_BOUGHT_FROM_SHOP, itemName, price);
             message = message.replace("%owner", owner);
 
@@ -61,7 +61,7 @@ public class TransactionMessageSender implements Listener {
 
         String price = Economy.formatBalance(event.getPrice());
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT && !Toggle.isIgnoringOthersMessages()) {
             String message = formatMessage(Messages.YOU_SOLD_TO_SHOP, itemName, price);
             message = message.replace("%buyer", owner);
 
@@ -94,7 +94,7 @@ public class TransactionMessageSender implements Listener {
 
         Player player = Bukkit.getPlayer(owner);
 
-        if (player != null) {
+        if (player != null && !Toggle.isIgnoringSelfMessages) {
             player.sendMessage(message);
         }
     }
