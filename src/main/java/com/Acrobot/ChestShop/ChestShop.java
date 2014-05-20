@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.Breeze.Configuration.Configuration;
 import com.Acrobot.ChestShop.Commands.Give;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
+import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -19,10 +20,7 @@ import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerConnect;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerInteract;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerInventory;
-import com.Acrobot.ChestShop.Listeners.Player.PlayerTeleport;
+import com.Acrobot.ChestShop.Listeners.Player.*;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.ShopCreationLogger;
@@ -133,6 +131,7 @@ public class ChestShop extends JavaPlugin {
         getCommand("iteminfo").setExecutor(new ItemInfo());
         getCommand("csVersion").setExecutor(new Version());
         getCommand("csGive").setExecutor(new Give());
+        getCommand("cstoggle").setExecutor(new Toggle());
 
         startStatistics();
         startUpdater();
@@ -240,6 +239,8 @@ public class ChestShop extends JavaPlugin {
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
 
+        Toggle.clearToggledPlayers();
+
         if (handler != null) {
             handler.close();
             getLogger().removeHandler(handler);
@@ -266,6 +267,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
+        registerEvent(new PlayerLeave());
         registerEvent(new PlayerTeleport());
 
         registerEvent(new ItemInfoListener());

@@ -31,6 +31,9 @@ commands:
     aliases: [chestshop]
     description: Shows the ChestShop's version
     usage: /<command>
+  cstoggle:
+    description: Toggle messages to the owner of a shop
+    usage: /<command>
 
 permissions:
   ChestShop.*:
@@ -67,6 +70,9 @@ permissions:
     description: Allows user to sell to a shop
   ChestShop.nofee:
     description: User doesn't have to pay the shop creation fee.
+  ChestShop.toggle:
+    description: Allows user to toggle messages.
+    default: true
   ChestShop.admin:
     description: Allows user to modify/destroy other stores and create an Admin Shops
     default: op
