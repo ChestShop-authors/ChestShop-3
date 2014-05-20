@@ -23,8 +23,12 @@ public class Toggle implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (Permission.has(player, Permission.NOTIFY_TOGGLE)) {
-                if (setIgnoring(player, !toggledPlayers.contains(player.getName()))) player.sendMessage(Messages.TOGGLE_MESSAGES_OFF);
-                else player.sendMessage(Messages.TOGGLE_MESSAGES_ON);
+                if (args.length == 0) {
+                    if (setIgnoring(player, !toggledPlayers.contains(player.getName()))) player.sendMessage(Messages.TOGGLE_MESSAGES_OFF);
+                    else player.sendMessage(Messages.TOGGLE_MESSAGES_ON);
+                } else {
+                    return false;
+                }
             } else {
                 player.sendMessage(Messages.ACCESS_DENIED);
             }
