@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
@@ -45,7 +46,7 @@ public class TransactionMessageSender implements Listener {
             player.sendMessage(message);
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwner())) {
             String message = formatMessage(Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, itemName, price);
             message = message.replace("%buyer", player.getName());
 
@@ -68,7 +69,7 @@ public class TransactionMessageSender implements Listener {
             player.sendMessage(message);
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwner())) {
             String message = formatMessage(Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, itemName, price);
             message = message.replace("%seller", player.getName());
 

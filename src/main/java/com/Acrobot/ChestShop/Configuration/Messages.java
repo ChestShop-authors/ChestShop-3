@@ -67,6 +67,10 @@ public class Messages {
     @PrecededBySpace
     public static String CANNOT_CREATE_SHOP_HERE = "You can't create shop here!";
 
+    @PrecededBySpace
+    public static String TOGGLE_MESSAGES_OFF = "You will no longer receive messages from your shop(s).";
+    public static String TOGGLE_MESSAGES_ON = "You will now receive messages from your shop(s)..";
+
     public static String prefix(String message) {
         return prefix + message;
     }

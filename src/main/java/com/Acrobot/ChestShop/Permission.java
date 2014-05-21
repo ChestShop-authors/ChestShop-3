@@ -24,7 +24,9 @@ public enum Permission {
     GROUP("ChestShop.group."),
 
     NOFEE("ChestShop.nofee"),
-    DISCOUNT("ChestShop.discount.");
+    DISCOUNT("ChestShop.discount."),
+
+    NOTIFY_TOGGLE("ChestShop.toggle");
 
     private final String permission;
 
