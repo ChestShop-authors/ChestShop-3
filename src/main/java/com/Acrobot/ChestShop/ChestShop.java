@@ -89,6 +89,12 @@ public class ChestShop extends JavaPlugin {
         description = getDescription();
         server = getServer();
 
+        if (server.getBukkitVersion().contains("1.7.2") || server.getBukkitVersion().contains("1.7.5")) {
+            for (int i = 0; i < 5; ++i) {
+                logger.log(java.util.logging.Level.SEVERE, "This version of plugin does not work with Minecraft 1.7.5 or lower!");
+            }
+        }
+
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
