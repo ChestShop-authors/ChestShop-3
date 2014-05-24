@@ -6,6 +6,12 @@
 
 package com.Acrobot.ChestShop.Updater;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,12 +20,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  * Check dev.bukkit.org to find updates for a given plugin, and download the updates if needed.
@@ -34,10 +34,7 @@ import org.json.simple.JSONValue;
  * <br>
  * If you are unsure about these rules, please read the plugin submission guidelines: http://goo.gl/8iU5l
  *
- * Modified to NOT download alpha/beta builds
- *
  * @author Gravity
- * @author Andrzej Pomirski (Acrobot)
  * @version 2.1
  */
 
@@ -466,17 +463,13 @@ public class Updater {
             if (title.split(delimiter).length == 2) {
                 final String remoteVersion = title.split(delimiter)[1].split(" ")[0]; // Get the newest file's version number
 
-                if (remoteVersion.split("-")[0].equals(localVersion) || this.hasTag(remoteVersion) || this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
+                if (this.hasTag(localVersion) || !this.shouldUpdate(localVersion, remoteVersion)) {
                     // We already have the latest version, or this build is tagged for no-update
                     this.result = Updater.UpdateResult.NO_UPDATE;
                     return false;
                 }
             } else {
-                // The file's name did not contain the string 'vVersion'
-                final String authorInfo = this.plugin.getDescription().getAuthors().size() == 0 ? "" : " (" + this.plugin.getDescription().getAuthors().get(0) + ")";
-                this.plugin.getLogger().warning("The author of this plugin" + authorInfo + " has misconfigured their Auto Update system");
-                this.plugin.getLogger().warning("File versions should follow the format 'PluginName vVERSION'");
-                this.plugin.getLogger().warning("Please notify the author of this error.");
+                // The file's name did not contain the string 'vVersion', which means it is not a proper plugin file
                 this.result = Updater.UpdateResult.FAIL_NOVERSION;
                 return false;
             }
@@ -512,6 +505,10 @@ public class Updater {
      * @return true if Updater should consider the remote version an update, false if not.
      */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
+        if (getLatestType() != ReleaseType.RELEASE) {
+            return false; //Do not download alphas or betas
+        }
+
         return !localVersion.equalsIgnoreCase(remoteVersion);
     }
 
