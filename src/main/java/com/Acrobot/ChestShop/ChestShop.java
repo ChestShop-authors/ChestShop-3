@@ -287,7 +287,17 @@ public class ChestShop extends JavaPlugin {
             return;
         }
 
-        new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
+        Updater updater = new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+
+        if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+            if (Bukkit.getBukkitVersion().contains("1.7.2") || Bukkit.getBukkitVersion().contains("1.7.5")) {
+                for (int i = 0; i < 3; ++i) {
+                    logger.warning("There is a new version of ChestShop available, however it is only compatible with Minecraft 1.7.8 and higher!");
+                }
+            } else {
+                new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+            }
+        }
     }
 
     /////////////////////   DATABASE    STUFF      ////////////////////////////////
