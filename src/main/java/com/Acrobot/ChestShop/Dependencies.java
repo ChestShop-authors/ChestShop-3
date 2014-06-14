@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Listeners.Economy.Plugins.RegisterListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -33,11 +32,6 @@ public class Dependencies {
     private static void loadEconomy() {
         String plugin = "Vault";
         Listener economy = VaultListener.initializeVault();
-
-        if (economy == null) {
-            plugin = "Register";
-            economy = RegisterListener.initializeRegister();
-        }
 
         if (economy == null) {
             return;
