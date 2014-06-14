@@ -60,7 +60,7 @@ public class VaultListener implements Listener {
             return;
         }
 
-        double balance = provider.getBalance(event.getAccount(), event.getWorld().getName());
+        double balance = provider.getBalance(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName());
 
         if (balance > Double.MAX_VALUE) {
             balance = Double.MAX_VALUE;
@@ -77,7 +77,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (provider.has(event.getAccount(), world.getName(), event.getDoubleAmount())) {
+        if (provider.has(Bukkit.getOfflinePlayer(event.getAccount()), world.getName(), event.getDoubleAmount())) {
             event.hasEnough(true);
         }
     }
@@ -90,7 +90,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (!provider.hasAccount(event.getAccount(), world.getName())) {
+        if (!provider.hasAccount(Bukkit.getOfflinePlayer(event.getAccount()), world.getName())) {
             event.hasAccount(false);
         }
     }
@@ -114,7 +114,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.depositPlayer(event.getTarget(), world.getName(), event.getDoubleAmount());
+        provider.depositPlayer(Bukkit.getOfflinePlayer(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -125,7 +125,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.withdrawPlayer(event.getTarget(), world.getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(Bukkit.getOfflinePlayer(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -147,22 +147,22 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount().isEmpty() || !transactionCanFail()) {
+        if (event.getAccount() == null || !transactionCanFail()) {
             return;
         }
 
-        if (!provider.hasAccount(event.getAccount(), event.getWorld().getName())) {
+        if (!provider.hasAccount(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName())) {
             event.canHold(false);
             return;
         }
 
-        EconomyResponse response = provider.depositPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
+        EconomyResponse response = provider.depositPlayer(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
 
         if (!response.transactionSuccess()) {
             event.canHold(false);
             return;
         }
 
-        provider.withdrawPlayer(event.getAccount(), event.getWorld().getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
     }
 }

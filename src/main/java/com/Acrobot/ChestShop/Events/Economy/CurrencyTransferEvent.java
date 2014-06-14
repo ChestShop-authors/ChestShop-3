@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Represents a transaction of goods between two entities
@@ -16,11 +17,11 @@ public class CurrencyTransferEvent extends Event {
 
     private BigDecimal amount;
     private World world;
-    private String sender;
-    private String receiver;
+    private UUID sender;
+    private UUID receiver;
     private boolean success;
 
-    public CurrencyTransferEvent(BigDecimal amount, String sender, String receiver, World world) {
+    public CurrencyTransferEvent(BigDecimal amount, UUID sender, UUID receiver, World world) {
         this.amount = amount;
         this.world = world;
 
@@ -28,7 +29,7 @@ public class CurrencyTransferEvent extends Event {
         this.receiver = receiver;
     }
 
-    public CurrencyTransferEvent(double amount, String sender, String receiver, World world) {
+    public CurrencyTransferEvent(double amount, UUID sender, UUID receiver, World world) {
         this(BigDecimal.valueOf(amount), sender, receiver, world);
     }
 
@@ -92,14 +93,14 @@ public class CurrencyTransferEvent extends Event {
     /**
      * @return Sender of the money
      */
-    public String getSender() {
+    public UUID getSender() {
         return sender;
     }
 
     /**
      * @return Receiver of the money
      */
-    public String getReceiver() {
+    public UUID getReceiver() {
         return receiver;
     }
 

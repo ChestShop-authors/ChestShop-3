@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * @author Acrobot
@@ -25,21 +26,21 @@ public class Economy {
         return !ChestShopSign.isAdminShop(inventory) || !getServerAccountName().isEmpty();
     }
 
-    public static boolean add(String name, World world, double amount) {
+    public static boolean add(UUID name, World world, double amount) {
         CurrencyAddEvent event = new CurrencyAddEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
         return true;
     }
 
-    public static boolean subtract(String name, World world, double amount) {
+    public static boolean subtract(UUID name, World world, double amount) {
         CurrencySubtractEvent event = new CurrencySubtractEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
         return true;
     }
 
-    public static boolean hasEnough(String name, World world, double amount) {
+    public static boolean hasEnough(UUID name, World world, double amount) {
         CurrencyCheckEvent event = new CurrencyCheckEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 

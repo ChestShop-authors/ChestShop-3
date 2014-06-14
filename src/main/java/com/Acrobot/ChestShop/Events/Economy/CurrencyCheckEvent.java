@@ -1,12 +1,12 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Represents a check for the existence of specified currency amount
@@ -19,17 +19,17 @@ public class CurrencyCheckEvent extends Event {
     boolean outcome;
 
     private BigDecimal amount;
-    private String account;
+    private UUID account;
     private World world;
 
-    public CurrencyCheckEvent(BigDecimal amount, String account, World world) {
+    public CurrencyCheckEvent(BigDecimal amount, UUID account, World world) {
         this.amount = amount;
         this.account = account;
         this.world = world;
     }
 
     public CurrencyCheckEvent(BigDecimal amount, Player player) {
-        this(amount, NameManager.getUsername(player.getUniqueId()), player.getWorld());
+        this(amount, player.getUniqueId(), player.getWorld());
     }
 
     /**
@@ -92,7 +92,7 @@ public class CurrencyCheckEvent extends Event {
     /**
      * @return Account that is checked
      */
-    public String getAccount() {
+    public UUID getAccount() {
         return account;
     }
 
@@ -101,7 +101,7 @@ public class CurrencyCheckEvent extends Event {
      *
      * @param account Account name
      */
-    public void setAccount(String account) {
+    public void setAccount(UUID account) {
         this.account = account;
     }
 

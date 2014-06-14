@@ -158,6 +158,10 @@ public class NameManager {
         return shortenedName.equals(name) || Permission.otherName(player, name);
     }
 
+    public static boolean isAdminShop(UUID uuid) {
+        return getUsername(uuid).equals(Properties.ADMIN_SHOP_NAME);
+    }
+
     public static void load() {
         File databaseFile = ChestShop.loadFile("users.db");
         String uri = ConnectionManager.getURI(databaseFile);

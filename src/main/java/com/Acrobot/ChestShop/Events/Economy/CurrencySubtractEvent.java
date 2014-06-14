@@ -1,12 +1,12 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Represents a subtraction of goods from entity
@@ -19,17 +19,17 @@ public class CurrencySubtractEvent extends Event {
     boolean subtracted;
 
     private BigDecimal amount;
-    private String target;
+    private UUID target;
     private World world;
 
-    public CurrencySubtractEvent(BigDecimal amount, String target, World world) {
+    public CurrencySubtractEvent(BigDecimal amount, UUID target, World world) {
         this.amount = amount;
         this.target = target;
         this.world = world;
     }
 
     public CurrencySubtractEvent(BigDecimal amount, Player target) {
-        this(amount, NameManager.getUsername(target.getUniqueId()), target.getWorld());
+        this(amount, target.getUniqueId(), target.getWorld());
     }
 
     /**
@@ -92,7 +92,7 @@ public class CurrencySubtractEvent extends Event {
     /**
      * @return Account from which the currency is subtracted
      */
-    public String getTarget() {
+    public UUID getTarget() {
         return target;
     }
 

@@ -4,6 +4,8 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.UUID;
+
 /**
  * Checks for the existence of an account
  *
@@ -14,15 +16,15 @@ public class AccountCheckEvent extends Event {
 
     boolean outcome;
 
-    private String account;
+    private UUID account;
     private World world;
 
-    public AccountCheckEvent(String account, World world) {
+    public AccountCheckEvent(UUID account, World world) {
         this.account = account;
         this.world = world;
     }
 
-    public AccountCheckEvent(String account) {
+    public AccountCheckEvent(UUID account) {
         this.account = account;
     }
 
@@ -45,7 +47,7 @@ public class AccountCheckEvent extends Event {
     /**
      * @return Account which is being checked
      */
-    public String getAccount() {
+    public UUID getAccount() {
         return account;
     }
 

@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
@@ -29,7 +30,7 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        String owner = NameManager.getFullUsername(event.getSign().getLine(NAME_LINE));
+        UUID owner = NameManager.getUUID(event.getSign().getLine(NAME_LINE));
 
         CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());
         ChestShop.callEvent(currencyEvent);

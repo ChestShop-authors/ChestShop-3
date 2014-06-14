@@ -39,7 +39,6 @@ import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
 import com.avaje.ebean.EbeanServer;
 import com.lennardf1989.bukkitex.Database;
-import com.nijikokun.register.payment.forChestShop.Methods;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -104,8 +103,6 @@ public class ChestShop extends JavaPlugin {
         itemDatabase = new ItemDatabase();
 
         NameManager.load();
-
-        Methods.setPreferred(Properties.PREFERRED_ECONOMY_PLUGIN);
 
         Dependencies.loadPlugins();
 

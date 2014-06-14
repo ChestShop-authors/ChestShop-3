@@ -1,12 +1,12 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Checks the amount of currency available
@@ -17,16 +17,16 @@ public class CurrencyAmountEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private BigDecimal amount = BigDecimal.ZERO;
-    private String account;
+    private UUID account;
     private World world;
 
-    public CurrencyAmountEvent(String account, World world) {
+    public CurrencyAmountEvent(UUID account, World world) {
         this.account = account;
         this.world = world;
     }
 
     public CurrencyAmountEvent(Player player) {
-        this(NameManager.getUsername(player.getUniqueId()), player.getWorld());
+        this(player.getUniqueId(), player.getWorld());
     }
 
     /**
@@ -73,7 +73,7 @@ public class CurrencyAmountEvent extends Event {
     /**
      * @return Account that is checked
      */
-    public String getAccount() {
+    public UUID getAccount() {
         return account;
     }
 

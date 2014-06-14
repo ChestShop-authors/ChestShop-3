@@ -8,7 +8,6 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.*;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
@@ -61,7 +61,7 @@ public class PartialTransactionModule implements Listener {
             event.setStock(getCountedItemStack(stock, amountAffordable));
         }
 
-        String seller = NameManager.getUsername(event.getOwner().getUniqueId());
+        UUID seller = event.getOwner().getUniqueId();
 
         CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(price), seller, client.getWorld());
         ChestShop.callEvent(currencyHoldEvent);
@@ -94,19 +94,19 @@ public class PartialTransactionModule implements Listener {
         }
 
         Player client = event.getClient();
-        String ownerName = NameManager.getUsername(event.getOwner().getUniqueId());
+        UUID owner = event.getOwner().getUniqueId();
         ItemStack[] stock = event.getStock();
 
         double price = event.getPrice();
         double pricePerItem = event.getPrice() / InventoryUtil.countItems(stock);
 
-        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(ownerName, client.getWorld());
+        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(owner, client.getWorld());
         ChestShop.callEvent(currencyAmountEvent);
 
         BigDecimal walletMoney = currencyAmountEvent.getAmount();
 
         if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
-            CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), ownerName, client.getWorld());
+            CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(price), owner, client.getWorld());
             ChestShop.callEvent(currencyCheckEvent);
 
             if (!currencyCheckEvent.hasEnough()) {
