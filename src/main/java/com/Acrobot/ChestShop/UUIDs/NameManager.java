@@ -50,7 +50,10 @@ public class NameManager {
         }
 
         if (account == null) {
-            return null;
+            UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
+            usernameToUUID.put(username, uuid);
+
+            return uuid;
         }
 
         UUID uuid = account.getUuid();
@@ -77,6 +80,13 @@ public class NameManager {
         }
 
         if (account == null) {
+            String name = Bukkit.getOfflinePlayer(uuid).getName();
+
+            if (name != null) {
+                usernameToUUID.put(name, uuid);
+                return name;
+            }
+
             return "";
         }
 
