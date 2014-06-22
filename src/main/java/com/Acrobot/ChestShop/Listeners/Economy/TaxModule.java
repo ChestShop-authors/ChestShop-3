@@ -47,7 +47,7 @@ public class TaxModule implements Listener {
         BigDecimal tax = getTax(event.getAmount(), taxAmount);
 
         if (!Economy.getServerAccountName().isEmpty()) {
-            CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(tax, Bukkit.getOfflinePlayer(Economy.getServerAccountName()).getUniqueId(), event.getWorld());
+            CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(tax, NameManager.getUUID(Economy.getServerAccountName()), event.getWorld());
             ChestShop.callEvent(currencyAddEvent);
         }
 

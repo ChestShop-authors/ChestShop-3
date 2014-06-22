@@ -30,7 +30,7 @@ public class ServerAccountCorrector implements Listener {
             event.setAdded(true);
             return;
         } else {
-            target = Bukkit.getOfflinePlayer(SERVER_ECONOMY_ACCOUNT).getUniqueId();
+            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
         }
 
         event.setAdded(true);
@@ -51,7 +51,7 @@ public class ServerAccountCorrector implements Listener {
             event.setSubtracted(true);
             return;
         } else {
-            target = Bukkit.getOfflinePlayer(SERVER_ECONOMY_ACCOUNT).getUniqueId();
+            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
         }
 
         event.setSubtracted(true);
@@ -72,7 +72,7 @@ public class ServerAccountCorrector implements Listener {
             event.hasEnough(true);
             return;
         } else {
-            target = Bukkit.getOfflinePlayer(SERVER_ECONOMY_ACCOUNT).getUniqueId();
+            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
         }
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getAmount(), target, event.getWorld());
@@ -105,7 +105,7 @@ public class ServerAccountCorrector implements Listener {
             event.setAmount(BigDecimal.valueOf(Double.MAX_VALUE));
             return;
         } else {
-            target = Bukkit.getOfflinePlayer(SERVER_ECONOMY_ACCOUNT).getUniqueId();
+            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
         }
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(target, event.getWorld());
