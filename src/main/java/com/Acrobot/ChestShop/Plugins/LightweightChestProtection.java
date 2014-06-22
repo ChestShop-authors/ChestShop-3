@@ -7,11 +7,9 @@ import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Security;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -115,7 +113,7 @@ public class LightweightChestProtection implements Listener {
             signProtection.remove();
         }
 
-        if (event.getChest() == null) {
+        if (event.getChest() == null || !Properties.REMOVE_LWC_PROTECTION_AUTOMATICALLY) {
             return;
         }
 

@@ -129,6 +129,9 @@ public class Properties {
     @ConfigurationComment("Do you want to protect shop signs with LWC?")
     public static boolean PROTECT_SIGN_WITH_LWC = false;
 
+    @ConfigurationComment("Should the chest's LWC protection be removed once the shop sign is destroyed? ")
+    public static boolean REMOVE_LWC_PROTECTION_AUTOMATICALLY = true;
+
     @PrecededBySpace
     @ConfigurationComment("If true, plugin will generate shop statistics webpage.")
     public static boolean GENERATE_STATISTICS_PAGE = false;
