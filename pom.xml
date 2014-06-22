@@ -73,21 +73,6 @@
             <version>1.4.1</version>
         </dependency>
         <dependency>
-            <groupId>com.iCo6</groupId>
-            <artifactId>iConomy6</artifactId>
-            <version>6.0.10b</version>
-        </dependency>
-        <dependency>
-            <groupId>com.iConomy</groupId>
-            <artifactId>iConomy5</artifactId>
-            <version>5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cosine.boseconomy</groupId>
-            <artifactId>boseconomy</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-        <dependency>
             <groupId>info.somethingodd</groupId>
             <artifactId>odditem</artifactId>
             <version>0.9.5</version>
