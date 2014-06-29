@@ -80,7 +80,7 @@
         <dependency>
             <groupId>com.herocraftonline.heroes</groupId>
             <artifactId>heroes</artifactId>
-            <version>1.5.2-dev-b1705</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>com.griefcraft.lwc</groupId>
@@ -108,9 +108,9 @@
             <version>1.7.9</version>
         </dependency>
         <dependency>
-            <groupId>com.bekvon.bukkit.residence</groupId>
+            <groupId>net.t00thpick1</groupId>
             <artifactId>residence</artifactId>
-            <version>2.6.6.3</version>
+            <version>3.0.0q-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

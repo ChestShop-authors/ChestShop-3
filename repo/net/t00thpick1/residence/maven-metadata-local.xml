@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-  <groupId>com.bekvon.bukkit.residence</groupId>
+  <groupId>net.t00thpick1</groupId>
   <artifactId>residence</artifactId>
   <versioning>
-    <release>2.6.6.3</release>
     <versions>
-      <version>2.6.6.3</version>
+      <version>3.0.0q-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20130308191747</lastUpdated>
+    <lastUpdated>20140629150451</lastUpdated>
   </versioning>
 </metadata>

@@ -1,8 +1,10 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
+import net.t00thpick1.residence.Residence;
+import net.t00thpick1.residence.api.ResidenceAPI;
+import net.t00thpick1.residence.api.areas.ResidenceArea;
+import net.t00thpick1.residence.api.flags.FlagManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,6 +13,7 @@ import org.bukkit.event.Listener;
 
 /**
  * @author TOOTHPlCK1
+ * @author Andrzej Pomirski
  */
 public class ResidenceChestProtection implements Listener {
 
@@ -22,10 +25,10 @@ public class ResidenceChestProtection implements Listener {
 
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        ClaimedResidence res = Residence.getResidenceManager().getByLoc(block.getLocation());
+        ResidenceArea area = ResidenceAPI.getResidenceManager().getByLocation(block.getLocation());
 
-        if (res != null) {
-            if (!res.getPermissions().playerHas(player.getName(), "container", false) && !Residence.isResAdminOn(player)) {
+        if (area != null) {
+            if (!area.allowAction(player.getName(), FlagManager.CONTAINER) && !Residence.getInstance().isAdminMode(player)) {
                 //Doesn't have permissions to that chest.
                 event.setResult(Event.Result.DENY);
             }
