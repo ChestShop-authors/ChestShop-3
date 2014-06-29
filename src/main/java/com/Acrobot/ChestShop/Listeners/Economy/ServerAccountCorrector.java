@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Listeners.Economy;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,7 +21,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyAdd(CurrencyAddEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || Bukkit.getOfflinePlayer(target).getName().equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
             return;
         }
 
@@ -43,7 +42,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencySubtract(CurrencySubtractEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || Bukkit.getOfflinePlayer(target).getName().equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
             return;
         }
 
@@ -64,7 +63,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyCheck(CurrencyCheckEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || Bukkit.getOfflinePlayer(target).getName().equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
             return;
         }
 
@@ -85,7 +84,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyHoldCheck(CurrencyHoldEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || Bukkit.getOfflinePlayer(target).getName().equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
             return;
         }
 
@@ -97,7 +96,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onBalanceCheck(CurrencyAmountEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || Bukkit.getOfflinePlayer(target).getName().equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
             return;
         }
 
