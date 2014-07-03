@@ -162,6 +162,20 @@ public class NameManager {
         });
     }
 
+    public static void dropUsername(final Player player) {
+        final UUID uuid = player.getUniqueId();
+
+        if (usernameToUUID.containsValue(uuid)) {
+            usernameToUUID.inverse().remove(uuid);
+        }
+
+        String shortName = NameUtil.stripUsername(player.getName());
+
+        if (shortToLongName.containsKey(shortName)) {
+            shortToLongName.remove(shortName);
+        }
+    }
+
     public static boolean canUseName(Player player, String name) {
         String shortenedName = NameUtil.stripUsername(getUsername(player.getUniqueId()));
 

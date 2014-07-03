@@ -505,7 +505,7 @@ public class Updater {
      * @return true if Updater should consider the remote version an update, false if not.
      */
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
-        if (getLatestType() != ReleaseType.RELEASE) {
+        if (localVersion.contains("DEV") || getLatestType() != ReleaseType.RELEASE) {
             return false; //Do not download alphas or betas
         }
 

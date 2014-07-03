@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.ChestShop.Commands.Toggle;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -15,6 +16,8 @@ public class PlayerLeave implements Listener {
         if (Toggle.isIgnoring(event.getPlayer())) {
             Toggle.setIgnoring(event.getPlayer(), false);
         }
+
+        NameManager.dropUsername(event.getPlayer());
     }
 
 }
