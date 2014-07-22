@@ -59,7 +59,7 @@ public class NameManager {
         UUID uuid = account.getUuid();
 
         if (uuid != null) {
-            usernameToUUID.put(username, uuid);
+            usernameToUUID.put(account.getName(), uuid);
         }
 
         return uuid;
