@@ -154,7 +154,7 @@ public class NameManager {
                 account = new Account(player.getName(), player.getUniqueId());
 
                 try {
-                    accounts.create(account);
+                    accounts.createOrUpdate(account);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -198,7 +198,7 @@ public class NameManager {
             TableUtils.createTableIfNotExists(connection, Account.class);
 
             Account adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
-            accounts.createIfNotExists(adminAccount);
+            accounts.createOrUpdate(adminAccount);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -7,9 +7,6 @@ import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
  * @author Acrobot
  */
 public class Properties {
-    @ConfigurationComment("(When not using Vault) Preferred economy plugin to use (iConomy/BOSEconomy/Essentials).")
-    public static String PREFERRED_ECONOMY_PLUGIN = "";
-
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = false;
 
