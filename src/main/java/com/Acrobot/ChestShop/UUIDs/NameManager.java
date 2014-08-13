@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.ConnectionManager;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.j256.ormlite.dao.Dao;
@@ -100,6 +101,10 @@ public class NameManager {
     }
 
     public static String getFullUsername(String username) {
+        if (ChestShopSign.isAdminShop(username)) {
+            return Properties.ADMIN_SHOP_NAME;
+        }
+
         String shortName = NameUtil.stripUsername(username);
 
         if (shortToLongName.containsKey(shortName)) {
