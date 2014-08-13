@@ -53,7 +53,9 @@ public class ErrorMessageSender implements Listener {
                 message = Messages.NOT_ENOUGH_ITEMS_TO_SELL;
                 break;
             case NOT_ENOUGH_STOCK_IN_CHEST:
-                String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP).replace("%material", getItemNames(event.getStock()));
+                String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP)
+                        .replace("%material", getItemNames(event.getStock()))
+                        .replace("%buyer", event.getClient().getName());
                 sendMessageToOwner(event.getOwner(), messageOutOfStock);
                 message = Messages.NOT_ENOUGH_STOCK;
                 break;
