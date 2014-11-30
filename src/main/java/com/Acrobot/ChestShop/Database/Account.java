@@ -13,13 +13,13 @@ import java.util.UUID;
 @DatabaseTable(tableName = "accounts")
 public class Account {
 
-    @DatabaseField(id = true)
+    @DatabaseField(id = true, canBeNull = false)
     private String name;
 
-    @DatabaseField(index = true)
+    @DatabaseField(index = true, canBeNull = false)
     private String shortName;
 
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private UUID uuid;
 
     public Account() {
