@@ -1,16 +1,16 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
-import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
-import com.Acrobot.ChestShop.Events.TransactionEvent;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
+import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
 
 import java.math.BigDecimal;
 
-import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
-import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+
+import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 
 /**
  * @author Acrobot
@@ -21,14 +21,14 @@ public class EconomicModule implements Listener {
         if (event.getTransactionType() != BUY) {
             return;
         }
+        
+        CurrencyTransferEvent currencyTransferEvent = new CurrencyTransferEvent(BigDecimal.valueOf(event.getPrice()), 
+        														event.getClient().getUniqueId(), 
+        														event.getOwner().getUniqueId(), 
+        														event.getSign().getWorld());
 
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()),
-                                                            event.getOwner().getUniqueId(),
-                                                            event.getSign().getWorld());
-        ChestShop.callEvent(currencyAddEvent);
-
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
-        ChestShop.callEvent(currencySubtractEvent);
+        ChestShop.callEvent(currencyTransferEvent);
+       
     }
 
     @EventHandler
@@ -36,13 +36,12 @@ public class EconomicModule implements Listener {
         if (event.getTransactionType() != SELL) {
             return;
         }
+        
+        CurrencyTransferEvent currencyTransferEvent = new CurrencyTransferEvent(BigDecimal.valueOf(event.getPrice()), 
+        														event.getOwner().getUniqueId(),
+        														event.getClient().getUniqueId(), 
+																event.getSign().getWorld());
 
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()),
-                                                                            event.getOwner().getUniqueId(),
-                                                                            event.getSign().getWorld());
-        ChestShop.callEvent(currencySubtractEvent);
-
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
-        ChestShop.callEvent(currencyAddEvent);
+        ChestShop.callEvent(currencyTransferEvent);
     }
 }
