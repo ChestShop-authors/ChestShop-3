@@ -19,7 +19,7 @@ import java.util.UUID;
 public class TaxModule implements Listener {
 
     private static BigDecimal getTax(BigDecimal price, float taxAmount) {
-        return price.multiply(BigDecimal.valueOf(taxAmount).divide(BigDecimal.valueOf(100)));
+        return price.multiply(BigDecimal.valueOf(taxAmount).divide(BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN));
     }
 
     private static boolean isServerAccount(UUID name) {
