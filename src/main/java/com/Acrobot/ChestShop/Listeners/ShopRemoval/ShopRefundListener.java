@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -35,6 +36,14 @@ public class ShopRefundListener implements Listener {
 
         CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());
         ChestShop.callEvent(currencyEvent);
+
+        if (!Economy.getServerAccountName().isEmpty()) {
+            CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(
+                    BigDecimal.valueOf(refundPrice),
+                    NameManager.getUUID(Economy.getServerAccountName()),
+                    event.getSign().getWorld());
+            ChestShop.callEvent(currencySubtractEvent);
+        }
 
         String message = Messages.SHOP_REFUNDED.replace("%amount", Economy.formatBalance(refundPrice));
         event.getDestroyer().sendMessage(Messages.prefix(message));
