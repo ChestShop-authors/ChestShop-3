@@ -123,7 +123,10 @@ public class MaterialUtil {
     public static String getSignName(ItemStack itemStack) {
         StringBuilder name = new StringBuilder(15);
 
-        name.append(itemStack.getType().name());
+        String itemName = itemStack.getType().name();
+        itemName = StringUtil.capitalizeFirstLetter(itemName, '_');
+
+        name.append(itemName);
 
         if (itemStack.getDurability() != 0) {
             name.append(':').append(itemStack.getDurability());
@@ -133,7 +136,7 @@ public class MaterialUtil {
             name.append('#').append(Metadata.getItemCode(itemStack));
         }
 
-        return StringUtil.capitalizeFirstLetter(name.toString(), '_');
+        return name.toString();
     }
 
     /**
