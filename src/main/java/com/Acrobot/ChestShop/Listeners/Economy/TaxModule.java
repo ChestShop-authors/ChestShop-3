@@ -5,7 +5,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,7 +33,7 @@ public class TaxModule implements Listener {
 
         UUID target = event.getTarget();
 
-        if (Bukkit.getOfflinePlayer(target).getName().equals(Economy.getServerAccountName())) {
+        if (NameManager.getUsername(target).equals(Economy.getServerAccountName())) {
             return;
         }
 

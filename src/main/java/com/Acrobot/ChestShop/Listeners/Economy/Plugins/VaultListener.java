@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.*;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -60,7 +61,7 @@ public class VaultListener implements Listener {
             return;
         }
 
-        double balance = provider.getBalance(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName());
+        double balance = provider.getBalance(NameManager.getUsername(event.getAccount()), event.getWorld().getName());
 
         if (balance > Double.MAX_VALUE) {
             balance = Double.MAX_VALUE;
@@ -77,7 +78,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (provider.has(Bukkit.getOfflinePlayer(event.getAccount()), world.getName(), event.getDoubleAmount())) {
+        if (provider.has(NameManager.getUsername(event.getAccount()), world.getName(), event.getDoubleAmount())) {
             event.hasEnough(true);
         }
     }
@@ -90,7 +91,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (!provider.hasAccount(Bukkit.getOfflinePlayer(event.getAccount()), world.getName())) {
+        if (!provider.hasAccount(NameManager.getUsername(event.getAccount()), world.getName())) {
             event.hasAccount(false);
         }
     }
@@ -114,7 +115,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.depositPlayer(Bukkit.getOfflinePlayer(event.getTarget()), world.getName(), event.getDoubleAmount());
+        provider.depositPlayer(NameManager.getUsername(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -125,7 +126,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.withdrawPlayer(Bukkit.getOfflinePlayer(event.getTarget()), world.getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(NameManager.getUsername(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -151,18 +152,18 @@ public class VaultListener implements Listener {
             return;
         }
 
-        if (!provider.hasAccount(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName())) {
+        if (!provider.hasAccount(NameManager.getUsername(event.getAccount()), event.getWorld().getName())) {
             event.canHold(false);
             return;
         }
 
-        EconomyResponse response = provider.depositPlayer(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        EconomyResponse response = provider.depositPlayer(NameManager.getUsername(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
 
         if (!response.transactionSuccess()) {
             event.canHold(false);
             return;
         }
 
-        provider.withdrawPlayer(Bukkit.getOfflinePlayer(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(NameManager.getUsername(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
     }
 }
