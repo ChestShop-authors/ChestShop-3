@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.7.19</version>
+    <version>3.8.0</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.4.1</version>
+            <version>1.5.2</version>
         </dependency>
         <dependency>
             <groupId>info.somethingodd</groupId>
