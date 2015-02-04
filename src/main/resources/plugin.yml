@@ -11,10 +11,10 @@ dev-url: http://dev.bukkit.org/server-mods/chestshop/
 author: Acrobot
 description: >
              A chest shop for economy plugins.
- 
- 
-softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Vault, Heroes,
-                SimpleChestLock, Residence]
+
+depend: [Vault]
+softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence]
+
 commands:
   iteminfo:
     aliases: [iinfo]
