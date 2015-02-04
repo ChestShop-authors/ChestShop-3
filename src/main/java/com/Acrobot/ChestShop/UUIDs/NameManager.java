@@ -59,7 +59,7 @@ public class NameManager {
 
         UUID uuid = account.getUuid();
 
-        if (uuid != null) {
+        if (uuid != null && !usernameToUUID.containsValue(uuid)) {
             usernameToUUID.put(account.getName(), uuid);
         }
 
@@ -184,7 +184,7 @@ public class NameManager {
     public static boolean canUseName(Player player, String name) {
         String shortenedName = NameUtil.stripUsername(getUsername(player.getUniqueId()));
 
-        return shortenedName.equals(name) || Permission.otherName(player, name);
+        return shortenedName.equals(name) || Permission.otherName(player, name) || player.getUniqueId().equals(getUUID(name));
     }
 
     public static boolean isAdminShop(UUID uuid) {
