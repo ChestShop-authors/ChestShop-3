@@ -146,17 +146,17 @@ public class NameManager {
                 Account account = null;
 
                 try {
-                    account = accounts.queryBuilder().selectColumns("name").where().eq("uuid", uuid).queryForFirst();
+                    account = accounts.queryBuilder().selectColumns(new String[]{"name", "uuid"}).where().eq("uuid", uuid).queryForFirst();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     return;
                 }
 
                 if (account != null) {
-                    return;
+                    account.setName(player.getName());
+                } else {
+                    account = new Account(player.getName(), player.getUniqueId());
                 }
-
-                account = new Account(player.getName(), player.getUniqueId());
 
                 try {
                     accounts.createOrUpdate(account);
