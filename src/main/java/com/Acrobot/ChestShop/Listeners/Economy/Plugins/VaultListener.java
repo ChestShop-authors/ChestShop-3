@@ -61,7 +61,7 @@ public class VaultListener implements Listener {
             return;
         }
 
-        double balance = provider.getBalance(NameManager.getUsername(event.getAccount()), event.getWorld().getName());
+        double balance = provider.getBalance(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName());
 
         if (balance > Double.MAX_VALUE) {
             balance = Double.MAX_VALUE;
@@ -78,7 +78,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (provider.has(NameManager.getUsername(event.getAccount()), world.getName(), event.getDoubleAmount())) {
+        if (provider.has(NameManager.getLastSeenName(event.getAccount()), world.getName(), event.getDoubleAmount())) {
             event.hasEnough(true);
         }
     }
@@ -91,7 +91,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        if (!provider.hasAccount(NameManager.getUsername(event.getAccount()), world.getName())) {
+        if (!provider.hasAccount(NameManager.getLastSeenName(event.getAccount()), world.getName())) {
             event.hasAccount(false);
         }
     }
@@ -115,7 +115,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.depositPlayer(NameManager.getUsername(event.getTarget()), world.getName(), event.getDoubleAmount());
+        provider.depositPlayer(NameManager.getLastSeenName(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -126,7 +126,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
 
-        provider.withdrawPlayer(NameManager.getUsername(event.getTarget()), world.getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(NameManager.getLastSeenName(event.getTarget()), world.getName(), event.getDoubleAmount());
     }
 
     @EventHandler
@@ -152,18 +152,18 @@ public class VaultListener implements Listener {
             return;
         }
 
-        if (!provider.hasAccount(NameManager.getUsername(event.getAccount()), event.getWorld().getName())) {
+        if (!provider.hasAccount(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName())) {
             event.canHold(false);
             return;
         }
 
-        EconomyResponse response = provider.depositPlayer(NameManager.getUsername(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        EconomyResponse response = provider.depositPlayer(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
 
         if (!response.transactionSuccess()) {
             event.canHold(false);
             return;
         }
 
-        provider.withdrawPlayer(NameManager.getUsername(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
     }
 }

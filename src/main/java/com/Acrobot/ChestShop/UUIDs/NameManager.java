@@ -31,8 +31,36 @@ import java.util.UUID;
 public class NameManager {
     private static Dao<Account, String> accounts;
 
+    private static Map<UUID, String> lastSeenName = new HashMap<UUID, String>();
     private static BiMap<String, UUID> usernameToUUID = HashBiMap.create();
     private static Map<String, String> shortToLongName = new HashMap<String, String>();
+
+    public static String getLastSeenName(UUID uuid) {
+        if (lastSeenName.containsKey(uuid)) {
+            return lastSeenName.get(uuid);
+        }
+
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().selectColumns("lastSeenName", "name").where().eq("uuid", uuid).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (account == null) {
+            return "";
+        }
+
+        if (account.getLastSeenName() != null) {
+            lastSeenName.put(uuid, account.getLastSeenName());
+        } else if (account.getName() != null) {
+            lastSeenName.put(uuid, account.getName());
+        }
+
+        return account.getLastSeenName();
+    }
 
     public static UUID getUUID(String username) {
         if (usernameToUUID.containsKey(username)) {
@@ -51,10 +79,7 @@ public class NameManager {
         }
 
         if (account == null) {
-            UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
-            usernameToUUID.put(username, uuid);
-
-            return uuid;
+            return Bukkit.getOfflinePlayer(username).getUniqueId();
         }
 
         UUID uuid = account.getUuid();
@@ -136,35 +161,40 @@ public class NameManager {
     public static void storeUsername(final Player player) {
         final UUID uuid = player.getUniqueId();
 
+        Account account = null;
+
+        try {
+            account = accounts.queryBuilder().where().eq("uuid", uuid).queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (account != null) {
+            account.setLastSeenName(player.getName());
+
+            try {
+                accounts.createOrUpdate(account);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
+        account = new Account(player.getName(), player.getUniqueId());
+
         if (!usernameToUUID.inverse().containsKey(uuid)) {
             usernameToUUID.inverse().put(uuid, player.getName());
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                Account account = null;
+        lastSeenName.put(uuid, player.getName());
 
-                try {
-                    account = accounts.queryBuilder().selectColumns("name").where().eq("uuid", uuid).queryForFirst();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                if (account != null) {
-                    return;
-                }
-
-                account = new Account(player.getName(), player.getUniqueId());
-
-                try {
-                    accounts.createOrUpdate(account);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        try {
+            accounts.createOrUpdate(account);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void dropUsername(final Player player) {
