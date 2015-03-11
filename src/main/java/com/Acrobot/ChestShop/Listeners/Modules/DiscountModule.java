@@ -8,6 +8,7 @@ import com.Acrobot.ChestShop.Permission;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class DiscountModule implements Listener {
         groupList = config.getKeys(false);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPreTransaction(PreTransactionEvent event) {
         if (event.isCancelled() || event.getTransactionType() != BUY || !(event.getOwnerInventory() instanceof AdminInventory)) {
             return;
