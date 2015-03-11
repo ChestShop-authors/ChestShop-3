@@ -10,6 +10,8 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.DB.Generator;
 import com.Acrobot.ChestShop.DB.Queue;
 import com.Acrobot.ChestShop.DB.Transaction;
+import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Database.ConnectionManager;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
@@ -38,6 +40,10 @@ import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
 import com.avaje.ebean.EbeanServer;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
 import com.lennardf1989.bukkitex.Database;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -59,6 +65,7 @@ import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -87,12 +94,6 @@ public class ChestShop extends JavaPlugin {
         dataFolder = getDataFolder();
         description = getDescription();
         server = getServer();
-
-        if (server.getBukkitVersion().contains("1.7.2") || server.getBukkitVersion().contains("1.7.5")) {
-            for (int i = 0; i < 5; ++i) {
-                logger.log(java.util.logging.Level.SEVERE, "This version of plugin does not work with Minecraft 1.7.5 or lower!");
-            }
-        }
 
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
@@ -180,7 +181,7 @@ public class ChestShop extends JavaPlugin {
         });
     }
 
-    private final int CURRENT_DATABASE_VERSION = 1;
+    private final int CURRENT_DATABASE_VERSION = 2;
 
     private void handleMigrations() {
         File versionFile = loadFile("version");
@@ -198,7 +199,28 @@ public class ChestShop extends JavaPlugin {
 
         int lastVersion = previousVersion.getInt("version");
 
+        if (CURRENT_DATABASE_VERSION != lastVersion) {
+            logger.info("Updating database...");
+        }
+
         switch (lastVersion) {
+            case 1:
+                try {
+                    File databaseFile = ChestShop.loadFile("users.db");
+                    String uri = ConnectionManager.getURI(databaseFile);
+                    ConnectionSource connection = new JdbcConnectionSource(uri);
+
+                    Dao<Account, String> accounts = DaoManager.createDao(connection, Account.class);
+
+                    accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN lastSeenName VARCHAR");
+
+                    previousVersion.set("version", 2);
+                    previousVersion.save(versionFile);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             case CURRENT_DATABASE_VERSION:
             default:
                 //do nothing

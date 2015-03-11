@@ -13,6 +13,9 @@ import java.util.UUID;
 @DatabaseTable(tableName = "accounts")
 public class Account {
 
+    @DatabaseField(canBeNull = false)
+    private String lastSeenName;
+
     @DatabaseField(id = true, canBeNull = false)
     private String name;
 
@@ -29,7 +32,16 @@ public class Account {
     public Account(String name, UUID uuid) {
         this.name = name;
         this.shortName = NameUtil.stripUsername(name);
+        this.lastSeenName = name;
         this.uuid = uuid;
+    }
+
+    public String getLastSeenName() {
+        return lastSeenName;
+    }
+
+    public void setLastSeenName(String lastSeenName) {
+        this.lastSeenName = lastSeenName;
     }
 
     public String getName() {
