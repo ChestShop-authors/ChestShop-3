@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.8.4</version>
+    <version>3.8.6</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>org.yi.acru.bukkit.lockette</groupId>
             <artifactId>lockette</artifactId>
-            <version>1.7.9</version>
+            <version>1.8.14</version>
         </dependency>
         <dependency>
             <groupId>net.t00thpick1</groupId>
