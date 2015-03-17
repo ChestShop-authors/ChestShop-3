@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Tests;
 
+import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,5 +41,15 @@ public class PriceCheckerTest {
         event = new PreShopCreationEvent(null, null, getPriceString("B 1S0"));
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
+
+        String priceString = "5 B 5";
+        assertTrue(PriceUtil.getBuyPrice(priceString) == PriceUtil.NO_PRICE);
+
+        priceString = "5 S 5";
+        assertTrue(PriceUtil.getSellPrice(priceString) == PriceUtil.NO_PRICE);
+
+        priceString = "5 B 5:5 S 5";
+        assertTrue(PriceUtil.getBuyPrice(priceString) == PriceUtil.NO_PRICE);
+        assertTrue(PriceUtil.getSellPrice(priceString) == PriceUtil.NO_PRICE);
     }
 }
