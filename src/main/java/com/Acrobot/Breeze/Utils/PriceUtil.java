@@ -24,7 +24,7 @@ public class PriceUtil {
         String character = String.valueOf(indicator).toLowerCase();
 
         for (String part : split) {
-            if (!part.contains(character)) {
+            if (!part.startsWith(character) && !part.endsWith(character)) {
                 continue;
             }
 
