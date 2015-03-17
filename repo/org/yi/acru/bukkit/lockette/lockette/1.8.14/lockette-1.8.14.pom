@@ -4,6 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.yi.acru.bukkit.lockette</groupId>
   <artifactId>lockette</artifactId>
-  <version>1.7.9</version>
+  <version>1.8.14</version>
   <description>POM was created from install:install-file</description>
 </project>
