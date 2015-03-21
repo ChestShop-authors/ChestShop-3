@@ -40,6 +40,13 @@ public class NameManager {
             return lastSeenName.get(uuid);
         }
 
+        if (Bukkit.getOfflinePlayer(uuid).getName() != null) {
+            String lastSeen = Bukkit.getOfflinePlayer(uuid).getName();
+
+            lastSeenName.put(uuid, lastSeen);
+            return lastSeen;
+        }
+
         Account account = null;
 
         try {
@@ -213,6 +220,10 @@ public class NameManager {
 
     public static boolean canUseName(Player player, String name) {
         String shortenedName = NameUtil.stripUsername(getUsername(player.getUniqueId()));
+
+        if (ChestShopSign.isAdminShop(name)) {
+            return false;
+        }
 
         return shortenedName.equals(name) || Permission.otherName(player, name) || player.getUniqueId().equals(getUUID(name));
     }
