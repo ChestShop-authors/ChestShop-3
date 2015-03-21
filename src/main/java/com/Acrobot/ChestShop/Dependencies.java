@@ -67,6 +67,13 @@ public class Dependencies {
                 listener = SimpleChestLock.getSimpleChestLock(plugin);
                 break;
             case Residence:
+                if (plugin.getDescription().getVersion().startsWith("2")) {
+                    ChestShop.getBukkitLogger().severe("You are using an old version of Residence! " +
+                            "Please update to the newest one, which supports UUIDs: http://ci.drtshock.net/job/Residence/");
+
+                    break;
+                }
+
                 listener = new ResidenceChestProtection();
                 break;
 
