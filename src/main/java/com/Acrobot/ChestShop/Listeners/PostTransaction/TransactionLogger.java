@@ -2,9 +2,6 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.LocationUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.DB.Queue;
-import com.Acrobot.ChestShop.DB.Transaction;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
@@ -25,7 +22,8 @@ public class TransactionLogger implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onTransaction(final TransactionEvent event) {
         ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 String template = (event.getTransactionType() == BUY ? BUY_MESSAGE : SELL_MESSAGE);
 
                 StringBuilder items = new StringBuilder(50);
@@ -44,33 +42,5 @@ public class TransactionLogger implements Listener {
                 ChestShop.getBukkitLogger().info(message);
             }
         });
-    }
-
-    @EventHandler
-    public static void onTransactionLogToDB(TransactionEvent event) {
-        if (!Properties.LOG_TO_DATABASE && !Properties.GENERATE_STATISTICS_PAGE) {
-            return;
-        }
-
-        double pricePerStack = event.getPrice() / event.getStock().length;
-
-        for (ItemStack item : event.getStock()) {
-            Transaction transaction = new Transaction();
-
-            transaction.setAmount(item.getAmount());
-
-            transaction.setItemID(item.getTypeId());
-            transaction.setItemDurability(item.getDurability());
-
-            transaction.setPrice((float) pricePerStack);
-
-            transaction.setShopOwner(NameManager.getUsername(event.getOwner().getUniqueId()));
-            transaction.setShopUser(NameManager.getUsername(event.getClient().getUniqueId()));
-
-            transaction.setSec(System.currentTimeMillis() / 1000);
-            transaction.setBuy(event.getTransactionType() == BUY);
-
-            Queue.addToQueue(transaction);
-        }
     }
 }
