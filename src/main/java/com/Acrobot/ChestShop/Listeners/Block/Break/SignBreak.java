@@ -25,10 +25,7 @@ import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
@@ -174,7 +171,7 @@ public class SignBreak implements Listener {
         }
 
         if (isSign(block)) {
-            return Arrays.asList((Sign) block.getState());
+            return Collections.singletonList((Sign) block.getState());
         } else {
             List<Sign> attachedSigns = new LinkedList<Sign>();
 

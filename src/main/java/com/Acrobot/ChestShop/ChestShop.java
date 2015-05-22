@@ -7,17 +7,14 @@ import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.DB.Generator;
-import com.Acrobot.ChestShop.DB.Queue;
-import com.Acrobot.ChestShop.DB.Transaction;
-import com.Acrobot.ChestShop.Database.Account;
-import com.Acrobot.ChestShop.Database.ConnectionManager;
+import com.Acrobot.ChestShop.Database.Migrations;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
+import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
@@ -39,12 +36,6 @@ import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
-import com.avaje.ebean.EbeanServer;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
-import com.lennardf1989.bukkitex.Database;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -55,7 +46,6 @@ import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -65,8 +55,6 @@ import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -82,19 +70,20 @@ public class ChestShop extends JavaPlugin {
     private static PluginDescriptionFile description;
 
     private static File dataFolder;
-    private static EbeanServer database;
     private static ItemDatabase itemDatabase;
 
     private static Logger logger;
     private FileHandler handler;
 
-    public void onEnable() {
-        plugin = this;
-        logger = getLogger();
+    public ChestShop() {
         dataFolder = getDataFolder();
+        logger = getLogger();
         description = getDescription();
         server = getServer();
+        plugin = this;
+    }
 
+    public void onEnable() {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
@@ -108,15 +97,6 @@ public class ChestShop extends JavaPlugin {
         Dependencies.loadPlugins();
 
         registerEvents();
-
-        if (Properties.LOG_TO_DATABASE || Properties.GENERATE_STATISTICS_PAGE) {
-            setupDB();
-        }
-
-        if (Properties.GENERATE_STATISTICS_PAGE) {
-            File htmlFolder = new File(Properties.STATISTICS_PAGE_PATH);
-            scheduleTask(new Generator(htmlFolder), 300L, Properties.STATISTICS_PAGE_GENERATION_INTERVAL * 20L);
-        }
 
         if (Properties.LOG_TO_FILE) {
             File log = loadFile("ChestShop.log");
@@ -181,14 +161,13 @@ public class ChestShop extends JavaPlugin {
         });
     }
 
-    private final int CURRENT_DATABASE_VERSION = 2;
 
     private void handleMigrations() {
         File versionFile = loadFile("version");
         YamlConfiguration previousVersion = YamlConfiguration.loadConfiguration(versionFile);
 
         if (previousVersion.get("version") == null) {
-            previousVersion.set("version", CURRENT_DATABASE_VERSION);
+            previousVersion.set("version", Migrations.CURRENT_DATABASE_VERSION);
 
             try {
                 previousVersion.save(versionFile);
@@ -198,32 +177,16 @@ public class ChestShop extends JavaPlugin {
         }
 
         int lastVersion = previousVersion.getInt("version");
+        int newVersion = Migrations.migrate(lastVersion);
 
-        if (CURRENT_DATABASE_VERSION != lastVersion) {
-            logger.info("Updating database...");
-        }
+        if (lastVersion != newVersion) {
+            previousVersion.set("version", newVersion);
 
-        switch (lastVersion) {
-            case 1:
-                try {
-                    File databaseFile = ChestShop.loadFile("users.db");
-                    String uri = ConnectionManager.getURI(databaseFile);
-                    ConnectionSource connection = new JdbcConnectionSource(uri);
-
-                    Dao<Account, String> accounts = DaoManager.createDao(connection, Account.class);
-
-                    accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN lastSeenName VARCHAR");
-
-                    previousVersion.set("version", 2);
-                    previousVersion.save(versionFile);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            case CURRENT_DATABASE_VERSION:
-            default:
-                //do nothing
+            try {
+                previousVersion.save(versionFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -296,6 +259,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerTeleport());
 
         registerEvent(new ItemInfoListener());
+        registerEvent(new GarbageTextListener());
 
         registerEvent(new RestrictedSign());
 
@@ -394,40 +358,6 @@ public class ChestShop extends JavaPlugin {
         new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
     }
 
-    /////////////////////   DATABASE    STUFF      ////////////////////////////////
-    private void setupDB() {
-        loadFile(new File("ebean.properties"));
-
-        Database DB;
-
-        DB = new Database(this) {
-            protected java.util.List<Class<?>> getDatabaseClasses() {
-                List<Class<?>> list = new ArrayList<Class<?>>();
-                list.add(Transaction.class);
-                return list;
-            }
-        };
-
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File("bukkit.yml"));
-
-        DB.initializeDatabase(
-                config.getString("database.driver"),
-                config.getString("database.url"),
-                config.getString("database.username"),
-                config.getString("database.password"),
-                config.getString("database.isolation")
-        );
-
-        database = DB.getDatabase();
-
-        scheduleTask(new Queue(), 200L, 200L);
-    }
-
-    @Override
-    public EbeanServer getDatabase() {
-        return database;
-    }
-
     ///////////////////////////////////////////////////////////////////////////////
 
     public static ItemDatabase getItemDatabase() {
@@ -452,10 +382,6 @@ public class ChestShop extends JavaPlugin {
 
     public static String getPluginName() {
         return description.getName();
-    }
-
-    public static EbeanServer getDB() {
-        return database;
     }
 
     public static List<String> getDependencies() {
