@@ -46,14 +46,8 @@ public class Properties {
     @ConfigurationComment("The economy account which Admin Shops should use and to which all taxes will go")
     public static String SERVER_ECONOMY_ACCOUNT = "";
 
-    @ConfigurationComment("Whether bank account members (if available) can create shops on its behalf")
-    public static boolean BANK_MEMBERS_ALLOWED = true;
-
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
     public static int TAX_AMOUNT = 0;
-
-    @ConfigurationComment("Percent of the price that should go to the server's account when buying from a bank.")
-    public static int BANK_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Percent of the price that should go to the server's account when buying from an Admin Shop.")
     public static int SERVER_TAX_AMOUNT = 0;
@@ -95,12 +89,6 @@ public class Properties {
     @ConfigurationComment("Do you want ChestShop's messages to show up in console?")
     public static boolean LOG_TO_CONSOLE = true;
 
-    @ConfigurationComment("If true, plugin will log transactions in EBean database")
-    public static boolean LOG_TO_DATABASE = false;
-
-    @ConfigurationComment("How long should transaction information be stored in the database (in seconds, -1 means forever)?")
-    public static int RECORD_TIME_TO_LIVE = 600;
-
     @PrecededBySpace
     @ConfigurationComment("Do you want to stack all items up to 64 item stacks?")
     public static boolean STACK_TO_64 = false;
@@ -128,16 +116,6 @@ public class Properties {
 
     @ConfigurationComment("Should the chest's LWC protection be removed once the shop sign is destroyed? ")
     public static boolean REMOVE_LWC_PROTECTION_AUTOMATICALLY = true;
-
-    @PrecededBySpace
-    @ConfigurationComment("If true, plugin will generate shop statistics webpage.")
-    public static boolean GENERATE_STATISTICS_PAGE = false;
-
-    @ConfigurationComment("Where should your generated website be saved?")
-    public static String STATISTICS_PAGE_PATH = "plugins/ChestShop/website.html";
-
-    @ConfigurationComment("How often should the website be generated?")
-    public static long STATISTICS_PAGE_GENERATION_INTERVAL = 60;
 
     @PrecededBySpace
     @ConfigurationComment("Do you want to only let people build inside regions?")
