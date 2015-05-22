@@ -1,23 +1,17 @@
 package com.Acrobot.ChestShop.UUIDs;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
-import com.Acrobot.ChestShop.Database.ConnectionManager;
+import com.Acrobot.ChestShop.Database.DaoCreator;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +22,7 @@ import java.util.UUID;
  *
  * @author Andrzej Pomirski (Acrobot)
  */
+@SuppressWarnings("UnusedAssignment") //I deliberately set the variables to null while initializing
 public class NameManager {
     private static Dao<Account, String> accounts;
 
@@ -229,19 +224,12 @@ public class NameManager {
     }
 
     public static boolean isAdminShop(UUID uuid) {
-        return getUsername(uuid).equals(Properties.ADMIN_SHOP_NAME);
+        return Properties.ADMIN_SHOP_NAME.equals(getUsername(uuid));
     }
 
     public static void load() {
-        File databaseFile = ChestShop.loadFile("users.db");
-        String uri = ConnectionManager.getURI(databaseFile);
-        ConnectionSource connection;
-
         try {
-            connection = new JdbcConnectionSource(uri);
-            accounts = DaoManager.createDao(connection, Account.class);
-
-            TableUtils.createTableIfNotExists(connection, Account.class);
+            accounts = DaoCreator.getDaoAndCreateTable(Account.class);
 
             Account adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
             accounts.createOrUpdate(adminAccount);
