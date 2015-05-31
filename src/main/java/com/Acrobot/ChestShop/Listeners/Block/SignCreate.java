@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
@@ -20,7 +21,7 @@ public class SignCreate implements Listener {
     @EventHandler
     public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
-        String[] line = event.getLines();
+        String[] line = StringUtil.stripColourCodes(event.getLines());
 
         if (!BlockUtil.isSign(signBlock)) {
             return;

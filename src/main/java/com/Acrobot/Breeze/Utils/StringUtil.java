@@ -2,6 +2,10 @@ package com.Acrobot.Breeze.Utils;
 
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.ChatColor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Acrobot
@@ -50,5 +54,29 @@ public class StringUtil {
      */
     public static String joinArray(Iterable<?> array) {
         return Joiner.on(' ').join(array);
+    }
+
+    /**
+     * Strips colour codes from a string
+     * @param string String to strip
+     * @return Stripped string
+     */
+    public static String stripColourCodes(String string) {
+        return ChatColor.stripColor(string);
+    }
+
+    /**
+     * Stips colour codes from an array of strings
+     * @param strings Strings to strip the codes from
+     * @return Stripped strings
+     */
+    public static String[] stripColourCodes(String[] strings) {
+        List<String> output = new ArrayList<String>();
+
+        for (String string : strings) {
+            output.add(stripColourCodes(string));
+        }
+
+        return output.toArray(new String[output.size()]);
     }
 }
