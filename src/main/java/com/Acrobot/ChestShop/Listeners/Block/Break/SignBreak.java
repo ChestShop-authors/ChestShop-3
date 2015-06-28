@@ -39,28 +39,17 @@ import static com.Acrobot.ChestShop.UUIDs.NameManager.canUseName;
  */
 public class SignBreak implements Listener {
     private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
-    private static final String METADATA_NAME = "shop_destroyer";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public static void onSign(BlockPhysicsEvent event) {
-        Block block = event.getBlock();
-
-        if (!BlockUtil.isSign(block)) {
-            return;
-        }
-
-        Sign sign = (Sign) block.getState();
-        Block attachedBlock = BlockUtil.getAttachedBlock(sign);
-
-        if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
-            List <MetadataValue> values = block.getMetadata(METADATA_NAME);
-
-            if (values.isEmpty()) {
-                return;
-            }
-
-            sendShopDestroyedEvent(sign, (Player) block.getMetadata(METADATA_NAME).get(0).value());
-        }
+    	if (event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST){
+	    	Sign sign = (Sign) event.getBlock().getState();
+	    	if (sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace()).getType() == Material.AIR){
+	    		if (ChestShopSign.isValid(sign)){
+	    			if (sign.hasMetadata("shop_destroyer")) sendShopDestroyedEvent(sign, (Player) sign.getMetadata("shop_destroyer").get(0).value());
+	    		}
+	    	}
+    	}
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -140,7 +129,7 @@ public class SignBreak implements Listener {
         }
 
         for (Sign sign : brokenBlocks) {
-            sign.setMetadata(METADATA_NAME, new FixedMetadataValue(ChestShop.getPlugin(), breaker));
+            sign.setMetadata("shop_destroyer", new FixedMetadataValue(ChestShop.getPlugin(), breaker));
         }
 
         return true;
