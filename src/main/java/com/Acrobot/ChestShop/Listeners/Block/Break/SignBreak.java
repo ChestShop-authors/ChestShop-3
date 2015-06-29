@@ -8,6 +8,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import com.google.common.collect.Lists;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -23,8 +24,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-
 import java.util.*;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
@@ -39,14 +38,15 @@ import static com.Acrobot.ChestShop.UUIDs.NameManager.canUseName;
  */
 public class SignBreak implements Listener {
     private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
+    private static final String METADATA_NAME = "shop_destroyer";
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public static void onSign(BlockPhysicsEvent event) {
     	if (event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST){
 	    	Sign sign = (Sign) event.getBlock().getState();
-	    	if (sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace()).getType() == Material.AIR){
+	    	if (BlockUtil.getAttachedBlock(sign).getType() == Material.AIR){
 	    		if (ChestShopSign.isValid(sign)){
-	    			if (sign.hasMetadata("shop_destroyer")) sendShopDestroyedEvent(sign, (Player) sign.getMetadata("shop_destroyer").get(0).value());
+	    			if (sign.hasMetadata(METADATA_NAME)) sendShopDestroyedEvent(sign, (Player) sign.getMetadata(METADATA_NAME).get(0).value());
 	    		}
 	    	}
     	}
@@ -129,7 +129,7 @@ public class SignBreak implements Listener {
         }
 
         for (Sign sign : brokenBlocks) {
-            sign.setMetadata("shop_destroyer", new FixedMetadataValue(ChestShop.getPlugin(), breaker));
+            sign.setMetadata(METADATA_NAME, new FixedMetadataValue(ChestShop.getPlugin(), breaker));
         }
 
         return true;
