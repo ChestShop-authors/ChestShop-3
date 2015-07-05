@@ -160,7 +160,7 @@ public class NameManager {
         return name;
     }
 
-    public static void storeUsername(final Player player) {
+    public static void storeUsername(final PlayerDTO player) {
         final UUID uuid = player.getUniqueId();
 
         Account account = null;
@@ -173,6 +173,13 @@ public class NameManager {
         }
 
         if (account != null) {
+            if (account.getName() != null && account.getShortName() == null) {
+                String shortenedName = NameUtil.stripUsername(account.getName());
+
+                account.setShortName(shortenedName);
+            }
+
+            account.setUuid(uuid); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
             account.setLastSeenName(player.getName());
 
             try {
