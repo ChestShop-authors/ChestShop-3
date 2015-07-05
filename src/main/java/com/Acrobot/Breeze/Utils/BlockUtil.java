@@ -1,5 +1,6 @@
 package com.Acrobot.Breeze.Utils;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
@@ -20,7 +21,8 @@ public class BlockUtil {
      * @return Is this block a sign?
      */
     public static boolean isSign(Block block) {
-        return block.getState() instanceof Sign;
+        return block.getType() == Material.SIGN_POST
+                || block.getType() == Material.WALL_SIGN;
     }
 
     /**
