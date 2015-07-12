@@ -237,7 +237,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
-                    <finalName>ChestShop-${project.version}</finalName>
+                    <finalName>ChestShop</finalName>
                 </configuration>
             </plugin>
             <plugin>
