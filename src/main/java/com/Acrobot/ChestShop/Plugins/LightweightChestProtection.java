@@ -60,7 +60,7 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
-        if (!lwc.canAccessProtection(player, protection)) {
+        if (!lwc.canAccessProtection(player, protection) || protection.getType() == Protection.Type.DONATION) {
             event.setResult(Event.Result.DENY);
         }
     }
