@@ -87,7 +87,6 @@ public class ChestShop extends JavaPlugin {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
-        turnOffDatabaseLogging();
         handleMigrations();
 
         itemDatabase = new ItemDatabase();
@@ -120,47 +119,6 @@ public class ChestShop extends JavaPlugin {
         startStatistics();
         startUpdater();
     }
-
-    private void turnOffDatabaseLogging() {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        org.apache.logging.log4j.core.config.Configuration config = ctx.getConfiguration();
-        LoggerConfig loggerConfig = config.getLoggerConfig("");
-
-        loggerConfig.addFilter(new AbstractFilter() {
-            @Override
-            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, String msg, Object... params) {
-                return filter(logger.getName(), level);
-            }
-
-            @Override
-            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Object msg, Throwable t) {
-                return filter(logger.getName(), level);
-            }
-
-            @Override
-            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Message msg, Throwable t) {
-                return filter(logger.getName(), level);
-            }
-
-            @Override
-            public Result filter(LogEvent event) {
-                return filter(event.getLoggerName(), event.getLevel());
-            }
-
-            private Result filter(String classname, Level level) {
-                if (level.isAtLeastAsSpecificAs(Level.ERROR) && !classname.contains("SqliteDatabaseType")) {
-                    return Result.NEUTRAL;
-                }
-
-                if (classname.contains("SqliteDatabaseType") || classname.contains("TableUtils")) {
-                    return Result.DENY;
-                } else {
-                    return Result.NEUTRAL;
-                }
-            }
-        });
-    }
-
 
     private void handleMigrations() {
         File versionFile = loadFile("version");
