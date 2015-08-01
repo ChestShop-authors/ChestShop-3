@@ -33,7 +33,6 @@ package com.Acrobot.Breeze.Utils.Encoding;
  * @author rob@iharder.net
  * @version 2.3.7
  */
-@SuppressWarnings("ALL")
 public class Base64 {
     
 /* ********  P U B L I C   F I E L D S  ******** */
@@ -1272,7 +1271,7 @@ public class Base64 {
                     @Override
                     public Class<?> resolveClass(java.io.ObjectStreamClass streamClass)
                             throws java.io.IOException, ClassNotFoundException {
-                        Class c = Class.forName(streamClass.getName(), false, loader);
+                        Class<?> c = Class.forName(streamClass.getName(), false, loader);
                         if (c == null) {
                             return super.resolveClass(streamClass);
                         } else {

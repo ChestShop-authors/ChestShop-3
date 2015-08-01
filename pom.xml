@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.8.12</version>
+    <version>3.8.13</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
@@ -37,6 +37,10 @@
             <url>http://nexus.theyeticave.net/content/repositories/pub_snapshots/</url>
         </repository>
         <repository>
+            <id>xephi-repo</id>
+            <url>http://ci.xephi.fr/plugin/repository/everything/</url>
+        </repository>
+        <repository>
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
         </repository>
@@ -54,24 +58,35 @@
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
             <version>4.48</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.0-beta9</version>
+            <scope>compile</scope>
+        </dependency>
+ 
+        <dependency>
+            <groupId>fr.xephi</groupId>
+            <artifactId>authme</artifactId>
+            <version>5.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.8.7-R0.1-SNAPSHOT</version>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
             <artifactId>metrics</artifactId>
             <version>R7</version>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -88,6 +103,7 @@
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.5.2</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -104,6 +120,7 @@
             <groupId>info.somethingodd</groupId>
             <artifactId>odditem</artifactId>
             <version>0.9.5</version>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -121,6 +138,7 @@
             <groupId>com.herocraftonline.heroes</groupId>
             <artifactId>Heroes</artifactId>
             <version>1.5.5.6-SNAPSHOT</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -137,6 +155,7 @@
             <groupId>com.griefcraft.lwc</groupId>
             <artifactId>lwc</artifactId>
             <version>4.3.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -153,6 +172,7 @@
             <groupId>com.daemitus.deadbolt</groupId>
             <artifactId>deadbolt</artifactId>
             <version>2.2</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -169,6 +189,7 @@
             <groupId>com.sk89q</groupId>
             <artifactId>worldguard</artifactId>
             <version>6.1.1-SNAPSHOT</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -185,6 +206,7 @@
             <groupId>com.webkonsept.bukkit.simplechestlock</groupId>
             <artifactId>simplechestlock</artifactId>
             <version>1.2.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -201,6 +223,7 @@
             <groupId>org.yi.acru.bukkit.lockette</groupId>
             <artifactId>lockette</artifactId>
             <version>1.8.14</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -217,6 +240,7 @@
             <groupId>net.t00thpick1</groupId>
             <artifactId>residence</artifactId>
             <version>3.0.0q-SNAPSHOT</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
