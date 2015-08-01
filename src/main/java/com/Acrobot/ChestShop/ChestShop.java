@@ -36,14 +36,6 @@ import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.filter.AbstractFilter;
-import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -292,10 +284,6 @@ public class ChestShop extends JavaPlugin {
 
     public void registerEvent(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
-    }
-
-    private void scheduleTask(Runnable runnable, long startTime, long repetitionTime) {
-        server.getScheduler().runTaskTimerAsynchronously(this, runnable, startTime, repetitionTime);
     }
 
     private void startStatistics() {

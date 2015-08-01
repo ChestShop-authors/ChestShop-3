@@ -44,7 +44,7 @@ public class Database {
      * @param clazz Class with fields
      * @return If table was succesfully created
      */
-    public boolean createFromClass(Class clazz) {
+    public boolean createFromClass(Class<?> clazz) {
         if (!clazz.isAnnotationPresent(Entity.class) || !clazz.isAnnotationPresent(javax.persistence.Table.class)) {
             return false;
         }
