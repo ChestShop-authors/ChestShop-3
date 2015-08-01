@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
-import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.bukkit.event.EventHandler;

@@ -23,8 +23,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-
 import java.util.*;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
