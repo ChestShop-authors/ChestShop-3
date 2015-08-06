@@ -14,6 +14,7 @@ import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
+import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
@@ -36,6 +37,7 @@ import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -210,6 +212,10 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
+
+        if (this.getServer().getPluginManager().getPlugin("AuthMe") != null && this.getServer().getPluginManager().getPlugin("ChestShop").isEnabled()){
+            registerEvent(new AuthMeChestShopListener());
+        }
 
         registerEvent(new RestrictedSign());
 
