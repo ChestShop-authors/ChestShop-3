@@ -47,6 +47,8 @@ public class ErrorMessageSender implements Listener {
             case NOT_ENOUGH_MONEY:
                 message = Messages.NOT_ENOUGH_MONEY;
                 break;
+            default:
+                break;
         }
 
         if (message != null) {

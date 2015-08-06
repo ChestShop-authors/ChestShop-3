@@ -15,9 +15,9 @@ import java.util.List;
  * @author Acrobot
  */
 public class EntityParser {
-    private Class entity;
+    private Class<?> entity;
 
-    public EntityParser(Class table) {
+    public EntityParser(Class<?> table) {
         if (!table.isAnnotationPresent(Entity.class) || !table.isAnnotationPresent(javax.persistence.Table.class)) {
             throw new AnnotationFormatError("The class hasn't got Entity or Table annotation!");
         }

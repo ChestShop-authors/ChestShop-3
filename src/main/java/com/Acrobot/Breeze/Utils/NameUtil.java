@@ -15,7 +15,6 @@ import java.util.UUID;
  */
 public class NameUtil {
     private static final UUID INVALID_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-    private static final String PROFILE_AGENT = "minecraft";
 
     /**
      * Get the UUID of a player

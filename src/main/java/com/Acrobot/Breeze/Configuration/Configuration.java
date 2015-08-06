@@ -22,7 +22,7 @@ public class Configuration {
      * @param file  File to load
      * @param clazz Class to modify
      */
-    public static void pairFileAndClass(File file, Class clazz) {
+    public static void pairFileAndClass(File file, Class<?> clazz) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         try {
@@ -77,6 +77,10 @@ public class Configuration {
 
             while (scanner.hasNextLine()) {
                 lastLine = scanner.nextLine();
+            }
+
+            if (scanner != null) {
+                scanner.close();
             }
 
             return lastLine.isEmpty();
