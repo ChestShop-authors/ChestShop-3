@@ -79,8 +79,10 @@ public class Configuration {
                 lastLine = scanner.nextLine();
             }
 
-            if (scanner != null)
+            if (scanner != null) {
                 scanner.close();
+            }
+
             return lastLine.isEmpty();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
