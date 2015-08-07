@@ -30,6 +30,6 @@ public class AuthMeChestShopListener implements Listener {
             return;
         }
         
-        event.setCancelled(TransactionOutcome.OTHER);
+        event.setCancelled(TransactionOutcome.CLIENT_DOES_NOT_HAVE_PERMISSION);
     }
 }
