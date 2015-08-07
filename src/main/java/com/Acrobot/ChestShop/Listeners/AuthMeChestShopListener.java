@@ -29,7 +29,7 @@ public class AuthMeChestShopListener implements Listener {
         if (AuthMeAPI.isAuthenticated(player)) {
             return;
         }
-        
+
         event.setCancelled(TransactionOutcome.CLIENT_DOES_NOT_HAVE_PERMISSION);
     }
 }
