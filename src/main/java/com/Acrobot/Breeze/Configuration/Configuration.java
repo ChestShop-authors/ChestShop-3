@@ -1,14 +1,19 @@
 package com.Acrobot.Breeze.Configuration;
 
-import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Scanner;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Scanner;
+import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
 
 /**
  * A class which can be used to make configs easier to load
@@ -71,16 +76,11 @@ public class Configuration {
      * @return If the file ends with space
      */
     public static boolean endsWithSpace(File file) {
-        try {
-            Scanner scanner = new Scanner(file);
+        try (Scanner scanner = new Scanner(file)) {
             String lastLine = "";
 
             while (scanner.hasNextLine()) {
                 lastLine = scanner.nextLine();
-            }
-
-            if (scanner != null) {
-                scanner.close();
             }
 
             return lastLine.isEmpty();

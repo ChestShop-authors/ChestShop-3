@@ -406,7 +406,7 @@ public class Base64 {
 
         byte[] ALPHABET = getAlphabet(options);
 
-        //           1         2         3  
+        //           1         2         3
         // 01234567890123456789012345678901 Bit position
         // --------000000001111111122222222 Array position from threeBytes
         // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
@@ -1106,8 +1106,8 @@ public class Base64 {
             else {
                 // There's a bad input character in the Base64 stream.
                 throw new java.io.IOException(String.format(
-                        "Bad Base64 input character decimal %d in array position %d", ((int) source[i]) & 0xFF, i));
-            }   // end else: 
+                        "Bad Base64 input character decimal %d in array position %d", (source[i]) & 0xFF, i));
+            }   // end else:
         }   // each input character
 
         byte[] out = new byte[outBuffPosn];
@@ -1164,7 +1164,7 @@ public class Base64 {
         boolean dontGunzip = (options & DONT_GUNZIP) != 0;
         if ((bytes != null) && (bytes.length >= 4) && (!dontGunzip)) {
 
-            int head = ((int) bytes[0] & 0xff) | ((bytes[1] << 8) & 0xff00);
+            int head = (bytes[0] & 0xff) | ((bytes[1] << 8) & 0xff00);
             if (java.util.zip.GZIPInputStream.GZIP_MAGIC == head) {
                 java.io.ByteArrayInputStream bais = null;
                 java.util.zip.GZIPInputStream gzis = null;
@@ -1515,7 +1515,7 @@ public class Base64 {
                 out.close();
             } catch (Exception ex) {
             }
-        }   // end finally    
+        }   // end finally
     }   // end encodeFileToFile
 
 
@@ -1545,7 +1545,7 @@ public class Base64 {
                 out.close();
             } catch (Exception ex) {
             }
-        }   // end finally    
+        }   // end finally
     }   // end decodeFileToFile
     
     
@@ -1683,7 +1683,7 @@ public class Base64 {
                     else {
                         // Must have broken out from above.
                         throw new java.io.IOException("Improperly padded Base64 input.");
-                    }   // end 
+                    }   // end
 
                 }   // end else: decode
             }   // end else: get data
