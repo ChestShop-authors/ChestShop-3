@@ -28,9 +28,15 @@ public class PlayerConnect implements Listener {
                 UUID uuid = NameManager.getUUID(playerName);
 
                 if (uuid != null && !playerDTO.getUniqueId().equals(uuid)) {
-                   Bukkit.getPlayer(playerDTO.getUniqueId()).kickPlayer("[ChestShop]" +
-                           "Unfortunately, this username was already used by " +
-                           "another player.");
+                    Bukkit.getScheduler().runTask(ChestShop.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            Bukkit.getPlayer(playerDTO.getUniqueId()).kickPlayer("[ChestShop]" +
+                                    "Unfortunately, this username was already used by " +
+                                    "another player.");
+
+                        }
+                    });
                 }
 
                 NameManager.storeUsername(playerDTO);
