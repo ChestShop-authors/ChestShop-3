@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome;
 
@@ -19,10 +20,17 @@ public class AuthMeChestShopListener implements Listener {
         if (event.getClient() == null) {
             return;
         }
-
         Player player = event.getClient();
 
+        if (!Properties.AUTHME_HOOK) {
+            return;
+        }
+
         if (AuthMeAPI.isUnrestricted(player)) {
+            return;
+        }
+
+        if (!AuthMeAPI.isRegistered(player.getName()) && Properties.AUTHME_ALLOW_UNREGISTERED) {
             return;
         }
 

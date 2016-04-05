@@ -128,6 +128,13 @@ public class Properties {
     public static boolean WORLDGUARD_USE_PROTECTION = false;
 
     @PrecededBySpace
+    @ConfigurationComment("Do you want to deny shop access to unlogged users?")
+    public static boolean AUTHME_HOOK = true;
+
+    @ConfigurationComment("Do you want to allow shop access to unregistered users? (Example: registration is optional)")
+    public static boolean AUTHME_ALLOW_UNREGISTERED = false;
+
+    @PrecededBySpace
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
 }

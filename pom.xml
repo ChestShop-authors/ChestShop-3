@@ -147,16 +147,12 @@
         <dependency>
             <groupId>fr.xephi</groupId>
             <artifactId>authme</artifactId>
-            <version>5.0-SNAPSHOT</version>
+            <version>5.2-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
