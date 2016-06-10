@@ -1,12 +1,12 @@
 package com.Acrobot.Breeze.Utils;
 
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Acrobot
@@ -49,7 +49,7 @@ public class InventoryUtil {
      * @return Is the inventory empty?
      */
     public static boolean isEmpty(Inventory inventory) {
-        for (ItemStack stack : inventory.getContents()) {
+        for (ItemStack stack : inventory.getStorageContents()) {
             if (!MaterialUtil.isEmpty(stack)) {
                 return false;
             }
@@ -89,7 +89,7 @@ public class InventoryUtil {
             return true;
         }
 
-        for (ItemStack iStack : inventory.getContents()) {
+        for (ItemStack iStack : inventory.getStorageContents()) {
             if (left <= 0) {
                 return true;
             }
@@ -125,7 +125,7 @@ public class InventoryUtil {
 
         int amountLeft = item.getAmount();
 
-        for (int currentSlot = 0; currentSlot < inventory.getSize() && amountLeft > 0; currentSlot++) {
+        for (int currentSlot = 0; currentSlot < effectiveSize(inventory) && amountLeft > 0; currentSlot++) {
             ItemStack currentItem = inventory.getItem(currentSlot);
             ItemStack duplicate = item.clone();
 
@@ -150,6 +150,12 @@ public class InventoryUtil {
         }
 
         return amountLeft;
+    }
+
+    // Don't use the armor slots or extra slots
+    private static int effectiveSize(Inventory inventory)
+    {
+        return inventory.getStorageContents().length;
     }
 
     /**
