@@ -10,19 +10,21 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.j256.ormlite.dao.Dao;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * Lets you save/cache username and UUID relations
  *
  * @author Andrzej Pomirski (Acrobot)
  */
-@SuppressWarnings("UnusedAssignment") //I deliberately set the variables to null while initializing
+@SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
 public class NameManager {
     private static Dao<Account, String> accounts;
 
@@ -35,9 +37,9 @@ public class NameManager {
             return lastSeenName.get(uuid);
         }
 
-        if (Bukkit.getOfflinePlayer(uuid).getName() != null) {
-            String lastSeen = Bukkit.getOfflinePlayer(uuid).getName();
-
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        String lastSeen = player.getName();
+        if (lastSeen != null) {
             lastSeenName.put(uuid, lastSeen);
             return lastSeen;
         }
@@ -46,22 +48,27 @@ public class NameManager {
 
         try {
             account = accounts.queryBuilder().selectColumns("lastSeenName", "name").where().eq("uuid", uuid).queryForFirst();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+        } catch (SQLException ex) {
+            Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Failed to find last seen name for " + uuid + ":", ex);
         }
 
         if (account == null) {
-            return "";
+            return null;
         }
 
-        if (account.getLastSeenName() != null) {
-            lastSeenName.put(uuid, account.getLastSeenName());
-        } else if (account.getName() != null) {
-            lastSeenName.put(uuid, account.getName());
+        lastSeen = account.getLastSeenName();
+        if (lastSeen != null) {
+            lastSeenName.put(uuid, lastSeen);
+            return lastSeen;
         }
 
-        return account.getLastSeenName();
+        lastSeen = account.getName();
+        if (lastSeen != null) {
+            lastSeenName.put(uuid, lastSeen);
+            return lastSeen;
+        }
+
+        return null;
     }
 
     public static UUID getUUID(String username) {

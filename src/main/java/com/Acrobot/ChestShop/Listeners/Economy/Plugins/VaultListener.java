@@ -61,10 +61,15 @@ public class VaultListener implements Listener {
             return;
         }
 
-        double balance = provider.getBalance(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName());
+        double balance = 0;
+        String lastSeen = NameManager.getLastSeenName(event.getAccount());
 
-        if (balance > Double.MAX_VALUE) {
-            balance = Double.MAX_VALUE;
+        if (lastSeen != null) {
+            balance = provider.getBalance(lastSeen, event.getWorld().getName());
+
+            if (balance > Double.MAX_VALUE) {
+                balance = Double.MAX_VALUE;
+            }
         }
 
         event.setAmount(balance);
@@ -77,9 +82,14 @@ public class VaultListener implements Listener {
         }
 
         World world = event.getWorld();
+        String lastSeen = NameManager.getLastSeenName(event.getAccount());
 
-        if (provider.has(NameManager.getLastSeenName(event.getAccount()), world.getName(), event.getDoubleAmount())) {
-            event.hasEnough(true);
+        if (lastSeen != null) {
+            if (provider.has(lastSeen, world.getName(), event.getDoubleAmount())) {
+                event.hasEnough(true);
+            }
+        } else {
+            event.hasEnough(false);
         }
     }
 
@@ -90,10 +100,8 @@ public class VaultListener implements Listener {
         }
 
         World world = event.getWorld();
-
-        if (!provider.hasAccount(NameManager.getLastSeenName(event.getAccount()), world.getName())) {
-            event.hasAccount(false);
-        }
+        String lastSeen = NameManager.getLastSeenName(event.getAccount());
+        event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
     }
 
     @EventHandler
@@ -103,7 +111,6 @@ public class VaultListener implements Listener {
         }
 
         String formatted = provider.format(event.getDoubleAmount());
-
         event.setFormattedAmount(formatted);
     }
 
@@ -114,8 +121,11 @@ public class VaultListener implements Listener {
         }
 
         World world = event.getWorld();
+        String lastSeen = NameManager.getLastSeenName(event.getTarget());
 
-        provider.depositPlayer(NameManager.getLastSeenName(event.getTarget()), world.getName(), event.getDoubleAmount());
+        if (lastSeen != null) {
+            provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+        }
     }
 
     @EventHandler
@@ -125,8 +135,11 @@ public class VaultListener implements Listener {
         }
 
         World world = event.getWorld();
+        String lastSeen = NameManager.getLastSeenName(event.getTarget());
 
-        provider.withdrawPlayer(NameManager.getLastSeenName(event.getTarget()), world.getName(), event.getDoubleAmount());
+        if (lastSeen != null) {
+            provider.withdrawPlayer(NameManager.getLastSeenName(event.getTarget()), world.getName(), event.getDoubleAmount());
+        }
     }
 
     @EventHandler
@@ -152,18 +165,26 @@ public class VaultListener implements Listener {
             return;
         }
 
-        if (!provider.hasAccount(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName())) {
+        String lastSeen = NameManager.getLastSeenName(event.getAccount());
+        String world = event.getWorld().getName();
+
+        if (lastSeen == null) {
             event.canHold(false);
             return;
         }
 
-        EconomyResponse response = provider.depositPlayer(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        if (!provider.hasAccount(lastSeen, world)) {
+            event.canHold(false);
+            return;
+        }
+
+        EconomyResponse response = provider.depositPlayer(lastSeen, world, event.getDoubleAmount());
 
         if (!response.transactionSuccess()) {
             event.canHold(false);
             return;
         }
 
-        provider.withdrawPlayer(NameManager.getLastSeenName(event.getAccount()), event.getWorld().getName(), event.getDoubleAmount());
+        provider.withdrawPlayer(lastSeen, world, event.getDoubleAmount());
     }
 }
