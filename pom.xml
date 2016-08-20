@@ -69,9 +69,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.10-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -144,11 +144,10 @@
             </exclusions>
         </dependency>
 
-		<!--
         <dependency>
             <groupId>fr.xephi</groupId>
             <artifactId>authme</artifactId>
-            <version>5.0-SNAPSHOT</version>
+            <version>5.2-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -161,7 +160,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        -->
 
         <dependency>
             <groupId>com.griefcraft.lwc</groupId>

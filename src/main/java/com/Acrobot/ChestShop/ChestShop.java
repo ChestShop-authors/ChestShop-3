@@ -43,6 +43,7 @@ import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -213,7 +214,8 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
 
-        if (this.getServer().getPluginManager().getPlugin("AuthMe") != null && this.getServer().getPluginManager().getPlugin("ChestShop").isEnabled()){
+        Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");
+        if (authMe != null && authMe.isEnabled()){
             registerEvent(new AuthMeChestShopListener());
         }
 
