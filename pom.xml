@@ -10,9 +10,9 @@
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
-        <connection>scm:git:git://github.com/Acrobot/ChestShop-3</connection>
-        <developerConnection>scm:git:ssh://git@github.com/Acrobot/ChestShop-3.git</developerConnection>
-        <url>https://github.com/Acrobot/ChestShop-3</url>
+        <connection>scm:git:git://github.com/dmulloy2/ChestShop-3</connection>
+        <developerConnection>scm:git:ssh://git@github.com/dmulloy2/ChestShop-3.git</developerConnection>
+        <url>https://github.com/dmulloy2/ChestShop-3</url>
     </scm>
 
     <repositories>
@@ -30,11 +30,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-        </repository>
-        <repository>
-            <id>heroes-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_snapshots/</url>
+            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
         </repository>
         <repository>
             <id>authme-repo</id>
@@ -95,7 +91,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.6</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
