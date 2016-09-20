@@ -118,8 +118,11 @@ public class PlayerInteract implements Listener {
         String material = sign.getLine(ITEM_LINE);
 
         String ownerName = NameManager.getFullUsername(name);
-        UUID uuid = NameManager.getUUID(ownerName);
+        if (ownerName == null || ownerName.isEmpty()) {
+            return null;
+        }
 
+        UUID uuid = NameManager.getUUID(ownerName);
         if (uuid == null) {
             return null;
         }

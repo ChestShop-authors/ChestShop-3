@@ -9,6 +9,8 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.j256.ormlite.dao.Dao;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -72,6 +74,8 @@ public class NameManager {
     }
 
     public static UUID getUUID(String username) {
+        Validate.notEmpty(username, "user cannot be null or empty!");
+        
         if (usernameToUUID.containsKey(username)) {
             return usernameToUUID.get(username);
         }
@@ -241,7 +245,7 @@ public class NameManager {
             return false;
         }
 
-        return shortenedName.equals(name) || Permission.otherName(player, name) || player.getUniqueId().equals(getUUID(name));
+        return shortenedName.equals(name) || Permission.otherName(player, name) || (!name.isEmpty() && player.getUniqueId().equals(getUUID(name)));
     }
 
     public static boolean isAdminShop(UUID uuid) {
