@@ -63,6 +63,9 @@ public class SignBreak implements Listener {
     public static void onSignBreak(BlockBreakEvent event) {
         if (!canBlockBeBroken(event.getBlock(), event.getPlayer())) {
             event.setCancelled(true);
+            if (isSign(event.getBlock())) {
+                event.getBlock().getState().update();
+            }
         }
     }
 
@@ -118,7 +121,6 @@ public class SignBreak implements Listener {
         boolean canBeBroken = true;
 
         for (Sign sign : attachedSigns) {
-            sign.update();
 
             if (!canBeBroken || !ChestShopSign.isValid(sign)) {
                 continue;
