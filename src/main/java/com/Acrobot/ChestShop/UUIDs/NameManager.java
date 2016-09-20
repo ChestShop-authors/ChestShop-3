@@ -214,10 +214,17 @@ public class NameManager {
     }
 
     public static void dropUsername(final Player player) {
-        final UUID uuid = player.getUniqueId();
+        if (player == null) return;
 
-        if (usernameToUUID.containsValue(uuid)) {
-            usernameToUUID.inverse().remove(uuid);
+        final UUID uuid = player.getUniqueId();
+        if (uuid == null) return;
+
+        try {
+            if (usernameToUUID.containsValue(uuid)) {
+                usernameToUUID.inverse().remove(uuid);
+            }
+        } catch (NullPointerException e) {
+            // Sigh...
         }
 
         String shortName = NameUtil.stripUsername(player.getName());
