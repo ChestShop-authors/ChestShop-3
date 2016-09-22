@@ -12,6 +12,21 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class InventoryUtil {
+    private static Boolean legacyContents = null;
+   
+    private static ItemStack[] getStorageContents(Inventory inventory) {
+        if (legacyContents == null) {
+            try {
+                inventory.getStorageContents();
+                legacyContents = false;
+            } catch (NoSuchMethodError e) {
+                legacyContents = true;
+            }
+        }
+
+        return legacyContents ? inventory.getContents() : inventory.getStorageContents();
+    }
+
     /**
      * Returns the amount of the item inside the inventory
      *
@@ -49,7 +64,7 @@ public class InventoryUtil {
      * @return Is the inventory empty?
      */
     public static boolean isEmpty(Inventory inventory) {
-        for (ItemStack stack : inventory.getStorageContents()) {
+        for (ItemStack stack : getStorageContents(inventory)) {
             if (!MaterialUtil.isEmpty(stack)) {
                 return false;
             }
@@ -89,7 +104,7 @@ public class InventoryUtil {
             return true;
         }
 
-        for (ItemStack iStack : inventory.getStorageContents()) {
+        for (ItemStack iStack : getStorageContents(inventory)) {
             if (left <= 0) {
                 return true;
             }
@@ -155,7 +170,7 @@ public class InventoryUtil {
     // Don't use the armor slots or extra slots
     private static int effectiveSize(Inventory inventory)
     {
-        return inventory.getStorageContents().length;
+        return getStorageContents(inventory).length;
     }
 
     /**
