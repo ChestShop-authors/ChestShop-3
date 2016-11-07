@@ -1,17 +1,8 @@
 name: ChestShop
-
 main: com.Acrobot.ChestShop.ChestShop
-
 version: ${project.version}
-
-#for CButD
-dev-url: http://dev.bukkit.org/server-mods/chestshop/
-
-
-author: Acrobot
-description: >
-             A chest shop for economy plugins.
-
+author: [Acrobot, dmulloy2, L4BORG]
+description: A chest shop for economy plugins.
 depend: [Vault]
 softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence]
 
