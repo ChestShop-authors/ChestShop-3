@@ -123,7 +123,7 @@ public class PlayerInteract implements Listener {
         OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
 
         // check if player exists in economy
-        if(owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner))
+        if(!ChestShopSign.isAdminShop(sign) && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
             return null;
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
