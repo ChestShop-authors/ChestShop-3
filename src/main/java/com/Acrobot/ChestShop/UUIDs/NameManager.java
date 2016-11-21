@@ -205,6 +205,7 @@ public class NameManager {
         account = new Account(player.getName(), player.getUniqueId());
 
         if (!usernameToUUID.inverse().containsKey(uuid)) {
+            usernameToUUID.remove(player.getName()); // https://github.com/dmulloy2/ChestShop-3/issues/11
             usernameToUUID.inverse().put(uuid, player.getName());
         }
 
