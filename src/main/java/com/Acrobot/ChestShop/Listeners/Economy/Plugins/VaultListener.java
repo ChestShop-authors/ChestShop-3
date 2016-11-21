@@ -1,10 +1,12 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
-import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Events.Economy.*;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
+import java.math.BigDecimal;
+
+import javax.annotation.Nullable;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -12,8 +14,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import javax.annotation.Nullable;
-import java.math.BigDecimal;
+import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 
 /**
  * Represents a Vault connector
@@ -23,7 +32,7 @@ import java.math.BigDecimal;
 public class VaultListener implements Listener {
     private static Economy provider;
 
-    private VaultListener(Economy provider) { this.provider = provider; }
+    private VaultListener(Economy provider) { VaultListener.provider = provider; }
 
     public static Economy getProvider() { return provider; }
 
