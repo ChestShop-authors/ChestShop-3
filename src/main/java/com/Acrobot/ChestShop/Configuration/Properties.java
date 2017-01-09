@@ -137,4 +137,9 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
+    
+    public static byte NEWLINE_HEROES_EXP;  ///////////////////////////////////////////////////
+    
+    @ConfigurationComment("What do you want the restricted signs to have on the first line?")
+    public static String RESTRICTED_SIGN_NAME = "[restricted]";
 }

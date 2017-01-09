@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import org.bukkit.Location;
@@ -119,7 +120,7 @@ public class RestrictedSign implements Listener {
     }
 
     public static boolean isRestricted(String[] lines) {
-        return lines[0].equalsIgnoreCase("[restricted]");
+        return lines[0].equalsIgnoreCase(Properties.RESTRICTED_SIGN_NAME);
     }
 
     public static boolean isRestricted(Sign sign) {
