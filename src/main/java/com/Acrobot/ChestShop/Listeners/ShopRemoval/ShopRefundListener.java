@@ -32,6 +32,10 @@ public class ShopRefundListener implements Listener {
         }
 
         String ownerName = NameManager.getFullUsername(event.getSign().getLine(NAME_LINE));
+        if (ownerName.isEmpty()) {
+            return;
+        }
+
         UUID owner = NameManager.getUUID(ownerName);
 
         CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());

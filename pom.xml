@@ -10,9 +10,9 @@
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
-        <connection>scm:git:git://github.com/Acrobot/ChestShop-3</connection>
-        <developerConnection>scm:git:ssh://git@github.com/Acrobot/ChestShop-3.git</developerConnection>
-        <url>https://github.com/Acrobot/ChestShop-3</url>
+        <connection>scm:git:git://github.com/dmulloy2/ChestShop-3</connection>
+        <developerConnection>scm:git:ssh://git@github.com/dmulloy2/ChestShop-3.git</developerConnection>
+        <url>https://github.com/dmulloy2/ChestShop-3</url>
     </scm>
 
     <repositories>
@@ -30,11 +30,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
-        </repository>
-        <repository>
-            <id>heroes-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_snapshots/</url>
+            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
         </repository>
         <repository>
             <id>authme-repo</id>
@@ -69,9 +65,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -95,7 +91,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.6</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -130,16 +126,12 @@
         <dependency>
             <groupId>com.herocraftonline.heroes</groupId>
             <artifactId>Heroes</artifactId>
-            <version>1.5.5.6-SNAPSHOT</version>
+            <version>1.5.5</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -241,11 +233,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
-            <groupId>net.t00thpick1</groupId>
-            <artifactId>residence</artifactId>
-            <version>3.0.0q-SNAPSHOT</version>
+            <groupId>com.bekvon.bukkit.residence</groupId>
+            <artifactId>Residence</artifactId>
+            <version>4.5.3.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -274,8 +265,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>

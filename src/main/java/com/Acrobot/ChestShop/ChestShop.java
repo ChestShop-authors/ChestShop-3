@@ -38,11 +38,21 @@ import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.filter.AbstractFilter;
+import org.apache.logging.log4j.message.Message;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -81,6 +91,7 @@ public class ChestShop extends JavaPlugin {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
+        turnOffDatabaseLogging();
         handleMigrations();
 
         itemDatabase = new ItemDatabase();
@@ -112,6 +123,46 @@ public class ChestShop extends JavaPlugin {
 
         startStatistics();
         startUpdater();
+    }
+
+    private void turnOffDatabaseLogging() {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        org.apache.logging.log4j.core.config.Configuration config = ctx.getConfiguration();
+        LoggerConfig loggerConfig = config.getLoggerConfig("");
+
+        loggerConfig.addFilter(new AbstractFilter() {
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, String msg, Object... params) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Object msg, Throwable t) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Message msg, Throwable t) {
+                return filter(logger.getName(), level);
+            }
+
+            @Override
+            public Result filter(LogEvent event) {
+                return filter(event.getLoggerName(), event.getLevel());
+            }
+
+            private Result filter(String classname, Level level) {
+                if (level.isAtLeastAsSpecificAs(Level.ERROR) && !classname.contains("SqliteDatabaseType")) {
+                    return Result.NEUTRAL;
+                }
+
+                if (classname.contains("SqliteDatabaseType") || classname.contains("TableUtils")) {
+                    return Result.DENY;
+                } else {
+                    return Result.NEUTRAL;
+                }
+            }
+        });
     }
 
     private void handleMigrations() {
@@ -212,8 +263,9 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
-
-        if (this.getServer().getPluginManager().getPlugin("AuthMe") != null && this.getServer().getPluginManager().getPlugin("AuthMe").isEnabled()){
+      
+        Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");
+        if (authMe != null && authMe.isEnabled()) {
             registerEvent(new AuthMeChestShopListener());
         }
 

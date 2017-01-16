@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
@@ -45,12 +46,11 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 public class PlayerInteract implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public static void onInteract(PlayerInteractEvent event) {
+    public static void onInteract(PlayerInteractEvent event)
+    {
         Block block = event.getClickedBlock();
-
-        if (block == null) {
+        if (block == null)
             return;
-        }
 
         Action action = event.getAction();
         Player player = event.getPlayer();
@@ -68,12 +68,10 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (!isSign(block) || player.getItemInHand().getType() == Material.SIGN) { // Blocking accidental sign edition
+        if (!isSign(block) || player.getItemInHand().getType() == Material.SIGN) // Blocking accidental sign edition
             return;
-        }
 
         Sign sign = (Sign) block.getState();
-
         if (!ChestShopSign.isValid(sign)) {
             return;
         }
@@ -95,17 +93,14 @@ public class PlayerInteract implements Listener {
             event.setCancelled(true);
         }
 
+        //Bukkit.getLogger().info("ChestShop - DEBUG - "+block.getWorld().getName()+": "+block.getLocation().getBlockX()+", "+block.getLocation().getBlockY()+", "+block.getLocation().getBlockZ());
         PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
-
-        if (pEvent == null) {
+        if (pEvent == null)
             return;
-        }
 
         Bukkit.getPluginManager().callEvent(pEvent);
-
-        if (pEvent.isCancelled()) {
+        if (pEvent.isCancelled())
             return;
-        }
 
         TransactionEvent tEvent = new TransactionEvent(pEvent, sign);
         Bukkit.getPluginManager().callEvent(tEvent);
@@ -118,13 +113,18 @@ public class PlayerInteract implements Listener {
         String material = sign.getLine(ITEM_LINE);
 
         String ownerName = NameManager.getFullUsername(name);
-        UUID uuid = NameManager.getUUID(ownerName);
-
-        if (uuid == null) {
+        if (ownerName == null || ownerName.isEmpty())
             return null;
-        }
+
+        UUID uuid = NameManager.getUUID(ownerName);
+        if (uuid == null)
+            return null;
 
         OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
+
+        // check if player exists in economy
+        if(!ChestShopSign.isAdminShop(sign) && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
+            return null;
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
@@ -133,7 +133,6 @@ public class PlayerInteract implements Listener {
         Inventory ownerInventory = (ChestShopSign.isAdminShop(sign) ? new AdminInventory() : chest != null ? chest.getInventory() : null);
 
         ItemStack item = MaterialUtil.getItem(material);
-
         if (item == null || !NumberUtil.isInteger(quantity)) {
             player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
             return null;

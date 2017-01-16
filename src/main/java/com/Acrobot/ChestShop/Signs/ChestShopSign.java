@@ -81,7 +81,10 @@ public class ChestShopSign {
         if (player == null) return false;
         if (sign == null) return true;
 
-        return NameManager.canUseName(player, sign.getLine(NAME_LINE));
+        String name = sign.getLine(NAME_LINE);
+        if (name == null || name.isEmpty()) return true;
+
+        return NameManager.canUseName(player, name);
     }
 
     public static boolean isValidPreparedSign(String[] lines) {

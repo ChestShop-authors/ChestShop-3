@@ -9,20 +9,24 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.j256.ormlite.dao.Dao;
+
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * Lets you save/cache username and UUID relations
  *
  * @author Andrzej Pomirski (Acrobot)
  */
-@SuppressWarnings("UnusedAssignment") //I deliberately set the variables to null while initializing
+@SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
 public class NameManager {
     private static Dao<Account, String> accounts;
 
@@ -35,9 +39,9 @@ public class NameManager {
             return lastSeenName.get(uuid);
         }
 
-        if (Bukkit.getOfflinePlayer(uuid).getName() != null) {
-            String lastSeen = Bukkit.getOfflinePlayer(uuid).getName();
-
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        String lastSeen = player.getName();
+        if (lastSeen != null) {
             lastSeenName.put(uuid, lastSeen);
             return lastSeen;
         }
@@ -46,25 +50,32 @@ public class NameManager {
 
         try {
             account = accounts.queryBuilder().selectColumns("lastSeenName", "name").where().eq("uuid", uuid).queryForFirst();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+        } catch (SQLException ex) {
+            Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Failed to find last seen name for " + uuid + ":", ex);
         }
 
         if (account == null) {
-            return "";
+            return null;
         }
 
-        if (account.getLastSeenName() != null) {
-            lastSeenName.put(uuid, account.getLastSeenName());
-        } else if (account.getName() != null) {
-            lastSeenName.put(uuid, account.getName());
+        lastSeen = account.getLastSeenName();
+        if (lastSeen != null) {
+            lastSeenName.put(uuid, lastSeen);
+            return lastSeen;
         }
 
-        return account.getLastSeenName();
+        lastSeen = account.getName();
+        if (lastSeen != null) {
+            lastSeenName.put(uuid, lastSeen);
+            return lastSeen;
+        }
+
+        return null;
     }
 
     public static UUID getUUID(String username) {
+        Validate.notEmpty(username, "user cannot be null or empty!");
+        
         if (usernameToUUID.containsKey(username)) {
             return usernameToUUID.get(username);
         }
@@ -194,6 +205,7 @@ public class NameManager {
         account = new Account(player.getName(), player.getUniqueId());
 
         if (!usernameToUUID.inverse().containsKey(uuid)) {
+            usernameToUUID.remove(player.getName()); // https://github.com/dmulloy2/ChestShop-3/issues/11
             usernameToUUID.inverse().put(uuid, player.getName());
         }
 
@@ -207,10 +219,17 @@ public class NameManager {
     }
 
     public static void dropUsername(final Player player) {
-        final UUID uuid = player.getUniqueId();
+        if (player == null) return;
 
-        if (usernameToUUID.containsValue(uuid)) {
-            usernameToUUID.inverse().remove(uuid);
+        final UUID uuid = player.getUniqueId();
+        if (uuid == null) return;
+
+        try {
+            if (usernameToUUID.containsValue(uuid)) {
+                usernameToUUID.inverse().remove(uuid);
+            }
+        } catch (NullPointerException e) {
+            // Sigh...
         }
 
         String shortName = NameUtil.stripUsername(player.getName());
@@ -227,7 +246,7 @@ public class NameManager {
             return false;
         }
 
-        return shortenedName.equals(name) || Permission.otherName(player, name) || player.getUniqueId().equals(getUUID(name));
+        return shortenedName.equals(name) || Permission.otherName(player, name) || (!name.isEmpty() && player.getUniqueId().equals(getUUID(name)));
     }
 
     public static boolean isAdminShop(UUID uuid) {
