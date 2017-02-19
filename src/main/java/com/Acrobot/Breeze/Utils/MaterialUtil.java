@@ -48,10 +48,7 @@ public class MaterialUtil {
      * @return Are they equal?
      */
     public static boolean equals(ItemStack one, ItemStack two) {
-        return one.isSimilar(two)
-                && one.toString().equals(two.toString());
-        // The string comparision is necessary as CB has a bug where it counts items with similar ItemMeta
-        // but different NBT data as being equal. (See https://hub.spigotmc.org/jira/browse/SPIGOT-3077)
+        return one.isSimilar(two);
     }
 
     /**
