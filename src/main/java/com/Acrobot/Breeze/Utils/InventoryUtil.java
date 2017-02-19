@@ -126,7 +126,6 @@ public class InventoryUtil {
 
     /**
      * Adds an item to the inventory with given maximum stack size
-     * (it currently uses a custom method of adding items, because Bukkit hasn't fixed it for a year now - not even kidding)
      *
      * @param item         Item to add
      * @param inventory    Inventory
@@ -181,7 +180,9 @@ public class InventoryUtil {
      * @return Number of leftover items
      */
     public static int add(ItemStack item, Inventory inventory) {
-        return add(item, inventory, item.getMaxStackSize());
+        Map<Integer, ItemStack> leftovers = inventory.addItem(item.clone()); // item needs to be cloned as cb changes the amount of the stack size
+
+        return countItems(leftovers);
     }
 
     /**
