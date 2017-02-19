@@ -137,6 +137,10 @@ public class InventoryUtil {
             return 0;
         }
 
+        if (maxStackSize == item.getMaxStackSize()) {
+            return add(item, inventory);
+        }
+
         int amountLeft = item.getAmount();
 
         for (int currentSlot = 0; currentSlot < effectiveSize(inventory) && amountLeft > 0; currentSlot++) {
