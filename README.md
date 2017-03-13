@@ -1,7 +1,7 @@
 ChestShop
 ================================
 
-Development downloads can be found here: [http://ci.dmulloy2.net/job/ChestShop](http://ci.dmulloy2.net/job/ChestShop)
+Development downloads can be found here: [https://ci.minebench.de/job/ChestShop-3/](https://ci.minebench.de/job/ChestShop-3/)
 
 ChestShop is an awesome plugin for managing your server's economy. 
 By using chests and signs, you can effectively create your own market!
@@ -30,7 +30,7 @@ To install external dependencies, place your .jar into the main folder and launc
 
 Links
 --------------------------------
-* [Dev Builds](http://ci.dmulloy2.net/job/ChestShop)
+* [Dev Builds](https://ci.minebench.de/job/ChestShop-3/)
 * [Forum Thread](http://forums.bukkit.org/threads/4150/)
 * [BukkitDev site](http://dev.bukkit.org/server-mods/chestshop/)
 * [Bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+)
