@@ -1,12 +1,14 @@
 package com.Acrobot.Breeze.Utils;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 /**
  * @author Acrobot
@@ -82,7 +84,7 @@ public class InventoryUtil {
      */
     public static boolean hasItems(ItemStack[] items, Inventory inventory) {
         for (ItemStack item : items) {
-            if (!inventory.containsAtLeast(item, item.getAmount())) {
+            if (getAmount(item, inventory) < item.getAmount()) {
                 return false;
             }
         }
@@ -141,32 +143,27 @@ public class InventoryUtil {
             return add(item, inventory);
         }
 
+        return addManually(item, inventory, maxStackSize);
+    }
+
+    private static int addManually(ItemStack item, Inventory inventory, int maxStackSize) {
         int amountLeft = item.getAmount();
 
         for (int currentSlot = 0; currentSlot < effectiveSize(inventory) && amountLeft > 0; currentSlot++) {
             ItemStack currentItem = inventory.getItem(currentSlot);
-            ItemStack duplicate = item.clone();
 
             if (MaterialUtil.isEmpty(currentItem)) {
-                duplicate.setAmount(Math.min(amountLeft, maxStackSize));
-                duplicate.addUnsafeEnchantments(item.getEnchantments());
+                currentItem.setAmount(Math.min(amountLeft, maxStackSize));
 
-                amountLeft -= duplicate.getAmount();
-
-                inventory.setItem(currentSlot, duplicate);
+                amountLeft -= currentItem.getAmount();
             } else if (currentItem.getAmount() < maxStackSize && MaterialUtil.equals(currentItem, item)) {
-                int currentAmount = currentItem.getAmount();
-                int neededToAdd = Math.min(maxStackSize - currentAmount, amountLeft);
+                int neededToAdd = Math.min(maxStackSize - currentItem.getAmount(), amountLeft);
 
-                duplicate.setAmount(currentAmount + neededToAdd);
-                duplicate.addUnsafeEnchantments(item.getEnchantments());
+                currentItem.setAmount(currentItem.getAmount() + neededToAdd);
 
                 amountLeft -= neededToAdd;
-
-                inventory.setItem(currentSlot, duplicate);
             }
         }
-
         return amountLeft;
     }
 
@@ -186,6 +183,18 @@ public class InventoryUtil {
     public static int add(ItemStack item, Inventory inventory) {
         Map<Integer, ItemStack> leftovers = inventory.addItem(item.clone()); // item needs to be cloned as cb changes the amount of the stack size
 
+        if (!leftovers.isEmpty()) {
+            for (Iterator<ItemStack> iterator = leftovers.values().iterator(); iterator.hasNext(); ) {
+                ItemStack left = iterator.next();
+                int amountLeft = addManually(left, inventory, left.getMaxStackSize());
+                if (amountLeft == 0) {
+                    iterator.remove();
+                } else {
+                    left.setAmount(amountLeft);
+                }
+            }
+        }
+
         return countItems(leftovers);
     }
 
@@ -199,7 +208,33 @@ public class InventoryUtil {
     public static int remove(ItemStack item, Inventory inventory) {
         Map<Integer, ItemStack> leftovers = inventory.removeItem(item);
 
+        if (!leftovers.isEmpty()) {
+            for (Iterator<ItemStack> iterator = leftovers.values().iterator(); iterator.hasNext(); ) {
+                ItemStack left = iterator.next();
+                if (removeManually(left, inventory) == 0) {
+                    iterator.remove();
+                }
+            }
+        }
+
         return countItems(leftovers);
+    }
+
+    private static int removeManually(ItemStack item, Inventory inventory) {
+        int amountLeft = item.getAmount();
+
+        for (int currentSlot = 0; currentSlot < effectiveSize(inventory) && amountLeft > 0; currentSlot++) {
+            ItemStack currentItem = inventory.getItem(currentSlot);
+
+            if (MaterialUtil.equals(currentItem, item)) {
+                int neededToRemove = Math.min(currentItem.getAmount(), amountLeft);
+
+                currentItem.setAmount(currentItem.getAmount() - neededToRemove);
+
+                amountLeft -= neededToRemove;
+            }
+        }
+        return amountLeft;
     }
 
     /**
@@ -252,11 +287,11 @@ public class InventoryUtil {
      * @param items Leftovers
      * @return Number of leftovers
      */
-    public static int countItems(Map<Integer, ?> items) {
+    public static int countItems(Map<Integer, ItemStack> items) {
         int totalLeft = 0;
 
-        for (int left : items.keySet()) {
-            totalLeft += left;
+        for (ItemStack left : items.values()) {
+            totalLeft += left.getAmount();
         }
 
         return totalLeft;

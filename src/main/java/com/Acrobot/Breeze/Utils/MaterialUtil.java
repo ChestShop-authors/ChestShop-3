@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.*;
 
@@ -48,7 +49,20 @@ public class MaterialUtil {
      * @return Are they equal?
      */
     public static boolean equals(ItemStack one, ItemStack two) {
-        return one.isSimilar(two);
+        if (one == null || two == null) {
+            return one != two;
+        }
+        if (one.isSimilar(two)) {
+            return true;
+        }
+
+        // Special check for books as their pages might change when serialising (See SPIGOT-3206)
+        return one.getType() == two.getType()
+                && one.getDurability() == two.getDurability()
+                && one.getData().equals(two.getData())
+                && one.hasItemMeta() && two.hasItemMeta()
+                && one.getItemMeta() instanceof BookMeta && two.getItemMeta() instanceof BookMeta
+                && one.getItemMeta().serialize().equals(two.getItemMeta().serialize());
     }
 
     /**
