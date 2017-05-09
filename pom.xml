@@ -10,9 +10,9 @@
     <description>Chest-and-sign shop plugin for Bukkit</description>
 
     <scm>
-        <connection>scm:git:git://github.com/dmulloy2/ChestShop-3</connection>
-        <developerConnection>scm:git:ssh://git@github.com/dmulloy2/ChestShop-3.git</developerConnection>
-        <url>https://github.com/dmulloy2/ChestShop-3</url>
+        <connection>scm:git:git://github.com/ChestShop-authors/ChestShop-3</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ChestShop-authors/ChestShop-3.git</developerConnection>
+        <url>https://github.com/ChestShop-authors/ChestShop-3</url>
     </scm>
 
     <repositories>
