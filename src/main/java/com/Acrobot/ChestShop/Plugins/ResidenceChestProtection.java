@@ -28,7 +28,7 @@ public class ResidenceChestProtection implements Listener {
         ClaimedResidence residence = ResidenceApi.getResidenceManager().getByLoc(block.getLocation());
 
         if (residence != null) {
-            if (!residence.getPermissions().playerHas(player, Flags.container, true) && !Residence.isResAdminOn(player)) {
+            if (!residence.getPermissions().playerHas(player, Flags.container, true) && !Residence.getInstance().isResAdminOn(player)) {
                 //Doesn't have permissions to that chest.
                 event.setResult(Event.Result.DENY);
             }
