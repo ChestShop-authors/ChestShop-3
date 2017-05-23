@@ -2,7 +2,7 @@ name: ChestShop
 main: com.Acrobot.ChestShop.ChestShop
 version: '${bukkit.plugin.version}'
 author: Acrobot
-authors: [dmulloy2, L4BORG, Phoenix616]
+authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
 depend: [Vault]
 softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence]
