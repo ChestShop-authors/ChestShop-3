@@ -152,7 +152,7 @@ public class ChestShop extends JavaPlugin {
             }
 
             private Result filter(String classname, Level level) {
-                if (level.isAtLeastAsSpecificAs(Level.ERROR) && !classname.contains("SqliteDatabaseType")) {
+                if (level.intLevel() <= Level.ERROR.intLevel() && !classname.contains("SqliteDatabaseType")) {
                     return Result.NEUTRAL;
                 }
 

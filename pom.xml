@@ -57,17 +57,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Should be kept in sync with Mojang -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.0-beta9</version>
-            <scope>compile</scope>
+            <version>2.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.11-R0.1-SNAPSHOT</version>
+            <version>1.12-pre6-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -285,6 +286,7 @@
                                     <include>org.mcstats.bukkit</include>
                                     <include>net.gravitydevelopment.updater</include>
                                     <include>com.j256.ormlite</include>
+                                    <include>org.apache.logging.log4j</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
