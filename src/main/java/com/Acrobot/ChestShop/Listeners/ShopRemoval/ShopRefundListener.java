@@ -32,7 +32,7 @@ public class ShopRefundListener implements Listener {
         }
 
         String ownerName = NameManager.getFullUsername(event.getSign().getLine(NAME_LINE));
-        if (ownerName.isEmpty()) {
+        if (ownerName == null || ownerName.isEmpty()) {
             return;
         }
 
