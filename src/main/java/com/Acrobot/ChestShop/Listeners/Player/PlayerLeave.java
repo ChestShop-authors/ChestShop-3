@@ -16,8 +16,6 @@ public class PlayerLeave implements Listener {
         if (Toggle.isIgnoring(event.getPlayer())) {
             Toggle.setIgnoring(event.getPlayer(), false);
         }
-
-        NameManager.dropUsername(event.getPlayer());
     }
 
 }

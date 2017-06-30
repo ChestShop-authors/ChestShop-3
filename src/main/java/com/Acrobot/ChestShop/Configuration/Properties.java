@@ -11,6 +11,10 @@ public class Properties {
     public static boolean TURN_OFF_UPDATES = false;
 
     @PrecededBySpace
+    @ConfigurationComment("How large should the internal uuid and name caches be?")
+    public static int CACHE_SIZE = 1000;
+
+    @PrecededBySpace
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
     public static int SHOP_INTERACTION_INTERVAL = 250;
 
