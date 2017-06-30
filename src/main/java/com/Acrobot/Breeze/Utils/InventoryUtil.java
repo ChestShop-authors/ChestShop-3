@@ -226,7 +226,7 @@ public class InventoryUtil {
         for (int currentSlot = 0; currentSlot < effectiveSize(inventory) && amountLeft > 0; currentSlot++) {
             ItemStack currentItem = inventory.getItem(currentSlot);
 
-            if (MaterialUtil.equals(currentItem, item)) {
+            if (currentItem != null && MaterialUtil.equals(currentItem, item)) {
                 int neededToRemove = Math.min(currentItem.getAmount(), amountLeft);
 
                 currentItem.setAmount(currentItem.getAmount() - neededToRemove);
