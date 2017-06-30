@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.UUIDs;
 
 import com.Acrobot.Breeze.Utils.Encoding.Base62;
 import com.Acrobot.Breeze.Utils.NameUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.DaoCreator;
@@ -56,7 +57,7 @@ public class NameManager {
                             uuid = account.getUuid();
                         }
                     } catch (SQLException e) {
-                        Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while getting uuid for " + username + ":", e);
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting uuid for " + username + ":", e);
                     }
                 }
                 if (uuid == null) {
@@ -96,7 +97,7 @@ public class NameManager {
                             name = account.getLastSeenName();
                         }
                     } catch (SQLException e) {
-                        Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while getting username for " + uuid + ":", e);
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting username for " + uuid + ":", e);
                     }
                 }
                 if (name == null) {
@@ -136,7 +137,7 @@ public class NameManager {
                         return account.getLastSeenName();
                     }
                 } catch (SQLException e) {
-                    Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while getting full name for " + shortName + ":", e);
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting full name for " + shortName + ":", e);
                 }
                 throw new Exception("Could not find full name for " + shortName);
             });
@@ -162,18 +163,18 @@ public class NameManager {
                 try {
                     accounts.update(account);
                 } catch (SQLException e) {
-                    Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while updating account " + account + ":", e);
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + account + ":", e);
                 }
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error getting all entries for " + uuid + ":", e);
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Error getting all entries for " + uuid + ":", e);
             return;
         } finally {
             if (existingAccounts != null) {
                 try {
                     existingAccounts.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while closing query iterator for " + uuid + ":", e);
                 }
             }
         }
@@ -182,7 +183,7 @@ public class NameManager {
         try {
             latestAccount = accounts.queryBuilder().where().eq("uuid", uuid).eq("name", player.getName()).queryForFirst();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
         }
 
         if (latestAccount == null) {
@@ -192,7 +193,7 @@ public class NameManager {
             try {
                 accounts.create(latestAccount);
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.WARNING, "[ChestShop] Error while updating account " + latestAccount + ":", e);
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
             }
         }
 
