@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Listeners.ShopRemoval;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
@@ -31,14 +32,12 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        String ownerName = NameManager.getFullUsername(event.getSign().getLine(NAME_LINE));
-        if (ownerName == null || ownerName.isEmpty()) {
+        Account account = NameManager.getAccountFromShortName(event.getSign().getLine(NAME_LINE));
+        if (account == null) {
             return;
         }
 
-        UUID owner = NameManager.getUUID(ownerName);
-
-        CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), owner, event.getSign().getWorld());
+        CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), account.getUuid(), event.getSign().getWorld());
         ChestShop.callEvent(currencyEvent);
 
         if (!Economy.getServerAccountName().isEmpty()) {

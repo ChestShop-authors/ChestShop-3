@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.*;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
+import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
@@ -112,15 +113,11 @@ public class PlayerInteract implements Listener {
         String prices = sign.getLine(PRICE_LINE);
         String material = sign.getLine(ITEM_LINE);
 
-        String ownerName = NameManager.getFullUsername(name);
-        if (ownerName == null || ownerName.isEmpty())
+        Account account = NameManager.getAccountFromShortName(name);
+        if (account == null)
             return null;
 
-        UUID uuid = NameManager.getUUID(ownerName);
-        if (uuid == null)
-            return null;
-
-        OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(account.getUuid());
 
         // check if player exists in economy
         if(!ChestShopSign.isAdminShop(sign) && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))

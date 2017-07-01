@@ -21,7 +21,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyAdd(CurrencyAddEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencySubtract(CurrencySubtractEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyCheck(CurrencyCheckEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
             return;
         }
 
@@ -84,7 +84,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyHoldCheck(CurrencyHoldEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
             return;
         }
 
@@ -96,7 +96,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onBalanceCheck(CurrencyAmountEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || NameManager.getUsername(target).equals(SERVER_ECONOMY_ACCOUNT)) {
+        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
             return;
         }
 

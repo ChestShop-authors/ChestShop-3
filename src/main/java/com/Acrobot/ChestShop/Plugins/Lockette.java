@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
+import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.block.Block;
@@ -26,9 +27,8 @@ public class Lockette implements Listener {
             return;
         }
 
-        String shortPlayerName = NameUtil.stripUsername(NameManager.getUsername(player.getUniqueId()));
-
-        if (!org.yi.acru.bukkit.Lockette.Lockette.isUser(block, shortPlayerName, true)) {
+        Account account = NameManager.getAccount(player.getUniqueId());
+        if (account != null && !org.yi.acru.bukkit.Lockette.Lockette.isUser(block, account.getName(), true)) {
             event.setResult(Event.Result.DENY);
         }
     }

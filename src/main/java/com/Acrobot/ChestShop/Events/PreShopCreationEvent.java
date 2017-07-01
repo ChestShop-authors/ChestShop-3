@@ -142,6 +142,8 @@ public class PreShopCreationEvent extends Event {
         INVALID_PRICE,
         INVALID_QUANTITY,
 
+        UNKNOWN_PLAYER,
+
         SELL_PRICE_HIGHER_THAN_BUY_PRICE,
 
         NO_CHEST,

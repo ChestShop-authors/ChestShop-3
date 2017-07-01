@@ -33,7 +33,7 @@ public class TaxModule implements Listener {
 
         UUID target = event.getTarget();
 
-        if (NameManager.getUsername(target).equals(Economy.getServerAccountName())) {
+        if (Economy.getServerAccountName().equals(NameManager.getUsername(target))) {
             return;
         }
 

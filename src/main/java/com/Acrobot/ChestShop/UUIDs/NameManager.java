@@ -10,7 +10,6 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 
 import org.apache.commons.lang.Validate;
@@ -19,6 +18,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -32,118 +32,167 @@ import java.util.logging.Level;
 public class NameManager {
     private static Dao<Account, String> accounts;
 
-    private static Cache<String, UUID> usernameToUUID = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
-    private static Cache<UUID, String> uuidToUsername = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
-    private static Cache<String, String> shortToLongName = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
+    private static Cache<String, Account> usernameToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
+    private static Cache<UUID, Account> uuidToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
+    private static Cache<String, Account> shortToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
 
     /**
-     * Get the UUID from a player's (non-shortened) username
-     * @param username  The player's username
-     * @return          The UUID or <tt>null</tt> if the UUID can't be found or an error occurred
+     * Get account info from a UUID
+     * @param uuid  The UUID of the player to get the account info
+     * @return      The account info or <tt>null</tt> if none was found
      */
-    public static UUID getUUID(String username) {
-        Validate.notEmpty(username, "username cannot be null or empty!");
+    public static Account getAccount(UUID uuid) {
         try {
-            return usernameToUUID.get(username, () -> {
-                UUID uuid = null;
-                Player player = Bukkit.getPlayer(username);
-                if (player != null) {
-                    uuid = player.getUniqueId();
-                }
-                if (uuid == null) {
-                    try {
-                        Account account = accounts.queryBuilder().selectColumns("uuid").where().eq("lastSeenName", username).queryForFirst();
-                        if (account != null) {
-                            uuid = account.getUuid();
-                        }
-                    } catch (SQLException e) {
-                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting uuid for " + username + ":", e);
+            return uuidToAccount.get(uuid, () -> {
+                try {
+                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", uuid).queryForFirst();
+                    if (account != null) {
+                        account.setUuid(uuid); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        shortToAccount.put(account.getShortName(), account);
+                        usernameToAccount.put(account.getName(), account);
+                        return account;
                     }
+                } catch (SQLException e) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + uuid + ":", e);
                 }
-                if (uuid == null) {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
-                    if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getUniqueId() != null) {
-                        uuid = offlinePlayer.getUniqueId();
-                    }
-                }
-                if (uuid != null) {
-                    uuidToUsername.put(uuid, username);
-                    return uuid;
-                }
-                throw new Exception("Could not find username for " + uuid);
+                throw new Exception("Could not find account for " + uuid);
             });
-        } catch (ExecutionException e) {
+        } catch (ExecutionException ignored) {
             return null;
         }
     }
 
     /**
+     * Get account info from a non-shortened username
+     * @param fullName  The full name of the player to get the account info
+     * @return          The account info or <tt>null</tt> if none was found
+     * @throws IllegalArgumentException if the username is empty or null
+     */
+    public static Account getAccount(String fullName) {
+        Validate.notEmpty(fullName, "fullName cannot be null or empty!");
+        try {
+            return usernameToAccount.get(fullName, () -> {
+                try {
+                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", fullName).queryForFirst();
+                    if (account != null) {
+                        account.setName(fullName); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        shortToAccount.put(account.getShortName(), account);
+                        return account;
+                    }
+                } catch (SQLException e) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + fullName + ":", e);
+                }
+                throw new Exception("Could not find account for " + fullName);
+            });
+        } catch (ExecutionException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Get account info from a username that might be shortened
+     * @param shortName The name of the player to get the account info
+     * @return          The account info or <tt>null</tt> if none was found
+     * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
+     */
+    public static Account getAccountFromShortName(String shortName) {
+        Validate.notEmpty(shortName, "shortName cannot be null or empty!");
+        Validate.isTrue(shortName.length() < 16, "Username is not a shortened name and longer than 15 chars!");
+
+        try {
+            return shortToAccount.get(shortName, () -> {
+                try {
+                    Account account = accounts.queryBuilder().where().eq("shortName", shortName).queryForFirst();
+                    if (account != null) {
+                        account.setShortName(shortName); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        return account;
+                    }
+                } catch (SQLException e) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
+                }
+                throw new Exception("Could not find account for " + shortName);
+            });
+        } catch (ExecutionException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Get the UUID from a player's (non-shortened) username
+     * @param username  The player's username
+     * @return          The UUID or <tt>null</tt> if the UUID can't be found or an error occurred
+     * @deprecated      Use {@link NameManager#getAccount(String)}
+     */
+    @Deprecated
+    public static UUID getUUID(String username) {
+        Validate.notEmpty(username, "username cannot be null or empty!");
+        Player player = Bukkit.getPlayer(username);
+        if (player != null) {
+            return player.getUniqueId();
+        }
+        Account account = getAccount(username);
+        if (account != null) {
+            return account.getUuid();
+        }
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getUniqueId() != null) {
+            return offlinePlayer.getUniqueId();
+        }
+        return null;
+    }
+
+    /**
      * Get the username from a player's UUID
      * @param uuid  The UUID of the player
-     * @return      The username that is stored, an empty string if none was found or <tt>null</tt> if an error occurred
+     * @return      The username that is stored or <tt>null</tt> if none was found
+     * @deprecated  Use {@link NameManager#getAccount(UUID)}
      */
+    @Deprecated
     public static String getUsername(UUID uuid) {
-        try {
-            return uuidToUsername.get(uuid, () -> {
-                String name = null;
-                Player player = Bukkit.getPlayer(uuid);
-                if (player != null) {
-                    name = player.getName();
-                }
-                if (name == null) {
-                    try {
-                        Account account = accounts.queryBuilder().selectColumns("lastSeenName").where().eq("uuid", uuid).queryForFirst();
-                        if (account != null) {
-                            name = account.getLastSeenName();
-                        }
-                    } catch (SQLException e) {
-                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting username for " + uuid + ":", e);
-                    }
-                }
-                if (name == null) {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-                    if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getName() != null) {
-                        name = offlinePlayer.getName();
-                    }
-                }
-                if (name != null) {
-                    usernameToUUID.put(name, uuid);
-                    return name;
-                }
-                throw new Exception("Could not find username for " + uuid);
-            });
-        } catch (ExecutionException e) {
-            return "";
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+            return player.getName();
         }
+        Account account = getAccount(uuid);
+        if (account != null) {
+            return account.getName();
+        }
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getName() != null) {
+            return offlinePlayer.getName();
+        }
+        return null;
     }
 
     /**
      * Get the full username from another username that might be shortened
      * @param shortName The name of the player to get the full username for
-     * @return          The full username, an empty string if none was found or <tt>null</tt> if an error occurred
+     * @return          The full username or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
+     * @deprecated      Use {@link NameManager#getAccountFromShortName(String)}
      */
+    @Deprecated
     public static String getFullUsername(String shortName) {
-        Validate.isTrue(shortName.length() < 16, "Username is not a shortened name and longer than 15 chars!");
-        if (ChestShopSign.isAdminShop(shortName)) {
-            return Properties.ADMIN_SHOP_NAME;
+        Account account = getAccountFromShortName(shortName); // first get the account associated with the short name
+        if (account != null) {
+            account = getAccount(account.getUuid()); // then get the last account that was online with that UUID
+            if (account != null) {
+                return account.getName();
+            }
         }
+        return null;
+    }
 
-        try {
-            return shortToLongName.get(shortName, () -> {
-                try {
-                    Account account = accounts.queryBuilder().selectColumns("lastSeenName").where().eq("shortName", shortName).queryForFirst();
-                    if (account != null) {
-                        return account.getLastSeenName();
-                    }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting full name for " + shortName + ":", e);
-                }
-                throw new Exception("Could not find full name for " + shortName);
-            });
-        } catch (ExecutionException ignored) {
-            return "";
-        }
+    /**
+     * Get the short username from a full username
+     * @param fullName  The name of the player to get the short username for
+     * @return          The short username or <tt>null</tt> if none was found
+     * @deprecated      Use {@link NameManager#getAccount(String)}
+     */
+    @Deprecated
+    public static String getShortUsername(String fullName) {
+        Account account = getAccount(fullName);
+        return account != null ? account.getShortName() : null;
     }
 
     /**
@@ -153,35 +202,9 @@ public class NameManager {
     public static void storeUsername(final PlayerDTO player) {
         final UUID uuid = player.getUniqueId();
 
-        CloseableIterator<Account> existingAccounts = null;
-        try {
-            existingAccounts = accounts.queryBuilder().where().eq("uuid", uuid).ne("lastSeenName", player.getName()).iterator();
-            while (existingAccounts.hasNext()) {
-                Account account = existingAccounts.next();
-                account.setUuid(uuid); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                account.setLastSeenName(player.getName());
-                try {
-                    accounts.update(account);
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + account + ":", e);
-                }
-            }
-        } catch (SQLException e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Error getting all entries for " + uuid + ":", e);
-            return;
-        } finally {
-            if (existingAccounts != null) {
-                try {
-                    existingAccounts.close();
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while closing query iterator for " + uuid + ":", e);
-                }
-            }
-        }
-
         Account latestAccount = null;
         try {
-            latestAccount = accounts.queryBuilder().where().eq("uuid", uuid).eq("name", player.getName()).queryForFirst();
+            latestAccount = accounts.queryBuilder().where().eq("uuid", uuid).and().eq("name", player.getName()).queryForFirst();
         } catch (SQLException e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
         }
@@ -189,18 +212,18 @@ public class NameManager {
         if (latestAccount == null) {
             latestAccount = new Account(player.getName(), player.getUniqueId());
             latestAccount.setShortName(getNewShortenedName(player));
-
-            try {
-                accounts.create(latestAccount);
-            } catch (SQLException e) {
-                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
-            }
         }
 
-        usernameToUUID.put(latestAccount.getLastSeenName(), uuid);
-        uuidToUsername.put(uuid, latestAccount.getLastSeenName());
+        latestAccount.setLastSeen(new Date());
+        try {
+            accounts.createOrUpdate(latestAccount);
+        } catch (SQLException e) {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
+        }
 
-        shortToLongName.put(latestAccount.getShortName(), latestAccount.getLastSeenName());
+        usernameToAccount.put(latestAccount.getName(), latestAccount);
+        uuidToAccount.put(uuid, latestAccount);
+        shortToAccount.put(latestAccount.getShortName(), latestAccount);
     }
 
     /**
@@ -211,27 +234,30 @@ public class NameManager {
     private static String getNewShortenedName(PlayerDTO player) {
         String shortenedName = NameUtil.stripUsername(player.getName());
 
-        String fullName = getFullUsername(shortenedName);
-        if (fullName != null && fullName.isEmpty()) {
+        Account account = getAccountFromShortName(shortenedName);
+        if (account == null) {
             return shortenedName;
         }
-        for (int id = 0; fullName != null && !fullName.isEmpty(); id++) {
+        for (int id = 0; account != null; id++) {
             String baseId = Base62.encode(id);
             shortenedName = NameUtil.stripUsername(player.getName(), 15 - 1 - baseId.length()) + ":" + baseId;
-            fullName = getFullUsername(shortenedName);
+            account = getAccountFromShortName(shortenedName);
         }
 
         return shortenedName;
     }
 
     public static boolean canUseName(Player player, String name) {
-        String shortenedName = NameUtil.stripUsername(getUsername(player.getUniqueId()));
-
         if (ChestShopSign.isAdminShop(name)) {
             return false;
         }
 
-        return shortenedName.equals(name) || Permission.otherName(player, name) || (!name.isEmpty() && player.getName().equals(getFullUsername(name)));
+        if (Permission.otherName(player, name)) {
+            return true;
+        }
+
+        Account account = getAccountFromShortName(name);
+        return account != null && account.getUuid().equals(player.getUniqueId());
     }
 
     public static boolean isAdminShop(UUID uuid) {

@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @author Andrzej Pomirski
  */
 public class Migrations {
-    public static final int CURRENT_DATABASE_VERSION = 2;
+    public static final int CURRENT_DATABASE_VERSION = 3;
 
     /**
      * Migrates a database from the given version
@@ -33,9 +33,19 @@ public class Migrations {
                 if (migrated) {
                     currentVersion++;
                 }
-
+                break;
             case 2:
+
+                boolean migrated3 = migrateTo3();
+
+                if (migrated3) {
+                    currentVersion++;
+                }
+                break;
+            case 3:
+                break;
             default:
+                break;
                 //do nothing
         }
 
@@ -47,6 +57,21 @@ public class Migrations {
             Dao<Account, String> accounts = DaoCreator.getDao(Account.class);
 
             accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN lastSeenName VARCHAR");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean migrateTo3() {
+        try {
+            Dao<Account, String> accountsOld = DaoCreator.getDao(Account.class);
+            accountsOld.executeRaw("ALTER TABLE `accounts` RENAME TO `accounts-old`");
+
+            Dao<Account, String> accounts = DaoCreator.getDaoAndCreateTable(Account.class);
+            accounts.executeRaw("INSERT INTO `accounts` (name, shortName, uuid) SELECT name, shortName, uuid FROM `accounts-old`");
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

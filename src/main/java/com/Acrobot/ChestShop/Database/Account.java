@@ -1,9 +1,11 @@
 package com.Acrobot.ChestShop.Database;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -14,17 +16,17 @@ import java.util.UUID;
 @DatabaseFileName("users.db")
 public class Account {
 
-    @DatabaseField(canBeNull = false)
-    private String lastSeenName;
-
-    @DatabaseField(id = true, canBeNull = false)
+    @DatabaseField(index = true, canBeNull = false, uniqueCombo = true)
     private String name;
 
-    @DatabaseField(index = true, canBeNull = false)
+    @DatabaseField(id = true, index = true, canBeNull = false)
     private String shortName;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(index = true, canBeNull = false, uniqueCombo = true)
     private UUID uuid;
+
+    @DatabaseField(canBeNull = false, dataType = DataType.DATE_LONG, defaultValue = "0")
+    private Date lastSeen;
 
     public Account() {
         //empty constructor, needed for ORMLite
@@ -33,16 +35,7 @@ public class Account {
     public Account(String name, UUID uuid) {
         this.name = name;
         this.shortName = NameUtil.stripUsername(name);
-        this.lastSeenName = name;
         this.uuid = uuid;
-    }
-
-    public String getLastSeenName() {
-        return lastSeenName;
-    }
-
-    public void setLastSeenName(String lastSeenName) {
-        this.lastSeenName = lastSeenName;
     }
 
     public String getName() {
@@ -67,5 +60,13 @@ public class Account {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public Date getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
     }
 }
