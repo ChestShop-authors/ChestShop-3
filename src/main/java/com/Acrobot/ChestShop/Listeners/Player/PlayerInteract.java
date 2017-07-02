@@ -117,7 +117,9 @@ public class PlayerInteract implements Listener {
         if (account == null)
             return null;
 
-        OfflinePlayer owner = Bukkit.getOfflinePlayer(account.getUuid());
+        OfflinePlayer owner = account.getUuid().version() != 4 // it seems to forget the username when getting by the offline UUID
+                ? Bukkit.getOfflinePlayer(account.getName())   // so we get the OfflinePlayer directly by the name in this case
+                : Bukkit.getOfflinePlayer(account.getUuid());
 
         // check if player exists in economy
         if(!ChestShopSign.isAdminShop(sign) && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
