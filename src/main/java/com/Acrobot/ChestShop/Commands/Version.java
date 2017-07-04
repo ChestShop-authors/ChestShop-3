@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Configuration.Configuration;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,6 +18,7 @@ public class Version implements CommandExecutor {
         if (args.length > 0 && args[0].equals("reload")) {
             Configuration.pairFileAndClass(ChestShop.loadFile("config.yml"), Properties.class);
             Configuration.pairFileAndClass(ChestShop.loadFile("local.yml"), Messages.class);
+            NameManager.load();
 
             sender.sendMessage(ChatColor.DARK_GREEN + "The config was reloaded.");
             return true;
