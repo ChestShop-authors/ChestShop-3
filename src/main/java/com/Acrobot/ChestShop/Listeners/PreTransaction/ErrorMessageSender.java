@@ -2,9 +2,11 @@ package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.ChestShop.Configuration.Messages.CLIENT_DEPOSIT_FAILED;
 import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_STOCK_IN_YOUR_SHOP;
+import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_SPACE_IN_YOUR_SHOP;
 
 /**
  * @author Acrobot
@@ -44,6 +47,17 @@ public class ErrorMessageSender implements Listener {
                 message = Messages.NOT_ENOUGH_MONEY_SHOP;
                 break;
             case NOT_ENOUGH_SPACE_IN_CHEST:
+                if (Properties.SHOW_MESSAGE_FULL_SHOP && !Properties.CSTOGGLE_TOGGLES_FULL_SHOP || !Toggle.isIgnoring(event.getOwner())) {
+                    Location loc = event.getSign().getLocation();
+                    String messageNotEnoughSpace = Messages.prefix(NOT_ENOUGH_SPACE_IN_YOUR_SHOP)
+                            .replace("%material", getItemNames(event.getStock()))
+                            .replace("%seller", event.getClient().getName())
+                            .replace("%world", loc.getWorld().getName())
+                            .replace("%x", String.valueOf(loc.getBlockX()))
+                            .replace("%y", String.valueOf(loc.getBlockY()))
+                            .replace("%z", String.valueOf(loc.getBlockZ()));
+                    sendMessageToOwner(event.getOwner(), messageNotEnoughSpace);
+                }
                 message = Messages.NOT_ENOUGH_SPACE_IN_CHEST;
                 break;
             case NOT_ENOUGH_SPACE_IN_INVENTORY:
@@ -53,10 +67,17 @@ public class ErrorMessageSender implements Listener {
                 message = Messages.NOT_ENOUGH_ITEMS_TO_SELL;
                 break;
             case NOT_ENOUGH_STOCK_IN_CHEST:
-                String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP)
-                        .replace("%material", getItemNames(event.getStock()))
-                        .replace("%buyer", event.getClient().getName());
-                sendMessageToOwner(event.getOwner(), messageOutOfStock);
+                if (Properties.SHOW_MESSAGE_OUT_OF_STOCK && !Properties.CSTOGGLE_TOGGLES_OUT_OF_STOCK || !Toggle.isIgnoring(event.getOwner())) {
+                    Location loc = event.getSign().getLocation();
+                    String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP)
+                            .replace("%material", getItemNames(event.getStock()))
+                            .replace("%buyer", event.getClient().getName())
+                            .replace("%world", loc.getWorld().getName())
+                            .replace("%x", String.valueOf(loc.getBlockX()))
+                            .replace("%y", String.valueOf(loc.getBlockY()))
+                            .replace("%z", String.valueOf(loc.getBlockZ()));
+                    sendMessageToOwner(event.getOwner(), messageOutOfStock);
+                }
                 message = Messages.NOT_ENOUGH_STOCK;
                 break;
             case CLIENT_DEPOSIT_FAILED:
@@ -85,17 +106,17 @@ public class ErrorMessageSender implements Listener {
     private static String getItemNames(ItemStack[] stock) {
         ItemStack[] items = InventoryUtil.mergeSimilarStacks(stock);
 
-        StringBuilder names = new StringBuilder(50);
+        StringBuilder names = new StringBuilder(MaterialUtil.getName(items[0]));
 
-        for (ItemStack item : items) {
-            names.append(MaterialUtil.getName(item)).append(',').append(' ');
+        for (int i = 1; i < items.length; i++) {
+            names.append(MaterialUtil.getName(items[i])).append(',').append(' ');
         }
 
         return names.toString();
     }
 
     private static void sendMessageToOwner(OfflinePlayer owner, String message) {
-        if (owner.isOnline() && Properties.SHOW_MESSAGE_OUT_OF_STOCK) {
+        if (owner.isOnline()) {
             Player player = (Player) owner;
             player.sendMessage(message);
         }

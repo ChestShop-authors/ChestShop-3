@@ -70,7 +70,7 @@ public class Properties {
     @ConfigurationComment("Do you want to allow other players to build a shop on a block where there's one already?")
     public static boolean ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK = false;
 
-    @ConfigurationComment("Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequatly to the item amount)")
+    @ConfigurationComment("Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequately to the item amount)")
     public static boolean ALLOW_PARTIAL_TRANSACTIONS = true;
 
     @ConfigurationComment("Can '?' be put in place of item name in order for the sign to be auto-filled?")
@@ -79,6 +79,14 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("Do you want to show \"Out of stock\" messages?")
     public static boolean SHOW_MESSAGE_OUT_OF_STOCK = true;
+    @ConfigurationComment("Do you want to show \"Full shop\" messages?")
+    public static boolean SHOW_MESSAGE_FULL_SHOP = true;
+
+    @PrecededBySpace
+    @ConfigurationComment("Can players hide the \"Out of stock\" messages with /cstoggle?")
+    public static boolean CSTOGGLE_TOGGLES_OUT_OF_STOCK = false;
+    @ConfigurationComment("Can players hide the \"Full shop\" messages with /cstoggle?")
+    public static boolean CSTOGGLE_TOGGLES_FULL_SHOP = false;
 
     @ConfigurationComment("Do you want to show \"You bought/sold... \" messages?")
     public static boolean SHOW_TRANSACTION_INFORMATION_CLIENT = true;

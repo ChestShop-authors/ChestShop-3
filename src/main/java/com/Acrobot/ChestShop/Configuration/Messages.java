@@ -7,8 +7,8 @@ import org.bukkit.ChatColor;
  * @author Acrobot
  */
 public class Messages {
-    public static String prefix = ChatColor.GREEN + "[Shop] " + ChatColor.RESET;
-    public static String iteminfo = ChatColor.GREEN + "Item Information: " + ChatColor.RESET;
+    public static String prefix = "&a[Shop] &r";
+    public static String iteminfo = "&aItem Information: &r";
 
     @PrecededBySpace
     public static String ACCESS_DENIED = "You don't have permission to do that!";
@@ -29,10 +29,11 @@ public class Messages {
     public static String NOT_ENOUGH_SPACE_IN_INVENTORY = "You haven't got enough space in inventory!";
     public static String NOT_ENOUGH_SPACE_IN_CHEST = "There isn't enough space in chest!";
     public static String NOT_ENOUGH_ITEMS_TO_SELL = "You don't have enough items to sell!";
+    public static String NOT_ENOUGH_SPACE_IN_YOUR_SHOP = "%material&7 shop at &r%world/%x/%y/%z&7 is full! (%seller tried to sell)";
 
     @PrecededBySpace
     public static String NOT_ENOUGH_STOCK = "This shop is out of stock.";
-    public static String NOT_ENOUGH_STOCK_IN_YOUR_SHOP = "Your %material shop is out of stock!";
+    public static String NOT_ENOUGH_STOCK_IN_YOUR_SHOP = "%material&7 shop at &r%world/%x/%y/%z&7 is out of stock! (%buyer tried to buy)";
 
     @PrecededBySpace
     public static String YOU_BOUGHT_FROM_SHOP = "You bought %item from %owner for %price.";
@@ -72,6 +73,6 @@ public class Messages {
     public static String TOGGLE_MESSAGES_ON = "You will now receive messages from your shop(s).";
 
     public static String prefix(String message) {
-        return prefix + message;
+        return ChatColor.translateAlternateColorCodes('&', prefix + message);
     }
 }
