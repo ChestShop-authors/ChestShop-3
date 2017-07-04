@@ -22,14 +22,19 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
@@ -47,15 +52,29 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 public class PlayerInteract implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public static void onInteract(PlayerInteractEvent event)
-    {
+    public static void onInteract(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
         if (block == null)
             return;
 
-        Action action = event.getAction();
-        Player player = event.getPlayer();
+        // Make sure that event isn't handled twice when the adventure mdoe workaround is used
+        if (event.getPlayer().getGameMode() != GameMode.ADVENTURE || event.getAction() != Action.LEFT_CLICK_BLOCK) {
+            handleEvent(event, event.getPlayer(), block, event.getAction());
+        }
+    }
 
+    // Workaround for adventure mode not sending left clicks to the server
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public static void onAnimation(PlayerAnimationEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.ADVENTURE && event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
+            Block block = event.getPlayer().getTargetBlock((Set<Material>) null, 5);
+            if (block == null)
+                return;
+            handleEvent(event, event.getPlayer(), block, Action.LEFT_CLICK_BLOCK);
+        }
+    }
+
+    private static void handleEvent(Cancellable event, Player player, Block block, Action action) {
         if (Properties.USE_BUILT_IN_PROTECTION && isChest(block)) {
             if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
                 return;
