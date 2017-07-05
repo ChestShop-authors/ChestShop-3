@@ -73,6 +73,6 @@ public class Messages {
     public static String TOGGLE_MESSAGES_ON = "You will now receive messages from your shop(s).";
 
     public static String prefix(String message) {
-        return ChatColor.translateAlternateColorCodes('&', prefix + message);
+        return prefix + message;
     }
 }
