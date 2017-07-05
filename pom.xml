@@ -29,6 +29,10 @@
             <url>http://repo.mcstats.org/content/repositories/releases/</url>
         </repository>
         <repository>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
+        </repository>
+        <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
         </repository>
@@ -87,6 +91,12 @@
                     <artifactId>craftbukkit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit-lite</artifactId>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -284,6 +294,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.mcstats.bukkit</include>
+                                    <include>org.bstats:*</include>
                                     <include>net.gravitydevelopment.updater</include>
                                     <include>com.j256.ormlite</include>
                                     <include>org.apache.logging.log4j</include>
@@ -292,7 +303,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.mcstats</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop</shadedPattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Metrics.MCStats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Metrics.BStats</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>net.gravitydevelopment.updater</pattern>

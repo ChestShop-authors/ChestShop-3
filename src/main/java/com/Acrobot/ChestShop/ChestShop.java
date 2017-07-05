@@ -55,7 +55,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -346,10 +345,11 @@ public class ChestShop extends JavaPlugin {
 
     private void startStatistics() {
         try {
-            new Metrics(this).start();
+            new org.mcstats.Metrics(this).start();
         } catch (IOException ex) {
-            ChestShop.getBukkitLogger().severe("There was an error while submitting statistics.");
+            ChestShop.getBukkitLogger().severe("There was an error while submitting MCStats statistics.");
         }
+        new org.bstats.MetricsLite(this);
     }
 
     private static final int PROJECT_BUKKITDEV_ID = 31263;
