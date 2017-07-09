@@ -270,6 +270,13 @@ public class NameManager {
 
             Account adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
             accounts.createOrUpdate(adminAccount);
+
+            if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
+                Account serverEconomyAccount = getAccount(Properties.SERVER_ECONOMY_ACCOUNT);
+                if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

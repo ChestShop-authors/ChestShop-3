@@ -33,6 +33,9 @@ public class ServerAccountCorrector implements Listener {
         }
 
         event.setAdded(true);
+        if (target == null) {
+            return;
+        }
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencyAddEvent);
@@ -54,6 +57,9 @@ public class ServerAccountCorrector implements Listener {
         }
 
         event.setSubtracted(true);
+        if (target == null) {
+            return;
+        }
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencySubtractEvent);
@@ -72,6 +78,10 @@ public class ServerAccountCorrector implements Listener {
             return;
         } else {
             target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
+            if (target == null) {
+                event.hasEnough(true);
+                return;
+            }
         }
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getAmount(), target, event.getWorld());
@@ -105,6 +115,9 @@ public class ServerAccountCorrector implements Listener {
             return;
         } else {
             target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
+            if (target == null) {
+                return;
+            }
         }
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(target, event.getWorld());
