@@ -93,11 +93,13 @@ public class NameManager {
      * Get account info from a username that might be shortened
      * @param shortName The name of the player to get the account info
      * @return          The account info or <tt>null</tt> if none was found
-     * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
+     * @throws IllegalArgumentException if the username is empty
      */
     public static Account getAccountFromShortName(String shortName) {
         Validate.notEmpty(shortName, "shortName cannot be null or empty!");
-        Validate.isTrue(shortName.length() < 16, "Username is not a shortened name and longer than 15 chars!");
+        if (shortName.length() > 15) {
+            return getAccount(shortName);
+        }
 
         try {
             return shortToAccount.get(shortName, () -> {
