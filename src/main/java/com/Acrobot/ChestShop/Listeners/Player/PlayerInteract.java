@@ -1,6 +1,10 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.NumberUtil;
+import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -29,20 +33,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Directional;
 
 import java.util.Set;
-import java.util.UUID;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -57,7 +63,7 @@ public class PlayerInteract implements Listener {
         if (block == null)
             return;
 
-        // Make sure that event isn't handled twice when the adventure mdoe workaround is used
+        // Make sure that event isn't handled twice when the adventure mode workaround is used
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE || event.getAction() != Action.LEFT_CLICK_BLOCK) {
             handleEvent(event, event.getPlayer(), block, event.getAction());
         }
@@ -70,6 +76,9 @@ public class PlayerInteract implements Listener {
             Block block = event.getPlayer().getTargetBlock((Set<Material>) null, 5);
             if (block == null)
                 return;
+            if (isSign(block) && !BlockUtil.getBoundingBox(block).intercepts(event.getPlayer().getEyeLocation(), block, 8, 0.1)) {
+                return;
+            }
             handleEvent(event, event.getPlayer(), block, Action.LEFT_CLICK_BLOCK);
         }
     }
