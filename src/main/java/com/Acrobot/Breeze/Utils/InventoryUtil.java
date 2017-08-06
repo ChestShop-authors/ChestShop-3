@@ -153,7 +153,9 @@ public class InventoryUtil {
             ItemStack currentItem = inventory.getItem(currentSlot);
 
             if (MaterialUtil.isEmpty(currentItem)) {
+                currentItem = new ItemStack(item);
                 currentItem.setAmount(Math.min(amountLeft, maxStackSize));
+                inventory.setItem(currentSlot, currentItem);
 
                 amountLeft -= currentItem.getAmount();
             } else if (currentItem.getAmount() < maxStackSize && MaterialUtil.equals(currentItem, item)) {
