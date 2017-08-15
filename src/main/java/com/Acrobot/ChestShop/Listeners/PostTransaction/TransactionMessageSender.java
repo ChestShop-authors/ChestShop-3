@@ -33,6 +33,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendBuyMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
+        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
 
         Player player = event.getClient();
 
@@ -40,7 +41,7 @@ public class TransactionMessageSender implements Listener {
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
             String message = formatMessage(Messages.YOU_BOUGHT_FROM_SHOP, itemName, price);
-            message = message.replace("%owner", event.getOwner().getName());
+            message = message.replace("%owner", owner);
 
             player.sendMessage(message);
         }
@@ -55,6 +56,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendSellMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
+        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
 
         Player player = event.getClient();
 
@@ -62,7 +64,7 @@ public class TransactionMessageSender implements Listener {
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
             String message = formatMessage(Messages.YOU_SOLD_TO_SHOP, itemName, price);
-            message = message.replace("%buyer", event.getOwner().getName());
+            message = message.replace("%buyer", owner);
 
             player.sendMessage(message);
         }
