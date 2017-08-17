@@ -80,7 +80,8 @@ public class Migrations {
             try {
                 accounts.executeRawNoArgs("INSERT INTO `accounts` (name, shortName, uuid) SELECT name, shortName, uuid FROM `accounts-old`");
             } catch (SQLException e) {
-                ChestShop.getBukkitLogger().log(Level.WARNING, "Fast accounts migration failed! (" + e.getMessage() + "). Starting slow migration...");
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Fast accounts migration failed!\n" + e + "\nCause: " + e.getCause());
+                ChestShop.getBukkitLogger().log(Level.INFO, "Starting slow migration...");
                 accounts.executeRawNoArgs("DELETE FROM `accounts`");
 
                 GenericRawResults<String[]> results = accounts.queryRaw("SELECT name, shortName, uuid FROM `accounts-old`");
@@ -88,6 +89,7 @@ public class Migrations {
                 int success = 0;
                 int error = 0;
                 CloseableIterator<String[]> resultIterator = results.closeableIterator();
+                long lastInfo = System.currentTimeMillis();
                 while (resultIterator.hasNext()) {
                     String[] strings = resultIterator.next();
                     Account account = new Account(strings[0], UUID.fromString(strings[2]));
@@ -98,7 +100,12 @@ public class Migrations {
                         success++;
                     } catch (SQLException x) {
                         error++;
-                        ChestShop.getBukkitLogger().log(Level.SEVERE, "Could not load account " + account.getName() + "/" + account.getShortName() + "/" + account.getUuid() + " to new database format", x);
+                        ChestShop.getBukkitLogger().log(Level.SEVERE, "Could not migrate account " + account.getName() + "/" + account.getShortName() + "/" + account.getUuid() + " to new database format:\n" + x + "\nCause: " + x.getCause());
+                        ChestShop.getBukkitLogger().log(Level.INFO, "If the cause is a constraint violation then this is nothing to worry about!");
+                    }
+                    if (lastInfo + 60 * 1000 < System.currentTimeMillis()) {
+                        ChestShop.getBukkitLogger().log(Level.INFO, "Slow migration in progress... " + (System.currentTimeMillis() - start) / 1000.0 + "s elapsed - " + success + " migrated - " + error + " errors");
+                        lastInfo = System.currentTimeMillis();
                     }
                 }
                 results.close();
