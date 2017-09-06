@@ -153,7 +153,7 @@ public class PlayerInteract implements Listener {
 
         item.setAmount(amount);
 
-        ItemStack[] items = {item};
+        ItemStack[] items = InventoryUtil.getItemsStacked(item);
 
         TransactionType transactionType = (action == buy ? BUY : SELL);
         return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, owner, sign, transactionType);
@@ -173,8 +173,8 @@ public class PlayerInteract implements Listener {
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         Inventory checkedInventory = (action == buy ? inventory : player.getInventory());
 
-        if (checkedInventory.containsAtLeast(item, item.getMaxStackSize())) {
-            return item.getMaxStackSize();
+        if (checkedInventory.containsAtLeast(item, InventoryUtil.getMaxStackSize(item))) {
+            return InventoryUtil.getMaxStackSize(item);
         } else {
             return InventoryUtil.getAmount(item, checkedInventory);
         }

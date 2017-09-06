@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.ChestShop.Database.Item;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,7 +46,8 @@ public class StockFittingChecker implements Listener {
     }
 
     private static boolean itemsFitInInventory(ItemStack[] items, Inventory inventory) {
-        for (ItemStack item : items) {
+        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
+        for (ItemStack item : mergedItems) {
             if (!InventoryUtil.fits(item, inventory)) {
                 return false;
             }
