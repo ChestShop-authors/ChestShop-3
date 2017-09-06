@@ -30,8 +30,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.UUID;
-
 import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
@@ -117,19 +115,25 @@ public class PlayerInteract implements Listener {
         if (account == null)
             return null;
 
-        OfflinePlayer owner = account.getUuid().version() != 4 // it seems to forget the username when getting by the offline UUID
-                ? Bukkit.getOfflinePlayer(account.getName())   // so we get the OfflinePlayer directly by the name in this case
+        boolean adminShop = ChestShopSign.isAdminShop(sign);
+
+        // It seems to forget the username when getting by the offline UUID
+        // so we get the OfflinePlayer directly by the name in this case.
+        // We're also getting the OfflinePlayer of the admin shop by its
+        // name, because it will be also sometimes forgotten.
+        OfflinePlayer owner = account.getUuid().version() != 4 || adminShop
+                ? Bukkit.getOfflinePlayer(account.getName())
                 : Bukkit.getOfflinePlayer(account.getUuid());
 
         // check if player exists in economy
-        if(!ChestShopSign.isAdminShop(sign) && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
+        if(!adminShop && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
             return null;
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
 
         Chest chest = uBlock.findConnectedChest(sign);
-        Inventory ownerInventory = (ChestShopSign.isAdminShop(sign) ? new AdminInventory() : chest != null ? chest.getInventory() : null);
+        Inventory ownerInventory = (adminShop ? new AdminInventory() : chest != null ? chest.getInventory() : null);
 
         ItemStack item = MaterialUtil.getItem(material);
         if (item == null || !NumberUtil.isInteger(quantity)) {
