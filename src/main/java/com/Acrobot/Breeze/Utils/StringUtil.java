@@ -1,11 +1,13 @@
 package com.Acrobot.Breeze.Utils;
 
-import com.google.common.base.Joiner;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Acrobot
@@ -43,7 +45,7 @@ public class StringUtil {
      * @return Joined array
      */
     public static String joinArray(String[] array) {
-        return Joiner.on(' ').join(array);
+        return joinArray(Arrays.asList(array));
     }
 
     /**
@@ -52,8 +54,8 @@ public class StringUtil {
      * @param array Iterable
      * @return Joined iterable
      */
-    public static String joinArray(Iterable<?> array) {
-        return Joiner.on(' ').join(array);
+    public static String joinArray(Collection<String> array) {
+        return array.stream().collect(Collectors.joining(" "));
     }
 
     /**

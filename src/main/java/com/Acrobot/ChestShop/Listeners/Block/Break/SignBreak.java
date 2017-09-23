@@ -7,7 +7,6 @@ import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -165,7 +164,7 @@ public class SignBreak implements Listener {
 
     private static List<Sign> getAttachedSigns(Block block) {
         if (block == null) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
         if (isSign(block)) {

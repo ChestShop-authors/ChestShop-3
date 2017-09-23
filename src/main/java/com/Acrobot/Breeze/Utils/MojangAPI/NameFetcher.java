@@ -1,12 +1,12 @@
 package com.Acrobot.Breeze.Utils.MojangAPI;
 
-import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
     private final List<UUID> uuids;
 
     public NameFetcher(UUID... uuids) {
-        this.uuids = ImmutableList.copyOf(uuids);
+        this.uuids = Arrays.asList(uuids);
     }
 
     @Override

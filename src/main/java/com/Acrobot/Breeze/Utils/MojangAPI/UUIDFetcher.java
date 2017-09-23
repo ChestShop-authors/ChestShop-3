@@ -1,6 +1,5 @@
 package com.Acrobot.Breeze.Utils.MojangAPI;
 
-import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -28,11 +27,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     private final List<String> names;
 
     public UUIDFetcher(String... names) {
-        this.names = ImmutableList.copyOf(names);
-    }
-
-    public UUIDFetcher(String name) {
-        this.names = ImmutableList.of(name);
+        this.names = Arrays.asList(names);
     }
 
     public Map<String, UUID> call() throws Exception {

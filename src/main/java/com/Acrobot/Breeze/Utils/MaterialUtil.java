@@ -1,8 +1,6 @@
 package com.Acrobot.Breeze.Utils;
 
 import com.Acrobot.ChestShop.ChestShop;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import info.somethingodd.OddItem.OddItem;
 import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
@@ -166,7 +164,10 @@ public class MaterialUtil {
             return itemStack;
         }
 
-        String[] split = Iterables.toArray(Splitter.onPattern(":|-|#").trimResults().split(itemName), String.class);
+        String[] split = itemName.split("[:\\-#]");
+        for (int i = 0; i < split.length; i++) {
+            split[i] = split[i].trim();
+        }
 
         Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);

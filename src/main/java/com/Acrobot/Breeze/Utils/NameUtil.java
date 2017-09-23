@@ -2,9 +2,9 @@ package com.Acrobot.Breeze.Utils;
 
 import com.Acrobot.Breeze.Utils.MojangAPI.NameFetcher;
 import com.Acrobot.Breeze.Utils.MojangAPI.UUIDFetcher;
-import com.google.common.collect.ImmutableMap;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,7 +60,7 @@ public class NameUtil {
         try {
             return fetcher.call();
         } catch (Exception exception) {
-            return ImmutableMap.of();
+            return new HashMap<>();
         }
     }
 
@@ -94,7 +94,7 @@ public class NameUtil {
         try {
             return fetcher.call();
         } catch (Exception e) {
-            return ImmutableMap.of();
+            return new HashMap<>();
         }
     }
 

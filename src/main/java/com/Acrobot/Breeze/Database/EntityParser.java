@@ -1,13 +1,12 @@
 package com.Acrobot.Breeze.Database;
 
-import com.google.common.base.Joiner;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Parses an entity (class with database fields)
@@ -37,7 +36,7 @@ public class EntityParser {
             fields.add(convertToSQL(field));
         }
 
-        return Joiner.on(',').join(fields);
+        return fields.stream().collect(Collectors.joining(","));
     }
 
     /**

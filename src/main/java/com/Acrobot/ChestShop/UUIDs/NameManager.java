@@ -8,8 +8,6 @@ import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.DaoCreator;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.j256.ormlite.dao.Dao;
 
 import org.apache.commons.lang.Validate;
@@ -19,7 +17,10 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
@@ -32,9 +33,9 @@ import java.util.logging.Level;
 public class NameManager {
     private static Dao<Account, String> accounts;
 
-    private static Cache<String, Account> usernameToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
-    private static Cache<UUID, Account> uuidToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
-    private static Cache<String, Account> shortToAccount = CacheBuilder.newBuilder().maximumSize(Properties.CACHE_SIZE).build();
+    private static SimpleLoadingCache<String, Account> usernameToAccount = new SimpleLoadingCache<>(Properties.CACHE_SIZE);
+    private static SimpleLoadingCache<UUID, Account> uuidToAccount = new SimpleLoadingCache<>(Properties.CACHE_SIZE);
+    private static SimpleLoadingCache<String, Account> shortToAccount = new SimpleLoadingCache<>(Properties.CACHE_SIZE);
 
     /**
      * Get account info from a UUID
@@ -281,6 +282,46 @@ public class NameManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static class SimpleLoadingCache<K, V> {
+        private final LinkedHashMap<K, V> map;
+
+        public SimpleLoadingCache(int cacheSize) {
+            map = new LinkedHashMap<K, V>(cacheSize * 10/9, 0.7f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+                    return size() > cacheSize;
+                }
+            };
+        }
+
+        public void put(K key, V value) {
+            map.put(key, value);
+        }
+
+        public V get(K key) {
+            return map.get(key);
+        }
+
+        public V get(K key, Callable<? extends V> loader) throws ExecutionException {
+            if (contains(key)) {
+                return map.get(key);
+            }
+            try {
+                V value = loader.call();
+                if (value != null) {
+                    put(key, value);
+                }
+                return value;
+            } catch (Exception e) {
+                throw new ExecutionException(e);
+            }
+        }
+
+        private boolean contains(K key) {
+            return map.containsKey(key);
         }
     }
 }

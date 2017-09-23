@@ -2,13 +2,13 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
-import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +16,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -80,14 +82,13 @@ public class TransactionMessageSender implements Listener {
     private static String parseItemInformation(ItemStack[] items) {
         ItemStack[] stock = InventoryUtil.mergeSimilarStacks(items);
 
-        StringBuilder message = new StringBuilder(15);
-        Joiner joiner = Joiner.on(' ');
+        List<String> itemText = new ArrayList<>();
 
         for (ItemStack item : stock) {
-            joiner.appendTo(message, item.getAmount(), MaterialUtil.getName(item));
+            itemText.add(item.getAmount() + " " + MaterialUtil.getName(item));
         }
 
-        return message.toString();
+        return StringUtil.joinArray(itemText);
     }
 
     private static void sendMessageToOwner(String message, TransactionEvent event) {
