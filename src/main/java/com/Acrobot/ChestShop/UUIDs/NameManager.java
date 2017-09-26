@@ -260,7 +260,8 @@ public class NameManager {
         }
 
         Account account = getAccountFromShortName(name);
-        return account != null && account.getUuid().equals(player.getUniqueId());
+        return account != null && (account.getUuid().equals(player.getUniqueId())
+                || (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, account.getName())));
     }
 
     public static boolean isAdminShop(UUID uuid) {
