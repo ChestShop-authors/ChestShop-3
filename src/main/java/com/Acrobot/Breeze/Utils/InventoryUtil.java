@@ -315,12 +315,15 @@ public class InventoryUtil {
             return new ItemStack[]{item};
         }
         List<ItemStack> items = new LinkedList<>();
-        int left = item.getAmount();
-        while (left > 0) {
+        for (int i = 0; i < Math.floor(item.getAmount() / maxStackSize); i++) {
             ItemStack itemClone = item.clone();
-            itemClone.setAmount(left > maxStackSize ? maxStackSize : left);
-            left -= itemClone.getAmount();
+            itemClone.setAmount(maxStackSize);
             items.add(itemClone);
+        }
+        if (item.getAmount() % maxStackSize != 0) {
+            ItemStack rest = item.clone();
+            rest.setAmount(item.getAmount() % maxStackSize);
+            items.add(rest);
         }
         return items.toArray(new ItemStack[items.size()]);
     }
