@@ -17,7 +17,6 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -117,16 +116,8 @@ public class PlayerInteract implements Listener {
 
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
-        // It seems to forget the username when getting by the offline UUID
-        // so we get the OfflinePlayer directly by the name in this case.
-        // We're also getting the OfflinePlayer of the admin shop by its
-        // name, because it will be also sometimes forgotten.
-        OfflinePlayer owner = account.getUuid().version() != 4 || adminShop
-                ? Bukkit.getOfflinePlayer(account.getName())
-                : Bukkit.getOfflinePlayer(account.getUuid());
-
         // check if player exists in economy
-        if(!adminShop && (owner == null || owner.getName() == null || !VaultListener.getProvider().hasAccount(owner)))
+        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName()))
             return null;
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
@@ -160,7 +151,7 @@ public class PlayerInteract implements Listener {
         ItemStack[] items = InventoryUtil.getItemsStacked(item);
 
         TransactionType transactionType = (action == buy ? BUY : SELL);
-        return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, owner, sign, transactionType);
+        return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, account, sign, transactionType);
     }
 
     private static boolean isAllowedForShift(boolean buyTransaction) {

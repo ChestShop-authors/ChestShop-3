@@ -35,7 +35,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendBuyMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
-        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
+        String owner = event.getOwnerAccount().getName();
 
         Player player = event.getClient();
 
@@ -48,7 +48,7 @@ public class TransactionMessageSender implements Listener {
             player.sendMessage(message);
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwner())) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
             String message = formatMessage(Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, itemName, price);
             message = message.replace("%buyer", player.getName());
 
@@ -58,7 +58,7 @@ public class TransactionMessageSender implements Listener {
 
     protected static void sendSellMessage(TransactionEvent event) {
         String itemName = parseItemInformation(event.getStock());
-        String owner = NameManager.getUsername(event.getOwner().getUniqueId());
+        String owner = event.getOwnerAccount().getName();
 
         Player player = event.getClient();
 
@@ -71,7 +71,7 @@ public class TransactionMessageSender implements Listener {
             player.sendMessage(message);
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwner())) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(owner)) {
             String message = formatMessage(Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, itemName, price);
             message = message.replace("%seller", player.getName());
 
@@ -92,7 +92,7 @@ public class TransactionMessageSender implements Listener {
     }
 
     private static void sendMessageToOwner(String message, TransactionEvent event) {
-        UUID owner = event.getOwner().getUniqueId();
+        UUID owner = event.getOwnerAccount().getUuid();
 
         Player player = Bukkit.getPlayer(owner);
 

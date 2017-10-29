@@ -49,7 +49,11 @@ public class Toggle implements CommandExecutor {
     }
 
     public static boolean isIgnoring(OfflinePlayer player) {
-        return player != null && toggledPlayers.contains(player.getName());
+        return player != null && isIgnoring(player.getName());
+    }
+
+    public static boolean isIgnoring(String playerName) {
+        return toggledPlayers.contains(playerName);
     }
 
     public static boolean setIgnoring(Player player, boolean ignoring) {

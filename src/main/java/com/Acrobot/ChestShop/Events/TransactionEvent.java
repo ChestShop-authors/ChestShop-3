@@ -1,5 +1,7 @@
 package com.Acrobot.ChestShop.Events;
 
+import com.Acrobot.ChestShop.Database.Account;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -21,7 +23,7 @@ public class TransactionEvent extends Event {
     private final Inventory clientInventory;
 
     private final Player client;
-    private final OfflinePlayer owner;
+    private final Account ownerAccount;
 
     private final ItemStack[] stock;
     private final double price;
@@ -35,7 +37,7 @@ public class TransactionEvent extends Event {
         this.clientInventory = event.getClientInventory();
 
         this.client = event.getClient();
-        this.owner = event.getOwner();
+        this.ownerAccount = event.getOwnerAccount();
 
         this.stock = event.getStock();
         this.price = event.getPrice();
@@ -43,14 +45,14 @@ public class TransactionEvent extends Event {
         this.sign = sign;
     }
 
-    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, OfflinePlayer owner, ItemStack[] stock, double price, Sign sign) {
+    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, Account ownerAccount, ItemStack[] stock, double price, Sign sign) {
         this.type = type;
 
         this.ownerInventory = ownerInventory;
         this.clientInventory = clientInventory;
 
         this.client = client;
-        this.owner = owner;
+        this.ownerAccount = ownerAccount;
 
         this.stock = stock;
         this.price = price;
@@ -87,10 +89,19 @@ public class TransactionEvent extends Event {
     }
 
     /**
-     * @return Shop's owner
+     * @return Account of the shop's owner
      */
+    public Account getOwnerAccount() {
+        return ownerAccount;
+    }
+
+    /**
+     * @return Shop's owner
+     * @deprecated Use {@link #getOwnerAccount}
+     */
+    @Deprecated
     public OfflinePlayer getOwner() {
-        return owner;
+        return Bukkit.getOfflinePlayer(ownerAccount.getUuid());
     }
 
     /**

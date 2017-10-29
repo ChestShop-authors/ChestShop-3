@@ -1,5 +1,8 @@
 package com.Acrobot.ChestShop.Events;
 
+import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -20,7 +23,7 @@ public class PreTransactionEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player client;
-    private OfflinePlayer owner;
+    private Account ownerAccount;
 
     private final TransactionType transactionType;
     private final Sign sign;
@@ -33,7 +36,7 @@ public class PreTransactionEvent extends Event {
 
     private TransactionOutcome transactionOutcome = TRANSACTION_SUCCESFUL;
 
-    public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, double price, Player client, OfflinePlayer owner, Sign sign, TransactionType type) {
+    public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, double price, Player client, Account ownerAccount, Sign sign, TransactionType type) {
         this.ownerInventory = ownerInventory;
         this.clientInventory = (clientInventory == null ? client.getInventory() : clientInventory);
 
@@ -41,7 +44,7 @@ public class PreTransactionEvent extends Event {
         this.price = price;
 
         this.client = client;
-        this.owner = owner;
+        this.ownerAccount = ownerAccount;
 
         this.sign = sign;
         this.transactionType = type;
@@ -94,19 +97,39 @@ public class PreTransactionEvent extends Event {
     }
 
     /**
-     * @return Shop's owner
+     * @return Account of the shop's owner
      */
+    public Account getOwnerAccount() {
+        return ownerAccount;
+    }
+
+    /**
+     * Sets the shop's owner
+     *
+     * @param ownerAccount Account of the shop owner
+     */
+    public void setOwnerAccount(Account ownerAccount) {
+        this.ownerAccount = ownerAccount;
+    }
+
+    /**
+     * @return Shop's owner
+     * @deprecated Use {@link #getOwnerAccount}
+     */
+    @Deprecated
     public OfflinePlayer getOwner() {
-        return owner;
+        return Bukkit.getOfflinePlayer(ownerAccount.getUuid());
     }
 
     /**
      * Sets the shop's owner
      *
      * @param owner Shop owner
+     * @deprecated Use {@link #setOwnerAccount(Account)}
      */
+    @Deprecated
     public void setOwner(OfflinePlayer owner) {
-        this.owner = owner;
+        this.ownerAccount = NameManager.getAccount(owner.getUniqueId());
     }
 
     /**

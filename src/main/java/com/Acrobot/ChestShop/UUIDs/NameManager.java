@@ -37,6 +37,9 @@ public class NameManager {
     private static SimpleLoadingCache<UUID, Account> uuidToAccount = new SimpleLoadingCache<>(Properties.CACHE_SIZE);
     private static SimpleLoadingCache<String, Account> shortToAccount = new SimpleLoadingCache<>(Properties.CACHE_SIZE);
 
+    private static Account adminAccount;
+    private static Account serverEconomyAccount;
+
     /**
      * Get account info from a UUID
      * @param uuid  The UUID of the player to get the account info
@@ -265,18 +268,22 @@ public class NameManager {
     }
 
     public static boolean isAdminShop(UUID uuid) {
-        return Properties.ADMIN_SHOP_NAME.equals(getUsername(uuid));
+        return adminAccount != null && uuid.equals(adminAccount.getUuid());
+    }
+
+    public static boolean isServerEconomyAccount(UUID uuid) {
+        return serverEconomyAccount != null && uuid.equals(serverEconomyAccount.getUuid());
     }
 
     public static void load() {
         try {
             accounts = DaoCreator.getDaoAndCreateTable(Account.class);
 
-            Account adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
             accounts.createOrUpdate(adminAccount);
 
             if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
-                Account serverEconomyAccount = getAccount(Properties.SERVER_ECONOMY_ACCOUNT);
+                serverEconomyAccount = getAccount(Properties.SERVER_ECONOMY_ACCOUNT);
                 if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
                     ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
                 }

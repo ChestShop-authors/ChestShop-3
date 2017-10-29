@@ -23,7 +23,7 @@ public class EconomicModule implements Listener {
         }
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()),
-                                                            event.getOwner().getUniqueId(),
+                                                            event.getOwnerAccount().getUuid(),
                                                             event.getSign().getWorld());
         ChestShop.callEvent(currencyAddEvent);  // java.lang.StackOverflowError
 
@@ -38,7 +38,7 @@ public class EconomicModule implements Listener {
         }
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()),
-                                                                            event.getOwner().getUniqueId(),
+                                                                            event.getOwnerAccount().getUuid(),
                                                                             event.getSign().getWorld());
         ChestShop.callEvent(currencySubtractEvent);
 

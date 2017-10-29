@@ -36,7 +36,7 @@ public class TransactionLogger implements Listener {
                         event.getClient().getName(),
                         items.toString(),
                         event.getPrice(),
-                        NameManager.getUsername(event.getOwner().getUniqueId()),
+                        event.getOwnerAccount().getName(),
                         LocationUtil.locationToString(event.getSign().getLocation()));
 
                 ChestShop.getBukkitLogger().info(message);

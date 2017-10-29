@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Economy;
 
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,11 @@ public class ServerAccountCorrector implements Listener {
             event.setAdded(true);
             return;
         } else {
-            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
+            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
+            if (account == null || account.getUuid() == null) {
+                return;
+            }
+            target = account.getUuid();
         }
 
         event.setAdded(true);
@@ -53,7 +58,12 @@ public class ServerAccountCorrector implements Listener {
             event.setSubtracted(true);
             return;
         } else {
-            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
+            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
+            if (account != null) {
+                target = account.getUuid();
+            } else {
+                target = null;
+            }
         }
 
         event.setSubtracted(true);
@@ -77,11 +87,12 @@ public class ServerAccountCorrector implements Listener {
             event.hasEnough(true);
             return;
         } else {
-            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
-            if (target == null) {
+            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
+            if (account == null || account.getUuid() == null) {
                 event.hasEnough(true);
                 return;
             }
+            target = account.getUuid();
         }
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getAmount(), target, event.getWorld());
@@ -106,7 +117,7 @@ public class ServerAccountCorrector implements Listener {
     public static void onBalanceCheck(CurrencyAmountEvent event) {
         UUID target = event.getAccount();
 
-        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
+        if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
@@ -114,10 +125,11 @@ public class ServerAccountCorrector implements Listener {
             event.setAmount(BigDecimal.valueOf(Double.MAX_VALUE));
             return;
         } else {
-            target = NameManager.getUUID(SERVER_ECONOMY_ACCOUNT);
-            if (target == null) {
+            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
+            if (account == null || account.getUuid() == null) {
                 return;
             }
+            target = account.getUuid();
         }
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(target, event.getWorld());
