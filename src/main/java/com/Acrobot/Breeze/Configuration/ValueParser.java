@@ -39,8 +39,6 @@ public class ValueParser {
             }
 
             return map;
-        } else if (object instanceof String) {
-            return Configuration.getColoured((String) object);
         } else {
             return object;
         }

@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Configuration;
 
 import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
-import org.bukkit.ChatColor;
+import com.Acrobot.Breeze.Configuration.Configuration;
 
 /**
  * @author Acrobot
@@ -73,6 +73,6 @@ public class Messages {
     public static String TOGGLE_MESSAGES_ON = "You will now receive messages from your shop(s).";
 
     public static String prefix(String message) {
-        return prefix + message;
+        return Configuration.getColoured( prefix + message);
     }
 }
