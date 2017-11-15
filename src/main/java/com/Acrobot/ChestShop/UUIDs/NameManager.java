@@ -285,6 +285,7 @@ public class NameManager {
             if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
                 serverEconomyAccount = getAccount(Properties.SERVER_ECONOMY_ACCOUNT);
                 if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
+                    serverEconomyAccount = null;
                     ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
                 }
             }
@@ -292,7 +293,11 @@ public class NameManager {
             e.printStackTrace();
         }
     }
-
+    
+    public static Account getServerEconomyAccount() {
+        return serverEconomyAccount;
+    }
+    
     private static class SimpleLoadingCache<K, V> {
         private final LinkedHashMap<K, V> map;
 

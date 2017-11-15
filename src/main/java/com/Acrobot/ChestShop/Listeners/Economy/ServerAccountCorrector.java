@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.Acrobot.ChestShop.Configuration.Properties.SERVER_ECONOMY_ACCOUNT;
-
 /**
  * @author Acrobot
  */
@@ -22,20 +20,12 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencyAdd(CurrencyAddEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
+        if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
-        if (SERVER_ECONOMY_ACCOUNT.isEmpty()) {
-            event.setAdded(true);
-            return;
-        } else {
-            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
-            if (account == null || account.getUuid() == null) {
-                return;
-            }
-            target = account.getUuid();
-        }
+        Account account = NameManager.getServerEconomyAccount();
+        target = account != null ? account.getUuid() : null;
 
         event.setAdded(true);
         if (target == null) {
@@ -50,21 +40,12 @@ public class ServerAccountCorrector implements Listener {
     public static void onCurrencySubtract(CurrencySubtractEvent event) {
         UUID target = event.getTarget();
 
-        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
+        if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
-
-        if (SERVER_ECONOMY_ACCOUNT.isEmpty()) {
-            event.setSubtracted(true);
-            return;
-        } else {
-            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
-            if (account != null) {
-                target = account.getUuid();
-            } else {
-                target = null;
-            }
-        }
+    
+        Account account = NameManager.getServerEconomyAccount();
+        target = account != null ? account.getUuid() : null;
 
         event.setSubtracted(true);
         if (target == null) {
@@ -78,21 +59,17 @@ public class ServerAccountCorrector implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onCurrencyCheck(CurrencyCheckEvent event) {
         UUID target = event.getAccount();
-
-        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
+    
+        if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
-        if (SERVER_ECONOMY_ACCOUNT.isEmpty()) {
+        Account account = NameManager.getServerEconomyAccount();
+        target = account != null ? account.getUuid() : null;
+        
+        if (target == null) {
             event.hasEnough(true);
             return;
-        } else {
-            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
-            if (account == null || account.getUuid() == null) {
-                event.hasEnough(true);
-                return;
-            }
-            target = account.getUuid();
         }
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getAmount(), target, event.getWorld());
@@ -104,8 +81,8 @@ public class ServerAccountCorrector implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onCurrencyHoldCheck(CurrencyHoldEvent event) {
         UUID target = event.getAccount();
-
-        if (!NameManager.isAdminShop(target) || SERVER_ECONOMY_ACCOUNT.equals(NameManager.getUsername(target))) {
+    
+        if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
@@ -121,15 +98,12 @@ public class ServerAccountCorrector implements Listener {
             return;
         }
 
-        if (SERVER_ECONOMY_ACCOUNT.isEmpty()) {
+        Account account = NameManager.getServerEconomyAccount();
+        target = account != null ? account.getUuid() : null;
+        
+        if (target == null) {
             event.setAmount(BigDecimal.valueOf(Double.MAX_VALUE));
             return;
-        } else {
-            Account account = NameManager.getAccount(SERVER_ECONOMY_ACCOUNT);
-            if (account == null || account.getUuid() == null) {
-                return;
-            }
-            target = account.getUuid();
         }
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(target, event.getWorld());

@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 
@@ -18,12 +19,18 @@ import java.util.UUID;
  *         Economy management
  */
 public class Economy {
+    /**
+     * Get the name of the server conomy account
+     * @return The username of te server economy account
+     * @deprecated Use {@link NameManager#getServerEconomyAccount()} or {@link Properties#SERVER_ECONOMY_ACCOUNT}
+     */
+    @Deprecated
     public static String getServerAccountName() {
         return Properties.SERVER_ECONOMY_ACCOUNT;
     }
 
     public static boolean isOwnerEconomicallyActive(Inventory inventory) {
-        return !ChestShopSign.isAdminShop(inventory) || !getServerAccountName().isEmpty();
+        return !ChestShopSign.isAdminShop(inventory) || NameManager.getServerEconomyAccount() != null;
     }
 
     public static boolean add(UUID name, World world, double amount) {

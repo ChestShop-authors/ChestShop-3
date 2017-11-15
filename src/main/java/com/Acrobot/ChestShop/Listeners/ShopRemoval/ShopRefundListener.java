@@ -40,10 +40,10 @@ public class ShopRefundListener implements Listener {
         CurrencyAddEvent currencyEvent = new CurrencyAddEvent(BigDecimal.valueOf(refundPrice), account.getUuid(), event.getSign().getWorld());
         ChestShop.callEvent(currencyEvent);
 
-        if (!Economy.getServerAccountName().isEmpty()) {
+        if (NameManager.getServerEconomyAccount() != null) {
             CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(
                     BigDecimal.valueOf(refundPrice),
-                    NameManager.getUUID(Economy.getServerAccountName()),
+                    NameManager.getServerEconomyAccount().getUuid(),
                     event.getSign().getWorld());
             ChestShop.callEvent(currencySubtractEvent);
         }

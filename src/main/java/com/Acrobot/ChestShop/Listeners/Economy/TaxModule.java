@@ -33,7 +33,7 @@ public class TaxModule implements Listener {
 
         UUID target = event.getTarget();
 
-        if (Economy.getServerAccountName().equals(NameManager.getUsername(target))) {
+        if (NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
@@ -45,8 +45,11 @@ public class TaxModule implements Listener {
 
         BigDecimal tax = getTax(event.getAmount(), taxAmount);
 
-        if (!Economy.getServerAccountName().isEmpty()) {
-            CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(tax, NameManager.getUUID(Economy.getServerAccountName()), event.getWorld());
+        if (NameManager.getServerEconomyAccount() != null) {
+            CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(
+                    tax,
+                    NameManager.getServerEconomyAccount().getUuid(),
+                    event.getWorld());
             ChestShop.callEvent(currencyAddEvent);
         }
 
