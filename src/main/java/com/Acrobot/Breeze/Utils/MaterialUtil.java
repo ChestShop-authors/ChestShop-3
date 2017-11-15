@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -135,7 +136,8 @@ public class MaterialUtil {
     public static String getSignName(ItemStack itemStack) {
         StringBuilder name = new StringBuilder(15);
 
-        String itemName = itemStack.getType().name();
+        String alias = Odd.getAlias(itemStack);
+        String itemName = alias != null ? alias : itemStack.getType().name();
         itemName = StringUtil.capitalizeFirstLetter(itemName, '_');
 
         name.append(itemName);
@@ -395,6 +397,20 @@ public class MaterialUtil {
             } catch (Exception ex) {
                 return null;
             }
+        }
+
+        public static String getAlias(ItemStack itemStack) {
+            if (!isInitialized) {
+                return null;
+            }
+
+            try {
+                Collection<String> aliases = OddItem.getAliases(itemStack);
+                if (!aliases.isEmpty()) {
+                    return aliases.iterator().next();
+                }
+            } catch (Exception ignored) {}
+            return null;
         }
 
         /**
