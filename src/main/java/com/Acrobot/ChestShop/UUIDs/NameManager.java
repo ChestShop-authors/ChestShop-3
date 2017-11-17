@@ -122,6 +122,20 @@ public class NameManager {
             return null;
         }
     }
+    
+    /**
+     * Get the information from the last time a player logged in that previously used the shortened name
+     * @param shortName The name of the player to get the last account for
+     * @return          The last account or <tt>null</tt> if none was found
+     * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
+     */
+    public static Account getLastAccountFromShortName(String shortName) {
+        Account account = getAccountFromShortName(shortName); // first get the account associated with the short name
+        if (account != null) {
+            return getAccount(account.getUuid()); // then get the last account that was online with that UUID
+        }
+        return null;
+    }
 
     /**
      * Get the UUID from a player's (non-shortened) username
@@ -179,12 +193,9 @@ public class NameManager {
      */
     @Deprecated
     public static String getFullUsername(String shortName) {
-        Account account = getAccountFromShortName(shortName); // first get the account associated with the short name
+        Account account = getLastAccountFromShortName(shortName);
         if (account != null) {
-            account = getAccount(account.getUuid()); // then get the last account that was online with that UUID
-            if (account != null) {
-                return account.getName();
-            }
+            return account.getName();
         }
         return null;
     }
