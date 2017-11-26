@@ -33,22 +33,18 @@ public class Migrations {
 
         switch (currentVersion) {
             case 1:
-                boolean migrated = migrateTo2();
-
-                if (migrated) {
+                if (migrateTo2()) {
                     currentVersion++;
+                } else {
+                    return -1;
                 }
-                break;
             case 2:
-
-                boolean migrated3 = migrateTo3();
-
-                if (migrated3) {
+                if (migrateTo3()) {
                     currentVersion++;
+                } else {
+                    return -1;
                 }
-                break;
             case 3:
-                break;
             default:
                 break;
                 //do nothing

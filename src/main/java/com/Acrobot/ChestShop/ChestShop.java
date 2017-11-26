@@ -91,7 +91,9 @@ public class ChestShop extends JavaPlugin {
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 
         turnOffDatabaseLogging();
-        handleMigrations();
+        if (!handleMigrations()) {
+            return;
+        }
 
         itemDatabase = new ItemDatabase();
 
@@ -164,7 +166,7 @@ public class ChestShop extends JavaPlugin {
         });
     }
 
-    private void handleMigrations() {
+    private boolean handleMigrations() {
         File versionFile = loadFile("version");
         YamlConfiguration previousVersion = YamlConfiguration.loadConfiguration(versionFile);
 
@@ -181,7 +183,11 @@ public class ChestShop extends JavaPlugin {
         int lastVersion = previousVersion.getInt("version");
         int newVersion = Migrations.migrate(lastVersion);
 
-        if (lastVersion != newVersion) {
+        if (newVersion == -1) {
+            plugin.getLogger().log(java.util.logging.Level.SEVERE, "Error while migrating! ChestShop can not run with a broken/outdated database...");
+            plugin.getServer().getPluginManager().disablePlugin(this);
+            return false;
+        } else if (lastVersion != newVersion) {
             previousVersion.set("version", newVersion);
 
             try {
@@ -190,6 +196,7 @@ public class ChestShop extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
     public static File loadFile(String string) {
