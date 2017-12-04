@@ -311,6 +311,9 @@ public class InventoryUtil {
      */
     public static ItemStack[] getItemsStacked(ItemStack item) {
         int maxStackSize = getMaxStackSize(item);
+        if (maxStackSize == 0) {
+            return new ItemStack[]{};
+        }
         if (item.getAmount() <= maxStackSize) {
             return new ItemStack[]{item};
         }
