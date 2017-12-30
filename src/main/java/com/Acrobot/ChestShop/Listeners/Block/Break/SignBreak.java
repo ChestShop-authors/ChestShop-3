@@ -70,14 +70,14 @@ public class SignBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public static void onBrokenSign(BlockBreakEvent event) {
-        if (ChestShopSign.isValid(event.getBlock()) && !event.isCancelled()) {
+        if (ChestShopSign.isValid(event.getBlock())) {
             sendShopDestroyedEvent((Sign) event.getBlock().getState(), event.getPlayer());
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public static void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        for (Block block : getExtendBlocks(event)) {
+        for (Block block : event.getBlocks()) {
             if (!canBlockBeBroken(block, null)) {
                 event.setCancelled(true);
                 return;
@@ -87,8 +87,11 @@ public class SignBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public static void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (!canBlockBeBroken(getRetractBlock(event), null)) {
-            event.setCancelled(true);
+        for (Block block : event.getBlocks()) {
+            if (!canBlockBeBroken(block, null)) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -188,44 +191,5 @@ public class SignBreak implements Listener {
 
             return attachedSigns;
         }
-    }
-
-    private static Block getRetractBlock(BlockPistonRetractEvent event) {
-        Block block = getRetractLocationBlock(event);
-        return (block != null && !BlockUtil.isSign(block) ? block : null);
-    }
-
-    //Those are fixes for CraftBukkit's piston bug, where piston appears not to be a piston.
-    private static BlockFace getPistonDirection(Block block) {
-        return block.getState().getData() instanceof PistonBaseMaterial ? ((Directional) block.getState().getData()).getFacing() : null;
-    }
-
-    private static Block getRetractLocationBlock(BlockPistonRetractEvent event) {
-        BlockFace pistonDirection = getPistonDirection(event.getBlock());
-        return pistonDirection != null ? event.getBlock().getRelative((pistonDirection), 2).getLocation().getBlock() : null;
-    }
-
-    private static List<Block> getExtendBlocks(BlockPistonExtendEvent event) {
-        BlockFace pistonDirection = getPistonDirection(event.getBlock());
-
-        if (pistonDirection == null) {
-            return new ArrayList<Block>();
-        }
-
-        Block piston = event.getBlock();
-        List<Block> pushedBlocks = new ArrayList<Block>();
-
-        for (int currentBlock = 1; currentBlock < event.getLength() + 1; currentBlock++) {
-            Block block = piston.getRelative(pistonDirection, currentBlock);
-            Material blockType = block.getType();
-
-            if (blockType == Material.AIR) {
-                break;
-            }
-
-            pushedBlocks.add(block);
-        }
-
-        return pushedBlocks;
     }
 }
