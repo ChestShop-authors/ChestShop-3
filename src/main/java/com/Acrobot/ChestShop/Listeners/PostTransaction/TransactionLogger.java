@@ -3,12 +3,12 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 import com.Acrobot.Breeze.Utils.LocationUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import static com.Acrobot.Breeze.Utils.InventoryUtil.mergeSimilarStacks;
 import static com.Acrobot.Breeze.Utils.MaterialUtil.getSignName;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
@@ -28,7 +28,7 @@ public class TransactionLogger implements Listener {
 
                 StringBuilder items = new StringBuilder(50);
 
-                for (ItemStack item : event.getStock()) {
+                for (ItemStack item : mergeSimilarStacks(event.getStock())) {
                     items.append(item.getAmount()).append(' ').append(getSignName(item));
                 }
 
