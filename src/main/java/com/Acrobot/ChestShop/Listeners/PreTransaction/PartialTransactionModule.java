@@ -30,9 +30,9 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL
  */
 public class PartialTransactionModule implements Listener {
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW)
     public static void onPreBuyTransaction(PreTransactionEvent event) {
-        if (event.getTransactionType() != BUY) {
+        if (event.isCancelled() || event.getTransactionType() != BUY) {
             return;
         }
 
@@ -95,9 +95,9 @@ public class PartialTransactionModule implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW)
     public static void onPreSellTransaction(PreTransactionEvent event) {
-        if (event.getTransactionType() != SELL) {
+        if (event.isCancelled() || event.getTransactionType() != SELL) {
             return;
         }
 
