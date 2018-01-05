@@ -26,7 +26,7 @@ public class StockFittingChecker implements Listener {
         Inventory shopInventory = event.getOwnerInventory();
         ItemStack[] stock = event.getStock();
 
-        if (!itemsFitInInventory(stock, shopInventory)) {
+        if (!InventoryUtil.fits(stock, shopInventory)) {
             event.setCancelled(NOT_ENOUGH_SPACE_IN_CHEST);
         }
     }
@@ -40,19 +40,8 @@ public class StockFittingChecker implements Listener {
         Inventory clientInventory = event.getClientInventory();
         ItemStack[] stock = event.getStock();
 
-        if (!itemsFitInInventory(stock, clientInventory)) {
+        if (!InventoryUtil.fits(stock, clientInventory)) {
             event.setCancelled(NOT_ENOUGH_SPACE_IN_INVENTORY);
         }
-    }
-
-    private static boolean itemsFitInInventory(ItemStack[] items, Inventory inventory) {
-        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
-        for (ItemStack item : mergedItems) {
-            if (!InventoryUtil.fits(item, inventory)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

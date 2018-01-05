@@ -74,6 +74,23 @@ public class InventoryUtil {
 
         return true;
     }
+    
+    /**
+     * Count amount of empty slots in an inventory
+     *
+     * @param inventory the inventory
+     * @return The amount of empty slots
+     */
+    public static int countEmpty(Inventory inventory) {
+        int emptyAmount = 0;
+        for (ItemStack stack : getStorageContents(inventory)) {
+            if (MaterialUtil.isEmpty(stack)) {
+                emptyAmount++;
+            }
+        }
+        
+        return emptyAmount;
+    }
 
     /**
      * Checks if the inventory has stock of this type
@@ -90,6 +107,24 @@ public class InventoryUtil {
             }
         }
 
+        return true;
+    }
+    
+    /**
+     * Checks if items fit in the inventory
+     *
+     * @param items     Items to check
+     * @param inventory inventory
+     * @return Do the items fit inside the inventory?
+     */
+    public static boolean fits(ItemStack[] items, Inventory inventory) {
+        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
+        for (ItemStack item : mergedItems) {
+            if (!InventoryUtil.fits(item, inventory)) {
+                return false;
+            }
+        }
+        
         return true;
     }
 

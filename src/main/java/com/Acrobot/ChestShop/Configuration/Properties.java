@@ -70,7 +70,7 @@ public class Properties {
     @ConfigurationComment("Do you want to allow other players to build a shop on a block where there's one already?")
     public static boolean ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK = false;
 
-    @ConfigurationComment("Can shops be used even when the seller doesn't have enough items? (The price will be scaled adequately to the item amount)")
+    @ConfigurationComment("Can shops be used even when the buyer/seller doesn't have enough items, space or money? (The price will be scaled adequately to the item amount)")
     public static boolean ALLOW_PARTIAL_TRANSACTIONS = true;
 
     @ConfigurationComment("Can '?' be put in place of item name in order for the sign to be auto-filled?")
