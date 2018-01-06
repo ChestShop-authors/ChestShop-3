@@ -267,6 +267,6 @@ public class PartialTransactionModule implements Listener {
             resultStock.add(clone);
         }
         
-        return (ItemStack[]) resultStock.toArray();
+        return resultStock.toArray(new ItemStack[resultStock.size()]);
     }
 }
