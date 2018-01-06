@@ -41,6 +41,10 @@
             <url>http://ci.xephi.fr/plugin/repository/everything/</url>
         </repository>
         <repository>
+            <id>minebench-repo</id>
+            <url>https://repo.minebench.de/</url>
+        </repository>
+        <repository>
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
         </repository>
@@ -259,6 +263,13 @@
                     <artifactId>craftbukkit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>de.themoep.showitem</groupId>
+            <artifactId>api</artifactId>
+            <version>1.2.24</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

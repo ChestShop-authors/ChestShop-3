@@ -109,6 +109,9 @@ public class Dependencies {
             case OddItem:
                 MaterialUtil.Odd.initialize();
                 break;
+            case ShowItem:
+                MaterialUtil.Show.initialize(plugin);
+                break;
         }
 
         if (listener != null) {
@@ -130,6 +133,8 @@ public class Dependencies {
 
         WorldGuard,
 
-        Heroes
+        Heroes,
+        
+        ShowItem
     }
 }

@@ -1,22 +1,32 @@
 package com.Acrobot.Breeze.Utils;
 
 import com.Acrobot.ChestShop.ChestShop;
+import com.google.common.collect.ImmutableMap;
+import de.themoep.ShowItem.api.ShowItem;
 import info.somethingodd.OddItem.OddItem;
 import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.*;
+import org.bukkit.plugin.Plugin;
+import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Acrobot
@@ -418,6 +428,58 @@ public class MaterialUtil {
          */
         public static void initialize() {
             isInitialized = true;
+        }
+    }
+    
+    public static class Show {
+        private static ShowItem showItem = null;
+        
+        /**
+         * Lets the class know that it's safe to use the ShowItem methods now
+         *
+         * @param plugin
+         */
+        public static void initialize(Plugin plugin) {
+            showItem = (ShowItem) plugin;
+        }
+    
+        /**
+         * Send a message with hover info and icons
+         *
+         * @param player  The player to send the message to
+         * @param message The raw message
+         * @param stock   The items in stock
+         */
+        public static boolean sendMessage(Player player, String message, ItemStack[] stock) {
+            if (showItem == null) {
+                return false;
+            }
+            
+            List<String> itemJson = new ArrayList<>();
+            for (ItemStack item : stock) {
+                try {
+                    itemJson.add(showItem.getItemConverter().createComponent(item, Level.OFF).toJsonString(player));
+                } catch (Exception e) {
+                    ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());
+                    return false;
+                }
+            }
+            
+            String joinedItemJson = itemJson.stream().collect(Collectors.joining("," + new JSONObject(ImmutableMap.of("text", " ")).toJSONString() + ", "));
+            
+            String messageJsonString = Arrays.stream(message.split("%item"))
+                    .map(s -> new JSONObject(ImmutableMap.of("text", s)).toJSONString())
+                    .collect(Collectors.joining("," + joinedItemJson + ","));
+    
+            while (messageJsonString.startsWith(",")) {
+                messageJsonString = messageJsonString.substring(1);
+            }
+            while (messageJsonString.endsWith(",")) {
+                messageJsonString = messageJsonString.substring(0, messageJsonString.length() - 1);
+            }
+            
+            showItem.tellRaw(player, messageJsonString);
+            return true;
         }
     }
 }
