@@ -15,6 +15,7 @@ import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -74,7 +76,34 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (ChestShopSign.canAccess(player, sign)) {
+        boolean canAccess = ChestShopSign.canAccess(player, sign);
+    
+        if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(sign.getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
+            if (canAccess) {
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (item != null) {
+                    String itemCode = MaterialUtil.getSignName(item);
+                    String[] lines = sign.getLines();
+                    lines[ITEM_LINE] = itemCode;
+    
+                    SignChangeEvent changeEvent = new SignChangeEvent(block, player, lines);
+                    com.Acrobot.ChestShop.ChestShop.callEvent(changeEvent);
+                    if (!changeEvent.isCancelled()) {
+                        for (byte i = 0; i < changeEvent.getLines().length; ++i) {
+                            sign.setLine(i, changeEvent.getLine(i));
+                        }
+                        sign.update();
+                    }
+                } else {
+                    player.sendMessage(Messages.prefix(Messages.NO_ITEM_IN_HAND));
+                }
+            } else {
+                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+            }
+            return;
+        }
+        
+        if (canAccess) {
             if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.isInsideVehicle() || player.getGameMode() == GameMode.CREATIVE) {
                 return;
             }

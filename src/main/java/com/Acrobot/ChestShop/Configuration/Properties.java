@@ -134,7 +134,7 @@ public class Properties {
     public static boolean WORLDGUARD_INTEGRATION = false;
 
     @ConfigurationComment("Do you want to only let people build inside region flagged by doing /region regionName flag allow-shop allow?")
-    public static boolean WORLDGUARD_USE_FLAG = true;
+    public static boolean WORLDGUARD_USE_FLAG = false;
 
     @ConfigurationComment("Do you want ChestShop to respect WorldGuard's chest protection?")
     public static boolean WORLDGUARD_USE_PROTECTION = false;

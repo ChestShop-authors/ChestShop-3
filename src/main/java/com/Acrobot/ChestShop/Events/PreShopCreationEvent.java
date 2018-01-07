@@ -141,6 +141,8 @@ public class PreShopCreationEvent extends Event {
         INVALID_ITEM,
         INVALID_PRICE,
         INVALID_QUANTITY,
+    
+        ITEM_AUTOFILL,
 
         UNKNOWN_PLAYER,
 

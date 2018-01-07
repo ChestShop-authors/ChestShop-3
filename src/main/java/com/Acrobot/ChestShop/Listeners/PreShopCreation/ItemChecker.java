@@ -2,9 +2,12 @@ package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,15 +17,16 @@ import java.util.regex.Matcher;
 
 import static com.Acrobot.Breeze.Utils.MaterialUtil.*;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.INVALID_ITEM;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.ITEM_AUTOFILL;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
 
 /**
  * @author Acrobot
  */
 public class ItemChecker implements Listener {
     private static final short MAXIMUM_SIGN_LETTERS = 15;
-    private static final String AUTOFILL_CODE = "?";
-
+    
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String itemCode = event.getSignLine(ITEM_LINE);
@@ -33,23 +37,29 @@ public class ItemChecker implements Listener {
         }
 
         if (item == null) {
-            boolean foundItem = false;
-
-            if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE) && uBlock.findConnectedChest(event.getSign()) != null) {
-                for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getInventory().getContents()) {
-                    if (!MaterialUtil.isEmpty(stack)) {
-                        item = stack;
-                        itemCode = MaterialUtil.getSignName(stack);
-
-                        event.setSignLine(ITEM_LINE, itemCode);
-                        foundItem = true;
-
-                        break;
+            if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE)) {
+                boolean foundItem = false;
+                if (uBlock.findConnectedChest(event.getSign()) != null) {
+                    for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getInventory().getContents()) {
+                        if (!MaterialUtil.isEmpty(stack)) {
+                            item = stack;
+                            itemCode = MaterialUtil.getSignName(stack);
+            
+                            event.setSignLine(ITEM_LINE, itemCode);
+                            foundItem = true;
+            
+                            break;
+                        }
                     }
                 }
-            }
-
-            if (!foundItem) {
+    
+                if (!foundItem) {
+                    event.setSignLine(ITEM_LINE, ChatColor.BOLD + ChestShopSign.AUTOFILL_CODE);
+                    event.setOutcome(ITEM_AUTOFILL);
+                    event.getPlayer().sendMessage(Messages.prefix(Messages.CLICK_TO_AUTOFILL_ITEM));
+                    return;
+                }
+            } else {
                 event.setOutcome(INVALID_ITEM);
                 return;
             }
