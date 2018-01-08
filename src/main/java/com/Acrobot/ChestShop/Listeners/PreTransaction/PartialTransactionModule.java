@@ -234,15 +234,13 @@ public class PartialTransactionModule implements Listener {
         List<ItemStack> resultStock = new ArrayList<>();
         
         int emptySlots = InventoryUtil.countEmpty(inventory);
-        ItemStack[] itemsInInventory = getItems(stock, inventory);
     
-        for (ItemStack item : stock) {
+        for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
             int maxStackSize = InventoryUtil.getMaxStackSize(item);
             int free = 0;
-            for (ItemStack itemInInventory : itemsInInventory) {
+            for (ItemStack itemInInventory : inventory.getContents()) {
                 if (MaterialUtil.equals(item, itemInInventory)) {
-                    free = (maxStackSize - itemInInventory.getAmount()) % maxStackSize;
-                    break;
+                    free += (maxStackSize - itemInInventory.getAmount()) % maxStackSize;
                 }
             }
     
@@ -250,21 +248,20 @@ public class PartialTransactionModule implements Listener {
                 continue;
             }
     
-            ItemStack clone = item.clone();
             if (item.getAmount() > free) {
                 if (emptySlots > 0) {
-                    int requiredSlots = (int) Math.ceil((item.getAmount() - free) / maxStackSize);
+                    int requiredSlots = (int) Math.ceil(((double) item.getAmount() - free) / maxStackSize);
                     if (requiredSlots <= emptySlots) {
                         emptySlots = emptySlots - requiredSlots;
                     } else {
+                        item.setAmount(free + maxStackSize * emptySlots);
                         emptySlots = 0;
-                        clone.setAmount(free + maxStackSize * emptySlots);
                     }
                 } else {
-                    clone.setAmount(free);
+                    item.setAmount(free);
                 }
             }
-            resultStock.add(clone);
+            resultStock.add(item);
         }
         
         return resultStock.toArray(new ItemStack[resultStock.size()]);

@@ -59,7 +59,7 @@ public class MaterialUtil {
      */
     public static boolean equals(ItemStack one, ItemStack two) {
         if (one == null || two == null) {
-            return one != two;
+            return one == two;
         }
         if (one.isSimilar(two)) {
             return true;
