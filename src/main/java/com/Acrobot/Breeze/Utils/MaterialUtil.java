@@ -456,7 +456,7 @@ public class MaterialUtil {
             }
             
             List<String> itemJson = new ArrayList<>();
-            for (ItemStack item : stock) {
+            for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
                 try {
                     itemJson.add(showItem.getItemConverter().createComponent(item, Level.OFF).toJsonString(player));
                 } catch (Exception e) {
