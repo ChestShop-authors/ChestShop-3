@@ -145,7 +145,7 @@ public class PartialTransactionModule implements Listener {
             ItemStack[] itemsFit = getItemsThatFit(event.getStock(), event.getOwnerInventory());
             int possessedItemCount = InventoryUtil.countItems(itemsFit);
             if (possessedItemCount <= 0) {
-                event.setCancelled(NOT_ENOUGH_STOCK_IN_CHEST);
+                event.setCancelled(NOT_ENOUGH_SPACE_IN_CHEST);
                 return;
             }
     
