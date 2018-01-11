@@ -45,7 +45,7 @@ public class TransactionMessageSender implements Listener {
         if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
             Player owner = Bukkit.getPlayer(event.getOwnerAccount().getUuid());
             if (owner != null) {
-                sendMessage(player, Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
+                sendMessage(owner, Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
             }
         }
     }
