@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.material.Attachable;
 
 /**
  * @author Acrobot
@@ -13,42 +14,68 @@ import org.bukkit.block.Sign;
 public class uBlock {
     public static final BlockFace[] CHEST_EXTENSION_FACES = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
     public static final BlockFace[] SHOP_FACES = {BlockFace.SELF, BlockFace.DOWN, BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
+    @Deprecated
     public static final BlockFace[] NEIGHBOR_FACES = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
 
     public static Sign getConnectedSign(Chest chest) {
         Sign sign = uBlock.findAnyNearbyShopSign(chest.getBlock());
 
-        if (sign == null && getNeighbor(chest) != null) {
-            sign = uBlock.findAnyNearbyShopSign(getNeighbor(chest).getBlock());
+        if (sign == null) {
+            Block neighbor = findNeighbor(chest.getBlock());
+            if (neighbor != null) {
+                sign = uBlock.findAnyNearbyShopSign(neighbor);
+            }
         }
 
         return sign;
     }
-
-    private static Chest getNeighbor(Chest chest) {
-        Block chestBlock = chest.getBlock();
-
-        for (BlockFace chestFace : NEIGHBOR_FACES) {
-            Block relative = chestBlock.getRelative(chestFace);
-
-            if (relative.getType() == chestBlock.getType()) {
-                return (Chest) relative.getState();
+    
+    public static Sign getConnectedSign(Block block) {
+        Sign sign = uBlock.findAnyNearbyShopSign(block);
+        
+        if (sign == null) {
+            Block neighbor = findNeighbor(block);
+            if (neighbor != null) {
+                sign = uBlock.findAnyNearbyShopSign(neighbor);
             }
         }
-
-        return null;
+        
+        return sign;
     }
 
     public static Chest findConnectedChest(Sign sign) {
-        Block block = sign.getBlock();
-        return findConnectedChest(block);
+        BlockFace signFace = null;
+        if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
+            signFace = ((Attachable) sign.getData()).getAttachedFace();
+        }
+        return findConnectedChest(sign.getBlock(), signFace);
     }
 
     public static Chest findConnectedChest(Block block) {
-        for (BlockFace bf : SHOP_FACES) {
-            Block faceBlock = block.getRelative(bf);
+        BlockFace signFace = null;
+        if (BlockUtil.isSign(block)) {
+            Sign sign = (Sign) block.getState();
+            if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
+                signFace = ((Attachable) sign.getData()).getAttachedFace();
+            }
+        }
+        return findConnectedChest(block, signFace);
+    }
+    
+    private static Chest findConnectedChest(Block block, BlockFace signFace) {
+        if (signFace != null ) {
+            Block faceBlock = block.getRelative(signFace);
             if (BlockUtil.isChest(faceBlock)) {
                 return (Chest) faceBlock.getState();
+            }
+        }
+        
+        for (BlockFace bf : SHOP_FACES) {
+            if (bf != signFace) {
+                Block faceBlock = block.getRelative(bf);
+                if (BlockUtil.isChest(faceBlock)) {
+                    return (Chest) faceBlock.getState();
+                }
             }
         }
         return null;
@@ -94,13 +121,18 @@ public class uBlock {
         }
         return null;
     }
-
-    public static Chest findNeighbor(Block block) {
+    
+    public static Chest findNeighbor(Chest chest) {
+        Block neighbor = findNeighbor(chest.getBlock());
+        return neighbor != null ? (Chest) neighbor.getState() : null;
+    }
+    
+    public static Block findNeighbor(Block block) {
         for (BlockFace blockFace : CHEST_EXTENSION_FACES) {
             Block neighborBlock = block.getRelative(blockFace);
 
             if (neighborBlock.getType() == block.getType()) {
-                return (Chest) neighborBlock.getState();
+                return neighborBlock;
             }
         }
 

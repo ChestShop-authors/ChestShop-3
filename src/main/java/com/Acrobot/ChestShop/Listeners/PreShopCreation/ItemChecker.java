@@ -8,6 +8,7 @@ import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,8 +40,9 @@ public class ItemChecker implements Listener {
         if (item == null) {
             if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE)) {
                 boolean foundItem = false;
-                if (uBlock.findConnectedChest(event.getSign()) != null) {
-                    for (ItemStack stack : uBlock.findConnectedChest(event.getSign()).getInventory().getContents()) {
+                Chest chest = uBlock.findConnectedChest(event.getSign());
+                if (chest != null) {
+                    for (ItemStack stack : chest.getInventory().getContents()) {
                         if (!MaterialUtil.isEmpty(stack)) {
                             item = stack;
                             itemCode = MaterialUtil.getSignName(stack);
