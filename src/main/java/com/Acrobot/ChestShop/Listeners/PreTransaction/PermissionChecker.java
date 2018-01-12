@@ -25,7 +25,7 @@ public class PermissionChecker implements Listener {
         TransactionEvent.TransactionType transactionType = event.getTransactionType();
 
         for (ItemStack stock : event.getStock()) {
-            String matID = Integer.toString(stock.getTypeId());
+            String matID = stock.getType().toString().toLowerCase();
 
             boolean hasPerm;
 

@@ -50,7 +50,7 @@ public class ItemInfo implements CommandExecutor {
     private static String getNameAndID(ItemStack item) {
         String itemName = MaterialUtil.getName(item);
 
-        return ChatColor.GRAY + itemName + ChatColor.WHITE + "      " + item.getTypeId();
+        return ChatColor.GRAY + itemName;
     }
 
     private static String getDurability(ItemStack item) {

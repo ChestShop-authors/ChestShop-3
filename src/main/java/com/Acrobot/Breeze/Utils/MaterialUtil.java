@@ -259,6 +259,7 @@ public class MaterialUtil {
         return Metadata.getFromCode(group);
     }
 
+    //1.13 TODO: Get rid of numeric data values with the API that replaces MaterialData
     public static class DataValue {
         /**
          * Gets the data value from a string

@@ -89,7 +89,8 @@ public class ItemChecker implements Listener {
         }
 
         if (!isSameItem(code + data, item)) {
-            code = String.valueOf(item.getTypeId());
+            event.setOutcome(INVALID_ITEM);
+            return;
         }
 
         code = StringUtil.capitalizeFirstLetter(code);
