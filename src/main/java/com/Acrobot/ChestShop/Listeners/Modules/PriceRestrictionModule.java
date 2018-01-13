@@ -6,6 +6,7 @@ import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -73,12 +74,15 @@ public class PriceRestrictionModule implements Listener {
     }
     
     private void convertToMaterial(String sectionPath) {
-        for (String typeId : configuration.getConfigurationSection(sectionPath).getKeys(false)) {
-            if (NumberUtil.isInteger(typeId)) {
-                Material material = Material.matchMaterial(typeId);
-                if (material != null) {
-                    configuration.set(sectionPath + "." + material.toString().toLowerCase(), configuration.get(sectionPath + "." + typeId));
-                    configuration.set(sectionPath + "." + typeId, null);
+        ConfigurationSection section = configuration.getConfigurationSection(sectionPath);
+        if (section != null) {
+            for (String typeId : section.getKeys(false)) {
+                if (NumberUtil.isInteger(typeId)) {
+                    Material material = Material.matchMaterial(typeId);
+                    if (material != null) {
+                        configuration.set(sectionPath + "." + material.toString().toLowerCase(), configuration.get(sectionPath + "." + typeId));
+                        configuration.set(sectionPath + "." + typeId, null);
+                    }
                 }
             }
         }
