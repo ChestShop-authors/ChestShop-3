@@ -21,26 +21,21 @@ public class TransactionLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onTransaction(final TransactionEvent event) {
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                String template = (event.getTransactionType() == BUY ? BUY_MESSAGE : SELL_MESSAGE);
+        String template = (event.getTransactionType() == BUY ? BUY_MESSAGE : SELL_MESSAGE);
 
-                StringBuilder items = new StringBuilder(50);
+        StringBuilder items = new StringBuilder(50);
 
-                for (ItemStack item : mergeSimilarStacks(event.getStock())) {
-                    items.append(item.getAmount()).append(' ').append(getSignName(item));
-                }
+        for (ItemStack item : mergeSimilarStacks(event.getStock())) {
+            items.append(item.getAmount()).append(' ').append(getSignName(item));
+        }
 
-                String message = String.format(template,
-                        event.getClient().getName(),
-                        items.toString(),
-                        event.getPrice(),
-                        event.getOwnerAccount().getName(),
-                        LocationUtil.locationToString(event.getSign().getLocation()));
+        String message = String.format(template,
+                event.getClient().getName(),
+                items.toString(),
+                event.getPrice(),
+                event.getOwnerAccount().getName(),
+                LocationUtil.locationToString(event.getSign().getLocation()));
 
-                ChestShop.getBukkitLogger().info(message);
-            }
-        });
+        ChestShop.getBukkitLogger().info(message);
     }
 }
