@@ -338,31 +338,34 @@ public class InventoryUtil {
     public static int getMaxStackSize(ItemStack item) {
         return Properties.STACK_TO_64 ? 64 : item.getMaxStackSize();
     }
-
+    
     /**
      * Get an array of different item stacks that are properly stacked to their max stack size
-     * @param item The item to stack
+     * @param items The items to stack
      * @return An array of item stacks which's amount is a maximum of the allowed stack size
      */
-    public static ItemStack[] getItemsStacked(ItemStack item) {
-        int maxStackSize = getMaxStackSize(item);
-        if (maxStackSize == 0) {
-            return new ItemStack[]{};
+    public static ItemStack[] getItemsStacked(ItemStack... items) {
+        List<ItemStack> stackedItems = new LinkedList<>();
+        for (ItemStack item : items) {
+            int maxStackSize = getMaxStackSize(item);
+            if (maxStackSize == 0) {
+                continue;
+            }
+            if (item.getAmount() <= maxStackSize) {
+                stackedItems.add(item.clone());
+                continue;
+            }
+            for (int i = 0; i < Math.floor(item.getAmount() / maxStackSize); i++) {
+                ItemStack itemClone = item.clone();
+                itemClone.setAmount(maxStackSize);
+                stackedItems.add(itemClone);
+            }
+            if (item.getAmount() % maxStackSize != 0) {
+                ItemStack rest = item.clone();
+                rest.setAmount(item.getAmount() % maxStackSize);
+                stackedItems.add(rest);
+            }
         }
-        if (item.getAmount() <= maxStackSize) {
-            return new ItemStack[]{item};
-        }
-        List<ItemStack> items = new LinkedList<>();
-        for (int i = 0; i < Math.floor(item.getAmount() / maxStackSize); i++) {
-            ItemStack itemClone = item.clone();
-            itemClone.setAmount(maxStackSize);
-            items.add(itemClone);
-        }
-        if (item.getAmount() % maxStackSize != 0) {
-            ItemStack rest = item.clone();
-            rest.setAmount(item.getAmount() % maxStackSize);
-            items.add(rest);
-        }
-        return items.toArray(new ItemStack[items.size()]);
+        return stackedItems.toArray(new ItemStack[stackedItems.size()]);
     }
 }

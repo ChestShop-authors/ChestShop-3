@@ -16,7 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -166,17 +166,13 @@ public class PartialTransactionModule implements Listener {
     }
 
     private static ItemStack[] getItems(ItemStack[] stock, Inventory inventory) {
-        List<ItemStack> toReturn = new LinkedList<ItemStack>();
+        List<ItemStack> toReturn = new LinkedList<>();
 
-        ItemStack[] neededItems = InventoryUtil.mergeSimilarStacks(stock);
-
-        for (ItemStack item : neededItems) {
+        for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
             int amount = InventoryUtil.getAmount(item, inventory);
 
-            ItemStack clone = item.clone();
-            clone.setAmount(amount > item.getAmount() ? item.getAmount() : amount);
-
-            toReturn.add(clone);
+            Collections.addAll(toReturn, getCountedItemStack(new ItemStack[]{item},
+                    amount > item.getAmount() ? item.getAmount() : amount));
         }
 
         return toReturn.toArray(new ItemStack[toReturn.size()]);
@@ -184,7 +180,7 @@ public class PartialTransactionModule implements Listener {
 
     private static ItemStack[] getCountedItemStack(ItemStack[] stock, int numberOfItems) {
         int left = numberOfItems;
-        LinkedList<ItemStack> stacks = new LinkedList<ItemStack>();
+        LinkedList<ItemStack> stacks = new LinkedList<>();
 
         for (ItemStack stack : stock) {
             int count = stack.getAmount();
@@ -203,16 +199,24 @@ public class PartialTransactionModule implements Listener {
 
             boolean added = false;
 
+            int maxStackSize = InventoryUtil.getMaxStackSize(stack);
+            
             for (ItemStack iStack : stacks) {
-                if (MaterialUtil.equals(toAdd, iStack)) {
-                    iStack.setAmount(iStack.getAmount() + toAdd.getAmount());
-                    added = true;
+                if (iStack.getAmount() < maxStackSize && MaterialUtil.equals(toAdd, iStack)) {
+                    int newAmount = iStack.getAmount() + toAdd.getAmount();
+                    if (newAmount > maxStackSize) {
+                        iStack.setAmount(maxStackSize);
+                        toAdd.setAmount(newAmount - maxStackSize);
+                    } else {
+                        iStack.setAmount(newAmount);
+                        added = true;
+                    }
                     break;
                 }
             }
 
             if (!added) {
-                stacks.add(toAdd);
+                Collections.addAll(stacks, InventoryUtil.getItemsStacked(toAdd));
             }
 
             if (left <= 0) {
@@ -231,7 +235,7 @@ public class PartialTransactionModule implements Listener {
      * @return Whether or not the items fit into the inventory
      */
     private static ItemStack[] getItemsThatFit(ItemStack[] stock, Inventory inventory) {
-        List<ItemStack> resultStock = new ArrayList<>();
+        List<ItemStack> resultStock = new LinkedList<>();
         
         int emptySlots = InventoryUtil.countEmpty(inventory);
     
@@ -261,7 +265,7 @@ public class PartialTransactionModule implements Listener {
                     item.setAmount(free);
                 }
             }
-            resultStock.add(item);
+            Collections.addAll(resultStock, InventoryUtil.getItemsStacked(item));
         }
         
         return resultStock.toArray(new ItemStack[resultStock.size()]);
