@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -146,7 +147,8 @@ public class PlayerInteract implements Listener {
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName()))
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(account.getUuid());
+        if(!adminShop && !VaultListener.getProvider().hasAccount(lastSeen))
             return null;
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
