@@ -18,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -140,16 +139,19 @@ public class PlayerInteract implements Listener {
         String prices = sign.getLine(PRICE_LINE);
         String material = sign.getLine(ITEM_LINE);
 
-        Account account = NameManager.getAccountFromShortName(name);
-        if (account == null)
+        Account account = NameManager.getLastAccountFromShortName(name);
+        if (account == null) {
+            player.sendMessage(Messages.prefix(Messages.PLAYER_NOT_FOUND));
             return null;
+        }
 
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(account.getUuid());
-        if(!adminShop && !VaultListener.getProvider().hasAccount(lastSeen))
+        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
+            player.sendMessage(Messages.prefix(Messages.NO_VAULT_ACCOUNT));
             return null;
+        }
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
