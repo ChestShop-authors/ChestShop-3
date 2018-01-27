@@ -20,6 +20,7 @@ public class Messages {
     @PrecededBySpace
     public static String CLIENT_DEPOSIT_FAILED = "Money deposit to your account failed!";
     public static String SHOP_DEPOSIT_FAILED = "Money deposit to shop owner failed!";
+    public static String NO_ECONOMY_ACCOUNT = "Economy account from shop owner doesn't exist!";
 
     @PrecededBySpace
     public static String NO_BUYING_HERE = "You can't buy here!";

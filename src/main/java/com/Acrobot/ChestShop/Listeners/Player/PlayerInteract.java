@@ -139,15 +139,19 @@ public class PlayerInteract implements Listener {
         String prices = sign.getLine(PRICE_LINE);
         String material = sign.getLine(ITEM_LINE);
 
-        Account account = NameManager.getAccountFromShortName(name);
-        if (account == null)
+        Account account = NameManager.getLastAccountFromShortName(name);
+        if (account == null) {
+            player.sendMessage(Messages.prefix(Messages.PLAYER_NOT_FOUND));
             return null;
+        }
 
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName()))
+        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
+            player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
             return null;
+        }
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
