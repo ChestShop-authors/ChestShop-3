@@ -149,7 +149,7 @@ public class PlayerInteract implements Listener {
 
         // check if player exists in economy
         if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
-            player.sendMessage(Messages.prefix(Messages.NO_VAULT_ACCOUNT));
+            player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
             return null;
         }
 
