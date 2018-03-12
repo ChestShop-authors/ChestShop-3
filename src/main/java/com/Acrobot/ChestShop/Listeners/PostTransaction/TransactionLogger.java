@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.Breeze.Utils.InventoryUtil.mergeSimilarStacks;
-import static com.Acrobot.Breeze.Utils.MaterialUtil.getSignName;
+import static com.Acrobot.Breeze.Utils.MaterialUtil.getName;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
 /**
@@ -26,7 +26,7 @@ public class TransactionLogger implements Listener {
         StringBuilder items = new StringBuilder(50);
 
         for (ItemStack item : mergeSimilarStacks(event.getStock())) {
-            items.append(item.getAmount()).append(' ').append(getSignName(item));
+            items.append(item.getAmount()).append(' ').append(getName(item));
         }
 
         String message = String.format(template,

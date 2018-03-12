@@ -11,7 +11,7 @@ public class Properties {
     public static boolean TURN_OFF_UPDATES = false;
 
     @PrecededBySpace
-    @ConfigurationComment("How large should the internal uuid and name caches be?")
+    @ConfigurationComment("How large should the internal caches be?")
     public static int CACHE_SIZE = 1000;
 
     @PrecededBySpace

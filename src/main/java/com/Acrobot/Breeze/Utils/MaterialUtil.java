@@ -1,6 +1,8 @@
 package com.Acrobot.Breeze.Utils;
 
+import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
 import info.somethingodd.OddItem.OddItem;
@@ -20,9 +22,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,8 +37,9 @@ public class MaterialUtil {
 
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
-
-    private static final Map<String, Material> MATERIAL_CACHE = new HashMap<String, Material>();
+    public static final short MAXIMUM_SIGN_LETTERS = 15;
+    
+    private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
     /**
      * Checks if the itemStack is empty or null
@@ -81,27 +82,45 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        String formatted = name.replaceAll(" |_", "").toUpperCase();
+        String formatted = name.toUpperCase();
 
-        if (MATERIAL_CACHE.containsKey(formatted)) {
-            return MATERIAL_CACHE.get(formatted);
+        Material material = MATERIAL_CACHE.get(formatted);
+        if (material != null) {
+            return material;
         }
 
-        Material material = Material.matchMaterial(name);
+        material = Material.matchMaterial(name);
 
         if (material != null) {
             MATERIAL_CACHE.put(formatted, material);
             return material;
         }
+        
+        String[] nameParts = name.toUpperCase().split(" ");
 
         short length = Short.MAX_VALUE;
 
         for (Material currentMaterial : Material.values()) {
-            String matName = currentMaterial.name();
+            String matName = currentMaterial.toString();
 
-            if (matName.length() < length && matName.replace("_", "").startsWith(formatted)) {
+            if (matName.length() < length && matName.startsWith(formatted)) {
                 length = (short) matName.length();
                 material = currentMaterial;
+            } else if (nameParts.length > 1) {
+                String[] matParts = matName.split("_");
+                if (nameParts.length == matParts.length) {
+                    boolean matched = true;
+                    for (int i = 0; i < matParts.length; i++) {
+                        if (!matParts[i].startsWith(nameParts[i])) {
+                            matched = false;
+                            break;
+                        }
+                    }
+                    if (matched) {
+                        material = currentMaterial;
+                        break;
+                    }
+                }
             }
         }
 
@@ -117,7 +136,7 @@ public class MaterialUtil {
      * @return ItemStack's name
      */
     public static String getName(ItemStack itemStack) {
-        return getName(itemStack, LONG_NAME);
+        return getName(itemStack, 0);
     }
 
     /**
@@ -126,7 +145,9 @@ public class MaterialUtil {
      * @param itemStack     ItemStack to name
      * @param showDataValue Should we also show the data value?
      * @return ItemStack's name
+     * @deprecated Use {@link #getName(ItemStack, int)}
      */
+    @Deprecated
     public static String getName(ItemStack itemStack, boolean showDataValue) {
         String dataName = DataValue.name(itemStack);
 
@@ -144,23 +165,80 @@ public class MaterialUtil {
      * @return ItemStack's name
      */
     public static String getSignName(ItemStack itemStack) {
-        StringBuilder name = new StringBuilder(15);
-
+        return getName(itemStack, MAXIMUM_SIGN_LETTERS);
+    }
+    
+    /**
+     * Returns item's name, with a maximum length
+     *
+     * @param itemStack ItemStack to name
+     * @param maxLength The max length that the name should have; 0 or below if it should be unlimited
+     * @return ItemStack's name
+     */
+    public static String getName(ItemStack itemStack, int maxLength) {
         String alias = Odd.getAlias(itemStack);
-        String itemName = alias != null ? alias : itemStack.getType().name();
-        itemName = StringUtil.capitalizeFirstLetter(itemName, '_');
-
-        name.append(itemName);
-
-        if (itemStack.getDurability() != 0) {
-            name.append(':').append(itemStack.getDurability());
+        String itemName = alias != null ? alias : itemStack.getType().toString();
+    
+        String data = DataValue.name(itemStack);
+        String durability = "";
+        if (data == null) {
+            if (itemStack.getDurability() != 0) {
+                durability = ":" + itemStack.getDurability();
+            }
         }
+        data = data != null ? data + "_" : "";
 
+        String metaData = "";
         if (itemStack.hasItemMeta()) {
-            name.append('#').append(Metadata.getItemCode(itemStack));
+            metaData = "#" + Metadata.getItemCode(itemStack);
+        }
+    
+        String code = data + itemName + durability + metaData;
+        if (maxLength > 0 && code.length() > maxLength) {
+            String[] itemParts = itemName.split("_");
+            int exceeding = code.length() - maxLength;
+            int shortestIndex = 0;
+            int longestIndex = 0;
+            for (int i = 0; i < itemParts.length; i++) {
+                if (itemParts[longestIndex].length() < itemParts[i].length()) {
+                    longestIndex = i;
+                }
+                if (itemParts[shortestIndex].length() > itemParts[i].length()) {
+                    shortestIndex = i;
+                }
+            }
+            if (itemParts[longestIndex].length() - itemParts[shortestIndex].length() > exceeding) {
+                itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - exceeding);
+            } else {
+                for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                    int remove = 0;
+                    if (itemParts[i].length() > itemParts[shortestIndex].length()) {
+                        remove = itemParts[i].length() - itemParts[shortestIndex].length();
+                    }
+                    if (remove > exceeding) {
+                        remove = exceeding;
+                    }
+                    itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
+                    exceeding -= remove;
+                }
+                while (exceeding > 0) {
+                    for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                        itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
+                        exceeding--;
+                    }
+                }
+            }
+            code = data + String.join("_", itemParts) + durability + metaData;
         }
 
-        return name.toString();
+        code = StringUtil.capitalizeFirstLetter(code, '_');
+        
+        ItemStack codeItem = getItem(code);
+        if (!equals(itemStack, codeItem)) {
+            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength);
+        }
+
+        return code;
     }
 
     /**
@@ -361,10 +439,10 @@ public class MaterialUtil {
 
     public static class Metadata {
         /**
-         * Returns the ItemStack represented by this code
+         * Returns the ItemMeta represented by this code
          *
-         * @param code Code representing the item
-         * @return Item represented by code
+         * @param code Code representing the ItemMeta
+         * @return ItemMeta represented by code
          */
         public static ItemMeta getFromCode(String code) {
             ItemStack item = ChestShop.getItemDatabase().getFromCode(code);
