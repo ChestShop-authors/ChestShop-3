@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Tests;
+package com.Acrobot.Breeze.Tests;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import org.bukkit.Material;
@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -23,5 +24,13 @@ public class MaterialTest {
 
         assertTrue(MaterialUtil.isEmpty(air));
         assertTrue(MaterialUtil.isEmpty(null));
+    }
+    
+    @Test
+    public void testCodes() {
+        for (Material material : Material.values()) {
+            String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_LETTERS);
+            assertSame(material, MaterialUtil.getMaterial(shortenedName));
+        }
     }
 }

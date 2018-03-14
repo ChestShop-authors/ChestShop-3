@@ -96,7 +96,7 @@ public class MaterialUtil {
             return material;
         }
         
-        String[] nameParts = name.toUpperCase().split(" ");
+        String[] nameParts = name.toUpperCase().split(" |_");
 
         short length = Short.MAX_VALUE;
 
@@ -195,40 +195,8 @@ public class MaterialUtil {
     
         String code = data + itemName + durability + metaData;
         if (maxLength > 0 && code.length() > maxLength) {
-            String[] itemParts = itemName.split("_");
             int exceeding = code.length() - maxLength;
-            int shortestIndex = 0;
-            int longestIndex = 0;
-            for (int i = 0; i < itemParts.length; i++) {
-                if (itemParts[longestIndex].length() < itemParts[i].length()) {
-                    longestIndex = i;
-                }
-                if (itemParts[shortestIndex].length() > itemParts[i].length()) {
-                    shortestIndex = i;
-                }
-            }
-            if (itemParts[longestIndex].length() - itemParts[shortestIndex].length() > exceeding) {
-                itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - exceeding);
-            } else {
-                for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
-                    int remove = 0;
-                    if (itemParts[i].length() > itemParts[shortestIndex].length()) {
-                        remove = itemParts[i].length() - itemParts[shortestIndex].length();
-                    }
-                    if (remove > exceeding) {
-                        remove = exceeding;
-                    }
-                    itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
-                    exceeding -= remove;
-                }
-                while (exceeding > 0) {
-                    for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
-                        itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
-                        exceeding--;
-                    }
-                }
-            }
-            code = data + String.join("_", itemParts) + durability + metaData;
+            code = data + getShortenedName(itemName, itemName.length() - exceeding) + durability + metaData;
         }
 
         code = StringUtil.capitalizeFirstLetter(code, '_');
@@ -240,7 +208,53 @@ public class MaterialUtil {
 
         return code;
     }
-
+    
+    /**
+     * Get an item name shortened to a max length that is still reversable by {@link #getMaterial(String)}
+     * @param itemName  The name of the item
+     * @param maxLength The max length
+     * @return The name shortened to the max length
+     */
+    public static String getShortenedName(String itemName, int maxLength) {
+        if (itemName.length() <= maxLength) {
+            return itemName;
+        }
+        int exceeding = itemName.length() - maxLength;
+        String[] itemParts = itemName.split("_");
+        int shortestIndex = 0;
+        int longestIndex = 0;
+        for (int i = 0; i < itemParts.length; i++) {
+            if (itemParts[longestIndex].length() < itemParts[i].length()) {
+                longestIndex = i;
+            }
+            if (itemParts[shortestIndex].length() > itemParts[i].length()) {
+                shortestIndex = i;
+            }
+        }
+        if (itemParts[longestIndex].length() - itemParts[shortestIndex].length() > exceeding) {
+            itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - exceeding);
+        } else {
+            for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                int remove = 0;
+                if (itemParts[i].length() > itemParts[shortestIndex].length()) {
+                    remove = itemParts[i].length() - itemParts[shortestIndex].length();
+                }
+                if (remove > exceeding) {
+                    remove = exceeding;
+                }
+                itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
+                exceeding -= remove;
+            }
+            while (exceeding > 0) {
+                for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                    itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
+                    exceeding--;
+                }
+            }
+        }
+        return String.join("_", itemParts);
+    }
+    
     /**
      * Gives you an ItemStack from a String
      *
