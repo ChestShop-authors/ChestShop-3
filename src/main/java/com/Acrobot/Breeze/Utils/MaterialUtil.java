@@ -22,7 +22,9 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,7 +67,18 @@ public class MaterialUtil {
         if (one.isSimilar(two)) {
             return true;
         }
-
+    
+        // Special check for banners as they might include the deprecated base color
+        if (one.getType() == two.getType()
+                && one.getType() == Material.BANNER
+                && one.getDurability() == two.getDurability()) {
+            Map<String, Object> m1 = new HashMap<>(one.getItemMeta().serialize());
+            Map<String, Object> m2 = new HashMap<>(two.getItemMeta().serialize());
+            Object c1 = m1.remove("base-color");
+            Object c2 = m2.remove("base-color");
+            return (one.getData().equals(two.getData()) || c1.equals(c2)) && m1.equals(m2);
+        }
+        
         // Special check for books as their pages might change when serialising (See SPIGOT-3206)
         return one.getType() == two.getType()
                 && one.getDurability() == two.getDurability()
@@ -203,7 +216,7 @@ public class MaterialUtil {
         
         ItemStack codeItem = getItem(code);
         if (!equals(itemStack, codeItem)) {
-            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength);
+            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength + "(tried code " + code);
         }
 
         return code;
@@ -275,7 +288,8 @@ public class MaterialUtil {
 
         Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);
-
+        byte data = -1;
+    
         if (material == null) {
             if (!split[0].contains(" ")) {
                 return null;
@@ -286,7 +300,7 @@ public class MaterialUtil {
 
                 if (material != null) {
                     if (durability == 0) {
-                        durability = DataValue.get(split[0].substring(0, index), material);
+                        durability = data = DataValue.get(split[0].substring(0, index), material);
                     }
 
                     break;
@@ -300,6 +314,9 @@ public class MaterialUtil {
 
         itemStack = new ItemStack(material);
         itemStack.setDurability(durability);
+        if (data > -1) {
+            itemStack.getData().setData(data);
+        }
 
         ItemMeta meta = getMetadata(itemName);
 
@@ -377,7 +394,7 @@ public class MaterialUtil {
                         return (byte) texturedMaterial.getTextures().indexOf(mat);
                     }
                 }
-            } else if (materialData instanceof Colorable) {
+            } else if (materialData instanceof Colorable || material == Material.BANNER) { // Banners might not use the Banner MaterialData...
                 DyeColor color;
 
                 try {
@@ -386,7 +403,7 @@ public class MaterialUtil {
                     return 0;
                 }
 
-                if (material == Material.INK_SACK) {
+                if (material == Material.INK_SACK || material == Material.BANNER) {
                     return color.getDyeData();
                 }
 
@@ -428,7 +445,12 @@ public class MaterialUtil {
             if (data == null) {
                 return null;
             }
-
+            
+            // Banner do not return the Banner MaterialData? Wat?!?
+            if (data.getItemType() == Material.BANNER && data.getData() < 16) {
+                return DyeColor.getByDyeData(data.getData()).name();
+            }
+            
             if (data instanceof TexturedMaterial) {
                 return ((TexturedMaterial) data).getMaterial().name();
             } else if (data instanceof Colorable) {
