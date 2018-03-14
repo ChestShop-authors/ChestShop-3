@@ -281,8 +281,8 @@ public class MaterialUtil {
                 return null;
             }
 
-            for (int index = split[0].indexOf(' '); index >= 0; index = split[0].indexOf(' ', index + 1)) {
-                material = getMaterial(split[0].substring(index));
+            for (int index = split[0].indexOf(' '); index >= 0 && index + 1 < split[0].length(); index = split[0].indexOf(' ', index + 1)) {
+                material = getMaterial(split[0].substring(index + 1));
 
                 if (material != null) {
                     if (durability == 0) {
