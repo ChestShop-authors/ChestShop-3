@@ -9,6 +9,7 @@ import info.somethingodd.OddItem.OddItem;
 import org.bukkit.CoalType;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.SandstoneType;
 import org.bukkit.TreeSpecies;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -108,36 +109,11 @@ public class MaterialUtil {
             MATERIAL_CACHE.put(formatted, material);
             return material;
         }
-        
-        String[] nameParts = name.toUpperCase().split(" |_");
 
-        short length = Short.MAX_VALUE;
-
-        for (Material currentMaterial : Material.values()) {
-            String matName = currentMaterial.toString();
-
-            if (matName.length() < length && matName.startsWith(formatted)) {
-                length = (short) matName.length();
-                material = currentMaterial;
-            } else if (nameParts.length > 1) {
-                String[] matParts = matName.split("_");
-                if (nameParts.length == matParts.length) {
-                    boolean matched = true;
-                    for (int i = 0; i < matParts.length; i++) {
-                        if (!matParts[i].startsWith(nameParts[i])) {
-                            matched = false;
-                            break;
-                        }
-                    }
-                    if (matched) {
-                        material = currentMaterial;
-                        break;
-                    }
-                }
-            }
+        material = new EnumParser<Material>().parse(name, Material.values());
+        if (material != null) {
+            MATERIAL_CACHE.put(formatted, material);
         }
-
-        MATERIAL_CACHE.put(formatted, material);
 
         return material;
     }
@@ -290,7 +266,7 @@ public class MaterialUtil {
 
         Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);
-        byte data = -1;
+        MaterialData data = null;
     
         if (material == null) {
             if (!split[0].contains(" ")) {
@@ -301,9 +277,7 @@ public class MaterialUtil {
                 material = getMaterial(split[0].substring(index + 1));
 
                 if (material != null) {
-                    if (durability == 0) {
-                        durability = data = DataValue.get(split[0].substring(0, index), material);
-                    }
+                    data = DataValue.getData(split[0].substring(0, index), material);
 
                     break;
                 }
@@ -315,10 +289,14 @@ public class MaterialUtil {
         }
 
         itemStack = new ItemStack(material);
-        itemStack.setDurability(durability);
-        if (data > -1) {
-            itemStack.getData().setData(data);
+        if (data == null && durability > 0 && material.getMaxDurability() == 0) {
+            data = material.getNewData((byte) durability);
         }
+        if (data != null) {
+            itemStack.setData(data);
+            durability = data.getData();
+        }
+        itemStack.setDurability(durability);
 
         ItemMeta meta = getMetadata(itemName);
 
@@ -378,63 +356,66 @@ public class MaterialUtil {
          * @param type     Data Value string
          * @param material Material
          * @return data value
+         * @deprecated Use {@link #getData}
          */
+        @Deprecated
         public static byte get(String type, Material material) {
             if (material == null || material.getData() == null) {
                 return 0;
             }
+            MaterialData data = getData(type, material);
+            return data != null ? data.getData() : 0;
+        }
+        
+        /**
+         * Gets the dat from a string
+         *
+         * @param type     Data Value string
+         * @param material Material
+         * @return data
+         */
+        public static MaterialData getData(String type, Material material) {
 
             type = type.toUpperCase().replace(" ", "_");
 
-            MaterialData materialData = material.getNewData((byte) 0);
+            MaterialData materialData = new ItemStack(material).getData();
 
             if (materialData instanceof TexturedMaterial) {
                 TexturedMaterial texturedMaterial = (TexturedMaterial) materialData;
-
-                for (Material mat : texturedMaterial.getTextures()) {
-                    if (mat.name().startsWith(type) && !mat.equals(material)) {
-                        return (byte) texturedMaterial.getTextures().indexOf(mat);
-                    }
+                Material texture = new EnumParser<Material>().parse(type, texturedMaterial.getTextures().toArray(new Material[0]));
+                if (texture != null) {
+                    ((TexturedMaterial) materialData).setMaterial(texture);
                 }
-            } else if (materialData instanceof Colorable || material == Material.BANNER) { // Banners might not use the Banner MaterialData...
-                DyeColor color;
-
-                try {
-                    color = DyeColor.valueOf(type);
-                } catch (IllegalArgumentException exception) {
-                    return 0;
+            } else if (materialData instanceof Colorable) {
+                DyeColor color = new EnumParser<DyeColor>().parse(type, DyeColor.values());
+                if (color != null) {
+                    ((Colorable) materialData).setColor(color);
                 }
-
-                if (material == Material.INK_SACK || material == Material.BANNER) {
-                    return color.getDyeData();
-                }
-
-                return color.getWoolData();
-            } else if (materialData instanceof Tree) {
-                try {
-                    return TreeSpecies.valueOf(type).getData();
-                } catch (IllegalArgumentException ex) {
-                    return 0;
+            } else if (materialData instanceof Wood) {
+                TreeSpecies species = new EnumParser<TreeSpecies>().parse(type, TreeSpecies.values());
+                if (species != null) {
+                    ((Wood) materialData).setSpecies(species);
                 }
             } else if (materialData instanceof SpawnEgg) {
-                try {
-                    EntityType entityType = EntityType.valueOf(type);
-
-                    return (byte) entityType.getTypeId();
-                } catch (IllegalArgumentException ex) {
-                    return 0;
+                EntityType entityType = new EnumParser<EntityType>().parse(type, EntityType.values());
+                if (entityType != null) {
+                    ((SpawnEgg) materialData).setSpawnedType(entityType);
                 }
             } else if (materialData instanceof Coal) {
-                try {
-                    return CoalType.valueOf(type).getData();
-                } catch (IllegalArgumentException ex) {
-                    return 0;
+                CoalType coalType = new EnumParser<CoalType>().parse(type, CoalType.values());
+                if (coalType != null) {
+                    ((Coal) materialData).setType(coalType);
+                }
+            } else if (materialData instanceof Sandstone) {
+                SandstoneType sandstoneType = new EnumParser<SandstoneType>().parse(type, SandstoneType.values());
+                if (sandstoneType != null) {
+                    ((Sandstone) materialData).setType(sandstoneType);
                 }
             }
 
-            return 0;
+            return materialData;
         }
-
+    
         /**
          * Returns a string with the DataValue
          *
@@ -448,20 +429,15 @@ public class MaterialUtil {
                 return null;
             }
             
-            // Banner do not return the Banner MaterialData? Wat?!?
-            if (data.getItemType() == Material.BANNER && data.getData() < 16) {
-                return DyeColor.getByDyeData(data.getData()).name();
-            }
-            
             if (data instanceof TexturedMaterial) {
                 return ((TexturedMaterial) data).getMaterial().name();
             } else if (data instanceof Colorable) {
                 DyeColor color = ((Colorable) data).getColor();
 
                 return (color != null ? color.name() : null);
-            } else if (data instanceof Tree) {
+            } else if (data instanceof Wood) {
                 //TreeSpecies specie = TreeSpecies.getByData((byte) (data.getData() & 3)); //This works, but not as intended
-                TreeSpecies specie = ((Tree) data).getSpecies();
+                TreeSpecies specie = ((Wood) data).getSpecies();
                 return (specie != null && specie != TreeSpecies.GENERIC ? specie.name() : null);
             } else if (data instanceof SpawnEgg) {
                 EntityType type = ((SpawnEgg) data).getSpawnedType();
@@ -469,8 +445,48 @@ public class MaterialUtil {
             } else if (data instanceof Coal) {
                 CoalType coal = ((Coal) data).getType();
                 return (coal != null && coal != CoalType.COAL ? coal.name() : null);
+            } else if (data instanceof Sandstone) {
+                SandstoneType type = ((Sandstone) data).getType();
+                return (type != null && type != SandstoneType.CRACKED ? type.name() : null);
             } else {
                 return null;
+            }
+        }
+    }
+    
+    private static class EnumParser<E extends Enum<E>> {
+        private E parse(String name, E[] values) {
+            name = name.toUpperCase();
+            
+            try {
+                return E.valueOf(values[0].getDeclaringClass(), name);
+            } catch (IllegalArgumentException exception) {
+                E currentEnum = null;
+                String[] typeParts = name.split("[ _]");
+                int length = Short.MAX_VALUE;
+                for (E e : values) {
+                    String enumName = e.name();
+                    if (enumName.length() < length && enumName.startsWith(name)) {
+                        length = (short) enumName.length();
+                        currentEnum = e;
+                    }  else if (typeParts.length > 1) {
+                        String[] nameParts = enumName.split("_");
+                        if (typeParts.length == nameParts.length) {
+                            boolean matched = true;
+                            for (int i = 0; i < nameParts.length; i++) {
+                                if (!nameParts[i].startsWith(typeParts[i])) {
+                                    matched = false;
+                                    break;
+                                }
+                            }
+                            if (matched) {
+                                currentEnum = e;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return currentEnum;
             }
         }
     }
