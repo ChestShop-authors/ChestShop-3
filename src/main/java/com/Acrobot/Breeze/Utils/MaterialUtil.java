@@ -206,17 +206,19 @@ public class MaterialUtil {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
     
-        String code = data + itemName + durability + metaData;
-        if (maxLength > 0 && code.length() > maxLength) {
-            int exceeding = code.length() - maxLength;
-            code = data + getShortenedName(itemName, itemName.length() - exceeding) + durability + metaData;
+        int codeLength = (data + itemName + durability + metaData).length();
+        String code = data + itemName;
+        if (maxLength > 0 && codeLength > maxLength) {
+            int exceeding = codeLength - maxLength;
+            code = getShortenedName(code, code.length() - exceeding);
         }
-
-        code = StringUtil.capitalizeFirstLetter(code, '_');
-        
+    
+        code = StringUtil.capitalizeFirstLetter(code, '_') + durability + metaData;
+    
         ItemStack codeItem = getItem(code);
         if (!equals(itemStack, codeItem)) {
-            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength + "(tried code " + code);
+            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength
+                    + " (code " + code + " results in item " + codeItem + ")");
         }
 
         return code;

@@ -36,8 +36,17 @@ public class ItemInfo implements CommandExecutor {
         }
 
         sender.sendMessage(Messages.prefix(iteminfo));
-        sender.sendMessage(ChatColor.WHITE + "Full Name: " + ChatColor.GRAY + MaterialUtil.getName(item));
-        sender.sendMessage(ChatColor.WHITE + "Shop Sign: " + ChatColor.GRAY + MaterialUtil.getSignName(item));
+        try {
+            sender.sendMessage(ChatColor.WHITE + "Full Name: " + ChatColor.GRAY + MaterialUtil.getName(item));
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "Full Name Error: " + e.getMessage());
+        }
+    
+        try {
+            sender.sendMessage(ChatColor.WHITE + "Shop Sign: " + ChatColor.GRAY + MaterialUtil.getSignName(item));
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "Shop Sign Error: " + e.getMessage());
+        }
 
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
