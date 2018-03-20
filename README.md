@@ -32,5 +32,6 @@ Links
 --------------------------------
 * [Dev Builds](https://ci.minebench.de/job/ChestShop-3/)
 * [Forum Thread](http://forums.bukkit.org/threads/4150/)
-* [BukkitDev site](http://dev.bukkit.org/server-mods/chestshop/)
+* [BukkitDev site](http://dev.bukkit.org/projects/chestshop/)
+* [SpigotMC site](https://www.spigotmc.org/resources/chestshop.51856/)
 * [Bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+)
