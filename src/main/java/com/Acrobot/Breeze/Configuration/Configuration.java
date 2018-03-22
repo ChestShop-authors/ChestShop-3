@@ -47,6 +47,8 @@ public class Configuration {
                 try {
                     if (config.isSet(path)) {
                         field.set(null, ValueParser.parseToJava(config.get(path)));
+                    } else if (config.isSet(path.toLowerCase())) {
+                        field.set(null, ValueParser.parseToJava(config.get(path.toLowerCase())));
                     } else {
                         if (field.isAnnotationPresent(PrecededBySpace.class)) {
                             writer.newLine();
