@@ -391,10 +391,10 @@ public class MaterialUtil {
                 if (color != null) {
                     ((Colorable) materialData).setColor(color);
                 }
-            } else if (materialData instanceof Wood) {
+            } else if (materialData instanceof Tree) {
                 TreeSpecies species = new EnumParser<TreeSpecies>().parse(type, TreeSpecies.values());
                 if (species != null) {
-                    ((Wood) materialData).setSpecies(species);
+                    ((Tree) materialData).setSpecies(species);
                 }
             } else if (materialData instanceof SpawnEgg) {
                 EntityType entityType = new EnumParser<EntityType>().parse(type, EntityType.values());
@@ -435,9 +435,8 @@ public class MaterialUtil {
                 DyeColor color = ((Colorable) data).getColor();
 
                 return (color != null ? color.name() : null);
-            } else if (data instanceof Wood) {
-                //TreeSpecies specie = TreeSpecies.getByData((byte) (data.getData() & 3)); //This works, but not as intended
-                TreeSpecies specie = ((Wood) data).getSpecies();
+            } else if (data instanceof Tree) {
+                TreeSpecies specie = ((Tree) data).getSpecies();
                 return (specie != null && specie != TreeSpecies.GENERIC ? specie.name() : null);
             } else if (data instanceof SpawnEgg) {
                 EntityType type = ((SpawnEgg) data).getSpawnedType();

@@ -68,16 +68,6 @@ public class AdminInventory implements Inventory {
     }
 
     @Override
-    public ItemStack[] getStorageContents() {
-        return new ItemStack[0];
-    }
-
-    @Override
-    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
-
-    }
-
-    @Override
     public boolean contains(int i) {
         return true;
     }
@@ -214,11 +204,6 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ListIterator<ItemStack> iterator(int i) {
-        return null;
-    }
-
-    @Override
-    public Location getLocation() {
         return null;
     }
 }

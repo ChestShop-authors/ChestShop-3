@@ -14,19 +14,9 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class InventoryUtil {
-    private static Boolean legacyContents = null;
    
     private static ItemStack[] getStorageContents(Inventory inventory) {
-        if (legacyContents == null) {
-            try {
-                inventory.getStorageContents();
-                legacyContents = false;
-            } catch (NoSuchMethodError e) {
-                legacyContents = true;
-            }
-        }
-
-        return legacyContents ? inventory.getContents() : inventory.getStorageContents();
+        return inventory.getContents();
     }
 
     /**
