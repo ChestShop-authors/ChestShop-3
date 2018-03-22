@@ -263,6 +263,7 @@ public class InventoryUtil {
                 int neededToRemove = Math.min(currentItem.getAmount(), amountLeft);
 
                 currentItem.setAmount(currentItem.getAmount() - neededToRemove);
+                inventory.setItem(currentSlot, currentItem);
 
                 amountLeft -= neededToRemove;
             }
