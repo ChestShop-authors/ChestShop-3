@@ -81,7 +81,7 @@ public class PlayerInteract implements Listener {
         if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(sign.getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
             if (canAccess) {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                if (item != null) {
+                if (!MaterialUtil.isEmpty(item)) {
                     String itemCode = MaterialUtil.getSignName(item);
                     String[] lines = sign.getLines();
                     lines[ITEM_LINE] = itemCode;
