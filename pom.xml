@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
-            <version>4.48</version>
+            <version>5.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -101,7 +101,8 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit-lite</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -125,7 +126,7 @@
             <groupId>info.somethingodd</groupId>
             <artifactId>odditem</artifactId>
             <version>0.9.5</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -249,6 +250,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>com.bekvon.bukkit</groupId>
             <artifactId>residence</artifactId>
