@@ -30,8 +30,12 @@ public class EmptyShopDeleter implements Listener {
         Inventory ownerInventory = event.getOwnerInventory();
         Sign sign = event.getSign();
         Chest connectedChest = uBlock.findConnectedChest(sign);
-
+        
         if (!shopShouldBeRemoved(ownerInventory, event.getStock())) {
+            return;
+        }
+        
+        if (!isInRemoveWorld(sign)) {
             return;
         }
 
@@ -46,8 +50,12 @@ public class EmptyShopDeleter implements Listener {
             ownerInventory.addItem(new ItemStack(Material.SIGN, 1));
         }
     }
-
+    
     private static boolean shopShouldBeRemoved(Inventory inventory, ItemStack[] stock) {
         return Properties.REMOVE_EMPTY_SHOPS && !ChestShopSign.isAdminShop(inventory) && !InventoryUtil.hasItems(stock, inventory);
+    }
+    
+    private static boolean isInRemoveWorld(Sign sign) {
+        return Properties.REMOVE_EMPTY_WORLDS.isEmpty() || Properties.REMOVE_EMPTY_WORLDS.contains(sign.getWorld().getName());
     }
 }
