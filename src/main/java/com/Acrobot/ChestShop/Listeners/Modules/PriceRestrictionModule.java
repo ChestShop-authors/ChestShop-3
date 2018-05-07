@@ -36,7 +36,7 @@ public class PriceRestrictionModule implements Listener {
 
         if (!file.exists()) {
             configuration.addDefault("uses_materials", true);
-            
+
             configuration.addDefault("max.buy_price.item_type", 5.53);
             configuration.addDefault("max.buy_price.piston_head", 3.51);
             configuration.addDefault("max.sell_price.placed_banner", 3.52);
@@ -72,7 +72,7 @@ public class PriceRestrictionModule implements Listener {
             }
         }
     }
-    
+
     private void convertToMaterial(String sectionPath) {
         ConfigurationSection section = configuration.getConfigurationSection(sectionPath);
         if (section != null) {
@@ -87,7 +87,7 @@ public class PriceRestrictionModule implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onPreShopCreation(PreShopCreationEvent event) {
         ItemStack material = MaterialUtil.getItem(event.getSignLine(ITEM_LINE));

@@ -34,7 +34,7 @@ package com.Acrobot.Breeze.Utils.Encoding;
  * @version 2.3.7
  */
 public class Base64 {
-    
+
 /* ********  P U B L I C   F I E L D S  ******** */
 
 
@@ -87,8 +87,8 @@ public class Base64 {
      * <a href="http://www.faqs.org/qa/rfcc-1940.html">http://www.faqs.org/qa/rfcc-1940.html</a>.
      */
     public final static int ORDERED = 32;
-    
-    
+
+
 /* ********  P R I V A T E   F I E L D S  ******** */
 
 
@@ -119,7 +119,7 @@ public class Base64 {
     private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
     private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
 
-	
+
 /* ********  S T A N D A R D   B A S E 6 4   A L P H A B E T  ******** */
 
     /**
@@ -178,7 +178,7 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9         // Decimal 244 - 255
     };
 
-	
+
 /* ********  U R L   S A F E   B A S E 6 4   A L P H A B E T  ******** */
 
     /**
@@ -305,7 +305,7 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9         // Decimal 244 - 255
     };
 
-	
+
 /* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
 
 
@@ -349,10 +349,10 @@ public class Base64 {
      * Defeats instantiation.
      */
     private Base64() {}
-    
 
-    
-    
+
+
+
 /* ********  E N C O D I N G   M E T H O D S  ******** */
 
 
@@ -903,11 +903,11 @@ public class Base64 {
         }   // end else: don't compress
 
     }   // end encodeBytesToBytes
-    
 
-    
-    
-    
+
+
+
+
 /* ********  D E C O D I N G   M E T H O D S  ******** */
 
 
@@ -1547,8 +1547,8 @@ public class Base64 {
             }
         }   // end finally
     }   // end decodeFileToFile
-    
-    
+
+
     /* ********  I N N E R   C L A S S   I N P U T S T R E A M  ******** */
 
 
@@ -1754,12 +1754,12 @@ public class Base64 {
         }   // end read
 
     }   // end inner class InputStream
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     /* ********  I N N E R   C L A S S   O U T P U T S T R E A M  ******** */
 
 

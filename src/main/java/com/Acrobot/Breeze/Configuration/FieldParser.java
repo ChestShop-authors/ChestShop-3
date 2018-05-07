@@ -16,11 +16,11 @@ public class FieldParser {
      */
     public static String parse(Field field) {
         StringBuilder builder = new StringBuilder(50);
-        
+
         if (field.isAnnotationPresent(ConfigurationComment.class)) {
             builder.append('#').append(field.getAnnotation(ConfigurationComment.class).value()).append('\n');
         }
-        
+
         try {
             builder.append(field.getName()).append(": ").append(ValueParser.parseToYAML(field.get(null)));
         } catch (IllegalAccessException e) {

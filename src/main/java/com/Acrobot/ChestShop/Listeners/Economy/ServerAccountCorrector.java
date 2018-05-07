@@ -43,7 +43,7 @@ public class ServerAccountCorrector implements Listener {
         if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
-    
+
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
 
@@ -59,14 +59,14 @@ public class ServerAccountCorrector implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onCurrencyCheck(CurrencyCheckEvent event) {
         UUID target = event.getAccount();
-    
+
         if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
 
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
-        
+
         if (target == null) {
             event.hasEnough(true);
             return;
@@ -81,7 +81,7 @@ public class ServerAccountCorrector implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onCurrencyHoldCheck(CurrencyHoldEvent event) {
         UUID target = event.getAccount();
-    
+
         if (!NameManager.isAdminShop(target) || NameManager.isServerEconomyAccount(target)) {
             return;
         }
@@ -100,7 +100,7 @@ public class ServerAccountCorrector implements Listener {
 
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
-        
+
         if (target == null) {
             event.setAmount(BigDecimal.valueOf(Double.MAX_VALUE));
             return;

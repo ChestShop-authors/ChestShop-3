@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class InventoryUtil {
     private static Boolean legacyContents = null;
-   
+
     private static ItemStack[] getStorageContents(Inventory inventory) {
         if (legacyContents == null) {
             try {
@@ -74,7 +74,7 @@ public class InventoryUtil {
 
         return true;
     }
-    
+
     /**
      * Count amount of empty slots in an inventory
      *
@@ -88,7 +88,7 @@ public class InventoryUtil {
                 emptyAmount++;
             }
         }
-        
+
         return emptyAmount;
     }
 
@@ -109,7 +109,7 @@ public class InventoryUtil {
 
         return true;
     }
-    
+
     /**
      * Checks if items fit in the inventory
      *
@@ -124,7 +124,7 @@ public class InventoryUtil {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -206,8 +206,7 @@ public class InventoryUtil {
     }
 
     // Don't use the armor slots or extra slots
-    private static int effectiveSize(Inventory inventory)
-    {
+    private static int effectiveSize(Inventory inventory) {
         return getStorageContents(inventory).length;
     }
 
@@ -333,15 +332,17 @@ public class InventoryUtil {
 
     /**
      * Get the max size an item stack is allowed to stack to while respecting the STACK_TO_64 config property
+     *
      * @param item The item to get the max stacksize of
      * @return The max stacksize of the item stack's type or 64 if STACK_TO_64 is enabled
      */
     public static int getMaxStackSize(ItemStack item) {
         return Properties.STACK_TO_64 ? 64 : item.getMaxStackSize();
     }
-    
+
     /**
      * Get an array of different item stacks that are properly stacked to their max stack size
+     *
      * @param items The items to stack
      * @return An array of item stacks which's amount is a maximum of the allowed stack size
      */

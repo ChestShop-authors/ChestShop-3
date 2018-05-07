@@ -41,7 +41,7 @@ public class ItemInfo implements CommandExecutor {
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Full Name Error: " + e.getMessage());
         }
-    
+
         try {
             sender.sendMessage(ChatColor.WHITE + "Shop Sign: " + ChatColor.GRAY + MaterialUtil.getSignName(item));
         } catch (IllegalArgumentException e) {

@@ -155,7 +155,7 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
-    
+
     @PrecededBySpace
     @ConfigurationComment("Add icons and make item names hoverable in transaction messages when ShowItem is installed?")
     public static boolean SHOWITEM_MESSAGE = true;

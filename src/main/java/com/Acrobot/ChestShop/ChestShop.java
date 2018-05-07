@@ -269,7 +269,7 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
-      
+
         Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");
         if (authMe != null && authMe.isEnabled()) {
             registerEvent(new AuthMeChestShopListener());
