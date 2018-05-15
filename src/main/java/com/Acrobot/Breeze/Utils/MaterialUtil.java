@@ -290,9 +290,6 @@ public class MaterialUtil {
         }
 
         itemStack = new ItemStack(material);
-        if (data == null && durability > 0 && material.getMaxDurability() == 0) {
-            data = material.getNewData((byte) durability);
-        }
         if (data != null) {
             itemStack.setData(data);
             durability = data.getData();
