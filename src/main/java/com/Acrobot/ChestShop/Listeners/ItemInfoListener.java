@@ -8,6 +8,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
@@ -24,12 +26,17 @@ public class ItemInfoListener implements Listener {
     @EventHandler
     public static void addEnchantment(ItemInfoEvent event) {
         ItemStack item = event.getItem();
+        ItemMeta meta = item.getItemMeta();
         CommandSender sender = event.getSender();
 
-        Map<Enchantment, Integer> enchantments = item.getEnchantments();
+        for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
+            sender.sendMessage(ChatColor.AQUA + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
+        }
 
-        for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
-            sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
+        if (meta instanceof EnchantmentStorageMeta) {
+            for (Map.Entry<Enchantment, Integer> enchantment : ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet()) {
+                sender.sendMessage(ChatColor.YELLOW + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
+            }
         }
     }
 
