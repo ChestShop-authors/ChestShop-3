@@ -167,6 +167,9 @@ public class MaterialUtil {
     public static String getName(ItemStack itemStack, int maxLength) {
         String alias = Odd.getAlias(itemStack);
         String itemName = alias != null ? alias : itemStack.getType().toString();
+        if (itemStack.getType() != Material.HUGE_MUSHROOM_2 && itemName.endsWith("_2")) {
+            itemName = itemName.substring(0, itemName.length() - 2);
+        }
 
         String data = DataValue.name(itemStack);
         String durability = "";
@@ -279,6 +282,7 @@ public class MaterialUtil {
 
                 if (material != null) {
                     data = DataValue.getData(split[0].substring(0, index), material);
+                    material = data.getItemType();
 
                     break;
                 }
@@ -370,7 +374,9 @@ public class MaterialUtil {
          *
          * @param type     Data Value string
          * @param material Material
-         * @return data
+         * @return data    The Material data with that name, under some circumstances the type of the data might be
+         *                 different from the inputted Material. (e.g. with LOG_2 or similar alternatives)
+         *                 It's advised to use the type of the MaterialData going forward when using the data
          */
         public static MaterialData getData(String type, Material material) {
 
@@ -392,7 +398,23 @@ public class MaterialUtil {
             } else if (materialData instanceof Wood) {
                 TreeSpecies species = new EnumParser<TreeSpecies>().parse(type, TreeSpecies.values());
                 if (species != null) {
-                    ((Wood) materialData).setSpecies(species);
+                    try {
+                        ((Wood) materialData).setSpecies(species);
+                    } catch (IllegalArgumentException e) {
+                        String materialName = material.toString();
+                        if (materialName.endsWith("_2")) {
+                            Material mat = Material.getMaterial(materialName.substring(0, materialName.length() - 2));
+                            if (mat != null) {
+                                materialData = new ItemStack(mat).getData();
+                            }
+                        } else {
+                            Material mat = Material.getMaterial(materialName + "_2");
+                            if (mat != null) {
+                                materialData = new ItemStack(mat).getData();
+                            }
+                        }
+                        ((Wood) materialData).setSpecies(species);
+                    }
                 }
             } else if (materialData instanceof SpawnEgg) {
                 EntityType entityType = new EnumParser<EntityType>().parse(type, EntityType.values());
