@@ -24,26 +24,39 @@ public class PermissionChecker implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         Player player = event.getPlayer();
 
-        if (Permission.has(player, ADMIN)) {
-            return;
-        }
-
         String priceLine = event.getSignLine(PRICE_LINE);
         String itemLine = event.getSignLine(ITEM_LINE);
 
         ItemStack item = MaterialUtil.getItem(itemLine);
 
-        if (item == null || Permission.has(player, SHOP_CREATION_ID + item.getType().toString().toLowerCase())) {
+        if (item == null) {
+            if (!Permission.has(player, SHOP_CREATION)) {
+                event.setOutcome(NO_PERMISSION);
+            }
             return;
         }
 
-        if (PriceUtil.hasBuyPrice(priceLine) && !Permission.has(player, SHOP_CREATION_BUY)) {
+        String matID = item.getType().toString().toLowerCase();
+        if (PriceUtil.hasBuyPrice(priceLine)) {
+            if (Permission.has(player, SHOP_CREATION_BUY_ID + matID)) {
+                return;
+            }
+            if (Permission.has(player, SHOP_CREATION) || (Permission.has(player, SHOP_CREATION_ID + matID) && Permission.has(player, SHOP_CREATION_BUY))) {
+                return;
+            }
             event.setOutcome(NO_PERMISSION);
             return;
         }
 
-        if (PriceUtil.hasSellPrice(priceLine) && !Permission.has(player, SHOP_CREATION_SELL)) {
+        if (PriceUtil.hasSellPrice(priceLine)) {
+            if (Permission.has(player, SHOP_CREATION_SELL_ID + matID)) {
+                return;
+            }
+            if (Permission.has(player, SHOP_CREATION) || (Permission.has(player, SHOP_CREATION_ID + matID) && Permission.has(player, SHOP_CREATION_SELL))) {
+                return;
+            }
             event.setOutcome(NO_PERMISSION);
+            return;
         }
     }
 }
