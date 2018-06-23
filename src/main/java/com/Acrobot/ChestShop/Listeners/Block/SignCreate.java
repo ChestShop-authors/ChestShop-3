@@ -33,11 +33,11 @@ public class SignCreate implements Listener {
 
         PreShopCreationEvent preEvent = new PreShopCreationEvent(event.getPlayer(), (Sign) signBlock.getState(), line);
         ChestShop.callEvent(preEvent);
-        
+
         for (byte i = 0; i < event.getLines().length; ++i) {
             event.setLine(i, preEvent.getSignLine(i));
         }
-        
+
         if (preEvent.isCancelled()) {
             return;
         }

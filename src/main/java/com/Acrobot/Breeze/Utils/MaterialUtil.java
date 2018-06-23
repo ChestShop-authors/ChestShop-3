@@ -41,7 +41,7 @@ public class MaterialUtil {
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
     public static final short MAXIMUM_SIGN_LETTERS = 15;
-    
+
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
     /**
@@ -68,7 +68,7 @@ public class MaterialUtil {
         if (one.isSimilar(two)) {
             return true;
         }
-    
+
         // Special check for banners as they might include the deprecated base color
         if (one.getType() == two.getType()
                 && one.getType() == Material.BANNER
@@ -79,7 +79,7 @@ public class MaterialUtil {
             Object c2 = m2.remove("base-color");
             return (one.getData().equals(two.getData()) || c1.equals(c2)) && m1.equals(m2);
         }
-        
+
         // Special check for books as their pages might change when serialising (See SPIGOT-3206)
         return one.getType() == two.getType()
                 && one.getDurability() == two.getDurability()
@@ -156,7 +156,7 @@ public class MaterialUtil {
     public static String getSignName(ItemStack itemStack) {
         return getName(itemStack, MAXIMUM_SIGN_LETTERS);
     }
-    
+
     /**
      * Returns item's name, with a maximum length
      *
@@ -167,7 +167,10 @@ public class MaterialUtil {
     public static String getName(ItemStack itemStack, int maxLength) {
         String alias = Odd.getAlias(itemStack);
         String itemName = alias != null ? alias : itemStack.getType().toString();
-    
+        if (itemStack.getType() != Material.HUGE_MUSHROOM_2 && itemName.endsWith("_2")) {
+            itemName = itemName.substring(0, itemName.length() - 2);
+        }
+
         String data = DataValue.name(itemStack);
         String durability = "";
         if (data == null) {
@@ -181,16 +184,16 @@ public class MaterialUtil {
         if (itemStack.hasItemMeta()) {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
-    
+
         int codeLength = (data + itemName + durability + metaData).length();
         String code = data + itemName;
         if (maxLength > 0 && codeLength > maxLength) {
             int exceeding = codeLength - maxLength;
             code = getShortenedName(code, code.length() - exceeding);
         }
-    
+
         code = StringUtil.capitalizeFirstLetter(code, '_') + durability + metaData;
-    
+
         ItemStack codeItem = getItem(code);
         if (!equals(itemStack, codeItem)) {
             throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength
@@ -199,9 +202,10 @@ public class MaterialUtil {
 
         return code;
     }
-    
+
     /**
      * Get an item name shortened to a max length that is still reversable by {@link #getMaterial(String)}
+     *
      * @param itemName  The name of the item
      * @param maxLength The max length
      * @return The name shortened to the max length
@@ -245,7 +249,7 @@ public class MaterialUtil {
         }
         return String.join("_", itemParts);
     }
-    
+
     /**
      * Gives you an ItemStack from a String
      *
@@ -267,7 +271,7 @@ public class MaterialUtil {
         Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);
         MaterialData data = null;
-    
+
         if (material == null) {
             if (!split[0].contains(" ")) {
                 return null;
@@ -278,6 +282,7 @@ public class MaterialUtil {
 
                 if (material != null) {
                     data = DataValue.getData(split[0].substring(0, index), material);
+                    material = data.getItemType();
 
                     break;
                 }
@@ -289,9 +294,6 @@ public class MaterialUtil {
         }
 
         itemStack = new ItemStack(material);
-        if (data == null && durability > 0 && material.getMaxDurability() == 0) {
-            data = material.getNewData((byte) durability);
-        }
         if (data != null) {
             itemStack.setData(data);
             durability = data.getData();
@@ -366,13 +368,15 @@ public class MaterialUtil {
             MaterialData data = getData(type, material);
             return data != null ? data.getData() : 0;
         }
-        
+
         /**
          * Gets the dat from a string
          *
          * @param type     Data Value string
          * @param material Material
-         * @return data
+         * @return data    The Material data with that name, under some circumstances the type of the data might be
+         *                 different from the inputted Material. (e.g. with LOG_2 or similar alternatives)
+         *                 It's advised to use the type of the MaterialData going forward when using the data
          */
         public static MaterialData getData(String type, Material material) {
 
@@ -395,6 +399,23 @@ public class MaterialUtil {
                 TreeSpecies species = new EnumParser<TreeSpecies>().parse(type, TreeSpecies.values());
                 if (species != null) {
                     ((Tree) materialData).setSpecies(species);
+                    try {
+                        ((Tree) materialData).setSpecies(species);
+                    } catch (IllegalArgumentException e) {
+                        String materialName = material.toString();
+                        if (materialName.endsWith("_2")) {
+                            Material mat = Material.getMaterial(materialName.substring(0, materialName.length() - 2));
+                            if (mat != null) {
+                                materialData = new ItemStack(mat).getData();
+                            }
+                        } else {
+                            Material mat = Material.getMaterial(materialName + "_2");
+                            if (mat != null) {
+                                materialData = new ItemStack(mat).getData();
+                            }
+                        }
+                        ((Tree) materialData).setSpecies(species);
+                    }
                 }
             } else if (materialData instanceof SpawnEgg) {
                 EntityType entityType = new EnumParser<EntityType>().parse(type, EntityType.values());
@@ -415,7 +436,7 @@ public class MaterialUtil {
 
             return materialData;
         }
-    
+
         /**
          * Returns a string with the DataValue
          *
@@ -428,7 +449,7 @@ public class MaterialUtil {
             if (data == null) {
                 return null;
             }
-            
+
             if (data instanceof TexturedMaterial) {
                 return ((TexturedMaterial) data).getMaterial().name();
             } else if (data instanceof Colorable) {
@@ -452,11 +473,11 @@ public class MaterialUtil {
             }
         }
     }
-    
+
     private static class EnumParser<E extends Enum<E>> {
         private E parse(String name, E[] values) {
             name = name.toUpperCase();
-            
+
             try {
                 return E.valueOf(values[0].getDeclaringClass(), name);
             } catch (IllegalArgumentException exception) {
@@ -468,7 +489,7 @@ public class MaterialUtil {
                     if (enumName.length() < length && enumName.startsWith(name)) {
                         length = (short) enumName.length();
                         currentEnum = e;
-                    }  else if (typeParts.length > 1) {
+                    } else if (typeParts.length > 1) {
                         String[] nameParts = enumName.split("_");
                         if (typeParts.length == nameParts.length) {
                             boolean matched = true;
@@ -562,10 +583,10 @@ public class MaterialUtil {
             isInitialized = true;
         }
     }
-    
+
     public static class Show {
         private static ShowItem showItem = null;
-        
+
         /**
          * Lets the class know that it's safe to use the ShowItem methods now
          *
@@ -574,7 +595,7 @@ public class MaterialUtil {
         public static void initialize(Plugin plugin) {
             showItem = (ShowItem) plugin;
         }
-    
+
         /**
          * Send a message with hover info and icons
          *
@@ -586,7 +607,7 @@ public class MaterialUtil {
             if (showItem == null) {
                 return false;
             }
-            
+
             List<String> itemJson = new ArrayList<>();
             for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
                 try {
@@ -596,20 +617,20 @@ public class MaterialUtil {
                     return false;
                 }
             }
-            
+
             String joinedItemJson = itemJson.stream().collect(Collectors.joining("," + new JSONObject(ImmutableMap.of("text", " ")).toJSONString() + ", "));
-            
+
             String messageJsonString = Arrays.stream(message.split("%item"))
                     .map(s -> new JSONObject(ImmutableMap.of("text", s)).toJSONString())
                     .collect(Collectors.joining("," + joinedItemJson + ","));
-    
+
             while (messageJsonString.startsWith(",")) {
                 messageJsonString = messageJsonString.substring(1);
             }
             while (messageJsonString.endsWith(",")) {
                 messageJsonString = messageJsonString.substring(0, messageJsonString.length() - 1);
             }
-            
+
             showItem.tellRaw(player, messageJsonString);
             return true;
         }

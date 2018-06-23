@@ -46,8 +46,7 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 public class PlayerInteract implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public static void onInteract(PlayerInteractEvent event)
-    {
+    public static void onInteract(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
         if (block == null)
             return;
@@ -77,15 +76,15 @@ public class PlayerInteract implements Listener {
         }
 
         boolean canAccess = ChestShopSign.canAccess(player, sign);
-    
+
         if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(sign.getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
             if (canAccess) {
                 ItemStack item = player.getInventory().getItemInHand();
-                if (item != null) {
+                if (!MaterialUtil.isEmpty(item)) {
                     String itemCode = MaterialUtil.getSignName(item);
                     String[] lines = sign.getLines();
                     lines[ITEM_LINE] = itemCode;
-    
+
                     SignChangeEvent changeEvent = new SignChangeEvent(block, player, lines);
                     com.Acrobot.ChestShop.ChestShop.callEvent(changeEvent);
                     if (!changeEvent.isCancelled()) {
@@ -102,7 +101,7 @@ public class PlayerInteract implements Listener {
             }
             return;
         }
-        
+
         if (canAccess) {
             if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.isInsideVehicle() || player.getGameMode() == GameMode.CREATIVE) {
                 return;
@@ -148,7 +147,7 @@ public class PlayerInteract implements Listener {
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        if(!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
+        if (!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
             player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
             return null;
         }

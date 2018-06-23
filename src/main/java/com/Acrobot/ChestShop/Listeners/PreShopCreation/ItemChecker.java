@@ -25,7 +25,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
  * @author Acrobot
  */
 public class ItemChecker implements Listener {
-    
+
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String itemCode = event.getSignLine(ITEM_LINE);
@@ -39,15 +39,15 @@ public class ItemChecker implements Listener {
                     for (ItemStack stack : chest.getInventory().getContents()) {
                         if (!MaterialUtil.isEmpty(stack)) {
                             itemCode = MaterialUtil.getSignName(stack);
-            
+
                             event.setSignLine(ITEM_LINE, itemCode);
                             foundItem = true;
-            
+
                             break;
                         }
                     }
                 }
-    
+
                 if (!foundItem) {
                     event.setSignLine(ITEM_LINE, ChatColor.BOLD + ChestShopSign.AUTOFILL_CODE);
                     event.setOutcome(ITEM_AUTOFILL);
@@ -59,7 +59,7 @@ public class ItemChecker implements Listener {
                 return;
             }
         }
-        
+
         if (itemCode.length() > MAXIMUM_SIGN_LETTERS) {
             event.setOutcome(INVALID_ITEM);
             return;

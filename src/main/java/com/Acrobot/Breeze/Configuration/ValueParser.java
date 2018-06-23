@@ -19,6 +19,12 @@ public class ValueParser {
     public static String parseToYAML(Object object) {
         if (object instanceof Number || object instanceof Boolean) {
             return String.valueOf(object);
+        } else if (object instanceof List) {
+            StringBuilder sb = new StringBuilder();
+            for (Object o : (List) object) {
+                sb.append("\n- ").append(parseToYAML(o));
+            }
+            return sb.toString();
         } else {
             return '\"' + String.valueOf(object) + '\"';
         }

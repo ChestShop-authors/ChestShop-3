@@ -134,7 +134,7 @@ public class Dependencies {
         WorldGuard,
 
         Heroes,
-        
+
         ShowItem
     }
 }

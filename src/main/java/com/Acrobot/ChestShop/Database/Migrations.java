@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
@@ -104,7 +105,11 @@ public class Migrations {
                         lastInfo = System.currentTimeMillis();
                     }
                 }
-                results.close();
+                try {
+                    results.close();
+                } catch (IOException e1) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while closing results! " + e.getMessage());
+                }
                 ChestShop.getBukkitLogger().log(Level.INFO, success + " accounts successfully migrated. " + error + " accounts failed to migrate!");
             }
             ChestShop.getBukkitLogger().log(Level.INFO, "Migration of accounts table finished in " + (System.currentTimeMillis() - start) / 1000.0 + "s!");

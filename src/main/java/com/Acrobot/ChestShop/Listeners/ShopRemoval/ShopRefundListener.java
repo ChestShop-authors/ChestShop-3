@@ -10,6 +10,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +19,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
@@ -29,6 +32,10 @@ public class ShopRefundListener implements Listener {
         double refundPrice = Properties.SHOP_REFUND_PRICE;
 
         if (event.getDestroyer() == null || Permission.has(event.getDestroyer(), NOFEE) || refundPrice == 0) {
+            return;
+        }
+
+        if (ChatColor.stripColor(event.getSign().getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
             return;
         }
 

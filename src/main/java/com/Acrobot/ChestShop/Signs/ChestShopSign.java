@@ -32,7 +32,7 @@ public class ChestShopSign {
             Pattern.compile("^[\\w? #:-]+$")
     };
     public static final String AUTOFILL_CODE = "?";
-    
+
     public static boolean isAdminShop(Inventory ownerInventory) {
         return ownerInventory instanceof AdminInventory;
     }

@@ -40,8 +40,9 @@ public class NameManager {
 
     /**
      * Get account info from a UUID
-     * @param uuid  The UUID of the player to get the account info
-     * @return      The account info or <tt>null</tt> if none was found
+     *
+     * @param uuid The UUID of the player to get the account info
+     * @return The account info or <tt>null</tt> if none was found
      */
     public static Account getAccount(UUID uuid) {
         try {
@@ -49,7 +50,7 @@ public class NameManager {
                 try {
                     Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", uuid).queryForFirst();
                     if (account != null) {
-                        account.setUuid(uuid); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                         shortToAccount.put(account.getShortName(), account);
                         usernameToAccount.put(account.getName(), account);
                         return account;
@@ -66,8 +67,9 @@ public class NameManager {
 
     /**
      * Get account info from a non-shortened username
-     * @param fullName  The full name of the player to get the account info
-     * @return          The account info or <tt>null</tt> if none was found
+     *
+     * @param fullName The full name of the player to get the account info
+     * @return The account info or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty or null
      */
     public static Account getAccount(String fullName) {
@@ -77,7 +79,7 @@ public class NameManager {
                 try {
                     Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", fullName).queryForFirst();
                     if (account != null) {
-                        account.setName(fullName); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                         shortToAccount.put(account.getShortName(), account);
                         return account;
                     }
@@ -93,8 +95,9 @@ public class NameManager {
 
     /**
      * Get account info from a username that might be shortened
+     *
      * @param shortName The name of the player to get the account info
-     * @return          The account info or <tt>null</tt> if none was found
+     * @return The account info or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty
      */
     public static Account getAccountFromShortName(String shortName) {
@@ -108,7 +111,7 @@ public class NameManager {
                 try {
                     Account account = accounts.queryBuilder().where().eq("shortName", shortName).queryForFirst();
                     if (account != null) {
-                        account.setShortName(shortName); //HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        account.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                         return account;
                     }
                 } catch (SQLException e) {
@@ -120,11 +123,12 @@ public class NameManager {
             return null;
         }
     }
-    
+
     /**
      * Get the information from the last time a player logged in that previously used the shortened name
+     *
      * @param shortName The name of the player to get the last account for
-     * @return          The last account or <tt>null</tt> if none was found
+     * @return The last account or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
      */
     public static Account getLastAccountFromShortName(String shortName) {
@@ -137,9 +141,10 @@ public class NameManager {
 
     /**
      * Get the UUID from a player's (non-shortened) username
-     * @param username  The player's username
-     * @return          The UUID or <tt>null</tt> if the UUID can't be found or an error occurred
-     * @deprecated      Use {@link NameManager#getAccount(String)}
+     *
+     * @param username The player's username
+     * @return The UUID or <tt>null</tt> if the UUID can't be found or an error occurred
+     * @deprecated Use {@link NameManager#getAccount(String)}
      */
     @Deprecated
     public static UUID getUUID(String username) {
@@ -161,9 +166,10 @@ public class NameManager {
 
     /**
      * Get the username from a player's UUID
-     * @param uuid  The UUID of the player
-     * @return      The username that is stored or <tt>null</tt> if none was found
-     * @deprecated  Use {@link NameManager#getAccount(UUID)}
+     *
+     * @param uuid The UUID of the player
+     * @return The username that is stored or <tt>null</tt> if none was found
+     * @deprecated Use {@link NameManager#getAccount(UUID)}
      */
     @Deprecated
     public static String getUsername(UUID uuid) {
@@ -184,10 +190,11 @@ public class NameManager {
 
     /**
      * Get the full username from another username that might be shortened
+     *
      * @param shortName The name of the player to get the full username for
-     * @return          The full username or <tt>null</tt> if none was found
+     * @return The full username or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
-     * @deprecated      Use {@link NameManager#getAccountFromShortName(String)}
+     * @deprecated Use {@link NameManager#getAccountFromShortName(String)}
      */
     @Deprecated
     public static String getFullUsername(String shortName) {
@@ -200,9 +207,10 @@ public class NameManager {
 
     /**
      * Get the short username from a full username
-     * @param fullName  The name of the player to get the short username for
-     * @return          The short username or <tt>null</tt> if none was found
-     * @deprecated      Use {@link NameManager#getAccount(String)}
+     *
+     * @param fullName The name of the player to get the short username for
+     * @return The short username or <tt>null</tt> if none was found
+     * @deprecated Use {@link NameManager#getAccount(String)}
      */
     @Deprecated
     public static String getShortUsername(String fullName) {
@@ -212,7 +220,8 @@ public class NameManager {
 
     /**
      * Store the username of a player into the database and the username-uuid cache
-     * @param player    The data transfer object of the player to store
+     *
+     * @param player The data transfer object of the player to store
      */
     public static void storeUsername(final PlayerDTO player) {
         final UUID uuid = player.getUniqueId();
@@ -243,8 +252,9 @@ public class NameManager {
 
     /**
      * Get a new unique shortened name that hasn't been used by another player yet
-     * @param player    The player data to get the shortened name for
-     * @return          A new shortened name that hasn't been used before and is a maximum of 15 chars long
+     *
+     * @param player The player data to get the shortened name for
+     * @return A new shortened name that hasn't been used before and is a maximum of 15 chars long
      */
     private static String getNewShortenedName(PlayerDTO player) {
         String shortenedName = NameUtil.stripUsername(player.getName());
@@ -302,9 +312,9 @@ public class NameManager {
             e.printStackTrace();
         }
     }
-    
+
     public static Account getServerEconomyAccount() {
         return serverEconomyAccount;
     }
-    
+
 }

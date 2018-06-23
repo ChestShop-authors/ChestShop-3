@@ -29,17 +29,17 @@ public class uBlock {
 
         return sign;
     }
-    
+
     public static Sign getConnectedSign(Block block) {
         Sign sign = uBlock.findAnyNearbyShopSign(block);
-        
+
         if (sign == null) {
             Block neighbor = findNeighbor(block);
             if (neighbor != null) {
                 sign = uBlock.findAnyNearbyShopSign(neighbor);
             }
         }
-        
+
         return sign;
     }
 
@@ -61,15 +61,15 @@ public class uBlock {
         }
         return findConnectedChest(block, signFace);
     }
-    
+
     private static Chest findConnectedChest(Block block, BlockFace signFace) {
-        if (signFace != null ) {
+        if (signFace != null) {
             Block faceBlock = block.getRelative(signFace);
             if (BlockUtil.isChest(faceBlock)) {
                 return (Chest) faceBlock.getState();
             }
         }
-        
+
         for (BlockFace bf : SHOP_FACES) {
             if (bf != signFace) {
                 Block faceBlock = block.getRelative(bf);
@@ -121,12 +121,12 @@ public class uBlock {
         }
         return null;
     }
-    
+
     public static Chest findNeighbor(Chest chest) {
         Block neighbor = findNeighbor(chest.getBlock());
         return neighbor != null ? (Chest) neighbor.getState() : null;
     }
-    
+
     public static Block findNeighbor(Block block) {
         for (BlockFace blockFace : CHEST_EXTENSION_FACES) {
             Block neighborBlock = block.getRelative(blockFace);

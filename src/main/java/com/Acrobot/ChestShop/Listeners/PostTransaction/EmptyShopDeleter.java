@@ -35,6 +35,10 @@ public class EmptyShopDeleter implements Listener {
             return;
         }
 
+        if (!isInRemoveWorld(sign)) {
+            return;
+        }
+
         ShopDestroyedEvent destroyedEvent = new ShopDestroyedEvent(null, event.getSign(), connectedChest);
         ChestShop.callEvent(destroyedEvent);
 
@@ -49,5 +53,9 @@ public class EmptyShopDeleter implements Listener {
 
     private static boolean shopShouldBeRemoved(Inventory inventory, ItemStack[] stock) {
         return Properties.REMOVE_EMPTY_SHOPS && !ChestShopSign.isAdminShop(inventory) && !InventoryUtil.hasItems(stock, inventory);
+    }
+
+    private static boolean isInRemoveWorld(Sign sign) {
+        return Properties.REMOVE_EMPTY_WORLDS.isEmpty() || Properties.REMOVE_EMPTY_WORLDS.contains(sign.getWorld().getName());
     }
 }

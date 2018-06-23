@@ -3,6 +3,9 @@ package com.Acrobot.ChestShop.Configuration;
 import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
 import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Acrobot
  */
@@ -42,6 +45,9 @@ public class Properties {
 
     @ConfigurationComment("If true, if the REMOVE_EMPTY_SHOPS option is turned on, the chest is also destroyed.")
     public static boolean REMOVE_EMPTY_CHESTS = false;
+
+    @ConfigurationComment("A list of worlds in which to remove empty shops with the previous config. Case sensitive. An empty list means all worlds.")
+    public static List<String> REMOVE_EMPTY_WORLDS = Arrays.asList("world1", "world2");
 
     @PrecededBySpace
     @ConfigurationComment("First line of your Admin Shop's sign should look like this:")
@@ -149,7 +155,7 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("How much Heroes exp should people get for creating a ChestShop?")
     public static double HEROES_EXP = 100;
-    
+
     @PrecededBySpace
     @ConfigurationComment("Add icons and make item names hoverable in transaction messages when ShowItem is installed?")
     public static boolean SHOWITEM_MESSAGE = true;

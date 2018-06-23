@@ -22,7 +22,11 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
 import org.bukkit.metadata.FixedMetadataValue;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
@@ -192,7 +196,7 @@ public class SignBreak implements Listener {
             return attachedSigns;
         }
     }
-    
+
     private static List<Block> getRetractBlocks(BlockPistonRetractEvent event) {
         try {
             return event.getBlocks();
@@ -205,41 +209,41 @@ public class SignBreak implements Listener {
             return blocks;
         }
     }
-    
+
     //Those are fixes for a very old CraftBukkit's piston bug, where piston appears not to be a piston.
     private static BlockFace getPistonDirection(Block block) {
         return block.getState().getData() instanceof PistonBaseMaterial ? ((Directional) block.getState().getData()).getFacing() : null;
     }
-    
+
     private static Block getRetractLocationBlock(BlockPistonRetractEvent event) {
         BlockFace pistonDirection = getPistonDirection(event.getBlock());
         return pistonDirection != null ? event.getBlock().getRelative((pistonDirection), 2).getLocation().getBlock() : null;
     }
-    
+
     private static List<Block> getExtendBlocks(BlockPistonExtendEvent event) {
         try {
             return event.getBlocks();
         } catch (NoSuchMethodError outdated) { // backwards compatiblity
             BlockFace pistonDirection = getPistonDirection(event.getBlock());
-    
+
             if (pistonDirection == null) {
                 return new ArrayList<>();
             }
-    
+
             Block piston = event.getBlock();
             List<Block> pushedBlocks = new ArrayList<>();
-    
+
             for (int currentBlock = 1; currentBlock < event.getLength() + 1; currentBlock++) {
                 Block block = piston.getRelative(pistonDirection, currentBlock);
                 Material blockType = block.getType();
-        
+
                 if (blockType == Material.AIR) {
                     break;
                 }
-        
+
                 pushedBlocks.add(block);
             }
-    
+
             return pushedBlocks;
         }
     }

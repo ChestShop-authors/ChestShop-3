@@ -59,20 +59,20 @@ public class PartialTransactionModule implements Listener {
             event.setPrice(amountAffordable * pricePerItem);
             event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
         }
-        
+
         if (!InventoryUtil.hasItems(event.getStock(), event.getOwnerInventory())) {
             ItemStack[] itemsHad = getItems(event.getStock(), event.getOwnerInventory());
             int possessedItemCount = InventoryUtil.countItems(itemsHad);
-        
+
             if (possessedItemCount <= 0) {
                 event.setCancelled(NOT_ENOUGH_STOCK_IN_CHEST);
                 return;
             }
-        
+
             event.setPrice(pricePerItem * possessedItemCount);
             event.setStock(itemsHad);
         }
-    
+
         if (!InventoryUtil.fits(event.getStock(), event.getClientInventory())) {
             ItemStack[] itemsFit = getItemsThatFit(event.getStock(), event.getClientInventory());
             int possessedItemCount = InventoryUtil.countItems(itemsFit);
@@ -80,11 +80,11 @@ public class PartialTransactionModule implements Listener {
                 event.setCancelled(NOT_ENOUGH_SPACE_IN_INVENTORY);
                 return;
             }
-            
+
             event.setStock(itemsFit);
             event.setPrice(pricePerItem * possessedItemCount);
         }
-        
+
         UUID seller = event.getOwnerAccount().getUuid();
 
         CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(BigDecimal.valueOf(event.getPrice()), seller, client.getWorld());
@@ -94,7 +94,7 @@ public class PartialTransactionModule implements Listener {
             event.setCancelled(SHOP_DEPOSIT_FAILED);
         }
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public static void onPreSellTransaction(PreTransactionEvent event) {
         if (event.isCancelled() || event.getTransactionType() != SELL) {
@@ -127,20 +127,20 @@ public class PartialTransactionModule implements Listener {
                 event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
             }
         }
-        
+
         if (!InventoryUtil.hasItems(event.getStock(), event.getClientInventory())) {
             ItemStack[] itemsHad = getItems(event.getStock(), event.getClientInventory());
             int possessedItemCount = InventoryUtil.countItems(itemsHad);
-        
+
             if (possessedItemCount <= 0) {
                 event.setCancelled(NOT_ENOUGH_STOCK_IN_INVENTORY);
                 return;
             }
-        
+
             event.setPrice(pricePerItem * possessedItemCount);
             event.setStock(itemsHad);
         }
-    
+
         if (!InventoryUtil.fits(event.getStock(), event.getOwnerInventory())) {
             ItemStack[] itemsFit = getItemsThatFit(event.getStock(), event.getOwnerInventory());
             int possessedItemCount = InventoryUtil.countItems(itemsFit);
@@ -148,7 +148,7 @@ public class PartialTransactionModule implements Listener {
                 event.setCancelled(NOT_ENOUGH_SPACE_IN_CHEST);
                 return;
             }
-    
+
             event.setStock(itemsFit);
             event.setPrice(pricePerItem * possessedItemCount);
         }
@@ -200,7 +200,7 @@ public class PartialTransactionModule implements Listener {
             boolean added = false;
 
             int maxStackSize = InventoryUtil.getMaxStackSize(stack);
-            
+
             for (ItemStack iStack : stacks) {
                 if (iStack.getAmount() < maxStackSize && MaterialUtil.equals(toAdd, iStack)) {
                     int newAmount = iStack.getAmount() + toAdd.getAmount();
@@ -226,7 +226,7 @@ public class PartialTransactionModule implements Listener {
 
         return stacks.toArray(new ItemStack[stacks.size()]);
     }
-    
+
     /**
      * Make an array of items fit into an inventory.
      *
@@ -236,9 +236,9 @@ public class PartialTransactionModule implements Listener {
      */
     private static ItemStack[] getItemsThatFit(ItemStack[] stock, Inventory inventory) {
         List<ItemStack> resultStock = new LinkedList<>();
-        
+
         int emptySlots = InventoryUtil.countEmpty(inventory);
-    
+
         for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
             int maxStackSize = InventoryUtil.getMaxStackSize(item);
             int free = 0;
@@ -247,11 +247,11 @@ public class PartialTransactionModule implements Listener {
                     free += (maxStackSize - itemInInventory.getAmount()) % maxStackSize;
                 }
             }
-    
+
             if (free == 0 && emptySlots == 0) {
                 continue;
             }
-    
+
             if (item.getAmount() > free) {
                 if (emptySlots > 0) {
                     int requiredSlots = (int) Math.ceil(((double) item.getAmount() - free) / maxStackSize);
@@ -267,7 +267,7 @@ public class PartialTransactionModule implements Listener {
             }
             Collections.addAll(resultStock, InventoryUtil.getItemsStacked(item));
         }
-        
+
         return resultStock.toArray(new ItemStack[resultStock.size()]);
     }
 }
