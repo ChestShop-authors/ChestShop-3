@@ -1,19 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
-import java.math.BigDecimal;
-
-import javax.annotation.Nullable;
-
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.RegisteredServiceProvider;
-
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
@@ -23,6 +9,17 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
+import javax.annotation.Nullable;
+import java.math.BigDecimal;
 
 /**
  * Represents a Vault connector
@@ -73,7 +70,7 @@ public class VaultListener implements Listener {
 
         double balance = 0;
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+		    OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
             balance = provider.getBalance(lastSeen, event.getWorld().getName());
@@ -94,7 +91,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+		    OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
             if (provider.has(lastSeen, world.getName(), event.getDoubleAmount())) {
@@ -136,7 +133,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getTarget());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
+		    OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
             provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
@@ -151,7 +148,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getTarget());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
+		    OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
             provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
@@ -182,7 +179,7 @@ public class VaultListener implements Listener {
         }
 
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+		    OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
         String world = event.getWorld().getName();
 
         if (lastSeen == null) {

@@ -49,6 +49,10 @@
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
         </repository>
+        <repository>
+            <id>reserve-repo</id>
+            <url>https://dl.bintray.com/theneweconomy/java/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -272,6 +276,13 @@
             <groupId>de.themoep.showitem</groupId>
             <artifactId>api</artifactId>
             <version>1.2.24</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.tnemc</groupId>
+            <artifactId>Reserve</artifactId>
+            <version>0.1.0.10</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

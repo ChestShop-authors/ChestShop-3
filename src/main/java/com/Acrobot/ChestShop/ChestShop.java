@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
@@ -77,6 +78,8 @@ public class ChestShop extends JavaPlugin {
 
     private static Logger logger;
     private FileHandler handler;
+
+    private static boolean usingReserve = false;
 
     public ChestShop() {
         dataFolder = getDataFolder();
@@ -347,7 +350,13 @@ public class ChestShop extends JavaPlugin {
     }
 
     public void registerEvent(Listener listener) {
+        if(listener instanceof ReserveListener) usingReserve = true;
+
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public static boolean isUsingReserve() {
+        return ChestShop.usingReserve;
     }
 
     private void startStatistics() {

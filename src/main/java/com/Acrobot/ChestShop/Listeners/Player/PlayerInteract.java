@@ -1,12 +1,17 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.NumberUtil;
+import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
@@ -36,7 +41,11 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -147,9 +156,15 @@ public class PlayerInteract implements Listener {
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        if (!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
-            player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
-            return null;
+        if (!adminShop) {
+            final boolean hasAccount = (com.Acrobot.ChestShop.ChestShop.isUsingReserve())?
+                ReserveListener.getProvider() != null &&
+                    ReserveListener.getProvider().hasAccount(account.getUuid()) :
+                VaultListener.getProvider().hasAccount(account.getName());
+            if(!hasAccount) {
+                player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
+                return null;
+            }
         }
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;

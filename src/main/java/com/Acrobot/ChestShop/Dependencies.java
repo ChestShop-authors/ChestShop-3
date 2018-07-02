@@ -2,9 +2,11 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import net.tnemc.core.Reserve;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -32,6 +34,12 @@ public class Dependencies {
     private static void loadEconomy() {
         String plugin = "Vault";
         Listener economy = VaultListener.initializeVault();
+
+        if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
+            if(Reserve.instance().economyProvided()) {
+                economy = ReserveListener.prepareListener();
+            }
+        }
 
         if (economy == null) {
             return;
