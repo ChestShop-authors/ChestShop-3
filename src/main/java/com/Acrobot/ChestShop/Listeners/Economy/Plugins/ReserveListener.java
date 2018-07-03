@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
@@ -8,7 +7,6 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.Bukkit;
@@ -128,24 +126,6 @@ public class ReserveListener implements Listener {
         if (lastSeen != null && provided()) {
             economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName());
         }
-    }
-
-    //Copied from VaultListener as Reserve doesn't have a dedicated transfer api until 1.0.11
-    @EventHandler
-    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (event.hasBeenTransferred()) {
-            return;
-        }
-
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
-        ChestShop.callEvent(currencySubtractEvent);
-
-        if (!currencySubtractEvent.isSubtracted()) {
-            return;
-        }
-
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
-        ChestShop.callEvent(currencyAddEvent);
     }
 
     @EventHandler
