@@ -9,10 +9,9 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
-import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
-import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
@@ -157,11 +156,9 @@ public class PlayerInteract implements Listener {
 
         // check if player exists in economy
         if (!adminShop) {
-            final boolean hasAccount = (com.Acrobot.ChestShop.ChestShop.isUsingReserve())?
-                ReserveListener.getProvider() != null &&
-                    ReserveListener.getProvider().hasAccount(account.getUuid()) :
-                VaultListener.getProvider().hasAccount(account.getName());
-            if(!hasAccount) {
+            AccountCheckEvent event = new AccountCheckEvent(account.getUuid(), player.getWorld());
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.hasAccount()) {
                 player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
                 return null;
             }
