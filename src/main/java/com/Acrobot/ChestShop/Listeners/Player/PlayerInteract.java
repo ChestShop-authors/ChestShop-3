@@ -1,10 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.Breeze.Utils.InventoryUtil;
-import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.NumberUtil;
-import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.Acrobot.Breeze.Utils.*;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -40,11 +36,7 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 

@@ -4,7 +4,7 @@ version: '${bukkit.plugin.version}'
 author: Acrobot
 authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
-softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence, ShowItem, Vault, Reserve]
+softdepend: [Vault, Reserve, LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence, ShowItem]
 
 commands:
   iteminfo:

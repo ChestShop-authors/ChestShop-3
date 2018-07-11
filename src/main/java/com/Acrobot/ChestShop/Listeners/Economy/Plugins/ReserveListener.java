@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
+import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.Bukkit;
@@ -31,31 +32,36 @@ public class ReserveListener implements Listener {
     }
 
     public static EconomyAPI getProvider() {
-      return economyAPI;
+        return economyAPI;
     }
 
     public boolean provided() {
-        if(Bukkit.getPluginManager().getPlugin("Reserve") == null) {
-            return false;
-        }
         return economyAPI != null;
     }
 
     public boolean transactionCanFail() {
-        if(!provided()) return false;
-        return economyAPI.name().equals("Gringotts") || economyAPI.name().equals("GoldIsMoney") ||
-                economyAPI.name().equals("MultiCurrency") ||
-                economyAPI.name().equalsIgnoreCase("TheNewEconomy");
+        if (economyAPI == null) {
+            return false;
+        }
+
+        return economyAPI.name().equals("Gringotts")
+                || economyAPI.name().equals("GoldIsMoney")
+                || economyAPI.name().equals("MultiCurrency")
+                || economyAPI.name().equalsIgnoreCase("TheNewEconomy");
     }
 
     public static @Nullable ReserveListener prepareListener() {
-        EconomyAPI api = null;
-        if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
-            if(Reserve.instance().economyProvided()) api = Reserve.instance().economy();
+        if (Bukkit.getPluginManager().getPlugin("Reserve") == null || Reserve.instance().economyProvided()) {
+            return null;
         }
 
-        if(api == null) return null;
-        return new ReserveListener(api);
+        EconomyAPI api = Reserve.instance().economy();
+
+        if (api == null) {
+            return null;
+        } else {
+            return new ReserveListener(api);
+        }
     }
 
     @EventHandler
@@ -79,8 +85,8 @@ public class ReserveListener implements Listener {
 
         if (lastSeen != null && provided()) {
             event.hasEnough(economyAPI.hasHoldings(event.getAccount(),
-                                                                                         event.getAmount(),
-                                                                                         event.getWorld().getName()));
+                    event.getAmount(),
+                    event.getWorld().getName()));
         }
     }
 
@@ -126,6 +132,23 @@ public class ReserveListener implements Listener {
         if (lastSeen != null && provided()) {
             economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName());
         }
+    }
+
+    @EventHandler
+    public void onCurrencyTransfer(CurrencyTransferEvent event) {
+        if (event.hasBeenTransferred()) {
+            return;
+        }
+
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
+        onCurrencySubtraction(currencySubtractEvent);
+
+        if (!currencySubtractEvent.isSubtracted()) {
+            return;
+        }
+
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
+        onCurrencyAdd(currencyAddEvent);
     }
 
     @EventHandler
