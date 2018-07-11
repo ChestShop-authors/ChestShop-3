@@ -26,10 +26,6 @@
             <url>http://maven.sk89q.com/artifactory/repo/</url>
         </repository>
         <repository>
-            <id>mcstats-releases</id>
-            <url>http://repo.mcstats.org/content/repositories/releases/</url>
-        </repository>
-        <repository>
             <id>bstats-repo</id>
             <url>http://repo.bstats.org/content/repositories/releases/</url>
         </repository>

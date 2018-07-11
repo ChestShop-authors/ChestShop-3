@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.mcstats.bukkit</groupId>
+  <artifactId>metrics</artifactId>
+  <versioning>
+    <versions>
+      <version>R8-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20180711163419</lastUpdated>
+  </versioning>
+</metadata>
