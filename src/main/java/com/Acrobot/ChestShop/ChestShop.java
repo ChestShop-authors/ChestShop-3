@@ -99,7 +99,9 @@ public class ChestShop extends JavaPlugin {
 
         NameManager.load();
 
-        Dependencies.loadPlugins();
+        if (!Dependencies.loadPlugins()) {
+            return;
+        }
 
         registerEvents();
 

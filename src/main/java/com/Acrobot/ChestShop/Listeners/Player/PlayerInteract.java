@@ -5,9 +5,9 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
-import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
@@ -147,9 +147,13 @@ public class PlayerInteract implements Listener {
         boolean adminShop = ChestShopSign.isAdminShop(sign);
 
         // check if player exists in economy
-        if (!adminShop && !VaultListener.getProvider().hasAccount(account.getName())) {
-            player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
-            return null;
+        if (!adminShop) {
+            AccountCheckEvent event = new AccountCheckEvent(account.getUuid(), player.getWorld());
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.hasAccount()) {
+                player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
+                return null;
+            }
         }
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
