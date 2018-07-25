@@ -98,7 +98,8 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
-        Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getTypeId(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+        // TODO: Update to new API once LWC is updated
+        Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getType().getId(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
 
         if (protection != null) {
             event.setProtected(true);

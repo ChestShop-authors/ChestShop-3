@@ -5,6 +5,7 @@ import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,8 +52,8 @@ public class PriceRestrictionModule implements Listener {
                 e.printStackTrace();
             }
         } else if (!configuration.getBoolean("uses_materials")) {
-            try {
-                Material.getMaterial(1);
+            Material testMat = Material.matchMaterial("1");
+            if (testMat != null) {
                 ChestShop.getBukkitLogger().log(Level.INFO, "Converting numeric IDs in priceLimits.yml to Material names...");
                 convertToMaterial("max.buy_price");
                 convertToMaterial("max.sell_price");
@@ -65,7 +66,7 @@ public class PriceRestrictionModule implements Listener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (NoSuchMethodError e) {
+            } else {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not convert numeric IDs in priceLimits.yml to Material names!");
                 ChestShop.getBukkitLogger().log(Level.WARNING, "If you want to automatically convert them you have to run this version on a pre 1.13 server.");
                 ChestShop.getBukkitLogger().log(Level.WARNING, "If you want to manually convert it and hide this message set the uses_materials key to true.");
@@ -77,12 +78,10 @@ public class PriceRestrictionModule implements Listener {
         ConfigurationSection section = configuration.getConfigurationSection(sectionPath);
         if (section != null) {
             for (String typeId : section.getKeys(false)) {
-                if (NumberUtil.isInteger(typeId)) {
-                    Material material = Material.matchMaterial(typeId);
-                    if (material != null) {
-                        configuration.set(sectionPath + "." + material.toString().toLowerCase(), configuration.get(sectionPath + "." + typeId));
-                        configuration.set(sectionPath + "." + typeId, null);
-                    }
+                Material material = Material.matchMaterial(typeId);
+                if (material != null) {
+                    configuration.set(sectionPath + "." + material.toString().toLowerCase(), configuration.get(sectionPath + "." + typeId));
+                    configuration.set(sectionPath + "." + typeId, null);
                 }
             }
         }

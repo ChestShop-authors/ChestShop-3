@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Containers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -47,12 +48,12 @@ public class AdminInventory implements Inventory {
 
     @Override
     public HashMap<Integer, ItemStack> addItem(ItemStack... itemStacks) {
-        return new HashMap<Integer, ItemStack>();
+        return new HashMap<>();
     }
 
     @Override
     public HashMap<Integer, ItemStack> removeItem(ItemStack... itemStacks) {
-        return new HashMap<Integer, ItemStack>();
+        return new HashMap<>();
     }
 
     @Override
@@ -78,22 +79,12 @@ public class AdminInventory implements Inventory {
     }
 
     @Override
-    public boolean contains(int i) {
-        return true;
-    }
-
-    @Override
     public boolean contains(Material material) {
         return true;
     }
 
     @Override
     public boolean contains(ItemStack itemStack) {
-        return true;
-    }
-
-    @Override
-    public boolean contains(int i, int i1) {
         return true;
     }
 
@@ -113,17 +104,9 @@ public class AdminInventory implements Inventory {
     }
 
     @Override
-    public HashMap<Integer, ? extends ItemStack> all(int i) {
-        HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
-        items.put(1, new ItemStack(i, Integer.MAX_VALUE));
-
-        return items;
-    }
-
-    @Override
     public HashMap<Integer, ? extends ItemStack> all(Material material) {
+        HashMap<Integer, ItemStack> items = new HashMap<>();
         if (material.getMaxDurability() != 0) {
-            HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 
             for (short currentDurability = 0; currentDurability < material.getMaxDurability(); currentDurability++) {
                 items.put((int) currentDurability, new ItemStack(material, Integer.MAX_VALUE, currentDurability));
@@ -132,7 +115,8 @@ public class AdminInventory implements Inventory {
             return items;
         }
 
-        return all(material.getId());
+        items.put(1, new ItemStack(material, Integer.MAX_VALUE));
+        return items;
     }
 
     @Override
@@ -148,11 +132,6 @@ public class AdminInventory implements Inventory {
     }
 
     @Override
-    public int first(int i) {
-        return 0;
-    }
-
-    @Override
     public int first(Material material) {
         return 0;
     }
@@ -165,10 +144,6 @@ public class AdminInventory implements Inventory {
     @Override
     public int firstEmpty() {
         return 0;
-    }
-
-    @Override
-    public void remove(int i) {
     }
 
     @Override
@@ -189,7 +164,7 @@ public class AdminInventory implements Inventory {
 
     @Override
     public List<HumanEntity> getViewers() {
-        return new ArrayList<HumanEntity>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -209,7 +184,7 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ListIterator<ItemStack> iterator() {
-        return null;
+        return Collections.emptyListIterator();
     }
 
     @Override

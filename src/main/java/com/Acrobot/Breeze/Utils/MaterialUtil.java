@@ -69,17 +69,6 @@ public class MaterialUtil {
             return true;
         }
 
-        // Special check for banners as they might include the deprecated base color
-        if (one.getType() == two.getType()
-                && one.getType() == Material.BANNER
-                && one.getDurability() == two.getDurability()) {
-            Map<String, Object> m1 = new HashMap<>(one.getItemMeta().serialize());
-            Map<String, Object> m2 = new HashMap<>(two.getItemMeta().serialize());
-            Object c1 = m1.remove("base-color");
-            Object c2 = m2.remove("base-color");
-            return (one.getData().equals(two.getData()) || c1.equals(c2)) && m1.equals(m2);
-        }
-
         // Special check for books as their pages might change when serialising (See SPIGOT-3206)
         return one.getType() == two.getType()
                 && one.getDurability() == two.getDurability()
@@ -138,13 +127,7 @@ public class MaterialUtil {
      */
     @Deprecated
     public static String getName(ItemStack itemStack, boolean showDataValue) {
-        String dataName = DataValue.name(itemStack);
-
-        if (dataName != null && showDataValue) {
-            return StringUtil.capitalizeFirstLetter(dataName + '_' + itemStack.getType(), '_');
-        } else {
-            return StringUtil.capitalizeFirstLetter(itemStack.getType().toString(), '_');
-        }
+        return getName(itemStack, 0);
     }
 
     /**
@@ -167,26 +150,19 @@ public class MaterialUtil {
     public static String getName(ItemStack itemStack, int maxLength) {
         String alias = Odd.getAlias(itemStack);
         String itemName = alias != null ? alias : itemStack.getType().toString();
-        if (itemStack.getType() != Material.HUGE_MUSHROOM_2 && itemName.endsWith("_2")) {
-            itemName = itemName.substring(0, itemName.length() - 2);
-        }
 
-        String data = DataValue.name(itemStack);
         String durability = "";
-        if (data == null) {
-            if (itemStack.getDurability() != 0) {
-                durability = ":" + itemStack.getDurability();
-            }
+        if (itemStack.getDurability() != 0) {
+            durability = ":" + itemStack.getDurability();
         }
-        data = data != null ? data + "_" : "";
 
         String metaData = "";
         if (itemStack.hasItemMeta()) {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
 
-        int codeLength = (data + itemName + durability + metaData).length();
-        String code = data + itemName;
+        int codeLength = (itemName + durability + metaData).length();
+        String code = itemName;
         if (maxLength > 0 && codeLength > maxLength) {
             int exceeding = codeLength - maxLength;
             code = getShortenedName(code, code.length() - exceeding);
@@ -226,27 +202,25 @@ public class MaterialUtil {
                 shortestIndex = i;
             }
         }
-        if (itemParts[longestIndex].length() - itemParts[shortestIndex].length() > exceeding) {
-            itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - exceeding);
-        } else {
-            for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
-                int remove = 0;
-                if (itemParts[i].length() > itemParts[shortestIndex].length()) {
-                    remove = itemParts[i].length() - itemParts[shortestIndex].length();
-                }
-                if (remove > exceeding) {
-                    remove = exceeding;
-                }
-                itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
-                exceeding -= remove;
+
+        for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+            int remove = 0;
+            if (itemParts[i].length() > itemParts[shortestIndex].length()) {
+                remove = itemParts[i].length() - itemParts[shortestIndex].length();
             }
-            while (exceeding > 0) {
-                for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
-                    itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
-                    exceeding--;
-                }
+            if (remove > exceeding) {
+                remove = exceeding;
+            }
+            itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
+            exceeding -= remove;
+        }
+        while (exceeding > 0) {
+            for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
+                exceeding--;
             }
         }
+
         return String.join("_", itemParts);
     }
 
@@ -270,34 +244,12 @@ public class MaterialUtil {
 
         Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);
-        MaterialData data = null;
 
         if (material == null) {
-            if (!split[0].contains(" ")) {
-                return null;
-            }
-
-            for (int index = split[0].indexOf(' '); index >= 0 && index + 1 < split[0].length(); index = split[0].indexOf(' ', index + 1)) {
-                material = getMaterial(split[0].substring(index + 1));
-
-                if (material != null) {
-                    data = DataValue.getData(split[0].substring(0, index), material);
-                    material = data.getItemType();
-
-                    break;
-                }
-            }
-
-            if (material == null) {
-                return null;
-            }
+            return null;
         }
 
         itemStack = new ItemStack(material);
-        if (data != null) {
-            itemStack.setData(data);
-            durability = data.getData();
-        }
         itemStack.setDurability(durability);
 
         ItemMeta meta = getMetadata(itemName);
@@ -348,130 +300,6 @@ public class MaterialUtil {
 
         String group = m.group().substring(1);
         return Metadata.getFromCode(group);
-    }
-
-    //1.13 TODO: Get rid of numeric data values with the API that replaces MaterialData
-    public static class DataValue {
-        /**
-         * Gets the data value from a string
-         *
-         * @param type     Data Value string
-         * @param material Material
-         * @return data value
-         * @deprecated Use {@link #getData}
-         */
-        @Deprecated
-        public static byte get(String type, Material material) {
-            if (material == null || material.getData() == null) {
-                return 0;
-            }
-            MaterialData data = getData(type, material);
-            return data != null ? data.getData() : 0;
-        }
-
-        /**
-         * Gets the dat from a string
-         *
-         * @param type     Data Value string
-         * @param material Material
-         * @return data    The Material data with that name, under some circumstances the type of the data might be
-         *                 different from the inputted Material. (e.g. with LOG_2 or similar alternatives)
-         *                 It's advised to use the type of the MaterialData going forward when using the data
-         */
-        public static MaterialData getData(String type, Material material) {
-
-            type = type.toUpperCase().replace(" ", "_");
-
-            MaterialData materialData = new ItemStack(material).getData();
-
-            if (materialData instanceof TexturedMaterial) {
-                TexturedMaterial texturedMaterial = (TexturedMaterial) materialData;
-                Material texture = new EnumParser<Material>().parse(type, texturedMaterial.getTextures().toArray(new Material[0]));
-                if (texture != null) {
-                    ((TexturedMaterial) materialData).setMaterial(texture);
-                }
-            } else if (materialData instanceof Colorable) {
-                DyeColor color = new EnumParser<DyeColor>().parse(type, DyeColor.values());
-                if (color != null) {
-                    ((Colorable) materialData).setColor(color);
-                }
-            } else if (materialData instanceof Wood) {
-                TreeSpecies species = new EnumParser<TreeSpecies>().parse(type, TreeSpecies.values());
-                if (species != null) {
-                    try {
-                        ((Wood) materialData).setSpecies(species);
-                    } catch (IllegalArgumentException e) {
-                        String materialName = material.toString();
-                        if (materialName.endsWith("_2")) {
-                            Material mat = Material.getMaterial(materialName.substring(0, materialName.length() - 2));
-                            if (mat != null) {
-                                materialData = new ItemStack(mat).getData();
-                            }
-                        } else {
-                            Material mat = Material.getMaterial(materialName + "_2");
-                            if (mat != null) {
-                                materialData = new ItemStack(mat).getData();
-                            }
-                        }
-                        ((Wood) materialData).setSpecies(species);
-                    }
-                }
-            } else if (materialData instanceof SpawnEgg) {
-                EntityType entityType = new EnumParser<EntityType>().parse(type, EntityType.values());
-                if (entityType != null) {
-                    ((SpawnEgg) materialData).setSpawnedType(entityType);
-                }
-            } else if (materialData instanceof Coal) {
-                CoalType coalType = new EnumParser<CoalType>().parse(type, CoalType.values());
-                if (coalType != null) {
-                    ((Coal) materialData).setType(coalType);
-                }
-            } else if (materialData instanceof Sandstone) {
-                SandstoneType sandstoneType = new EnumParser<SandstoneType>().parse(type, SandstoneType.values());
-                if (sandstoneType != null) {
-                    ((Sandstone) materialData).setType(sandstoneType);
-                }
-            }
-
-            return materialData;
-        }
-
-        /**
-         * Returns a string with the DataValue
-         *
-         * @param itemStack ItemStack to describe
-         * @return Data value string
-         */
-        public static String name(ItemStack itemStack) {
-            MaterialData data = itemStack.getData();
-
-            if (data == null) {
-                return null;
-            }
-
-            if (data instanceof TexturedMaterial) {
-                return ((TexturedMaterial) data).getMaterial().name();
-            } else if (data instanceof Colorable) {
-                DyeColor color = ((Colorable) data).getColor();
-
-                return (color != null ? color.name() : null);
-            } else if (data instanceof Wood) {
-                //TreeSpecies specie = TreeSpecies.getByData((byte) (data.getData() & 3)); //This works, but not as intended
-                TreeSpecies specie = ((Wood) data).getSpecies();
-                return (specie != null && specie != TreeSpecies.GENERIC ? specie.name() : null);
-            } else if (data instanceof SpawnEgg) {
-                EntityType type = ((SpawnEgg) data).getSpawnedType();
-                return (type != null ? type.name() : null);
-            } else if (data instanceof Coal) {
-                CoalType coal = ((Coal) data).getType();
-                return (coal != null && coal != CoalType.COAL ? coal.name() : null);
-            } else if (data instanceof Sandstone) {
-                SandstoneType type = ((Sandstone) data).getType();
-                return (type != null && type != SandstoneType.CRACKED ? type.name() : null);
-            } else {
-                return null;
-            }
-        }
     }
 
     private static class EnumParser<E extends Enum<E>> {

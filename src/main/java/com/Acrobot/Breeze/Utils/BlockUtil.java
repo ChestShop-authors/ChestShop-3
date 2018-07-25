@@ -5,10 +5,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.material.Attachable;
 
 /**
  * @author Acrobot
@@ -21,7 +21,7 @@ public class BlockUtil {
      * @return Is this block a sign?
      */
     public static boolean isSign(Block block) {
-        return block.getType() == Material.SIGN_POST
+        return block.getType() == Material.SIGN
                 || block.getType() == Material.WALL_SIGN;
     }
 
@@ -52,7 +52,7 @@ public class BlockUtil {
      * @return Block to which the sign is attached
      */
     public static Block getAttachedBlock(Sign sign) {
-        return sign.getBlock().getRelative(((Attachable) sign.getData()).getAttachedFace());
+        return sign.getBlock().getRelative(((Rotatable) sign.getBlockData()).getRotation().getOppositeFace());
     }
 
     /**

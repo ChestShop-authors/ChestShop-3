@@ -5,6 +5,7 @@ author: Acrobot
 authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
 softdepend: [Vault, Reserve, LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence, ShowItem]
+api-version: '1.13'
 
 commands:
   iteminfo:
@@ -80,22 +81,22 @@ permissions:
       ChestShop.shop.create.bread: true #Bread
       ChestShop.shop.create.cake: true #Cake
       ChestShop.shop.create.cookie: true #Cookie
-      ChestShop.shop.create.raw_fish: true #Raw Fish
-      ChestShop.shop.create.cooked_fish: true #Cooked Fish
-      ChestShop.shop.create.raw_chicken: true #Raw Chicken
+      ChestShop.shop.create.cod: true #Raw Fish
+      ChestShop.shop.create.cooked_cod: true #Cooked Fish
+      ChestShop.shop.create.chicken: true #Raw Chicken
       ChestShop.shop.create.cooked_chicken: true #Cooked Chicken
-      ChestShop.shop.create.raw_beef: true #Raw Steak
+      ChestShop.shop.create.beef: true #Raw Steak
       ChestShop.shop.create.cooked_beef: true #Cooked Steak
-      ChestShop.shop.create.pork: true #Raw Pork
-      ChestShop.shop.create.grilled_pork: true #Cooked Pork
-      ChestShop.shop.create.mushroom_soup: true #Mushroom Soup
+      ChestShop.shop.create.porkchop: true #Raw Pork
+      ChestShop.shop.create.cooked_porkchop: true #Cooked Pork
+      ChestShop.shop.create.mushroom_stew: true #Mushroom Soup
       ChestShop.shop.create.melon: true #Melon
       ChestShop.shop.create.apple: true #Apple
       ChestShop.shop.create.golden_apple: true #Gold Apple
       ChestShop.shop.create.bread: true #Bread
       ChestShop.shop.create.milk_bucket: true #Milk
-      ChestShop.shop.create.carrot_item: true #Carrot
-      ChestShop.shop.create.potato_item: true #Potato
+      ChestShop.shop.create.carrot: true #Carrot
+      ChestShop.shop.create.potato: true #Potato
       ChestShop.shop.create.baked_potato: true #Baked Potato
       ChestShop.shop.create.golden_carrot: true #Golden Carrot
       ChestShop.shop.create.pumpkin_pie: true #Pumpkin Pie
@@ -143,25 +144,25 @@ permissions:
     description: Allows to create a shop that sells diamond tools
     children:
       ChestShop.shop.create.diamond_sword: true #Diamond Sword
-      ChestShop.shop.create.diamond_spade: true #Diamond Shovel
+      ChestShop.shop.create.diamond_shovel: true #Diamond Shovel
       ChestShop.shop.create.diamond_pickaxe: true #Diamond Pick
       ChestShop.shop.create.diamond_axe: true #Diamond Axe
       ChestShop.shop.create.diamond_hoe: true #Diamond Hoe
   ChestShop.shop.create.goldarmor:
     description: Allows to create a shop that sells gold armor
     children:
-      ChestShop.shop.create.gold_helmet: true #Gold Helm
-      ChestShop.shop.create.gold_chestplate: true #Gold Chestplate
-      ChestShop.shop.create.gold_leggings: true #Gold Leggings
-      ChestShop.shop.create.gold_boots: true #Gold Boots
+      ChestShop.shop.create.golden_helmet: true #Gold Helm
+      ChestShop.shop.create.golden_chestplate: true #Gold Chestplate
+      ChestShop.shop.create.golden_leggings: true #Gold Leggings
+      ChestShop.shop.create.golden_boots: true #Gold Boots
   ChestShop.shop.create.goldtools:
     description: Allows to create a shop that sells gold tools
     children:
-      ChestShop.shop.create.gold_sword: true #Gold Sword
-      ChestShop.shop.create.gold_spade: true #Gold Shovel
-      ChestShop.shop.create.gold_pickaxe: true #Gold Pick
-      ChestShop.shop.create.gold_axe: true #Gold Axe
-      ChestShop.shop.create.gold_hoe: true #Gold Hoe
+      ChestShop.shop.create.golden_sword: true #Gold Sword
+      ChestShop.shop.create.golden_shovel: true #Gold Shovel
+      ChestShop.shop.create.golden_pickaxe: true #Gold Pick
+      ChestShop.shop.create.golden_axe: true #Gold Axe
+      ChestShop.shop.create.golden_hoe: true #Gold Hoe
   ChestShop.shop.create.ironarmor:
     description: Allows to create a shop that sells iron armor
     children:
@@ -173,7 +174,7 @@ permissions:
     description: Allows to create a shop that sells iron tools
     children:
       ChestShop.shop.create.iron_sword: true #Iron Sword
-      ChestShop.shop.create.iron_spade: true #Iron Shovel
+      ChestShop.shop.create.iron_shovel: true #Iron Shovel
       ChestShop.shop.create.iron_pickaxe: true #Iron Pick
       ChestShop.shop.create.iron_axe: true #Iron Axe
       ChestShop.shop.create.iron_hoe: true #Iron Hoe
@@ -188,7 +189,7 @@ permissions:
     description: Allows to create a shop that sells stone tools
     children:
       ChestShop.shop.create.stone_sword: true #Stone Sword
-      ChestShop.shop.create.stone_spade: true #Stone Shovel
+      ChestShop.shop.create.stone_shovel: true #Stone Shovel
       ChestShop.shop.create.stone_pickaxe: true #Stone Pick
       ChestShop.shop.create.stone_axe: true #Stone Axe
       ChestShop.shop.create.stone_hoe: true #Stone Hoe
@@ -202,11 +203,11 @@ permissions:
   ChestShop.shop.create.woodtools:
     description: Allows to create a shop that sells wood tools
     children:
-      ChestShop.shop.create.wood_sword: true #Wood Sword
-      ChestShop.shop.create.wood_spade: true #Wood Shovel
-      ChestShop.shop.create.wood_pickaxe: true #Wood Pick
-      ChestShop.shop.create.wood_axe: true #Wood Axe
-      ChestShop.shop.create.wood_hoe: true #Wood Hoe
+      ChestShop.shop.create.wooden_sword: true #Wood Sword
+      ChestShop.shop.create.wooden_shovel: true #Wood Shovel
+      ChestShop.shop.create.wooden_pickaxe: true #Wood Pick
+      ChestShop.shop.create.wooden_axe: true #Wood Axe
+      ChestShop.shop.create.wooden_hoe: true #Wood Hoe
   ChestShop.shop.create.bows:
     description: Allows to create a shop that sells bows & arrows
     children:
@@ -223,7 +224,7 @@ permissions:
       ChestShop.shop.create.lava_bucket: true #Lava Bucket
       ChestShop.shop.create.compass: true #Compass
       ChestShop.shop.create.fishing_rod: true #Fishing Rod
-      ChestShop.shop.create.watch: true #Clock
+      ChestShop.shop.create.clock: true #Clock
       ChestShop.shop.create.map: true #Map
       ChestShop.shop.create.shears: true #Sheers
   ChestShop.shop.create.ore:
@@ -234,8 +235,8 @@ permissions:
       ChestShop.shop.create.lapis_ore: true #Lapis Ore
       ChestShop.shop.create.gold_ore: true #Gold Ore
       ChestShop.shop.create.diamond_ore: true #Diamond Ore
-      ChestShop.shop.create.glowing_redstone_ore: true #Redstone Ore
-      ChestShop.shop.create.quartz_ore: true #Nether Quartz Ore
+      ChestShop.shop.create.redstone_ore: true #Redstone Ore
+      ChestShop.shop.create.nether_quartz_ore: true #Nether Quartz Ore
   ChestShop.shop.create.ingots:
     description: Allows to create a shop that sells ingots
     children:
@@ -245,16 +246,16 @@ permissions:
       ChestShop.shop.create.emerald: true #Emerald
   ChestShop.shop.create.stairs:
     description: Allows to create a shop that sells stairs
-    children:
-      ChestShop.shop.create.wood_stairs: true #Wood Stairs
+    children: # TODO: Add new stairs
+      ChestShop.shop.create.oak_stairs: true #Wood Stairs
       ChestShop.shop.create.cobblestone_stairs: true #Cobble Stairs
       ChestShop.shop.create.brick_stairs: true #Brick S tairs
-      ChestShop.shop.create.smooth_stairs: true #Stone S tairs
+      ChestShop.shop.create.stone_brick_stairs: true #Stone S tairs
       ChestShop.shop.create.nether_brick_stairs: true #Nether Brick Stairs
-      ChestShop.shop.create.spruce_wood_stairs: true #Sandstone Stairs
-      ChestShop.shop.create.spruce_wood_stairs: true #Spruce Wood Stairs
-      ChestShop.shop.create.birch_wood_stairs: true #Birch Wood Stairs
-      ChestShop.shop.create.jungle_wood_stairs: true #Jungle Wood Stairs
+      ChestShop.shop.create.spruce_stairs: true #Sandstone Stairs
+      ChestShop.shop.create.spruce_stairs: true #Spruce Wood Stairs
+      ChestShop.shop.create.birch_stairs: true #Birch Wood Stairs
+      ChestShop.shop.create.jungle_stairs: true #Jungle Wood Stairs
       ChestShop.shop.create.quartz_stairs: true #Quartz Stairs
       ChestShop.shop.create.acacia_stairs: true #Acacia Wood Stairs
       ChestShop.shop.create.dark_oak_stairs: true #Dark Oak Wood Stairs
@@ -262,8 +263,8 @@ permissions:
       ChestShop.shop.create.purpur_stairs: true #Purpur Stairs
   ChestShop.shop.create.monsterdrops:
     description: Allows to create a shop that sells mob drops
-    children:
-      ChestShop.shop.create.sulphur: true #Sulphur
+    children: # TODO: add new monster drops
+      ChestShop.shop.create.gunpowder: true #Sulphur
       ChestShop.shop.create.feather: true #Feather
       ChestShop.shop.create.string: true #String
       ChestShop.shop.create.slime_ball: true #Slimeball
@@ -277,7 +278,7 @@ permissions:
       ChestShop.shop.create.prismarine_crystals: true #Prismarine Crystal
       ChestShop.shop.create.rabbit_foot: true #Rabbit Hide
       ChestShop.shop.create.rabbit_hide: true #Rabbits Foot
-      ChestShop.shop.create.totem: true #Totem of Undying
+      ChestShop.shop.create.totem_of_undying: true #Totem of Undying
       ChestShop.shop.create.shulker_shell: true #Shulker Shell
   ChestShop.shop.create.netherdrops:
     description: Allows to create a shop that sells nether drops
@@ -288,21 +289,21 @@ permissions:
       ChestShop.shop.create.magma_cream: true #Magma Cream
   ChestShop.shop.create.plants:
     description: Allows to create a shop that sells plants
-    children:
-      ChestShop.shop.create.sapling: true #Sapling
-      ChestShop.shop.create.leaves: true #Leaf Block
-      ChestShop.shop.create.long_grass: true #Tall Grass
+    children: # TODO: Add underwater plants, maybe even in different category
+      ChestShop.shop.create.oak_sapling: true #Sapling
+      ChestShop.shop.create.oak_leaves: true #Leaf Block
+      ChestShop.shop.create.dead_bush: true #Tall Grass
       ChestShop.shop.create.dead_bush: true #Dead Shrub
-      ChestShop.shop.create.yellow_flower: true #Yellow Flower
-      ChestShop.shop.create.red_rose: true #Red Flower
+      ChestShop.shop.create.dandelion: true #Yellow Flower
+      ChestShop.shop.create.poppy: true #Red Flower
       ChestShop.shop.create.brown_mushroom: true #Brown Mushroom
       ChestShop.shop.create.red_mushroom: true #Red Mushroom
       ChestShop.shop.create.cactus: true #Cactus
-      ChestShop.shop.create.pumpkin: true #Pumpkin
+      ChestShop.shop.create.carved_pumpkin: true #Pumpkin
       ChestShop.shop.create.melon_block: true #Melon Block
       ChestShop.shop.create.vine: true #Vines
-      ChestShop.shop.create.water_lily: true #Lilly Pad
-      ChestShop.shop.create.seeds: true #Seeds
+      ChestShop.shop.create.lily_pad: true #Lilly Pad
+      ChestShop.shop.create.wheat_seeds: true #Seeds
       ChestShop.shop.create.wheat: true #Wheat
       ChestShop.shop.create.sugar_cane: true #Reeds
       ChestShop.shop.create.pumpkin_seeds: true #Pumpkin Seeds
@@ -314,17 +315,17 @@ permissions:
     children:
       ChestShop.shop.create.lever: true #Lever
       ChestShop.shop.create.stone_button: true #Stone Button
-      ChestShop.shop.create.redstone_torch_on: true #Torch On
+      ChestShop.shop.create.redstone_torch: true #Torch On
       ChestShop.shop.create.dispenser: true #Dispenser
-      ChestShop.shop.create.piston_sticky_base: true #Sticky Piston
-      ChestShop.shop.create.piston_base: true #Piston
+      ChestShop.shop.create.sticky_piston: true #Sticky Piston
+      ChestShop.shop.create.piston: true #Piston
       ChestShop.shop.create.powered_rail: true #Power Rail
       ChestShop.shop.create.detector_rail: true #Detector Rail
-      ChestShop.shop.create.rails: true #Minecart Rail
-      ChestShop.shop.create.stone_plate: true #Stone Plate
-      ChestShop.shop.create.wood_plate: true #Wood Plate
-      ChestShop.shop.create.redstone_lamp_off: true #Redstone Lamp
-      ChestShop.shop.create.wood_button: true #Wooden Button
+      ChestShop.shop.create.rail: true #Minecart Rail
+      ChestShop.shop.create.stone_pressure_plate: true #Stone Plate
+      ChestShop.shop.create.oak_pressure_plate: true #Wood Plate
+      ChestShop.shop.create.note_redstone_lamp_off: merged with redstone lamp, only available via state: true #Redstone Lamp
+      ChestShop.shop.create.oak_button: true #Wooden Button
       ChestShop.shop.create.redstone_block: true #Redstone Block
       ChestShop.shop.create.hopper: true #Hopper
       ChestShop.shop.create.activator_rail: true #Activator Rail
@@ -332,38 +333,38 @@ permissions:
       ChestShop.shop.create.daylight_detector: true #Daylight Sensor
       ChestShop.shop.create.observer: true #Observer
       ChestShop.shop.create.redstone: true #Redstone Dust
-      ChestShop.shop.create.diode: true #Redstone Repeater
-      ChestShop.shop.create.redstone_comparator: true #Redstone Comparator
+      ChestShop.shop.create.repeater: true #Redstone Repeater
+      ChestShop.shop.create.comparator: true #Redstone Comparator
   ChestShop.shop.create.netherblocks:
     descriptions: Allows to create a shop that sells netherblocks
     children:
       ChestShop.shop.create.netherrack: true #Nether Rack
       ChestShop.shop.create.soul_sand: true #Soul Sand
       ChestShop.shop.create.glowstone: true #Glow Stone
-      ChestShop.shop.create.nether_brick: true #Nether Brick Block
-      ChestShop.shop.create.nether_fence: true #Nether Fence
+      ChestShop.shop.create.nether_bricks: true #Nether Brick Block
+      ChestShop.shop.create.nether_brick_fence: true #Nether Fence
       ChestShop.shop.create.nether_brick_stairs: true #Nether Stairs
-      ChestShop.shop.create.magma: true #Magma Block
+      ChestShop.shop.create.magma_block: true #Magma Block
       ChestShop.shop.create.nether_wart_block: true #Nether Wart Block
-      ChestShop.shop.create.red_nether_brick: true #Red Nether Brick Block
-      ChestShop.shop.create.nether_brick_item: true #Nether Brick
+      ChestShop.shop.create.red_nether_bricks: true #Red Nether Brick Block
+      ChestShop.shop.create.nether_brick: true #Nether Brick
       ChestShop.shop.create.quartz: true #Nether Quartz
   ChestShop.shop.create.end:
     descriptions: Allows to create a shop that sells items and blocks from the end
     children:
-      ChestShop.shop.create.ender_stone: true #End Stone
+      ChestShop.shop.create.end_stone: true #End Stone
       ChestShop.shop.create.end_rod: true #End Rod
       ChestShop.shop.create.chorus_flower: true #Chorus Flower
       ChestShop.shop.create.purpur_block: true #Purpur Block
       ChestShop.shop.create.purpur_pillar: true #Purpur Pillar
       ChestShop.shop.create.purpur_stairs: true #Purpur Stairs
       ChestShop.shop.create.purpur_slab: true #Double Purpur Slab
-      ChestShop.shop.create.end_bricks: true #End Stone Bricks
+      ChestShop.shop.create.end_stone_bricks: true #End Stone Bricks
       ChestShop.shop.create.end_crystal: true #End Crystal
-      ChestShop.shop.create.dark_oak_door_item: true #Elytra
+      ChestShop.shop.create.dark_oak_door: true #Elytra
       ChestShop.shop.create.chorus_fruit: true #Chorus Fruit
       ChestShop.shop.create.end_crystal: true #Popped Chorus Fruit
-      ChestShop.shop.create.dragons_breath: true #Dragon's Breath
+      ChestShop.shop.create.dragon_breath: true #Dragon's Breath
       ChestShop.shop.create.shulker_shell: true #Shulker Shell
   ChestShop.shop.create.misc:
     descriptions: Allows to create a shop that sells misc items
@@ -375,50 +376,55 @@ permissions:
       ChestShop.shop.create.painting: true #Painting
       ChestShop.shop.create.sign: true #Sign
       ChestShop.shop.create.saddle: true #Saddle
-      ChestShop.shop.create.snow_ball: true #Snowballs
-      ChestShop.shop.create.clay_brick: true #Bricks
+      ChestShop.shop.create.snowball: true #Snowballs
+      ChestShop.shop.create.brick: true #Bricks
       ChestShop.shop.create.clay_ball: true #Clay Balls
       ChestShop.shop.create.paper: true #Paper
       ChestShop.shop.create.book: true #Book
       ChestShop.shop.create.glowstone_dust: true #Glowstone Dust
       ChestShop.shop.create.map: true #Explorer Map
       ChestShop.shop.create.sugar: true #Sugar
-      ChestShop.shop.create.bed: true #Bed
-      ChestShop.shop.create.eye_of_ender: true #Ender Eye
-      ChestShop.shop.create.monster_egg: true #Bed
-      ChestShop.shop.create.exp_bottle: true #Ender Eye
-      ChestShop.shop.create.fireball: true #Fire Charge
-      ChestShop.shop.create.book_and_quill: true #Book and Quill
+      ChestShop.shop.create.white_bed: true #Bed
+      ChestShop.shop.create.ender_eye: true #Ender Eye
+      ChestShop.shop.create.spawn_eggs: true #Spawn eggs
+      ChestShop.shop.create.experience_bottle: true #Ender Eye
+      ChestShop.shop.create.fire_charge: true #Fire Charge
+      ChestShop.shop.create.writable_book: true #Book and Quill
       ChestShop.shop.create.written_book: true #Written Book
       ChestShop.shop.create.item_frame: true #Item Frame
-      ChestShop.shop.create.flower_pot_item: true #Flower Pot
-      ChestShop.shop.create.empty_map: true #Empty Map
-      ChestShop.shop.create.skull_item: true #Skull
+      ChestShop.shop.create.flower_pot: true #Flower Pot
+      ChestShop.shop.create.map: true #Empty Map
+      ChestShop.shop.create.skeleton_skull: true #Skull
       ChestShop.shop.create.carrot_stick: true #Carrot on a Stick
       ChestShop.shop.create.nether_star: true #Nether Star
-      ChestShop.shop.create.firework: true #Firework
-      ChestShop.shop.create.firework_charge: true #Firework Star
+      ChestShop.shop.create.firework_rocket: true #Firework
+      ChestShop.shop.create.firework_star: true #Firework Star
       ChestShop.shop.create.enchanted_book: true #Enchanted Book
       ChestShop.shop.create.armor_stand: true #Armor Stand
-      ChestShop.shop.create.banner: true #Banner
+      ChestShop.shop.create.white_banner: true #Banner
       ChestShop.shop.create.shield: true #Shield
-  ChestShop.shop.create.steps:
+  ChestShop.shop.create.spawn_eggs:
     description: Allows to create a shop that sells steps
     children:
-      ChestShop.shop.create.step: true #Step
-      ChestShop.shop.create.wood_step: true #Wood Step
+      ChestShop.shop.create.cave_spider_spawn_egg: true
+      # TODO: Add all spawn eggs
+  ChestShop.shop.create.steps: # TODO: Add new steps
+    description: Allows to create a shop that sells steps
+    children:
+      ChestShop.shop.create.stone_slab: true #Step
+      ChestShop.shop.create.oak_slab: true #Wood Step
       ChestShop.shop.create.purpur_slab: true #Purpur Step
-  ChestShop.shop.create.brewing:
+  ChestShop.shop.create.brewing: # TODO: Add new ingredients
     description: Allows to create a shop that sells brewing materials
     children:
       ChestShop.shop.create.milk_bucket: true #Milk
-      ChestShop.shop.create.nether_stalk: true #Nether Wart
+      ChestShop.shop.create.nether_wart: true #Nether Wart
       ChestShop.shop.create.potion: true #Water Bottle
       ChestShop.shop.create.glass_bottle: true #Bottle
       ChestShop.shop.create.fermented_spider_eye: true #Fermented Spider Eye
       ChestShop.shop.create.blaze_powder: true #Blaze Powder
       ChestShop.shop.create.speckled_melon: true #Glistering Melon
-      ChestShop.shop.create.dragons_breath: true #Dragon's Breath
+      ChestShop.shop.create.dragon_breath: true #Dragon's Breath
   ChestShop.shop.create.shulkerbox:
     description: Allows to create a shop that sells all shulker boxes
     children:
@@ -430,7 +436,7 @@ permissions:
       ChestShop.shop.create.lime_shulker_box: true #Shulker Box (Lime)
       ChestShop.shop.create.pink_shulker_box: true #Shulker Box (Pink)
       ChestShop.shop.create.gray_shulker_box: true #Shulker Box (Gray)
-      ChestShop.shop.create.silver_shulker_box: true #Shulker Box (Light Gray)
+      ChestShop.shop.create.light_gray_shulker_box: true #Shulker Box (Light Gray)
       ChestShop.shop.create.cyan_shulker_box: true #Shulker Box (Cyan)
       ChestShop.shop.create.purple_shulker_box: true #Shulker Box (Purple)
       ChestShop.shop.create.blue_shulker_box: true #Shulker Box (Blue)
@@ -440,118 +446,118 @@ permissions:
       ChestShop.shop.create.black_shulker_box: true #Shulker Box (Black)
   ChestShop.shop.create.basic:
     description: Allows to create a shop that sells basic blocks
-    children:
+    children: # TODO: Add individual stones and other missing stuff?
       ChestShop.shop.create.stone: true #Stone, Granite, Polished Granite, Andesite, Polished Andesite, Diorite, Polished Diorite
       ChestShop.shop.create.grass: true #Grass
       ChestShop.shop.create.dirt: true #Dirt
       ChestShop.shop.create.cobblestone: true #Cobble
-      ChestShop.shop.create.wood: true #Planks
+      ChestShop.shop.create.oak_planks: true #Planks
       ChestShop.shop.create.sand: true #Sand
       ChestShop.shop.create.gravel: true #Gravel
-      ChestShop.shop.create.log: true #Log
+      ChestShop.shop.create.oak_log: true #Log
       ChestShop.shop.create.sponge: true #Sponge
       ChestShop.shop.create.glass: true #Glass
       ChestShop.shop.create.lapis_block: true #Lapis Block
       ChestShop.shop.create.sandstone: true #Sand Stone
       ChestShop.shop.create.gold_block: true #Gold Block
       ChestShop.shop.create.iron_block: true #Iron Block
-      ChestShop.shop.create.step: true #Stone Slab
-      ChestShop.shop.create.brick: true #Brick Block
+      ChestShop.shop.create.stone_slab: true #Stone Slab
+      ChestShop.shop.create.bricks: true #Brick Block
       ChestShop.shop.create.tnt: true #TNT
       ChestShop.shop.create.bookshelf: true #Book Shelf
       ChestShop.shop.create.mossy_cobblestone: true #Mossy Cobble
       ChestShop.shop.create.obsidian: true #Obsidian
       ChestShop.shop.create.torch: true #Torch
       ChestShop.shop.create.chest: true #Chest
-      ChestShop.shop.create.shulkerbox: true #Shulkerboxes
+      ChestShop.shop.create.unknown_shulkerbox: true #Shulkerboxes
       ChestShop.shop.create.diamond_block: true #Diamond Block
       ChestShop.shop.create.ladder: true #Ladder
       ChestShop.shop.create.ice: true #Ice
       ChestShop.shop.create.snow_block: true #Snow
       ChestShop.shop.create.clay: true #Clay Block
       ChestShop.shop.create.jack_o_lantern: true #Jacko Lantern
-      ChestShop.shop.create.smooth_brick: true #Stone Brick
-      ChestShop.shop.create.huge_mushroom_1: true #Mushroom Block1
-      ChestShop.shop.create.huge_mushroom_2: true #Mushroom Block2
-      ChestShop.shop.create.iron_fence: true #Iron Bar
-      ChestShop.shop.create.thin_glass: true #Glass Pane
-      ChestShop.shop.create.mycel: true #Mycelium
-      ChestShop.shop.create.ender_stone: true #End Stone
+      ChestShop.shop.create.stone_bricks: true #Stone Brick
+      ChestShop.shop.create.brown_mushroom_block: true #Mushroom Block1
+      ChestShop.shop.create.red_mushroom_block: true #Mushroom Block2
+      ChestShop.shop.create.ironbars: true #Iron Bar
+      ChestShop.shop.create.glass_pane: true #Glass Pane
+      ChestShop.shop.create.mycelium: true #Mycelium
+      ChestShop.shop.create.end_stone: true #End Stone
       ChestShop.shop.create.dragon_egg: true #Dragon Egg
       ChestShop.shop.create.trapped_chest: true #Trapped Chest
       ChestShop.shop.create.quartz_block: true #Block of Quartz
-      ChestShop.shop.create.log_2: true #Acacia Logand Dark Log
+      ChestShop.shop.create.acacia_log: true #Acacia Logand Dark Log
       ChestShop.shop.create.dark_oak_stairs: true #Slime Block
       ChestShop.shop.create.sea_lantern: true #Sea Lantern
       ChestShop.shop.create.prismarine: true #Prismarine, Prismarine Bricks, Dark Prismarine
       ChestShop.shop.create.red_sandstone: true #Chiseled Red Sandstone, Smooth Red Sandstone
-      ChestShop.shop.create.stone_slab2: true #Red Sandstone Slab
+      ChestShop.shop.create.red_sandstone_slab: true #Red Sandstone Slab
       ChestShop.shop.create.bone_block: true #Bone Block
   ChestShop.shop.create.doors:
     descriptions: Allows to create a shop that sells doors
     children:
-      ChestShop.shop.create.wood_door: true #Wood Door
+      ChestShop.shop.create.oak_door: true #Wood Door
       ChestShop.shop.create.iron_door: true #Iron Door
-      ChestShop.shop.create.trap_door: true #Trap Door
+      ChestShop.shop.create.oak_trapdoor: true #Trap Door
       ChestShop.shop.create.iron_trapdoor: true #Iron Trapdoor
-      ChestShop.shop.create.spruce_door_item: true #Spruce Door
-      ChestShop.shop.create.birch_door_item: true #Birch Door
-      ChestShop.shop.create.jungle_door_item: true #Jungle Door
-      ChestShop.shop.create.acacia_door_item: true #Acacia Door
-      ChestShop.shop.create.dark_oak_door_item: true #Dark Oak Door
+      ChestShop.shop.create.spruce_door: true #Spruce Door
+      ChestShop.shop.create.birch_door: true #Birch Door
+      ChestShop.shop.create.jungle_door: true #Jungle Door
+      ChestShop.shop.create.acacia_door: true #Acacia Door
+      ChestShop.shop.create.dark_oak_door: true #Dark Oak Door
   ChestShop.shop.create.music:
     description: Allows to create a shop that sells music items
     children:
       ChestShop.shop.create.note_block: true #Noteblock
       ChestShop.shop.create.jukebox: true #Jukebox
-      ChestShop.shop.create.gold_record: true #Disk 13
-      ChestShop.shop.create.green_record: true #Disk Cat
-      ChestShop.shop.create.record_3: true #Disk Blocks
-      ChestShop.shop.create.record_4: true #Disk Chirp
-      ChestShop.shop.create.record_5: true #Disk Far
-      ChestShop.shop.create.record_6: true #Disk Mall
-      ChestShop.shop.create.record_7: true #Disk Mellohi
-      ChestShop.shop.create.record_8: true #Disk Stal
-      ChestShop.shop.create.record_9: true #Disk Strad
-      ChestShop.shop.create.record_10: true #Disk Ward
-      ChestShop.shop.create.record_11: true #Disk 11
+      ChestShop.shop.create.music_disc_13: true #Disk 13
+      ChestShop.shop.create.music_disc_cat: true #Disk Cat
+      ChestShop.shop.create.music_disc_blocks: true #Disk Blocks
+      ChestShop.shop.create.music_disc_chirp: true #Disk Chirp
+      ChestShop.shop.create.music_disc_far: true #Disk Far
+      ChestShop.shop.create.music_disc_mall: true #Disk Mall
+      ChestShop.shop.create.music_disc_mellohi: true #Disk Mellohi
+      ChestShop.shop.create.music_disc_stal: true #Disk Stal
+      ChestShop.shop.create.music_disc_strad: true #Disk Strad
+      ChestShop.shop.create.music_disc_ward: true #Disk Ward
+      ChestShop.shop.create.music_disc_11: true #Disk 11
   ChestShop.shop.create.vehicles:
     description: Allows to create a shop that sells vehicles
     children:
       ChestShop.shop.create.minecart: true #Minecart
-      ChestShop.shop.create.boat: true #Boat
-      ChestShop.shop.create.storage_minecart: true #Storage Cart
-      ChestShop.shop.create.powered_minecart: true #Powered Cart
-      ChestShop.shop.create.explosive_minecart: true #TNT cart
+      ChestShop.shop.create.oak_boat: true #Boat
+      ChestShop.shop.create.chest_minecart: true #Storage Cart
+      ChestShop.shop.create.furnace_minecart: true #Powered Cart
+      ChestShop.shop.create.tnt_minecart: true #TNT cart
       ChestShop.shop.create.hopper_minecart: true #Hopper Cart
       ChestShop.shop.create.elytra: true #Elytra
-      ChestShop.shop.create.boat_spruce: true #Spruce Boat
-      ChestShop.shop.create.boat_birch: true #Birch Boat
-      ChestShop.shop.create.boat_jungle: true #Jungle Boat
-      ChestShop.shop.create.boat_acacia: true #Acacia Boat
-      ChestShop.shop.create.boat_dark_oak: true #Dark Oak Boat
+      ChestShop.shop.create.spruce_boat: true #Spruce Boat
+      ChestShop.shop.create.birch_boat: true #Birch Boat
+      ChestShop.shop.create.jungle_boat: true #Jungle Boat
+      ChestShop.shop.create.acacia_boat: true #Acacia Boat
+      ChestShop.shop.create.dark_oak_boat: true #Dark Oak Boat
   ChestShop.shop.create.boats:
     description: Allows to create a shop that sells boats
     children:
-      ChestShop.shop.create.boat: true #Boat
-      ChestShop.shop.create.boat_spruce: true #Spruce Boat
-      ChestShop.shop.create.boat_birch: true #Birch Boat
-      ChestShop.shop.create.boat_jungle: true #Jungle Boat
-      ChestShop.shop.create.boat_acacia: true #Acacia Boat
-      ChestShop.shop.create.boat_dark_oak: true #Dark Oak Boat
+      ChestShop.shop.create.oak_boat: true #Boat
+      ChestShop.shop.create.spruce_boat: true #Spruce Boat
+      ChestShop.shop.create.birch_boat: true #Birch Boat
+      ChestShop.shop.create.jungle_boat: true #Jungle Boat
+      ChestShop.shop.create.acacia_boat: true #Acacia Boat
+      ChestShop.shop.create.dark_oak_boat: true #Dark Oak Boat
   ChestShop.shop.create.woolitems:
     description: Allows to create a shop that sells wool, carpet and dye
     children:
-      ChestShop.shop.create.wool: true #Wool
-      ChestShop.shop.create.carpet: true #Carpet
-      ChestShop.shop.create.ink_sack: true #Dyes
+      ChestShop.shop.create.white_wool: true #Wool
+      ChestShop.shop.create.white_carpet: true #Carpet
+      ChestShop.shop.create.ink_sac: true #Dyes
   ChestShop.shop.create.fences:
     description: Allows to create a shop that sells fence
     children:
-      ChestShop.shop.create.fence: true #Fence
-      ChestShop.shop.create.iron_fence: true #Iron Bar
-      ChestShop.shop.create.fence_gate: true #Fence Gate
-      ChestShop.shop.create.nether_fence: true #Nether Fence
+      ChestShop.shop.create.oak_fence: true #Fence
+      ChestShop.shop.create.ironbars: true #Iron Bar
+      ChestShop.shop.create.oak_fence_gate: true #Fence Gate
+      ChestShop.shop.create.nether_brick_fence: true #Nether Fence
       ChestShop.shop.create.spruce_fence_gate: true #Spruce Fence Gate
       ChestShop.shop.create.birch_fence_gate: true #Birch Fence Gate
       ChestShop.shop.create.jungle_fence_gate: true #Jungle Fence Gate
@@ -565,61 +571,105 @@ permissions:
   ChestShop.shop.create.bench:
     description: Allows to create a shop that sells crafting blocks
     children:
-      ChestShop.shop.create.workbench: true #Work Bench
+      ChestShop.shop.create.crafting_table: true #Work Bench
       ChestShop.shop.create.furnace: true #Furnace
-      ChestShop.shop.create.enchantment_table: true #Enchanting Table
-      ChestShop.shop.create.brewing_stand_item: true #Brewing Stand
-      ChestShop.shop.create.cauldron_item: true #Cauldron
+      ChestShop.shop.create.enchanting_table: true #Enchanting Table
+      ChestShop.shop.create.brewing_stand: true #Brewing Stand
+      ChestShop.shop.create.cauldron: true #Cauldron
       ChestShop.shop.create.anvil: true #Anvil
+  ChestShop.shop.create.beds:
+    description: Allows to create a shop that sells all beds
+    children:
+      ChestShop.shop.create.white_bed: true #Bed (White)
+      ChestShop.shop.create.orange_bed: true #Bed (Orange)
+      ChestShop.shop.create.magenta_bed: true #Bed (Magenta)
+      ChestShop.shop.create.light_blue_bed: true #Bed (Light Blue)
+      ChestShop.shop.create.yellow_bed: true #Bed (Yellow)
+      ChestShop.shop.create.lime_bed: true #Bed (Lime)
+      ChestShop.shop.create.pink_bed: true #Bed (Pink)
+      ChestShop.shop.create.gray_bed: true #Bed (Gray)
+      ChestShop.shop.create.light_gray_bed: true #Bed (Light Gray)
+      ChestShop.shop.create.cyan_bed: true #Bed (Cyan)
+      ChestShop.shop.create.purple_bed: true #Bed (Purple)
+      ChestShop.shop.create.blue_bed: true #Bed (Blue)
+      ChestShop.shop.create.brown_bed: true #Bed (Brown)
+      ChestShop.shop.create.green_bed: true #Bed (Green)
+      ChestShop.shop.create.red_bed: true #Bed (Red)
+      ChestShop.shop.create.black_bed: true #Bed (Black)
+  ChestShop.shop.create.banners:
+    description: Allows to create a shop that sells all banners
+    children:
+      ChestShop.shop.create.white_banner: true #banner (White)
+      ChestShop.shop.create.orange_banner: true #banner (Orange)
+      ChestShop.shop.create.magenta_banner: true #banner (Magenta)
+      ChestShop.shop.create.light_blue_banner: true #banner (Light Blue)
+      ChestShop.shop.create.yellow_banner: true #banner (Yellow)
+      ChestShop.shop.create.lime_banner: true #banner (Lime)
+      ChestShop.shop.create.pink_banner: true #banner (Pink)
+      ChestShop.shop.create.gray_banner: true #banner (Gray)
+      ChestShop.shop.create.light_gray_banner: true #banner (Light Gray)
+      ChestShop.shop.create.cyan_banner: true #banner (Cyan)
+      ChestShop.shop.create.purple_banner: true #banner (Purple)
+      ChestShop.shop.create.blue_banner: true #banner (Blue)
+      ChestShop.shop.create.brown_banner: true #banner (Brown)
+      ChestShop.shop.create.green_banner: true #banner (Green)
+      ChestShop.shop.create.red_banner: true #banner (Red)
+      ChestShop.shop.create.black_banner: true #banner (Black)
+  ChestShop.shop.create.wall_banners:
+    description: Allows to create a shop that sells all wall banners
+    children:
+      ChestShop.shop.create.white_wall_banner: true #wall_banner (White)
+      ChestShop.shop.create.orange_wall_banner: true #wall_banner (Orange)
+      ChestShop.shop.create.magenta_wall_banner: true #wall_banner (Magenta)
+      ChestShop.shop.create.light_blue_wall_banner: true #wall_banner (Light Blue)
+      ChestShop.shop.create.yellow_wall_banner: true #wall_banner (Yellow)
+      ChestShop.shop.create.lime_wall_banner: true #wall_banner (Lime)
+      ChestShop.shop.create.pink_wall_banner: true #wall_banner (Pink)
+      ChestShop.shop.create.gray_wall_banner: true #wall_banner (Gray)
+      ChestShop.shop.create.light_gray_wall_banner: true #wall_banner (Light Gray)
+      ChestShop.shop.create.cyan_wall_banner: true #wall_banner (Cyan)
+      ChestShop.shop.create.purple_wall_banner: true #wall_banner (Purple)
+      ChestShop.shop.create.blue_wall_banner: true #wall_banner (Blue)
+      ChestShop.shop.create.brown_wall_banner: true #wall_banner (Brown)
+      ChestShop.shop.create.green_wall_banner: true #wall_banner (Green)
+      ChestShop.shop.create.red_wall_banner: true #wall_banner (Red)
+      ChestShop.shop.create.black_wall_banner: true #wall_banner (Black)
   ChestShop.shop.create.unobtainables:
     description: Allows to create a shop that sells unobtainable items
-    children:
+    children: # TODO: Check if these are all unobtainable or if some are missing
       ChestShop.shop.create.bedrock: true #Bedrock
-      ChestShop.shop.create.water: true #Water
-      ChestShop.shop.create.stationary_water: true #Still Water
-      ChestShop.shop.create.lava: true #Lava
-      ChestShop.shop.create.stationary_lava: true #Still Lava
-      ChestShop.shop.create.bed_block: true #Placed Bed
-      ChestShop.shop.create.web: true #Cobweb
-      ChestShop.shop.create.piston_extension: true #Piston Head
-      ChestShop.shop.create.piston_moving_piece: true #Moving Piston
-      ChestShop.shop.create.double_step: true #Doublestep
+      ChestShop.shop.create.flowing_water: true #Water
+      ChestShop.shop.create.water: true #Still Water
+      ChestShop.shop.create.flowing_lava: true #Lava
+      ChestShop.shop.create.lava: true #Still Lava
+      ChestShop.shop.create.cobweb: true #Cobweb
+      ChestShop.shop.create.piston_head: true #Piston Head
+      ChestShop.shop.create.moving_piston: true #Moving Piston
       ChestShop.shop.create.fire: true #Fire
       ChestShop.shop.create.mob_spawner: true #Mob Spawner
       ChestShop.shop.create.redstone_wire: true #Placed Redstone
-      ChestShop.shop.create.crops: true #Growing Crop
-      ChestShop.shop.create.soil: true #Tilled Dirt
-      ChestShop.shop.create.burning_furnace: true #Lit Furnace
-      ChestShop.shop.create.sign_post: true #Sign Post
-      ChestShop.shop.create.wooden_door: true #Placed Door
+      ChestShop.shop.create.wheat: true #Growing Crop
+      ChestShop.shop.create.farmland: true #Tilled Dirt
+      ChestShop.shop.create.sign: true #Sign Post
       ChestShop.shop.create.wall_sign: true #Wall Sign
-      ChestShop.shop.create.iron_door_block: true #Placed Iron Door
-      ChestShop.shop.create.redstone_ore: true #Glowing Redstone Ore
-      ChestShop.shop.create.redstone_torch_off: true #Redstone Torch Off
       ChestShop.shop.create.snow: true #Fallen Snow
-      ChestShop.shop.create.sugar_cane_block: true #Placed Reeds
+      ChestShop.shop.create.sugar_cane: true #Placed Reeds
       ChestShop.shop.create.portal: true #Portal
-      ChestShop.shop.create.cake_block: true #Placed Cake
-      ChestShop.shop.create.diode_block_off: true #Placed Repeater Off
-      ChestShop.shop.create.diode_block_on: true #Placed Repeater On
-      ChestShop.shop.create.stained_glass: true #Locked Chest
-      ChestShop.shop.create.monster_eggs: true #Monster Egg
+      ChestShop.shop.create.cake: true #Placed Cake
+      ChestShop.shop.create.repeater: true #Placed Repeater On
+      ChestShop.shop.create.white_stained_glass: true #Locked Chest
+      ChestShop.shop.create.infested_stone: true #Monster Egg
       ChestShop.shop.create.pumpkin_stem: true #Pumpkin Stalk
       ChestShop.shop.create.melon_stem: true #Melon Stalk
-      ChestShop.shop.create.nether_warts: true #Growing Netherwart
-      ChestShop.shop.create.brewing_stand: true #Brewing Block
+      ChestShop.shop.create.nether_wart: true #Growing Netherwart
       ChestShop.shop.create.cauldron: true #Placed Cauldron
-      ChestShop.shop.create.ender_portal: true #End Portal
-      ChestShop.shop.create.ender_portal_frame: true #End Portal Block
-      ChestShop.shop.create.redstone_lamp_on: true #Redstone Lamp On
-      ChestShop.shop.create.command: true #Command Block
+      ChestShop.shop.create.end_portal: true #End Portal
+      ChestShop.shop.create.end_portal_frame: true #End Portal Block
+      ChestShop.shop.create.command_block: true #Command Block
       ChestShop.shop.create.barrier: true #Barrier
-      ChestShop.shop.create.standing_banner: true #Free Standing Banner
-      ChestShop.shop.create.wall_banner: true #Wall-Mounted Banner
-      ChestShop.shop.create.double_stone_slab2: true #Double Red Sandstone Slab
+      ChestShop.shop.create.wall_banners: true #Wall banners
       ChestShop.shop.create.chorus_plant: true #Chorus Plant
-      ChestShop.shop.create.purpur_double_slab: true #Double Purpur Slab
-      ChestShop.shop.create.beetroot_block: true #Frosted Ice
+      ChestShop.shop.create.beetroots: true #Frosted Ice
       ChestShop.shop.create.grass_path: true #Grass Path
       ChestShop.shop.create.end_gateway: true #End Gateway
       ChestShop.shop.create.structure_void: true #Structure Void
