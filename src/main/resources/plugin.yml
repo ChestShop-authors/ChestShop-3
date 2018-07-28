@@ -324,7 +324,7 @@ permissions:
       ChestShop.shop.create.rail: true #Minecart Rail
       ChestShop.shop.create.stone_pressure_plate: true #Stone Plate
       ChestShop.shop.create.oak_pressure_plate: true #Wood Plate
-      ChestShop.shop.create.note_redstone_lamp_off: merged with redstone lamp, only available via state: true #Redstone Lamp
+      ChestShop.shop.create.redstone_lamp: true #Redstone Lamp
       ChestShop.shop.create.oak_button: true #Wooden Button
       ChestShop.shop.create.redstone_block: true #Redstone Block
       ChestShop.shop.create.hopper: true #Hopper
