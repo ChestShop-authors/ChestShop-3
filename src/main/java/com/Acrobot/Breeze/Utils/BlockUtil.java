@@ -2,10 +2,14 @@ package com.Acrobot.Breeze.Utils;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -51,8 +55,46 @@ public class BlockUtil {
      * @param sign Sign which is attached
      * @return Block to which the sign is attached
      */
-    public static Block getAttachedBlock(Sign sign) {
-        return sign.getBlock().getRelative(((Rotatable) sign.getBlockData()).getRotation().getOppositeFace());
+    public static Block getAttachedBlock(org.bukkit.block.Sign sign) {
+        BlockFace direction;
+        BlockData blockData = sign.getBlockData();
+        if (blockData instanceof WallSign) {
+            direction = ((Directional) blockData).getFacing().getOppositeFace();
+        } else if (blockData instanceof Sign) {
+            direction = getMajorDirection(((Rotatable) blockData).getRotation().getOppositeFace());
+        } else {
+            throw new IllegalArgumentException("Cannot get direction of " + blockData.getClass().getSimpleName());
+        }
+        return sign.getBlock().getRelative(direction);
+    }
+
+    /**
+     * Convert a blockface to a major direction
+     *
+     * @param face The face to get the major direction from
+     * @return The major direction. For middle directions it will return the next clockwise direction
+     */
+    public static BlockFace getMajorDirection(BlockFace face) {
+        switch (face) {
+            case NORTH_WEST:
+            case NORTH_NORTH_WEST:
+            case NORTH_NORTH_EAST:
+                return BlockFace.NORTH;
+            case NORTH_EAST:
+            case EAST_NORTH_EAST:
+            case EAST_SOUTH_EAST:
+                return BlockFace.EAST;
+            case SOUTH_EAST:
+            case SOUTH_SOUTH_EAST:
+            case SOUTH_SOUTH_WEST:
+                return BlockFace.SOUTH;
+            case SOUTH_WEST:
+            case WEST_NORTH_WEST:
+            case WEST_SOUTH_WEST:
+                return BlockFace.WEST;
+            default:
+                return face;
+        }
     }
 
     /**
