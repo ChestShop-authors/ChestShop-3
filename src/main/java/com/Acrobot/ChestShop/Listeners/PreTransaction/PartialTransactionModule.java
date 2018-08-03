@@ -121,7 +121,10 @@ public class PartialTransactionModule implements Listener {
             if (!currencyCheckEvent.hasEnough()) {
                 int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
 
-                if (amountAffordable < 1) {
+                CurrencyCheckEvent currencyCheckEventPPI = new CurrencyCheckEvent(BigDecimal.valueOf(amountAffordable*pricePerItem), client);
+                ChestShop.callEvent(currencyCheckEventPPI);
+                
+                if (!currencyCheckEventPPI.hasEnough() || amountAffordable < 1) {
                     event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
                     return;
                 }
