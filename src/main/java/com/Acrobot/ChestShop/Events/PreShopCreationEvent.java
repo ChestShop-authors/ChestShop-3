@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Events;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -10,7 +11,7 @@ import org.bukkit.event.HandlerList;
  *
  * @author Acrobot
  */
-public class PreShopCreationEvent extends Event {
+public class PreShopCreationEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private Player creator;
@@ -30,8 +31,19 @@ public class PreShopCreationEvent extends Event {
      *
      * @return Is event cancelled?
      */
+    @Override
     public boolean isCancelled() {
         return outcome != CreationOutcome.SHOP_CREATED_SUCCESSFULLY;
+    }
+
+    /**
+     * Set if event is cancelled. This sets a generic {@link CreationOutcome#OTHER};
+     *
+     * @param cancel Cancel the event?
+     */
+    @Override
+    public void setCancelled(boolean cancel) {
+        outcome = CreationOutcome.OTHER;
     }
 
     /**

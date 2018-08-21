@@ -19,7 +19,7 @@ public class TransactionLogger implements Listener {
     private static final String BUY_MESSAGE = "%1$s bought %2$s for %3$.2f from %4$s at %5$s";
     private static final String SELL_MESSAGE = "%1$s sold %2$s for %3$.2f to %4$s at %5$s";
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onTransaction(final TransactionEvent event) {
         String template = (event.getTransactionType() == BUY ? BUY_MESSAGE : SELL_MESSAGE);
 

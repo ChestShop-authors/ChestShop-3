@@ -118,7 +118,7 @@ public class ReserveListener implements Listener {
         final OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null && provided()) {
-            economyAPI.addHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName());
+            event.setAdded(economyAPI.addHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
         }
     }
 
@@ -130,7 +130,7 @@ public class ReserveListener implements Listener {
         final OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null && provided()) {
-            economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName());
+            event.setSubtracted(economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
         }
     }
 
@@ -149,6 +149,8 @@ public class ReserveListener implements Listener {
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
         onCurrencyAdd(currencyAddEvent);
+
+        event.setTransferred(currencyAddEvent.isAdded());
     }
 
     @EventHandler
