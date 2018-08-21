@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class EmptyShopDeleter implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public static void onTransaction(TransactionEvent event) {
         if (event.getTransactionType() != TransactionEvent.TransactionType.BUY) {
             return;

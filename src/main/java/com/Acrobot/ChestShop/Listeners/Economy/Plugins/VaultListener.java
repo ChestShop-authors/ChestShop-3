@@ -146,7 +146,8 @@ public class VaultListener implements Listener {
 		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
         }
     }
 
@@ -161,7 +162,8 @@ public class VaultListener implements Listener {
 		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
         }
     }
 
@@ -180,6 +182,8 @@ public class VaultListener implements Listener {
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
         onCurrencyAdd(currencyAddEvent);
+
+        event.setTransferred(currencyAddEvent.isAdded());
     }
 
     @EventHandler

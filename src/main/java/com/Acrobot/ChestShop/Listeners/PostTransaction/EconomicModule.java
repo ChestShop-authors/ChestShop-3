@@ -16,33 +16,60 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL
  * @author Acrobot
  */
 public class EconomicModule implements Listener {
-    @EventHandler
+
+    @EventHandler(ignoreCancelled = true)
     public static void onBuyTransaction(TransactionEvent event) {
         if (event.getTransactionType() != BUY) {
             return;
         }
 
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()),
-                                                            event.getOwnerAccount().getUuid(),
-                                                            event.getSign().getWorld());
-        ChestShop.callEvent(currencyAddEvent);  // java.lang.StackOverflowError
+        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(
+                BigDecimal.valueOf(event.getPrice()),
+                event.getOwnerAccount().getUuid(),
+                event.getSign().getWorld());
+        ChestShop.callEvent(currencyAddEvent);
+        if (!currencyAddEvent.isAdded()) {
+            event.setCancelled(true);
+            return;
+        }
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
         ChestShop.callEvent(currencySubtractEvent);
+        if (!currencySubtractEvent.isSubtracted()) {
+            event.setCancelled(true);
+            CurrencySubtractEvent currencyResetEvent = new CurrencySubtractEvent(
+                    BigDecimal.valueOf(event.getPrice()),
+                    event.getOwnerAccount().getUuid(),
+                    event.getSign().getWorld());
+            ChestShop.callEvent(currencyResetEvent);
+        }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void onSellTransaction(TransactionEvent event) {
         if (event.getTransactionType() != SELL) {
             return;
         }
 
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(BigDecimal.valueOf(event.getPrice()),
-                                                                            event.getOwnerAccount().getUuid(),
-                                                                            event.getSign().getWorld());
+        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(
+                BigDecimal.valueOf(event.getPrice()),
+                event.getOwnerAccount().getUuid(),
+                event.getSign().getWorld());
         ChestShop.callEvent(currencySubtractEvent);
+        if (!currencySubtractEvent.isSubtracted()) {
+            event.setCancelled(true);
+            return;
+        }
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(BigDecimal.valueOf(event.getPrice()), event.getClient());
         ChestShop.callEvent(currencyAddEvent);
+        if (!currencyAddEvent.isAdded()) {
+            event.setCancelled(true);
+            CurrencyAddEvent currencyResetEvent = new CurrencyAddEvent(
+                    BigDecimal.valueOf(event.getPrice()),
+                    event.getOwnerAccount().getUuid(),
+                    event.getSign().getWorld());
+            ChestShop.callEvent(currencyResetEvent);
+        }
     }
 }

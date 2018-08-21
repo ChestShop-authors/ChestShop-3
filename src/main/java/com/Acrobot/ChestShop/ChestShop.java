@@ -21,7 +21,7 @@ import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
 import com.Acrobot.ChestShop.Listeners.Player.*;
-import com.Acrobot.ChestShop.Listeners.PostShopCreation.CreationFeeGetter;
+import com.Acrobot.ChestShop.Listeners.PreShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.ShopCreationLogger;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.SignSticker;

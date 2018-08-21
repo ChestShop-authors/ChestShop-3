@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,7 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL
  * @author Acrobot
  */
 public class ItemManager implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public static void shopItemRemover(TransactionEvent event) {
         if (event.getTransactionType() != BUY) {
             return;
@@ -27,7 +28,7 @@ public class ItemManager implements Listener {
         event.getClient().updateInventory();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public static void inventoryItemRemover(TransactionEvent event) {
         if (event.getTransactionType() != SELL) {
             return;
