@@ -34,6 +34,8 @@ public class ServerAccountCorrector implements Listener {
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencyAddEvent);
+
+        event.setAdded(currencyAddEvent.isAdded());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -54,6 +56,8 @@ public class ServerAccountCorrector implements Listener {
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencySubtractEvent);
+
+        event.setSubtracted(currencySubtractEvent.isSubtracted());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.9.2-1.8.8-hotfix</version>
+    <version>3.9.2-1.8.8</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
     <name>ChestShop</name>
 
@@ -48,6 +48,10 @@
         <repository>
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
+        </repository>
+        <repository>
+            <id>reserve-repo</id>
+            <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
     </repositories>
 
@@ -272,6 +276,13 @@
             <groupId>de.themoep.showitem</groupId>
             <artifactId>api</artifactId>
             <version>1.2.24</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.tnemc</groupId>
+            <artifactId>Reserve</artifactId>
+            <version>0.1.0.10</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

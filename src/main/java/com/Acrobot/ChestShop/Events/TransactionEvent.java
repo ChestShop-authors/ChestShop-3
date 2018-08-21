@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Acrobot
  */
-public class TransactionEvent extends Event {
+public class TransactionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final TransactionType type;
 
@@ -29,6 +30,8 @@ public class TransactionEvent extends Event {
     private final double price;
 
     private final Sign sign;
+
+    private boolean cancelled = false;
 
     public TransactionEvent(PreTransactionEvent event, Sign sign) {
         this.type = event.getTransactionType();
@@ -131,6 +134,16 @@ public class TransactionEvent extends Event {
 
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 
     /**

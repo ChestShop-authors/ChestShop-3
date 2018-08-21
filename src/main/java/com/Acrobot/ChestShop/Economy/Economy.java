@@ -37,14 +37,14 @@ public class Economy {
         CurrencyAddEvent event = new CurrencyAddEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
-        return true;
+        return event.isAdded();
     }
 
     public static boolean subtract(UUID name, World world, double amount) {
         CurrencySubtractEvent event = new CurrencySubtractEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
-        return true;
+        return event.isSubtracted();
     }
 
     public static boolean hasEnough(UUID name, World world, double amount) {

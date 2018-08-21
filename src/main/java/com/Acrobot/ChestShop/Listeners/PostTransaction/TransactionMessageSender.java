@@ -24,7 +24,7 @@ import java.util.UUID;
  * @author Acrobot
  */
 public class TransactionMessageSender implements Listener {
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onTransaction(TransactionEvent event) {
         if (event.getTransactionType() == TransactionEvent.TransactionType.BUY) {
             sendBuyMessage(event);

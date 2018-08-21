@@ -4,8 +4,7 @@ version: '${bukkit.plugin.version}'
 author: Acrobot
 authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
-depend: [Vault]
-softdepend: [LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence, ShowItem]
+softdepend: [Vault, Reserve, LWC, Lockette, Deadbolt, OddItem, WorldGuard, Heroes, SimpleChestLock, Residence, ShowItem]
 
 commands:
   iteminfo:
@@ -47,10 +46,14 @@ permissions:
         ChestShop.shop.create.sell: true
   ChestShop.shop.create.buy:
     description: Allows the user to create a shop that sells any item
+  ChestShop.shop.create.buy.(itemType):
+    description: Allows the user to create a shop that sells items with itemType like in the permission node (replace (itemType) with Material item name)
   ChestShop.shop.create.sell:
-    description: Allows the user to create a shop that buy any item
+    description: Allows the user to create a shop that buys any item
+  ChestShop.shop.create.sell.(itemType):
+    description: Allows the user to create a shop that buys items with itemType like in the permission node (replace (itemType) with Material item name)
   ChestShop.shop.create.(itemType):
-    description: Allows user to create a shop that sells item with itemType like in the permission node (replace (itemType) with Material item name)
+    description: Allows user to create a shop that sells items with itemType like in the permission node (replace (itemType) with Material item name)
   ChestShop.shop.buy.(itemType):
     description: Allows user to buy certain (itemType) from a shop (replace (itemType) with the Material item name)
   ChestShop.shop.sell.(itemType):

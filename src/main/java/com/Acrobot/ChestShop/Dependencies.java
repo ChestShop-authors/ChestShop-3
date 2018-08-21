@@ -2,9 +2,11 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import net.tnemc.core.Reserve;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +17,7 @@ import org.bukkit.plugin.PluginManager;
  * @author Acrobot
  */
 public class Dependencies {
-    public static void loadPlugins() {
+    public static boolean loadPlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         for (String dependency : ChestShop.getDependencies()) {
@@ -26,19 +28,32 @@ public class Dependencies {
             }
         }
 
-        loadEconomy();
+        return loadEconomy();
     }
 
-    private static void loadEconomy() {
-        String plugin = "Vault";
-        Listener economy = VaultListener.initializeVault();
+    private static boolean loadEconomy() {
+        String plugin = "none";
+
+        Listener economy = null;
+
+        if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
+            plugin = "Reserve";
+            economy = ReserveListener.prepareListener();
+        }
+
+        if(Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            plugin = "Vault";
+            economy = VaultListener.initializeVault();
+        }
 
         if (economy == null) {
-            return;
+            ChestShop.getBukkitLogger().severe("No Economy plugin found! You need to install either Vault or Reserve and a compatible economy!");
+            return false;
         }
 
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded! Found an economy plugin!");
+        return true;
     }
 
     private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)

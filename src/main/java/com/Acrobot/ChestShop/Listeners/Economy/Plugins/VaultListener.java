@@ -37,7 +37,14 @@ public class VaultListener implements Listener {
     public static Economy getProvider() { return provider; }
 
     public boolean transactionCanFail() {
-        return provider.getName().equals("Gringotts") || provider.getName().equals("GoldIsMoney") || provider.getName().equals("MultiCurrency");
+        if (provider == null) {
+            return false;
+        }
+
+        return provider.getName().equals("Gringotts")
+                || provider.getName().equals("GoldIsMoney")
+                || provider.getName().equals("MultiCurrency")
+                || provider.getName().equalsIgnoreCase("TheNewEconomy");
     }
 
     /**
@@ -139,7 +146,8 @@ public class VaultListener implements Listener {
 		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
         }
     }
 
@@ -154,25 +162,28 @@ public class VaultListener implements Listener {
 		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+            event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
         }
     }
 
     @EventHandler
-    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
+    public void onCurrencyTransfer(CurrencyTransferEvent event) {
         if (event.hasBeenTransferred()) {
             return;
         }
 
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
-        ChestShop.callEvent(currencySubtractEvent);
+        onCurrencySubtraction(currencySubtractEvent);
 
         if (!currencySubtractEvent.isSubtracted()) {
             return;
         }
 
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
-        ChestShop.callEvent(currencyAddEvent);
+        onCurrencyAdd(currencyAddEvent);
+
+        event.setTransferred(currencyAddEvent.isAdded());
     }
 
     @EventHandler
