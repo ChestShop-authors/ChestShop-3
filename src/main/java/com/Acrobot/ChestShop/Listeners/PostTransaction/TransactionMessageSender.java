@@ -1,24 +1,17 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
-import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * @author Acrobot
@@ -68,8 +61,13 @@ public class TransactionMessageSender implements Listener {
     }
     
     private static void sendMessage(Player player, String rawMessage, TransactionEvent event, String... replacements) {
+        Location loc = event.getSign().getLocation();
         String message = Messages.prefix(rawMessage)
-                .replace("%price", Economy.formatBalance(event.getPrice()));
+                .replace("%price", Economy.formatBalance(event.getPrice()))
+                .replace("%world", loc.getWorld().getName())
+                .replace("%x", String.valueOf(loc.getBlockX()))
+                .replace("%y", String.valueOf(loc.getBlockY()))
+                .replace("%z", String.valueOf(loc.getBlockZ()));
         
         for (int i = 0; i + 1 < replacements.length; i+=2) {
             message = message.replace("%" + replacements[i], replacements[i + 1]);
@@ -78,18 +76,7 @@ public class TransactionMessageSender implements Listener {
         if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, event.getStock())) {
             return;
         }
-        player.sendMessage(message.replace("%item", parseItemInformation(event.getStock())));
+        player.sendMessage(message.replace("%item", MaterialUtil.getItemList(event.getStock())));
     }
 
-    private static String parseItemInformation(ItemStack[] items) {
-        ItemStack[] stock = InventoryUtil.mergeSimilarStacks(items);
-
-        List<String> itemText = new ArrayList<>();
-
-        for (ItemStack item : stock) {
-            itemText.add(item.getAmount() + " " + MaterialUtil.getName(item));
-        }
-
-        return StringUtil.joinArray(itemText);
-    }
 }
