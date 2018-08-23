@@ -1,11 +1,11 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
-import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -51,13 +51,13 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOW_MESSAGE_FULL_SHOP && !Properties.CSTOGGLE_TOGGLES_FULL_SHOP || !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
                     Location loc = event.getSign().getLocation();
                     String messageNotEnoughSpace = Messages.prefix(NOT_ENOUGH_SPACE_IN_YOUR_SHOP)
-                            .replace("%material", getItemNames(event.getStock()))
+                            .replace("%price", Economy.formatBalance(event.getPrice()))
                             .replace("%seller", event.getClient().getName())
                             .replace("%world", loc.getWorld().getName())
                             .replace("%x", String.valueOf(loc.getBlockX()))
                             .replace("%y", String.valueOf(loc.getBlockY()))
                             .replace("%z", String.valueOf(loc.getBlockZ()));
-                    sendMessageToOwner(event.getOwnerAccount(), messageNotEnoughSpace);
+                    sendMessageToOwner(event.getOwnerAccount(), messageNotEnoughSpace, event.getStock());
                 }
                 message = Messages.NOT_ENOUGH_SPACE_IN_CHEST;
                 break;
@@ -71,13 +71,13 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOW_MESSAGE_OUT_OF_STOCK && !Properties.CSTOGGLE_TOGGLES_OUT_OF_STOCK || !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
                     Location loc = event.getSign().getLocation();
                     String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP)
-                            .replace("%material", getItemNames(event.getStock()))
+                            .replace("%price", Economy.formatBalance(event.getPrice()))
                             .replace("%buyer", event.getClient().getName())
                             .replace("%world", loc.getWorld().getName())
                             .replace("%x", String.valueOf(loc.getBlockX()))
                             .replace("%y", String.valueOf(loc.getBlockY()))
                             .replace("%z", String.valueOf(loc.getBlockZ()));
-                    sendMessageToOwner(event.getOwnerAccount(), messageOutOfStock);
+                    sendMessageToOwner(event.getOwnerAccount(), messageOutOfStock, event.getStock());
                 }
                 message = Messages.NOT_ENOUGH_STOCK;
                 break;
@@ -104,22 +104,14 @@ public class ErrorMessageSender implements Listener {
         }
     }
 
-    private static String getItemNames(ItemStack[] stock) {
-        ItemStack[] items = InventoryUtil.mergeSimilarStacks(stock);
-
-        StringBuilder names = new StringBuilder(MaterialUtil.getName(items[0]));
-
-        for (int i = 1; i < items.length; i++) {
-            names.append(MaterialUtil.getName(items[i])).append(',').append(' ');
-        }
-
-        return names.toString();
-    }
-
-    private static void sendMessageToOwner(Account ownerAccount, String message) {
+    private static void sendMessageToOwner(Account ownerAccount, String message, ItemStack... stock) {
         Player player = Bukkit.getPlayer(ownerAccount.getUuid());
         if (player != null) {
-            player.sendMessage(message);
+            message = message.replace("%material", "%item");
+            if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, stock)) {
+                return;
+            }
+            player.sendMessage(message.replace("%item", MaterialUtil.getItemList(stock)));
         }
     }
 }
