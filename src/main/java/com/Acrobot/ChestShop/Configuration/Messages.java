@@ -30,19 +30,19 @@ public class Messages {
     public static String NOT_ENOUGH_SPACE_IN_INVENTORY = "You haven't got enough space in inventory!";
     public static String NOT_ENOUGH_SPACE_IN_CHEST = "There isn't enough space in chest!";
     public static String NOT_ENOUGH_ITEMS_TO_SELL = "You don't have enough items to sell!";
-    public static String NOT_ENOUGH_SPACE_IN_YOUR_SHOP = "%material&7 shop at &r%world/%x/%y/%z&7 is full! (%seller tried to sell)";
+    public static String NOT_ENOUGH_SPACE_IN_YOUR_SHOP = "%price %item&7 shop at &r%world/%x/%y/%z&7 is full! (%seller tried to sell)";
 
     @PrecededBySpace
     public static String NOT_ENOUGH_STOCK = "This shop is out of stock.";
-    public static String NOT_ENOUGH_STOCK_IN_YOUR_SHOP = "%material&7 shop at &r%world/%x/%y/%z&7 is out of stock! (%buyer tried to buy)";
+    public static String NOT_ENOUGH_STOCK_IN_YOUR_SHOP = "%price %item&7 shop at &r%world/%x/%y/%z&7 is out of stock! (%buyer tried to buy)";
 
     @PrecededBySpace
     public static String YOU_BOUGHT_FROM_SHOP = "You bought %item from %owner for %price.";
-    public static String SOMEBODY_BOUGHT_FROM_YOUR_SHOP = "%buyer bought %item for %price from you.";
+    public static String SOMEBODY_BOUGHT_FROM_YOUR_SHOP = "%buyer bought %item for %price from your shop at %world/%x/%y/%z.";
 
     @PrecededBySpace
     public static String YOU_SOLD_TO_SHOP = "You sold %item to %buyer for %price.";
-    public static String SOMEBODY_SOLD_TO_YOUR_SHOP = "%seller sold %item for %price to you.";
+    public static String SOMEBODY_SOLD_TO_YOUR_SHOP = "%seller sold %item for %price to your shop at %world/%x/%y/%z.";
 
     @PrecededBySpace
     public static String YOU_CANNOT_CREATE_SHOP = "You can't create this type of shop!";

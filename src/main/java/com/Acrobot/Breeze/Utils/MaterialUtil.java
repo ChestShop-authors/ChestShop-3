@@ -108,6 +108,24 @@ public class MaterialUtil {
     }
 
     /**
+     * Get a list with item information
+     *
+     * @param items The items to get the information from
+     * @return The list, including the amount and names of the items
+     */
+    public static String getItemList(ItemStack[] items) {
+        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
+
+        List<String> itemText = new ArrayList<>();
+
+        for (ItemStack item : mergedItems) {
+            itemText.add(item.getAmount() + " " + getName(item));
+        }
+
+        return String.join(", ", itemText);
+    }
+
+    /**
      * Returns item's name
      *
      * @param itemStack ItemStack to name
@@ -440,7 +458,7 @@ public class MaterialUtil {
             List<String> itemJson = new ArrayList<>();
             for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
                 try {
-                    itemJson.add(showItem.getItemConverter().createComponent(item, Level.OFF).toJsonString(player));
+                    itemJson.add(showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player));
                 } catch (Exception e) {
                     ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());
                     return false;
