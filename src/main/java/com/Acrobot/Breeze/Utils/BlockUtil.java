@@ -3,7 +3,6 @@ package com.Acrobot.Breeze.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -36,7 +35,7 @@ public class BlockUtil {
      * @return Is this block a chest?
      */
     public static boolean isChest(Block block) {
-        return block.getState() instanceof Chest;
+        return block.getBlockData() instanceof org.bukkit.block.data.type.Chest;
     }
 
     /**
@@ -46,7 +45,7 @@ public class BlockUtil {
      * @return Is this holder a chest?
      */
     public static boolean isChest(InventoryHolder holder) {
-        return holder instanceof Chest || holder instanceof DoubleChest;
+        return holder instanceof org.bukkit.block.Chest || holder instanceof DoubleChest;
     }
 
     /**
