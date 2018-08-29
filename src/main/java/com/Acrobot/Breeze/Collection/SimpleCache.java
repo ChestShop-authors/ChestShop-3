@@ -40,7 +40,7 @@ public class SimpleCache<K, V> {
         }
     }
 
-    private boolean contains(K key) {
+    public boolean contains(K key) {
         return map.containsKey(key);
     }
 }

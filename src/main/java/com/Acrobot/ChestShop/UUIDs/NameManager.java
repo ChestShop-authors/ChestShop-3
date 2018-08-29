@@ -34,9 +34,11 @@ public class NameManager {
     private static SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
     private static SimpleCache<UUID, Account> uuidToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
     private static SimpleCache<String, Account> shortToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
+    private static SimpleCache<String, Boolean> invalidPlayers = new SimpleCache<>(Properties.CACHE_SIZE);
 
     private static Account adminAccount;
     private static Account serverEconomyAccount;
+    private static int uuidVersion = -1;
 
     /**
      * Get account info from a UUID
@@ -102,26 +104,38 @@ public class NameManager {
      */
     public static Account getAccountFromShortName(String shortName) {
         Validate.notEmpty(shortName, "shortName cannot be null or empty!");
+        Account account = null;
+
         if (shortName.length() > 15) {
-            return getAccount(shortName);
+            account = getAccount(shortName);
+        } else {
+            try {
+                account = shortToAccount.get(shortName, () -> {
+                    try {
+                        Account a = accounts.queryBuilder().where().eq("shortName", shortName).queryForFirst();
+                        if (a != null) {
+                            a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            return a;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
+                    }
+                    throw new Exception("Could not find account for " + shortName);
+                });
+            } catch (ExecutionException ignored) {}
         }
 
-        try {
-            return shortToAccount.get(shortName, () -> {
-                try {
-                    Account account = accounts.queryBuilder().where().eq("shortName", shortName).queryForFirst();
-                    if (account != null) {
-                        account.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        return account;
-                    }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
-                }
-                throw new Exception("Could not find account for " + shortName);
-            });
-        } catch (ExecutionException ignored) {
-            return null;
+        if (account == null && !invalidPlayers.contains(shortName.toLowerCase())) {
+            // no account with that shortname was found, try to get an offline player with that name
+            OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(shortName);
+            if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
+                    && offlinePlayer.getUniqueId().version() == uuidVersion) {
+                account = storeUsername(new PlayerDTO(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
+            } else {
+                invalidPlayers.put(shortName.toLowerCase(), true);
+            }
         }
+        return account;
     }
 
     /**
@@ -222,8 +236,9 @@ public class NameManager {
      * Store the username of a player into the database and the username-uuid cache
      *
      * @param player The data transfer object of the player to store
+     * @return The stored/updated account. <tt>null</tt> if there was an error updating it
      */
-    public static void storeUsername(final PlayerDTO player) {
+    public static Account storeUsername(final PlayerDTO player) {
         final UUID uuid = player.getUniqueId();
 
         Account latestAccount = null;
@@ -243,11 +258,14 @@ public class NameManager {
             accounts.createOrUpdate(latestAccount);
         } catch (SQLException e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
+            return null;
         }
 
         usernameToAccount.put(latestAccount.getName(), latestAccount);
         uuidToAccount.put(uuid, latestAccount);
         shortToAccount.put(latestAccount.getShortName(), latestAccount);
+
+        return latestAccount;
     }
 
     /**
@@ -317,4 +335,11 @@ public class NameManager {
         return serverEconomyAccount;
     }
 
+    public static void setUuidVersion(int uuidVersion) {
+        NameManager.uuidVersion = uuidVersion;
+    }
+
+    public static int getUuidVersion() {
+        return uuidVersion;
+    }
 }
