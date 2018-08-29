@@ -2,11 +2,14 @@ package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.bukkit.BukkitUtil;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.internal.permission.RegionPermissionModel;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -19,9 +22,11 @@ import org.bukkit.event.Listener;
  */
 public class WorldGuardProtection implements Listener {
     private WorldGuardPlugin worldGuard;
+    private WorldGuardPlatform worldGuardPlatform;
 
     public WorldGuardProtection(WorldGuardPlugin worldGuard) {
         this.worldGuard = worldGuard;
+        this.worldGuardPlatform = WorldGuard.getInstance().getPlatform();
     }
 
     @EventHandler
@@ -33,8 +38,11 @@ public class WorldGuardProtection implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        Vector blockPos = BukkitUtil.toVector(block);
-        RegionManager manager = worldGuard.getRegionManager(block.getWorld());
+        Vector blockPos = BukkitAdapter.adapt(block.getLocation()).toVector();
+        RegionManager manager = worldGuardPlatform.getRegionContainer().get(BukkitAdapter.adapt(block.getWorld()));
+        if (manager == null) {
+            return;
+        }
         ApplicableRegionSet set = manager.getApplicableRegions(blockPos);
 
         LocalPlayer localPlayer = worldGuard.wrapPlayer(player);
@@ -45,8 +53,8 @@ public class WorldGuardProtection implements Listener {
     }
 
     private boolean canAccess(LocalPlayer player, Block block, ApplicableRegionSet set) {
-        return worldGuard.getGlobalRegionManager().hasBypass(player, block.getWorld())
-                || set.testState(player, DefaultFlag.BUILD)
-                || set.testState(player, DefaultFlag.CHEST_ACCESS);
+        return new RegionPermissionModel(player).mayIgnoreRegionProtection(BukkitAdapter.adapt(block.getWorld()))
+                || set.testState(player, Flags.BUILD)
+                || set.testState(player, Flags.CHEST_ACCESS);
     }
 }

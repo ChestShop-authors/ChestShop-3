@@ -86,6 +86,12 @@ public class ChestShop extends JavaPlugin {
         plugin = this;
     }
 
+    @Override
+    public void onLoad() {
+        Dependencies.initializePlugins();
+    }
+
+    @Override
     public void onEnable() {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);

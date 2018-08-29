@@ -6,7 +6,6 @@ import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import net.tnemc.core.Reserve;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -17,7 +16,8 @@ import org.bukkit.plugin.PluginManager;
  * @author Acrobot
  */
 public class Dependencies {
-    public static boolean loadPlugins() {
+
+    public static void initializePlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         for (String dependency : ChestShop.getDependencies()) {
@@ -25,6 +25,40 @@ public class Dependencies {
 
             if (plugin != null) {
                 initializePlugin(dependency, plugin);
+            }
+        }
+    }
+
+    private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+        Dependency dependency;
+
+        try {
+            dependency = Dependency.valueOf(name);
+        } catch (IllegalArgumentException exception) {
+            return;
+        }
+
+        switch (dependency) {
+            //Terrain protection plugins
+            case WorldGuard:
+                if (Properties.WORLDGUARD_USE_FLAG) {
+                    WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
+                }
+                break;
+        }
+
+        PluginDescriptionFile description = plugin.getDescription();
+        ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " loaded.");
+    }
+
+    public static boolean loadPlugins() {
+        PluginManager pluginManager = Bukkit.getPluginManager();
+
+        for (String dependency : ChestShop.getDependencies()) {
+            Plugin plugin = pluginManager.getPlugin(dependency);
+
+            if (plugin != null) {
+                loadPlugin(dependency, plugin);
             }
         }
 
@@ -56,7 +90,7 @@ public class Dependencies {
         return true;
     }
 
-    private static void initializePlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+    private static void loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
         Dependency dependency;
 
         try {
