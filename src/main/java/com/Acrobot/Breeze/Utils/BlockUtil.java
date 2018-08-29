@@ -60,7 +60,7 @@ public class BlockUtil {
         if (blockData instanceof WallSign) {
             direction = ((Directional) blockData).getFacing().getOppositeFace();
         } else if (blockData instanceof Sign) {
-            direction = getMajorDirection(((Rotatable) blockData).getRotation().getOppositeFace());
+            direction = BlockFace.DOWN;
         } else {
             throw new IllegalArgumentException("Cannot get direction of " + blockData.getClass().getSimpleName());
         }
