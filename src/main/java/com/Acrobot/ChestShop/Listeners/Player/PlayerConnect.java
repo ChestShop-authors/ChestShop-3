@@ -17,6 +17,10 @@ public class PlayerConnect implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public static void onPlayerConnect(final PlayerJoinEvent event) {
+        if (NameManager.getUuidVersion() < 0) {
+            NameManager.setUuidVersion(event.getPlayer().getUniqueId().version());
+        }
+
         final PlayerDTO playerDTO = new PlayerDTO(event.getPlayer());
 
         Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
