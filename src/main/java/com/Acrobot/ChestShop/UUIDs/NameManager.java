@@ -103,6 +103,11 @@ public class NameManager {
      * @throws IllegalArgumentException if the username is empty
      */
     public static Account getAccountFromShortName(String shortName) {
+        return getAccountFromShortName(shortName, true);
+    }
+
+    private static Account getAccountFromShortName(String shortName, boolean searchOfflinePlayer) {
+
         Validate.notEmpty(shortName, "shortName cannot be null or empty!");
         Account account = null;
 
@@ -125,7 +130,7 @@ public class NameManager {
             } catch (ExecutionException ignored) {}
         }
 
-        if (account == null && !invalidPlayers.contains(shortName.toLowerCase())) {
+        if (account == null && searchOfflinePlayer && !invalidPlayers.contains(shortName.toLowerCase())) {
             // no account with that shortname was found, try to get an offline player with that name
             OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(shortName);
             if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
@@ -277,14 +282,14 @@ public class NameManager {
     private static String getNewShortenedName(PlayerDTO player) {
         String shortenedName = NameUtil.stripUsername(player.getName());
 
-        Account account = getAccountFromShortName(shortenedName);
+        Account account = getAccountFromShortName(shortenedName, false);
         if (account == null) {
             return shortenedName;
         }
         for (int id = 0; account != null; id++) {
             String baseId = Base62.encode(id);
             shortenedName = NameUtil.stripUsername(player.getName(), 15 - 1 - baseId.length()) + ":" + baseId;
-            account = getAccountFromShortName(shortenedName);
+            account = getAccountFromShortName(shortenedName, false);
         }
 
         return shortenedName;
@@ -299,7 +304,7 @@ public class NameManager {
             return true;
         }
 
-        Account account = getAccountFromShortName(name);
+        Account account = getAccountFromShortName(name, false);
         return account != null && (account.getUuid().equals(player.getUniqueId())
                 || (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, account.getName())));
     }
