@@ -68,6 +68,9 @@ public class Properties {
     @ConfigurationComment("How much money do you get back when destroying a sign?")
     public static double SHOP_REFUND_PRICE = 0;
 
+    @ConfigurationComment("How many decimal places are allowed at a maximum for prices?")
+    public static int PRICE_PRECISION = 2;
+
     @PrecededBySpace
     @ConfigurationComment("Should we block shops that sell things for more than they buy? (This prevents newbies from creating shops that would be exploited)")
     public static boolean BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE = true;
