@@ -86,7 +86,7 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        String formatted = name.toUpperCase();
+        String formatted = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").replace(' ', '_').toUpperCase();
 
         Material material = MATERIAL_CACHE.get(formatted);
         if (material != null) {
@@ -211,8 +211,13 @@ public class MaterialUtil {
         if (width <= maxWidth) {
             return itemName;
         }
-        int exceeding = width - maxWidth;
         String[] itemParts = itemName.split(" ");
+        itemName = String.join("", itemParts);
+        width = getMinecraftStringWidth(itemName);
+        if (width <= maxWidth) {
+            return itemName;
+        }
+        int exceeding = width - maxWidth;
         int shortestIndex = 0;
         int longestIndex = 0;
         for (int i = 0; i < itemParts.length; i++) {
@@ -259,7 +264,7 @@ public class MaterialUtil {
                 exceeding -= endWidth;
             }
         }
-        return String.join(" ", itemParts);
+        return String.join("", itemParts);
     }
 
     /**
@@ -342,13 +347,11 @@ public class MaterialUtil {
 
     private static class EnumParser<E extends Enum<E>> {
         private E parse(String name, E[] values) {
-            name = name.toUpperCase();
-
             try {
-                return E.valueOf(values[0].getDeclaringClass(), name);
+                return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase());
             } catch (IllegalArgumentException exception) {
                 E currentEnum = null;
-                String[] typeParts = name.split("[ _]");
+                String[] typeParts = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").toUpperCase().split("[ _]");
                 int length = Short.MAX_VALUE;
                 for (E e : values) {
                     String enumName = e.name();
