@@ -6,26 +6,18 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
 import info.somethingodd.OddItem.OddItem;
-import org.bukkit.CoalType;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.SandstoneType;
-import org.bukkit.TreeSpecies;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.*;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -188,14 +180,14 @@ public class MaterialUtil {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
 
-        int codeWidth = getMinecraftStringWidth(itemName + durability + metaData);
-        String code = itemName;
+        String code = StringUtil.capitalizeFirstLetter(itemName, '_');
+        int codeWidth = getMinecraftStringWidth(code + durability + metaData);
         if (maxWidth > 0 && codeWidth > maxWidth) {
             int exceeding = codeWidth - maxWidth;
             code = getShortenedName(code, getMinecraftStringWidth(code) - exceeding);
         }
 
-        code = StringUtil.capitalizeFirstLetter(code, '_') + durability + metaData;
+        code += durability + metaData;
 
         ItemStack codeItem = getItem(code);
         if (!equals(itemStack, codeItem)) {
@@ -214,12 +206,13 @@ public class MaterialUtil {
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
+        itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
         int width = getMinecraftStringWidth(itemName);
         if (width <= maxWidth) {
             return itemName;
         }
         int exceeding = width - maxWidth;
-        String[] itemParts = itemName.split("_");
+        String[] itemParts = itemName.split(" ");
         int shortestIndex = 0;
         int longestIndex = 0;
         for (int i = 0; i < itemParts.length; i++) {
@@ -230,10 +223,18 @@ public class MaterialUtil {
                 shortestIndex = i;
             }
         }
+        int shortestWidth = getMinecraftStringWidth(itemParts[shortestIndex]);
+        int longestWidth = getMinecraftStringWidth(itemParts[longestIndex]);
+        int remove = longestWidth - shortestWidth;
+        while (remove > 0 && exceeding > 0) {
+            int endWidth = getMinecraftCharWidth(itemParts[longestIndex].charAt(itemParts[longestIndex].length() - 1));
+            itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - 1);
+            remove -= endWidth;
+            exceeding -= endWidth;
+        }
+
         for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
-            int remove = 0;
             int partWidth = getMinecraftStringWidth(itemParts[i]);
-            int shortestWidth = getMinecraftStringWidth(itemParts[shortestIndex]);
 
             if (partWidth > shortestWidth) {
                 remove = partWidth - shortestWidth;
@@ -258,7 +259,7 @@ public class MaterialUtil {
                 exceeding -= endWidth;
             }
         }
-        return String.join("_", itemParts);
+        return String.join(" ", itemParts);
     }
 
     /**
