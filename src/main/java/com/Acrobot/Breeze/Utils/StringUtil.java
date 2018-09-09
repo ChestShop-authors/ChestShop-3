@@ -77,4 +77,39 @@ public class StringUtil {
 
         return output;
     }
+
+    private static String characters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_'abcdefghijklmnopqrstuvwxyz{|}~¦ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×áíóúñÑªº¿®¬½¼¡«»";
+    private static int[] extraWidth = {4,2,5,6,6,6,6,3,5,5,5,6,2,6,2,6,6,6,6,6,6,6,6,6,6,6,2,2,5,6,5,6,7,6,6,6,6,6,6,6,6,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,6,4,6,6,3,6,6,6,6,6,5,6,6,2,6,5,3,6,6,6,6,6,6,6,4,6,6,6,6,6,6,5,2,5,7,6,6,6,6,6,6,6,6,6,6,6,6,4,6,3,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,4,6,6,3,6,6,6,6,6,6,6,7,6,6,6,2,6,6,8,9,9,6,6,6,8,8,6,8,8,8,8,8,6,6,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,6,9,9,9,5,9,9,8,7,7,8,7,8,8,8,7,8,8,7,9,9,6,7,7,7,7,7,9,6,7,8,7,6,6,9,7,6,7,1};
+
+    /**
+     * Get the width that a character is displayed with in the default resource pack.
+     * This relies on a hardcoded character to width mapping and might not be precise in places.
+     * @param c The character to get the width of
+     * @return The width of the character (will return 10 for characters that we don't know the width of)
+     */
+    public static int getMinecraftCharWidth(char c) {
+        if (c != ChatColor.COLOR_CHAR) {
+            int index = characters.indexOf(c);
+            if (index > -1) {
+                return extraWidth[index];
+            } else {
+                return 10;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get the width that a string is displayed with in the default resource pack.
+     * This relies on a hardcoded character to width mapping and might not be precise in places.
+     * @param string The string to get the width of
+     * @return The width of the string
+     */
+    public static int getMinecraftStringWidth(String string) {
+        int width = 0;
+        for (char c : string.toCharArray()) {
+            width += getMinecraftCharWidth(c);
+        }
+        return width;
+    }
 }

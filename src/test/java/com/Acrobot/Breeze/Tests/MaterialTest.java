@@ -29,7 +29,7 @@ public class MaterialTest {
     @Test
     public void testCodes() {
         for (Material material : Material.values()) {
-            String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_LETTERS);
+            String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_WIDTH);
             assertSame(material, MaterialUtil.getMaterial(shortenedName));
         }
     }

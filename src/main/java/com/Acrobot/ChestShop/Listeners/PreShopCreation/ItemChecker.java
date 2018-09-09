@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
@@ -57,7 +58,7 @@ public class ItemChecker implements Listener {
 
         itemCode = MaterialUtil.getSignName(item);
 
-        if (itemCode.length() > MAXIMUM_SIGN_LETTERS) {
+        if (StringUtil.getMinecraftStringWidth(itemCode) > MAXIMUM_SIGN_WIDTH) {
             event.setOutcome(INVALID_ITEM);
             return;
         }

@@ -31,6 +31,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftCharWidth;
+import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
+
 /**
  * @author Acrobot
  */
@@ -40,7 +43,13 @@ public class MaterialUtil {
 
     public static final boolean LONG_NAME = true;
     public static final boolean SHORT_NAME = false;
+    /**
+     * @deprecated Use {@link MaterialUtil#MAXIMUM_SIGN_WIDTH}
+     */
+    @Deprecated
     public static final short MAXIMUM_SIGN_LETTERS = 15;
+    // 15 dashes fit on one sign line with the default resource pack:
+    public static final int MAXIMUM_SIGN_WIDTH = (short) getMinecraftStringWidth("---------------");
 
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
@@ -172,17 +181,17 @@ public class MaterialUtil {
      * @return ItemStack's name
      */
     public static String getSignName(ItemStack itemStack) {
-        return getName(itemStack, MAXIMUM_SIGN_LETTERS);
+        return getName(itemStack, MAXIMUM_SIGN_WIDTH);
     }
 
     /**
-     * Returns item's name, with a maximum length
+     * Returns item's name, with a maximum width
      *
      * @param itemStack ItemStack to name
-     * @param maxLength The max length that the name should have; 0 or below if it should be unlimited
+     * @param maxWidth The max width that the name should have; 0 or below if it should be unlimited
      * @return ItemStack's name
      */
-    public static String getName(ItemStack itemStack, int maxLength) {
+    public static String getName(ItemStack itemStack, int maxWidth) {
         String alias = Odd.getAlias(itemStack);
         String itemName = alias != null ? alias : itemStack.getType().toString();
         if (itemStack.getType() != Material.HUGE_MUSHROOM_2 && itemName.endsWith("_2")) {
@@ -203,18 +212,18 @@ public class MaterialUtil {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
 
-        int codeLength = (data + itemName + durability + metaData).length();
+        int codeWidth = getMinecraftStringWidth(data + itemName + durability + metaData);
         String code = data + itemName;
-        if (maxLength > 0 && codeLength > maxLength) {
-            int exceeding = codeLength - maxLength;
-            code = getShortenedName(code, code.length() - exceeding);
+        if (maxWidth > 0 && codeWidth > maxWidth) {
+            int exceeding = codeWidth - maxWidth;
+            code = getShortenedName(code, getMinecraftStringWidth(code) - exceeding);
         }
 
         code = StringUtil.capitalizeFirstLetter(code, '_') + durability + metaData;
 
         ItemStack codeItem = getItem(code);
         if (!equals(itemStack, codeItem)) {
-            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxLength
+            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxWidth
                     + " (code " + code + " results in item " + codeItem + ")");
         }
 
@@ -225,43 +234,62 @@ public class MaterialUtil {
      * Get an item name shortened to a max length that is still reversable by {@link #getMaterial(String)}
      *
      * @param itemName  The name of the item
-     * @param maxLength The max length
+     * @param maxWidth  The max width
      * @return The name shortened to the max length
      */
-    public static String getShortenedName(String itemName, int maxLength) {
-        if (itemName.length() <= maxLength) {
+    public static String getShortenedName(String itemName, int maxWidth) {
+        int width = getMinecraftStringWidth(itemName);
+        if (width <= maxWidth) {
             return itemName;
         }
-        int exceeding = itemName.length() - maxLength;
+        int exceeding = width - maxWidth;
         String[] itemParts = itemName.split("_");
         int shortestIndex = 0;
         int longestIndex = 0;
         for (int i = 0; i < itemParts.length; i++) {
-            if (itemParts[longestIndex].length() < itemParts[i].length()) {
+            if (getMinecraftStringWidth(itemParts[longestIndex]) < getMinecraftStringWidth(itemParts[i])) {
                 longestIndex = i;
             }
-            if (itemParts[shortestIndex].length() > itemParts[i].length()) {
+            if (getMinecraftStringWidth(itemParts[shortestIndex]) > getMinecraftStringWidth(itemParts[i])) {
                 shortestIndex = i;
             }
         }
-        if (itemParts[longestIndex].length() - itemParts[shortestIndex].length() > exceeding) {
-            itemParts[longestIndex] = itemParts[longestIndex].substring(0, itemParts[longestIndex].length() - exceeding);
+        String longest = itemParts[longestIndex];
+        String shortest = itemParts[shortestIndex];
+        if (getMinecraftStringWidth(longest) - getMinecraftStringWidth(shortest) > exceeding) {
+            int remove = exceeding;
+            while (remove > 0) {
+                int endWidth = getMinecraftCharWidth(longest.charAt(longest.length() - 1));
+                itemParts[longestIndex] = longest.substring(0, longest.length() - 1);
+                remove -= endWidth;
+            }
         } else {
             for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
                 int remove = 0;
-                if (itemParts[i].length() > itemParts[shortestIndex].length()) {
-                    remove = itemParts[i].length() - itemParts[shortestIndex].length();
+                int partWidth = getMinecraftStringWidth(itemParts[i]);
+                int shortestWidth = getMinecraftStringWidth(shortest);
+
+                if (partWidth > shortestWidth) {
+                    remove = partWidth - shortestWidth;
                 }
+
                 if (remove > exceeding) {
                     remove = exceeding;
                 }
-                itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - remove);
-                exceeding -= remove;
+
+                while (remove > 0) {
+                    int endWidth = getMinecraftCharWidth(itemParts[i].charAt(itemParts[i].length() - 1));
+                    itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
+                    remove -= endWidth;
+                    exceeding -= endWidth;
+                }
             }
+
             while (exceeding > 0) {
                 for (int i = itemParts.length - 1; i >= 0 && exceeding > 0; i--) {
+                    int endWidth = getMinecraftCharWidth(itemParts[i].charAt(itemParts[i].length() - 1));
                     itemParts[i] = itemParts[i].substring(0, itemParts[i].length() - 1);
-                    exceeding--;
+                    exceeding -= endWidth;
                 }
             }
         }
