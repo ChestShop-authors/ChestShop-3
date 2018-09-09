@@ -238,6 +238,7 @@ public class MaterialUtil {
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
+        itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
         int width = getMinecraftStringWidth(itemName);
         if (width <= maxWidth) {
             return itemName;
