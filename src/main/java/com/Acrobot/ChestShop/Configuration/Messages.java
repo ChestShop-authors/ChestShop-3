@@ -67,7 +67,7 @@ public class Messages {
     @PrecededBySpace
     public static String PLAYER_NOT_FOUND = "Player not found!";
     public static String NO_PERMISSION = "You don't have permissions to do that!";
-    public static String INCORRECT_ITEM_ID = "You have specified invalid item id!";
+    public static String INCORRECT_ITEM_ID = "You have specified an invalid item id!";
     public static String NOT_ENOUGH_PROTECTIONS = "Could not create a protection!";
 
     @PrecededBySpace

@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
@@ -33,22 +34,17 @@ public class ItemChecker implements Listener {
 
         if (item == null) {
             if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE)) {
-                boolean foundItem = false;
                 Chest chest = uBlock.findConnectedChest(event.getSign());
                 if (chest != null) {
                     for (ItemStack stack : chest.getInventory().getContents()) {
                         if (!MaterialUtil.isEmpty(stack)) {
-                            itemCode = MaterialUtil.getSignName(stack);
-
-                            event.setSignLine(ITEM_LINE, itemCode);
-                            foundItem = true;
-
+                            item = stack;
                             break;
                         }
                     }
                 }
 
-                if (!foundItem) {
+                if (item == null) {
                     event.setSignLine(ITEM_LINE, ChatColor.BOLD + ChestShopSign.AUTOFILL_CODE);
                     event.setOutcome(ITEM_AUTOFILL);
                     event.getPlayer().sendMessage(Messages.prefix(Messages.CLICK_TO_AUTOFILL_ITEM));
@@ -60,10 +56,14 @@ public class ItemChecker implements Listener {
             }
         }
 
-        if (itemCode.length() > MAXIMUM_SIGN_LETTERS) {
+        itemCode = MaterialUtil.getSignName(item);
+
+        if (StringUtil.getMinecraftStringWidth(itemCode) > MAXIMUM_SIGN_WIDTH) {
             event.setOutcome(INVALID_ITEM);
             return;
         }
+
+        event.setSignLine(ITEM_LINE, itemCode);
     }
 
     private static boolean isSameItem(String newCode, ItemStack item) {

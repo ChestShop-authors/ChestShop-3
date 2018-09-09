@@ -29,10 +29,11 @@ public class MaterialTest {
     @Test
     public void testCodes() {
         for (Material material : Material.values()) {
-            if (!material.isLegacy()) {
-                String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_LETTERS);
-                assertSame(shortenedName + " does not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
+            if (material.isLegacy()) {
+                continue;
             }
+            String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_WIDTH);
+            assertSame(material, MaterialUtil.getMaterial(shortenedName));
         }
     }
 }
