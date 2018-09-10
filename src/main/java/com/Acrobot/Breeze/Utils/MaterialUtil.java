@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
@@ -293,11 +294,13 @@ public class MaterialUtil {
         }
 
         itemStack = new ItemStack(material);
-        itemStack.setDurability(durability);
 
         ItemMeta meta = getMetadata(itemName);
 
         if (meta != null) {
+            if (meta instanceof Damageable) {
+                ((Damageable) meta).setDamage(durability);
+            }
             itemStack.setItemMeta(meta);
         }
 
