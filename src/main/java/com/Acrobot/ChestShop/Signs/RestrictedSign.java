@@ -58,7 +58,7 @@ public class RestrictedSign implements Listener {
 
             Sign sign = (Sign) connectedSign.getState();
 
-            if (!ChestShopSign.canAccess(player, sign) && !Permission.has(player, ADMIN)) {
+            if (!ChestShopSign.canAccess(player, sign)) {
                 dropSignAndCancelEvent(event);
             }
 
