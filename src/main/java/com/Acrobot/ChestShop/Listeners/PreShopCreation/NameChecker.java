@@ -22,7 +22,7 @@ public class NameChecker implements Listener {
         String name = event.getSignLine(NAME_LINE);
         Player player = event.getPlayer();
 
-        if (name.isEmpty() || (!NameManager.canUseName(player, name) && !Permission.has(player, Permission.ADMIN))) {
+        if (name.isEmpty() || !NameManager.canUseName(player, name)) {
             Account account = NameManager.getAccount(player.getName());
             if (account != null) {
                 event.setSignLine(NAME_LINE, account.getShortName());

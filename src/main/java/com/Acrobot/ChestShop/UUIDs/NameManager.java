@@ -297,7 +297,7 @@ public class NameManager {
 
     public static boolean canUseName(Player player, String name) {
         if (ChestShopSign.isAdminShop(name)) {
-            return false;
+            return Permission.has(player, Permission.ADMIN);
         }
 
         if (Permission.otherName(player, name)) {
