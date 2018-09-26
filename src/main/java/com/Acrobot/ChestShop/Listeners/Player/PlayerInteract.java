@@ -102,8 +102,10 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (canAccess) {
-            if (!Properties.ALLOW_SIGN_CHEST_OPEN || player.isSneaking() || player.isInsideVehicle() || player.getGameMode() == GameMode.CREATIVE) {
+        if (canAccess && !ChestShopSign.isAdminShop(sign)) {
+            if (!Properties.ALLOW_SIGN_CHEST_OPEN
+                    || player.isSneaking() || player.isInsideVehicle()
+                    || (Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
                 return;
             }
 
