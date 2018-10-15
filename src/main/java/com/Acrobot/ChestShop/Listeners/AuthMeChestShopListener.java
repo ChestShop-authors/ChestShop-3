@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners;
 
+import fr.xephi.authme.api.v3.AuthMeApi;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,11 +10,9 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome;
 
-import fr.xephi.authme.api.NewAPI;
-
 public class AuthMeChestShopListener implements Listener {
 
-    NewAPI AuthMeAPI = NewAPI.getInstance();
+    private AuthMeApi authmeApi = AuthMeApi.getInstance();
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPreTransaction(PreTransactionEvent event) {
@@ -26,15 +25,15 @@ public class AuthMeChestShopListener implements Listener {
             return;
         }
 
-        if (AuthMeAPI.isUnrestricted(player)) {
+        if (authmeApi.isUnrestricted(player)) {
             return;
         }
 
-        if (!AuthMeAPI.isRegistered(player.getName()) && Properties.AUTHME_ALLOW_UNREGISTERED) {
+        if (!authmeApi.isRegistered(player.getName()) && Properties.AUTHME_ALLOW_UNREGISTERED) {
             return;
         }
 
-        if (AuthMeAPI.isAuthenticated(player)) {
+        if (authmeApi.isAuthenticated(player)) {
             return;
         }
 
