@@ -1,0 +1,54 @@
+prefix: "&2[Shop] &r"
+iteminfo: "&aItem Information: &r"
+
+ACCESS_DENIED: "Du bist dafür nicht berechtigt!"
+
+NOT_ENOUGH_MONEY: "Du hast nicht genug Geld!"
+NOT_ENOUGH_MONEY_SHOP: "Der Shopbesitzer hat zu wenig Geld!"
+
+CLIENT_DEPOSIT_FAILED: "Geldtransfer auf deinen Account ist fehlgeschlagen!"
+SHOP_DEPOSIT_FAILED: "Geldtranser zum Shopbesitzer ist fehlgeschlagen!"
+NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+
+NO_BUYING_HERE: "Hier kannst du nichts kaufen!"
+NO_SELLING_HERE: "Hier kannst du nichts verkaufen!"
+
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Du hast im Inventar zu wenig Platz!"
+NOT_ENOUGH_SPACE_IN_CHEST: "In der Kiste ist zu wenig Platz!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Du hast nicht genug Item zu verkaufen!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "%price %item&7 shop bei &r%world/%x/%y/%z&7 ist voll! (%seller tried to sell)"
+
+NOT_ENOUGH_STOCK: "Dieser Shop ist leer."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "%price %item&7 shop bei &r%world/%x/%y/%z&7 is leer! (%buyer tried to buy)"
+
+YOU_BOUGHT_FROM_SHOP: "Du hast &e%item &ffür %price von &e%owner&f gekauft."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "&e%buyer &fhat &e%item &fzum Preis von &e%price &fgekauft. Dieser Shop befindet sich in %world/%x/%y/%z."
+YOU_SOLD_TO_SHOP: "Du hast &e%item &fan &e%buyer &fzum Preis von &e%price &fverkauft."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "&e%seller &fhat &e%item &fzum Preis von &e%price &fverkauft. Dieser Shop befindet sich in %world/%x/%y/%z."
+
+YOU_CANNOT_CREATE_SHOP: "Du kannst diese Art von Shops nicht erstellen!"
+NO_CHEST_DETECTED: "Es konnte keine Kiste gefunden werden!"
+INVALID_SHOP_DETECTED: "Der Shop kann nich benutzt werden!"
+CANNOT_ACCESS_THE_CHEST: "Du bist nicht befugt, auf diese Truhe zuzugreifen!"
+
+CLICK_TO_AUTOFILL_ITEM: "Klick mit dem Item auf das Schild, welches für den Shop gedacht ist!"
+NO_ITEM_IN_HAND: "Du hast kein Item in der Hand um es automatisch aufzufüllen!"
+
+PROTECTED_SHOP: "Erfolgreich mich LWC geschützt!"
+SHOP_CREATED: "Der Shop wurde erfolgreich erstellt!"
+SHOP_FEE_PAID: "Dir wurden %amount verrechnet"
+SHOP_REFUNDED: "Dir wurden %amount erstattet."
+ITEM_GIVEN: "Du gibst %item an %player."
+
+RESTRICTED_SIGN_CREATED: "Schild erfolgreich erstellt!"
+
+PLAYER_NOT_FOUND: "Spieler konnte nicht gefunden werden!"
+NO_PERMISSION: "Du bist dafür nicht berechtigt!"
+INCORRECT_ITEM_ID: "Du hast eine falsche ItemID verwendet!"
+NOT_ENOUGH_PROTECTIONS: "Es konnte keine Sicherung erstellt werden!"
+
+CANNOT_CREATE_SHOP_HERE: "Dir ist es nicht erlaubt, hier einen Shop zu erstellen!"
+
+TOGGLE_MESSAGES_OFF: "Du wirst nicht länger Nachrichten von deinen Shops erhalten."
+TOGGLE_MESSAGES_ON: "Du erhälst wieder Nachrichten von deinen Shops."
+
