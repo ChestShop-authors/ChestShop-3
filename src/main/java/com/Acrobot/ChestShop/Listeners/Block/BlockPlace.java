@@ -8,16 +8,19 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Acrobot
  */
 public class BlockPlace implements Listener {
-    private static BlockFace[] SEARCH_DIRECTIONS = {BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.DOWN};
 
     @EventHandler(ignoreCancelled = true)
     public static void onContainerPlace(BlockPlaceEvent event) {
@@ -66,7 +69,18 @@ public class BlockPlace implements Listener {
             return;
         }
 
-        for (BlockFace face : SEARCH_DIRECTIONS) {
+        List<BlockFace> searchDirections = new ArrayList<>();
+        switch (placed.getType()) {
+            case HOPPER:
+                searchDirections.add(BlockFace.UP);
+                searchDirections.add(((Directional) placed.getBlockData()).getFacing());
+                break;
+            case DROPPER:
+                searchDirections.add(((Directional) placed.getBlockData()).getFacing());
+                break;
+        }
+
+        for (BlockFace face : searchDirections) {
             Block relative = placed.getRelative(face);
 
             if (!uBlock.couldBeShopContainer(relative)) {
