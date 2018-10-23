@@ -1,21 +1,71 @@
 package com.Acrobot.ChestShop.Configuration;
 
 import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
+import com.Acrobot.Breeze.Configuration.Annotations.Parser;
 import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
+import com.Acrobot.Breeze.Configuration.Configuration;
+import com.Acrobot.Breeze.Configuration.ValueParser;
+import com.Acrobot.ChestShop.ChestShop;
+import org.bukkit.Material;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * @author Acrobot
  */
 public class Properties {
+    static {
+        Configuration.registerParser("StringSet", new ValueParser(){
+            public Object parseToJava(Object object) {
+                if (object instanceof Collection) {
+                    return new LinkedHashSet<>((Collection<String>) object);
+                }
+                return object;
+            }
+        });
+        Configuration.registerParser("MaterialSet", new ValueParser(){
+            public Object parseToJava(Object object) {
+                if (object instanceof Collection) {
+                    EnumSet<Material> set = EnumSet.noneOf(Material.class);
+                    for (Object o : (Collection) object) {
+                        if (o instanceof Material) {
+                            set.add((Material) o);
+                        } else if (o instanceof String) {
+                            try {
+                                set.add(Material.getMaterial(((String) o).toUpperCase()));
+                            } catch (IllegalArgumentException e) {
+                                ChestShop.getBukkitLogger().log(Level.WARNING, o + " is not a valid Material name in the config!");
+                            }
+                        }
+                    }
+                    return set;
+                }
+                return object;
+            }
+        });
+    }
+
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = false;
 
     @PrecededBySpace
     @ConfigurationComment("How large should the internal caches be?")
     public static int CACHE_SIZE = 1000;
+
+    @PrecededBySpace
+    @ConfigurationComment("What containers are allowed to hold a shop? (Only blocks with inventories work!)")
+    @Parser("MaterialSet")
+    public static Set<Material> SHOP_CONTAINERS = EnumSet.of(
+            Material.CHEST,
+            Material.TRAPPED_CHEST
+    );
 
     @PrecededBySpace
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
@@ -47,7 +97,8 @@ public class Properties {
     public static boolean REMOVE_EMPTY_CHESTS = false;
 
     @ConfigurationComment("A list of worlds in which to remove empty shops with the previous config. Case sensitive. An empty list means all worlds.")
-    public static List<String> REMOVE_EMPTY_WORLDS = Arrays.asList("world1", "world2");
+    @Parser("StringSet")
+    public static Set<String> REMOVE_EMPTY_WORLDS = new LinkedHashSet<>(Arrays.asList("world1", "world2"));
 
     @PrecededBySpace
     @ConfigurationComment("First line of your Admin Shop's sign should look like this:")

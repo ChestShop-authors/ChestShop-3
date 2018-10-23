@@ -2,6 +2,7 @@ package com.Acrobot.Breeze.Configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,12 @@ public class ValueParser {
      * @param object Object to parse
      * @return YAML string
      */
-    public static String parseToYAML(Object object) {
+    public String parseToYAML(Object object) {
         if (object instanceof Number || object instanceof Boolean) {
             return String.valueOf(object);
-        } else if (object instanceof List) {
+        } else if (object instanceof Collection) {
             StringBuilder sb = new StringBuilder();
-            for (Object o : (List) object) {
+            for (Object o : (Collection) object) {
                 sb.append("\n- ").append(parseToYAML(o));
             }
             return sb.toString();
@@ -36,7 +37,7 @@ public class ValueParser {
      * @param object Object to parse
      * @return Java-compatible object
      */
-    public static Object parseToJava(Object object) {
+    public Object parseToJava(Object object) {
         if (object instanceof ConfigurationSection) {
             Map<String, List<String>> map = new HashMap<String, List<String>>();
 

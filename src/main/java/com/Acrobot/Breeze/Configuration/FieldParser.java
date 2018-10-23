@@ -1,6 +1,7 @@
 package com.Acrobot.Breeze.Configuration;
 
 import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
+import com.Acrobot.Breeze.Configuration.Annotations.Parser;
 
 import java.lang.reflect.Field;
 
@@ -21,8 +22,10 @@ public class FieldParser {
             builder.append('#').append(field.getAnnotation(ConfigurationComment.class).value()).append('\n');
         }
 
+        ValueParser parser = Configuration.getParser(field);
+
         try {
-            builder.append(field.getName()).append(": ").append(ValueParser.parseToYAML(field.get(null)));
+            builder.append(field.getName()).append(": ").append(parser.parseToYAML(field.get(null)));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return "";

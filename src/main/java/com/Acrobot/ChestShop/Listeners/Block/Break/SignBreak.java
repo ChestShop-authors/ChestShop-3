@@ -10,7 +10,7 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -159,13 +159,13 @@ public class SignBreak implements Listener {
     }
 
     private static void sendShopDestroyedEvent(Sign sign, Player player) {
-        Chest connectedChest = null;
+        Container connectedContainer = null;
 
         if (!ChestShopSign.isAdminShop(sign)) {
-            connectedChest = uBlock.findConnectedChest(sign.getBlock());
+            connectedContainer = uBlock.findConnectedContainer(sign.getBlock());
         }
 
-        Event event = new ShopDestroyedEvent(player, sign, connectedChest);
+        Event event = new ShopDestroyedEvent(player, sign, connectedContainer);
         ChestShop.callEvent(event);
     }
 

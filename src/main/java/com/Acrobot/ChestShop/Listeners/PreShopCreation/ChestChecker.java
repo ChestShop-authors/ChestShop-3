@@ -5,7 +5,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,9 +29,9 @@ public class ChestChecker implements Listener {
             return;
         }
 
-        Chest connectedChest = uBlock.findConnectedChest(event.getSign().getBlock());
+        Container connectedContainer = uBlock.findConnectedContainer(event.getSign().getBlock());
 
-        if (connectedChest == null) {
+        if (connectedContainer == null) {
             event.setOutcome(NO_CHEST);
             return;
         }
@@ -42,7 +42,7 @@ public class ChestChecker implements Listener {
             return;
         }
 
-        if (!Security.canAccess(player, connectedChest.getBlock())) {
+        if (!Security.canAccess(player, connectedContainer.getBlock())) {
             event.setOutcome(NO_PERMISSION_FOR_CHEST);
         }
     }

@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
@@ -21,10 +20,10 @@ public class BlockPlace implements Listener {
     private static BlockFace[] SEARCH_DIRECTIONS = {BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.DOWN};
 
     @EventHandler(ignoreCancelled = true)
-    public static void onChestPlace(BlockPlaceEvent event) {
+    public static void onContainerPlace(BlockPlaceEvent event) {
         Block placed = event.getBlockPlaced();
 
-        if (!BlockUtil.isChest(placed)) {
+        if (!uBlock.couldBeShopContainer(placed)) {
             return;
         }
 
@@ -70,7 +69,7 @@ public class BlockPlace implements Listener {
         for (BlockFace face : SEARCH_DIRECTIONS) {
             Block relative = placed.getRelative(face);
 
-            if (!BlockUtil.isChest(relative)) {
+            if (!uBlock.couldBeShopContainer(relative)) {
                 continue;
             }
 

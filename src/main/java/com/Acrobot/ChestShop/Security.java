@@ -1,13 +1,13 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
-import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -53,7 +53,7 @@ public class Security {
         for (BlockFace face : BLOCKS_AROUND) {
             Block block = sign.getRelative(face);
 
-            if (!BlockUtil.isChest(block)) {
+            if (!uBlock.couldBeShopContainer(block)) {
                 continue;
             }
             if (!canAccess(player, block)) {

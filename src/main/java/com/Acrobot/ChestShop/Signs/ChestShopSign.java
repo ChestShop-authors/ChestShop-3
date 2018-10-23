@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.Sign;
@@ -58,6 +59,10 @@ public class ChestShopSign {
         return BlockUtil.isSign(sign) && isValid((Sign) sign.getState());
     }
 
+    /**
+     * @deprecated Use {@link #isShopBlock(Block}
+     */
+    @Deprecated
     public static boolean isShopChest(Block chest) {
         if (!BlockUtil.isChest(chest)) {
             return false;
@@ -66,6 +71,18 @@ public class ChestShopSign {
         return uBlock.getConnectedSign((Chest) chest.getState()) != null;
     }
 
+    public static boolean isShopBlock(Block block) {
+        if (!uBlock.couldBeShopContainer(block)) {
+            return false;
+        }
+
+        return uBlock.getConnectedSign(block) != null;
+    }
+
+    /**
+     * @deprecated Use {@link #isShopBlock(InventoryHolder}
+     */
+    @Deprecated
     public static boolean isShopChest(InventoryHolder holder) {
         if (!BlockUtil.isChest(holder)) {
             return false;
@@ -78,6 +95,10 @@ public class ChestShopSign {
         } else {
             return false;
         }
+    }
+
+    public static boolean isShopBlock(InventoryHolder holder) {
+        return holder instanceof BlockState && isShopBlock(((BlockState) holder).getBlock());
     }
 
     public static boolean canAccess(Player player, Sign sign) {

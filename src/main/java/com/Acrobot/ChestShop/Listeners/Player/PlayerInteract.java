@@ -19,7 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static com.Acrobot.Breeze.Utils.BlockUtil.isChest;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
@@ -54,7 +53,7 @@ public class PlayerInteract implements Listener {
         Action action = event.getAction();
         Player player = event.getPlayer();
 
-        if (Properties.USE_BUILT_IN_PROTECTION && isChest(block)) {
+        if (Properties.USE_BUILT_IN_PROTECTION && isShopBlock(block)) {
             if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
                 return;
             }
@@ -161,8 +160,8 @@ public class PlayerInteract implements Listener {
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
 
-        Chest chest = uBlock.findConnectedChest(sign);
-        Inventory ownerInventory = (adminShop ? new AdminInventory() : chest != null ? chest.getInventory() : null);
+        Container shopBlock = uBlock.findConnectedContainer(sign);
+        Inventory ownerInventory = (adminShop ? new AdminInventory() : shopBlock != null ? shopBlock.getInventory() : null);
 
         ItemStack item = MaterialUtil.getItem(material);
         if (item == null || !NumberUtil.isInteger(quantity)) {
@@ -218,9 +217,9 @@ public class PlayerInteract implements Listener {
     }
 
     private static void showChestGUI(Player player, Block signBlock) {
-        Chest chest = uBlock.findConnectedChest(signBlock);
+        Container container = uBlock.findConnectedContainer(signBlock);
 
-        if (chest == null) {
+        if (container == null) {
             player.sendMessage(Messages.prefix(Messages.NO_CHEST_DETECTED));
             return;
         }
@@ -229,6 +228,6 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        BlockUtil.openBlockGUI(chest, player);
+        BlockUtil.openBlockGUI(container, player);
     }
 }

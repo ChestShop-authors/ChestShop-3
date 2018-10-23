@@ -8,7 +8,7 @@ import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Location;
-import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,10 +41,10 @@ public class TerrainChecker implements Listener {
             return;
         }
 
-        Chest connectedChest = uBlock.findConnectedChest(event.getSign().getBlock());
-        Location chestLocation = (connectedChest != null ? connectedChest.getLocation() : null);
+        Container connectedContainer = uBlock.findConnectedContainer(event.getSign().getBlock());
+        Location containerLocation = (connectedContainer != null ? connectedContainer.getLocation() : null);
 
-        BuildPermissionEvent bEvent = new BuildPermissionEvent(player, chestLocation, event.getSign().getLocation());
+        BuildPermissionEvent bEvent = new BuildPermissionEvent(player, containerLocation, event.getSign().getLocation());
         ChestShop.callEvent(bEvent);
 
         if (!bEvent.isAllowed()) {

@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.PostShopCreation;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -38,16 +37,16 @@ public class SignSticker implements Listener {
             return;
         }
 
-        BlockFace chestFace = null;
+        BlockFace shopBlockFace = null;
 
         for (BlockFace face : uBlock.CHEST_EXTENSION_FACES) {
-            if (BlockUtil.isChest(signBlock.getRelative(face))) {
-                chestFace = face;
+            if (uBlock.couldBeShopContainer(signBlock.getRelative(face))) {
+                shopBlockFace = face;
                 break;
             }
         }
 
-        if (chestFace == null) {
+        if (shopBlockFace == null) {
             return;
         }
 
@@ -57,7 +56,7 @@ public class SignSticker implements Listener {
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) signBlock.getState();
 
         Sign signMaterial = (Sign) Bukkit.createBlockData(Material.WALL_SIGN);
-        signMaterial.setRotation(chestFace.getOppositeFace());
+        signMaterial.setRotation(shopBlockFace.getOppositeFace());
         sign.setBlockData(signMaterial);
 
         for (int i = 0; i < lines.length; ++i) {

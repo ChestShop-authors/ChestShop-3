@@ -12,6 +12,7 @@ import com.griefcraft.model.Protection;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -32,7 +33,7 @@ public class LightweightChestProtection implements Listener {
     public static void onShopCreation(ShopCreatedEvent event) {
         Player player = event.getPlayer();
         Sign sign = event.getSign();
-        Chest connectedChest = event.getChest();
+        Container connectedContainer = event.getContainer();
 
         if (Properties.PROTECT_SIGN_WITH_LWC) {
             if (!Security.protect(player, sign.getBlock())) {
@@ -40,7 +41,7 @@ public class LightweightChestProtection implements Listener {
             }
         }
 
-        if (Properties.PROTECT_CHEST_WITH_LWC && connectedChest != null && Security.protect(player, connectedChest.getBlock())) {
+        if (Properties.PROTECT_CHEST_WITH_LWC && connectedContainer != null && Security.protect(player, connectedContainer.getBlock())) {
             player.sendMessage(Messages.prefix(Messages.PROTECTED_SHOP));
         }
     }
@@ -114,11 +115,11 @@ public class LightweightChestProtection implements Listener {
             signProtection.remove();
         }
 
-        if (event.getChest() == null || !Properties.REMOVE_LWC_PROTECTION_AUTOMATICALLY) {
+        if (event.getContainer() == null || !Properties.REMOVE_LWC_PROTECTION_AUTOMATICALLY) {
             return;
         }
 
-        Protection chestProtection = lwc.findProtection(event.getChest().getBlock());
+        Protection chestProtection = lwc.findProtection(event.getContainer().getBlock());
 
         if (chestProtection != null) {
             chestProtection.remove();

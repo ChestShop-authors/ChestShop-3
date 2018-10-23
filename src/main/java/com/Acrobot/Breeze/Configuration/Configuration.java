@@ -7,8 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
+import com.Acrobot.Breeze.Configuration.Annotations.Parser;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,6 +24,9 @@ import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
  * @author Acrobot
  */
 public class Configuration {
+    private static Map<String, ValueParser> parsers = new HashMap<>();
+    public static ValueParser DEFAULT_PARSER = new ValueParser();
+
     /**
      * Loads a YAML-formatted file into a class and modifies the file if some of class's fields are missing
      *
@@ -46,9 +52,9 @@ public class Configuration {
 
                 try {
                     if (config.isSet(path)) {
-                        field.set(null, ValueParser.parseToJava(config.get(path)));
+                        field.set(null, getParser(field).parseToJava(config.get(path)));
                     } else if (config.isSet(path.toLowerCase())) {
-                        field.set(null, ValueParser.parseToJava(config.get(path.toLowerCase())));
+                        field.set(null, getParser(field).parseToJava(config.get(path.toLowerCase())));
                     } else {
                         if (field.isAnnotationPresent(PrecededBySpace.class)) {
                             writer.newLine();
@@ -99,7 +105,7 @@ public class Configuration {
      * @return Parsed output
      */
     public static String parseToConfig(Object value) {
-        return ValueParser.parseToYAML(value);
+        return DEFAULT_PARSER.parseToYAML(value);
     }
 
     /**
@@ -110,5 +116,39 @@ public class Configuration {
      */
     public static String getColoured(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+    /**
+     * Register a parser
+     * @param name The name of the parser
+     * @param valueParser The parser itself
+     */
+    public static void registerParser(String name, ValueParser valueParser) {
+        parsers.put(name.toLowerCase(), valueParser);
+    }
+
+    /**
+     * Get a registered parser
+     * @param name The name of the parser
+     * @return The parser or null if it doesn't exist
+     */
+    public static ValueParser getParser(String name) {
+        return parsers.get(name.toLowerCase());
+    }
+
+    /**
+     * Get the parser that should be used for a field
+     * @param field The field
+     * @return The registered parser if the field has a Parser annotation or the default one
+     */
+    public static ValueParser getParser(Field field) {
+        ValueParser parser = null;
+        if (field.isAnnotationPresent(Parser.class)) {
+            parser = Configuration.getParser(field.getAnnotation(Parser.class).value());
+        }
+        if (parser == null) {
+            parser = Configuration.DEFAULT_PARSER;
+        }
+        return parser;
     }
 }

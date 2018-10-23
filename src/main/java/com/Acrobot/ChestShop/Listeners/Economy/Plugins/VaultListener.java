@@ -80,7 +80,7 @@ public class VaultListener implements Listener {
 
         double balance = 0;
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
             balance = provider.getBalance(lastSeen, event.getWorld().getName());
@@ -101,7 +101,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
             if (provider.has(lastSeen, world.getName(), event.getDoubleAmount())) {
@@ -120,7 +120,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
     }
@@ -143,7 +143,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getTarget());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
             EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
@@ -159,7 +159,7 @@ public class VaultListener implements Listener {
 
         World world = event.getWorld();
         //String lastSeen = NameManager.getLastSeenName(event.getTarget());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
             EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
@@ -193,7 +193,7 @@ public class VaultListener implements Listener {
         }
 
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
-		OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
+        OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
         String world = event.getWorld().getName();
 
         if (lastSeen == null) {

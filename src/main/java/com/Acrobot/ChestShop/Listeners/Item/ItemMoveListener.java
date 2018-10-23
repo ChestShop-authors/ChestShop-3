@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Item;
 
-import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,11 +13,11 @@ public class ItemMoveListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public static void onItemMove(InventoryMoveItemEvent event) {
-        if (event.getSource() == null || !BlockUtil.isChest(event.getSource().getHolder())) {
+        if (event.getSource() == null) {
             return;
         }
 
-        if (!ChestShopSign.isShopChest(event.getSource().getHolder())) {
+        if (!ChestShopSign.isShopBlock(event.getSource().getHolder())) {
             return;
         }
 

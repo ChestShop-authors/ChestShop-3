@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Events;
 
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,12 +21,17 @@ public class ShopCreatedEvent extends Event {
 
     private final Sign sign;
     private final String[] signLines;
-    @Nullable private final Chest chest;
+    @Nullable private final Container container;
 
+    @Deprecated
     public ShopCreatedEvent(Player creator, Sign sign, @Nullable Chest chest, String[] signLines) {
+        this(creator, sign, (Container) chest, signLines);
+    }
+
+    public ShopCreatedEvent(Player creator, Sign sign, @Nullable Container container, String[] signLines) {
         this.creator = creator;
         this.sign = sign;
-        this.chest = chest;
+        this.container = container;
         this.signLines = signLines.clone();
     }
 
@@ -67,12 +73,20 @@ public class ShopCreatedEvent extends Event {
     }
 
     /**
-     * Returns the shop's chest (if applicable)
+     * Returns the shop's container (if applicable)
      *
-     * @return Shop's chest
+     * @return Shop's container
      */
+    @Nullable public Container getContainer() {
+        return container;
+    }
+
+    /**
+     * @deprecated Use {@link #getContainer()}
+     */
+    @Deprecated
     @Nullable public Chest getChest() {
-        return chest;
+        return container instanceof Chest ? (Chest) container : null;
     }
 
     public HandlerList getHandlers() {
