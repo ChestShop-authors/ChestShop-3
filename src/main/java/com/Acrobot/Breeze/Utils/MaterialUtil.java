@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
 import info.somethingodd.OddItem.OddItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -493,9 +494,14 @@ public class MaterialUtil {
 
             String joinedItemJson = itemJson.stream().collect(Collectors.joining("," + new JSONObject(ImmutableMap.of("text", " ")).toJSONString() + ", "));
 
-            String messageJsonString = Arrays.stream(message.split("%item"))
-                    .map(s -> new JSONObject(ImmutableMap.of("text", s)).toJSONString())
-                    .collect(Collectors.joining("," + joinedItemJson + ","));
+            String prevColor = "";
+            List<String> parts = new ArrayList<>();
+            for (String s : message.split("%item")) {
+                parts.add(new JSONObject(ImmutableMap.of("text", prevColor + s)).toJSONString());
+                prevColor = ChatColor.getLastColors(s);
+            }
+
+            String messageJsonString = String.join("," + joinedItemJson + ",", parts);
 
             while (messageJsonString.startsWith(",")) {
                 messageJsonString = messageJsonString.substring(1);
