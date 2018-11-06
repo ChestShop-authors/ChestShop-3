@@ -41,6 +41,6 @@ public class WorldGuardBuilding implements Listener {
         if (regionManager == null) {
             return null;
         }
-        return regionManager.getApplicableRegions(BukkitAdapter.adapt(location).toVector());
+        return regionManager.getApplicableRegions(BukkitAdapter.adapt(location).toVector().toBlockPoint());
     }
 }

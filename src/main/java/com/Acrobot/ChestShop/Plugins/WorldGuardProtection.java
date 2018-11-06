@@ -1,8 +1,8 @@
 package com.Acrobot.ChestShop.Plugins;
 
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
-import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -38,7 +38,7 @@ public class WorldGuardProtection implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        Vector blockPos = BukkitAdapter.adapt(block.getLocation()).toVector();
+        BlockVector3 blockPos = BukkitAdapter.adapt(block.getLocation()).toVector().toBlockPoint();
         RegionManager manager = worldGuardPlatform.getRegionContainer().get(BukkitAdapter.adapt(block.getWorld()));
         if (manager == null) {
             return;
