@@ -57,7 +57,7 @@ public class Dependencies {
         for (String dependency : ChestShop.getDependencies()) {
             Plugin plugin = pluginManager.getPlugin(dependency);
 
-            if (plugin != null) {
+            if (plugin != null && plugin.isEnabled()) {
                 loadPlugin(dependency, plugin);
             }
         }
