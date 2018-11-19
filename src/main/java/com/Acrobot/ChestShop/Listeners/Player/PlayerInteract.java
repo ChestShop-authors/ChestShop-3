@@ -35,6 +35,9 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
+import static com.Acrobot.ChestShop.Permission.OTHER_NAME_ACCESS;
+import static com.Acrobot.ChestShop.Permission.OTHER_NAME_CREATE;
+import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -58,7 +61,7 @@ public class PlayerInteract implements Listener {
                 return;
             }
 
-            if (!canOpenOtherShops(player) && !ChestShop.canAccess(player, block)) {
+            if (!ChestShop.canAccess(player, block)) {
                 player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
                 event.setCancelled(true);
             }
@@ -66,7 +69,7 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (!isSign(block) || player.getItemInHand().getType() == Material.SIGN) // Blocking accidental sign edition
+        if (!isSign(block) || player.getInventory().getItemInMainHand().getType() == Material.SIGN) // Blocking accidental sign edition
             return;
 
         Sign sign = (Sign) block.getState();
@@ -74,10 +77,8 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        boolean canAccess = ChestShopSign.canAccess(player, sign);
-
         if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(sign.getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
-            if (canAccess) {
+            if (ChestShopSign.hasPermission(player, OTHER_NAME_CREATE, sign)) {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (!MaterialUtil.isEmpty(item)) {
                     String itemCode = MaterialUtil.getSignName(item);
@@ -101,19 +102,22 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (canAccess && !ChestShopSign.isAdminShop(sign)) {
-            if (!Properties.ALLOW_SIGN_CHEST_OPEN
-                    || player.isSneaking() || player.isInsideVehicle()
-                    || (Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
+        if (ChestShopSign.hasPermission(player, OTHER_NAME_ACCESS, sign) && !ChestShopSign.isAdminShop(sign)) {
+            if (Properties.ALLOW_SIGN_CHEST_OPEN) {
+                if (player.isSneaking() || player.isInsideVehicle()
+                        || (Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)
+                        || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK
+                                && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+                    return;
+                }
+
+                event.setCancelled(true);
+                showChestGUI(player, block, sign);
+                return;
+            } else if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
+                // don't allow owners or people with access to buy/sell at this shop
                 return;
             }
-
-            if (!Properties.ALLOW_LEFT_CLICK_DESTROYING || action != LEFT_CLICK_BLOCK) {
-                event.setCancelled(true);
-                showChestGUI(player, block);
-            }
-
-            return;
         }
 
         if (action == RIGHT_CLICK_BLOCK) {
@@ -212,19 +216,23 @@ public class PlayerInteract implements Listener {
         }
     }
 
+    /**
+     * @deprecated Use {@link ChestShopSign#hasPermission(Player, Permission, Sign)} with {@link Permission#OTHER_NAME_ACCESS}
+     */
+    @Deprecated
     public static boolean canOpenOtherShops(Player player) {
-        return Permission.has(player, Permission.ADMIN) || Permission.has(player, Permission.MOD);
+        return Permission.has(player, Permission.OTHER_NAME_ACCESS + ".*");
     }
 
-    private static void showChestGUI(Player player, Block signBlock) {
-        Container container = uBlock.findConnectedContainer(signBlock);
+    private static void showChestGUI(Player player, Block signBlock, Sign sign) {
+        Container container = uBlock.findConnectedContainer(sign);
 
         if (container == null) {
             player.sendMessage(Messages.prefix(Messages.NO_CHEST_DETECTED));
             return;
         }
 
-        if (!canOpenOtherShops(player) && !Security.canAccess(player, signBlock)) {
+        if (!Security.canAccess(player, signBlock)) {
             return;
         }
 

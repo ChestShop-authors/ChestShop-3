@@ -22,6 +22,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
+import static com.Acrobot.ChestShop.Permission.OTHER_NAME;
+
 /**
  * Lets you save/cache username and UUID relations
  *
@@ -295,18 +297,26 @@ public class NameManager {
         return shortenedName;
     }
 
+    /**
+     * @deprecated Use {@link #canUseName(Player, Permission, String)} to provide specific information about how the player wants to use the name
+     */
+    @Deprecated
     public static boolean canUseName(Player player, String name) {
+        return canUseName(player, OTHER_NAME, name);
+    }
+
+    public static boolean canUseName(Player player, Permission base, String name) {
         if (ChestShopSign.isAdminShop(name)) {
-            return Permission.has(player, Permission.ADMIN);
+            return Permission.has(player, Permission.ADMIN_SHOP);
         }
 
-        if (Permission.otherName(player, name)) {
+        if (Permission.otherName(player, base, name)) {
             return true;
         }
 
         Account account = getAccountFromShortName(name, false);
         return account != null && (account.getUuid().equals(player.getUniqueId())
-                || (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, account.getName())));
+                || (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, base, account.getName())));
     }
 
     public static boolean isAdminShop(UUID uuid) {

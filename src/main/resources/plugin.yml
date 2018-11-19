@@ -71,10 +71,35 @@ permissions:
   ChestShop.admin:
     description: Allows user to modify/destroy other stores and create an Admin Shops
     default: op
+    children:
+      ChestShop.adminshop: true
+      ChestShop.name.*: true
+  ChestShop.adminshop:
+    description: Allows user to create and destroy Admin Shops
   ChestShop.mod:
     description: Allows user only to view other store chests, he can't destroy them or create an Admin Shop
+    children:
+      ChestShop.name.access.*: true
+  ChestShop.name.*:
+    description: Gives you the power to do create and access shops for all names.
+    children:
+      ChestShop.name.create.*: true
+      ChestShop.name.destroy.*: true
+      ChestShop.name.access.*: true
   ChestShop.name.(some name):
+    description: Gives you the power to do create and access shops for (some name), for example your town.
+  ChestShop.name.create.*:
+    description: Gives you the power to do create shops for all names.
+  ChestShop.name.create.(some name):
     description: Gives you the power to do create shops for (some name), for example your town.
+  ChestShop.name.destroy.*:
+    description: Gives you the power to do destroy shops with all names.
+  ChestShop.name.destroy.(some name):
+    description: Gives you the power to do destroy shops with (some name), for example your town.
+  ChestShop.name.access.*:
+    description: Gives you the power to do access shops for all names.
+  ChestShop.name.access.(some name):
+    description: Gives you the power to do access shops for (some name), for example your town.
   ChestShop.shop.create.food:
     description: Allows to create a shop that sells food
     children:

@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 /**
  * @author Acrobot
  */
@@ -24,8 +26,12 @@ public enum Permission {
     SELL("ChestShop.shop.sell"),
 
     ADMIN("ChestShop.admin"),
+    ADMIN_SHOP("ChestShop.adminshop"),
     MOD("ChestShop.mod"),
-    OTHER_NAME("ChestShop.name."),
+    OTHER_NAME("ChestShop.name"),
+    OTHER_NAME_CREATE("ChestShop.othername.create"),
+    OTHER_NAME_DESTROY("ChestShop.othername.destroy"),
+    OTHER_NAME_ACCESS("ChestShop.othername.access"),
     GROUP("ChestShop.group."),
 
     NOFEE("ChestShop.nofee"),
@@ -48,15 +54,21 @@ public enum Permission {
     }
 
     public static boolean otherName(Player player, String name) {
-        if (has(player, Permission.ADMIN)) {
-            return true;
-        }
-
-        return hasPermissionSet(player, OTHER_NAME + name) || hasPermissionSet(player, OTHER_NAME + name.toLowerCase());
+        return otherName(player, OTHER_NAME, name);
     }
 
-    private static boolean hasPermissionSet(CommandSender sender, String permission) {
-        return sender.isPermissionSet(permission) && sender.hasPermission(permission);
+    public static boolean otherName(Player player, Permission base, String name) {
+        boolean hasBase = base != OTHER_NAME && otherName(player, OTHER_NAME, name);
+        if (hasBase || has(player, base + ".*")) {
+            return !hasPermissionSetFalse(player, base+ "." + name) && !hasPermissionSetFalse(player, base + "." + name.toLowerCase());
+        }
+
+        return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase());
+    }
+
+    private static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
+        return (sender.isPermissionSet(permission) && !sender.hasPermission(permission))
+                || (sender.isPermissionSet(permission.toLowerCase()) && !sender.hasPermission(permission.toLowerCase()));
     }
 
     public static org.bukkit.permissions.Permission getPermission(Permission permission) {

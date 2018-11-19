@@ -43,7 +43,7 @@ public class PlayerInventory implements Listener {
             chest = ((DoubleChest) event.getInventory().getHolder()).getLocation().getBlock();
         }
 
-        if (!PlayerInteract.canOpenOtherShops(player) && !ChestShop.canAccess(player, chest)) {
+        if (!ChestShop.canAccess(player, chest)) {
             player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             event.setCancelled(true);
         }

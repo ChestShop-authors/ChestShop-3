@@ -58,8 +58,9 @@ public class RestrictedSign implements Listener {
 
             Sign sign = (Sign) connectedSign.getState();
 
-            if (!ChestShopSign.canAccess(player, sign)) {
+            if (!ChestShopSign.hasPermission(player, Permission.OTHER_NAME_DESTROY, sign)) {
                 dropSignAndCancelEvent(event);
+                return;
             }
 
             player.sendMessage(Messages.prefix(Messages.RESTRICTED_SIGN_CREATED));
@@ -129,16 +130,11 @@ public class RestrictedSign implements Listener {
     public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
         return !BlockUtil.isSign(blockUp) || hasPermission(player, ((Sign) blockUp.getState()).getLines());
-
     }
 
     public static boolean canDestroy(Player player, Sign sign) {
-        if (Permission.has(player, ADMIN)) {
-            return true;
-        }
-
         Sign shopSign = getAssociatedSign(sign);
-        return ChestShopSign.canAccess(player, shopSign);
+        return ChestShopSign.hasPermission(player, Permission.OTHER_NAME_DESTROY, shopSign);
     }
 
     public static Sign getAssociatedSign(Sign restricted) {
@@ -152,7 +148,7 @@ public class RestrictedSign implements Listener {
         }
 
         for (String line : lines) {
-            if (p.hasPermission(Permission.GROUP.toString() + line)) {
+            if (Permission.has(p, Permission.GROUP + line)) {
                 return true;
             }
         }

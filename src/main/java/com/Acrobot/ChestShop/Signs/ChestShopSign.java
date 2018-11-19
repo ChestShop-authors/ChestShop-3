@@ -4,6 +4,8 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
+import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
@@ -102,13 +104,30 @@ public class ChestShopSign {
     }
 
     public static boolean canAccess(Player player, Sign sign) {
+        return hasPermission(player, Permission.OTHER_NAME_ACCESS, sign);
+    }
+
+    public static boolean hasPermission(Player player, Permission base, Sign sign) {
         if (player == null) return false;
         if (sign == null) return true;
 
         String name = sign.getLine(NAME_LINE);
         if (name == null || name.isEmpty()) return true;
 
-        return NameManager.canUseName(player, name);
+        return NameManager.canUseName(player, base, name);
+    }
+
+    public static boolean isOwner(Player player, Sign sign) {
+        if (player == null || sign == null) return false;
+
+        String name = sign.getLine(NAME_LINE);
+        if (name == null || name.isEmpty()) return false;
+
+        Account account = NameManager.getAccountFromShortName(name);
+        if (account == null) {
+            return player.getName().equalsIgnoreCase(name);
+        }
+        return account.getUuid().equals(player.getUniqueId());
     }
 
     public static boolean isValidPreparedSign(String[] lines) {

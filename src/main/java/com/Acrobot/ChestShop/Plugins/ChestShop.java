@@ -33,7 +33,7 @@ public class ChestShop implements Listener {
     }
 
     public static boolean canAccess(Player player, Block block) {
-        if (Permission.has(player, Permission.ADMIN) || !canBeProtected(block)) {
+        if (!canBeProtected(block)) {
             return true;
         }
 
@@ -65,6 +65,6 @@ public class ChestShop implements Listener {
     }
 
     private static boolean isShopMember(Player player, Sign sign) {
-        return NameManager.canUseName(player, sign.getLine(ChestShopSign.NAME_LINE));
+        return ChestShopSign.hasPermission(player, Permission.OTHER_NAME_ACCESS, sign);
     }
 }

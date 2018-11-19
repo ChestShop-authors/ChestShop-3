@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Utils;
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -67,7 +68,7 @@ public class uBlock {
     }
 
     /**
-     * @deprecated Use {@link #findConnectedContainer(Block, BlockFace)}
+     * @deprecated Use {@link #findConnectedContainer(Location, BlockFace)}
      */
     @Deprecated
     private static org.bukkit.block.Chest findConnectedChest(Block block, BlockFace signFace) {
@@ -94,7 +95,7 @@ public class uBlock {
         if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
             signFace = ((Attachable) sign.getData()).getAttachedFace();
         }
-        return findConnectedContainer(sign.getBlock(), signFace);
+        return findConnectedContainer(sign.getLocation(), signFace);
     }
 
     public static Container findConnectedContainer(Block block) {
@@ -105,12 +106,12 @@ public class uBlock {
                 signFace = ((Attachable) sign.getData()).getAttachedFace();
             }
         }
-        return findConnectedContainer(block, signFace);
+        return findConnectedContainer(block.getLocation(), signFace);
     }
 
-    private static Container findConnectedContainer(Block block, BlockFace signFace) {
+    private static Container findConnectedContainer(Location location, BlockFace signFace) {
         if (signFace != null) {
-            Block faceBlock = block.getRelative(signFace);
+            Block faceBlock = location.clone().add(signFace.getModX(), signFace.getModY(), signFace.getModZ()).getBlock();
             if (uBlock.couldBeShopContainer(faceBlock)) {
                 return (Container) faceBlock.getState();
             }
@@ -118,7 +119,7 @@ public class uBlock {
 
         for (BlockFace bf : SHOP_FACES) {
             if (bf != signFace) {
-                Block faceBlock = block.getRelative(bf);
+                Block faceBlock = location.clone().add(bf.getModX(), bf.getModY(), bf.getModZ()).getBlock();
                 if (uBlock.couldBeShopContainer(faceBlock)) {
                     return (Container) faceBlock.getState();
                 }

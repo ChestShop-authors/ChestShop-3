@@ -74,6 +74,9 @@ public class Properties {
     @ConfigurationComment("Do you want to allow using shops to people in creative mode?")
     public static boolean IGNORE_CREATIVE_MODE = true;
 
+    @ConfigurationComment("Do you want to allow using shops to people who have access to it due to their permissions? (owners are always ignored)")
+    public static boolean IGNORE_ACCESS_PERMS = true;
+
     @ConfigurationComment("If true, people will buy with left-click and sell with right-click.")
     public static boolean REVERSE_BUTTONS = false;
 

@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,10 +31,8 @@ import java.util.List;
 
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
-import static com.Acrobot.ChestShop.Permission.ADMIN;
-import static com.Acrobot.ChestShop.Permission.MOD;
+import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
-import static com.Acrobot.ChestShop.UUIDs.NameManager.canUseName;
 
 /**
  * @author Acrobot
@@ -151,11 +150,7 @@ public class SignBreak implements Listener {
     }
 
     private static boolean canDestroyShop(Player player, String name) {
-        return player != null && (hasShopBreakingPermission(player) || canUseName(player, name));
-    }
-
-    private static boolean hasShopBreakingPermission(Player player) {
-        return Permission.has(player, ADMIN) || Permission.has(player, MOD);
+        return player != null && NameManager.canUseName(player, OTHER_NAME_DESTROY, name);
     }
 
     private static void sendShopDestroyedEvent(Sign sign, Player player) {
