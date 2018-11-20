@@ -18,7 +18,7 @@ import org.bukkit.event.block.SignChangeEvent;
  */
 public class SignCreate implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
         String[] line = StringUtil.stripColourCodes(event.getLines());
