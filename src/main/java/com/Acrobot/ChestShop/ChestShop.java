@@ -49,6 +49,8 @@ import org.apache.logging.log4j.message.Message;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -58,6 +60,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -78,6 +81,8 @@ public class ChestShop extends JavaPlugin {
     private static Logger logger;
     private FileHandler handler;
 
+    private List<PluginCommand> commands = new ArrayList<>();
+
     public ChestShop() {
         dataFolder = getDataFolder();
         logger = getLogger();
@@ -93,19 +98,22 @@ public class ChestShop extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
-        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
-
         turnOffDatabaseLogging();
         if (!handleMigrations()) {
             return;
         }
 
+        registerCommand("iteminfo", new ItemInfo(), Permission.ITEMINFO);
+        registerCommand("csVersion", new Version(), Permission.ADMIN);
+        registerCommand("csGive", new Give(), Permission.ADMIN);
+        registerCommand("cstoggle", new Toggle(), Permission.NOTIFY_TOGGLE);
+
+        loadConfig();
+
         itemDatabase = new ItemDatabase();
 
-        NameManager.load();
-
         if (!Dependencies.loadPlugins()) {
+            getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
@@ -125,13 +133,24 @@ public class ChestShop extends JavaPlugin {
             logger.setUseParentHandlers(false);
         }
 
-        getCommand("iteminfo").setExecutor(new ItemInfo());
-        getCommand("csVersion").setExecutor(new Version());
-        getCommand("csGive").setExecutor(new Give());
-        getCommand("cstoggle").setExecutor(new Toggle());
-
         startStatistics();
         startUpdater();
+    }
+
+    private void registerCommand(String name, CommandExecutor executor, Permission permission) {
+        PluginCommand command = getCommand(name);
+        command.setExecutor(executor);
+        command.setPermission(permission.toString());
+        commands.add(command);
+    }
+
+    public void loadConfig() {
+        Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
+        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
+
+        NameManager.load();
+
+        commands.forEach(c -> c.setPermissionMessage(Messages.prefix(Messages.ACCESS_DENIED)));
     }
 
     private void turnOffDatabaseLogging() {

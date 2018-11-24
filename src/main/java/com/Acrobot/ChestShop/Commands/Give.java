@@ -22,11 +22,6 @@ public class Give implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!Permission.has(sender, Permission.ADMIN)) {
-            sender.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
-            return true;
-        }
-
         if (args.length < 1) {
             return false;
         }

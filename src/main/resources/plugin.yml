@@ -68,6 +68,9 @@ permissions:
   ChestShop.toggle:
     description: Allows user to toggle messages.
     default: true
+  ChestShop.iteminfo:
+    description: Allows user to see item info with the command.
+    default: true
   ChestShop.admin:
     description: Allows user to modify/destroy other stores and create an Admin Shops
     default: op

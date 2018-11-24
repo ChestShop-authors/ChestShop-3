@@ -24,11 +24,6 @@ public class Toggle implements CommandExecutor {
             return false;
         }
 
-        if (!Permission.has(sender, Permission.NOTIFY_TOGGLE)) {
-            sender.sendMessage(Messages.ACCESS_DENIED);
-            return true;
-        }
-
         Player player = (Player) sender;
 
         if (args.length != 0) {
