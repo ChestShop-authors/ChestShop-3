@@ -1,9 +1,10 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
-import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -90,7 +91,9 @@ public class PriceRestrictionModule implements Listener {
 
     @EventHandler
     public void onPreShopCreation(PreShopCreationEvent event) {
-        ItemStack material = MaterialUtil.getItem(event.getSignLine(ITEM_LINE));
+        ItemParseEvent parseEvent = new ItemParseEvent(event.getSignLine(ITEM_LINE));
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack material = parseEvent.getItem();
 
         if (material == null) {
             return;

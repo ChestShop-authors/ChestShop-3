@@ -5,6 +5,8 @@ import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,7 +30,9 @@ public class ItemInfo implements CommandExecutor {
 
             item = ((HumanEntity) sender).getItemInHand();
         } else {
-            item = MaterialUtil.getItem(StringUtil.joinArray(args));
+            ItemParseEvent parseEvent = new ItemParseEvent(StringUtil.joinArray(args));
+            Bukkit.getPluginManager().callEvent(parseEvent);
+            item = parseEvent.getItem();
         }
 
         if (MaterialUtil.isEmpty(item)) {

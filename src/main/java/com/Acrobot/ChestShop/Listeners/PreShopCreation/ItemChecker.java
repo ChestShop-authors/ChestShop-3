@@ -4,9 +4,11 @@ import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
@@ -30,7 +32,10 @@ public class ItemChecker implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String itemCode = event.getSignLine(ITEM_LINE);
-        ItemStack item = MaterialUtil.getItem(itemCode);
+
+        ItemParseEvent parseEvent = new ItemParseEvent(itemCode);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack item = parseEvent.getItem();
 
         if (item == null) {
             if (Properties.ALLOW_AUTO_ITEM_FILL && itemCode.equals(AUTOFILL_CODE)) {
@@ -67,7 +72,9 @@ public class ItemChecker implements Listener {
     }
 
     private static boolean isSameItem(String newCode, ItemStack item) {
-        ItemStack newItem = MaterialUtil.getItem(newCode);
+        ItemParseEvent parseEvent = new ItemParseEvent(newCode);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack newItem = parseEvent.getItem();
 
         return newItem != null && MaterialUtil.equals(newItem, item);
     }

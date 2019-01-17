@@ -3,9 +3,12 @@ package com.Acrobot.Breeze.Utils;
 import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
+import com.Acrobot.ChestShop.Events.MaterialParseEvent;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
 import info.somethingodd.OddItem.OddItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +20,6 @@ import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -191,7 +193,9 @@ public class MaterialUtil {
 
         code += durability + metaData;
 
-        ItemStack codeItem = getItem(code);
+        ItemParseEvent parseEvent = new ItemParseEvent(code);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack codeItem = parseEvent.getItem();
         if (!equals(itemStack, codeItem)) {
             throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxWidth
                     + " (code " + code + " results in item " + codeItem + ")");
@@ -287,9 +291,10 @@ public class MaterialUtil {
             split[i] = split[i].trim();
         }
 
-        Material material = getMaterial(split[0]);
         short durability = getDurability(itemName);
-
+        MaterialParseEvent parseEvent = new MaterialParseEvent(split[0], durability);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        Material material = parseEvent.getMaterial();
         if (material == null) {
             return null;
         }

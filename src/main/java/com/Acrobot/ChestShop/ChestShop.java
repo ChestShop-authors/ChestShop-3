@@ -18,6 +18,7 @@ import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
+import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
 import com.Acrobot.ChestShop.Listeners.Player.*;
@@ -294,6 +295,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerLeave());
         registerEvent(new PlayerTeleport());
 
+        registerEvent(new SignParseListener());
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
 

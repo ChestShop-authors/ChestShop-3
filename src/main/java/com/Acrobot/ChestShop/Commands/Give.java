@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -89,6 +90,8 @@ public class Give implements CommandExecutor {
             builder.append(arguments[index]).append(' ');
         }
 
-        return MaterialUtil.getItem(builder.toString());
+        ItemParseEvent parseEvent = new ItemParseEvent(builder.toString());
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        return parseEvent.getItem();
     }
 }

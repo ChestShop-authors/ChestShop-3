@@ -1,9 +1,10 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
-import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +28,9 @@ public class PermissionChecker implements Listener {
         String priceLine = event.getSignLine(PRICE_LINE);
         String itemLine = event.getSignLine(ITEM_LINE);
 
-        ItemStack item = MaterialUtil.getItem(itemLine);
+        ItemParseEvent parseEvent = new ItemParseEvent(itemLine);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack item = parseEvent.getItem();
 
         if (item == null) {
             if (!Permission.has(player, SHOP_CREATION)) {

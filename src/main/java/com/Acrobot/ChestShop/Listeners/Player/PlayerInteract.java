@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
+import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
@@ -167,7 +168,9 @@ public class PlayerInteract implements Listener {
         Container shopBlock = uBlock.findConnectedContainer(sign);
         Inventory ownerInventory = (adminShop ? new AdminInventory() : shopBlock != null ? shopBlock.getInventory() : null);
 
-        ItemStack item = MaterialUtil.getItem(material);
+        ItemParseEvent parseEvent = new ItemParseEvent(material);
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        ItemStack item = parseEvent.getItem();
         if (item == null || !NumberUtil.isInteger(quantity)) {
             player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
             return null;
