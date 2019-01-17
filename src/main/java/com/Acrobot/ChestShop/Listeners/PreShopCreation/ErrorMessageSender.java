@@ -32,6 +32,18 @@ public class ErrorMessageSender implements Listener {
             case SELL_PRICE_HIGHER_THAN_BUY_PRICE:
                 message = Messages.YOU_CANNOT_CREATE_SHOP;
                 break;
+            case SELL_PRICE_ABOVE_MAX:
+                message = Messages.SELL_PRICE_ABOVE_MAX;
+                break;
+            case SELL_PRICE_BELOW_MIN:
+                message = Messages.SELL_PRICE_BELOW_MIN;
+                break;
+            case BUY_PRICE_ABOVE_MAX:
+                message = Messages.BUY_PRICE_ABOVE_MAX;
+                break;
+            case BUY_PRICE_BELOW_MIN:
+                message = Messages.BUY_PRICE_BELOW_MIN;
+                break;
             case NO_CHEST:
                 message = Messages.NO_CHEST_DETECTED;
                 break;

@@ -159,6 +159,10 @@ public class PreShopCreationEvent extends Event implements Cancellable {
         UNKNOWN_PLAYER,
 
         SELL_PRICE_HIGHER_THAN_BUY_PRICE,
+        SELL_PRICE_ABOVE_MAX,
+        SELL_PRICE_BELOW_MIN,
+        BUY_PRICE_ABOVE_MAX,
+        BUY_PRICE_BELOW_MIN,
 
         NO_CHEST,
 

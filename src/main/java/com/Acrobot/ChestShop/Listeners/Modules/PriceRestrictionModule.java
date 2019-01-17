@@ -1,11 +1,9 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.INVALID_PRICE;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_ABOVE_MAX;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_BELOW_MIN;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_ABOVE_MAX;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_BELOW_MIN;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
 
@@ -102,11 +103,11 @@ public class PriceRestrictionModule implements Listener {
             double buyPrice = PriceUtil.getBuyPrice(event.getSignLine(PRICE_LINE));
 
             if (isValid("min.buy_price." + itemType) && buyPrice < (configuration.getDouble("min.buy_price." + itemType) / amount)) {
-                event.setOutcome(INVALID_PRICE);
+                event.setOutcome(BUY_PRICE_BELOW_MIN);
             }
 
             if (isValid("max.buy_price." + itemType) && buyPrice > (configuration.getDouble("max.buy_price." + itemType) / amount)) {
-                event.setOutcome(INVALID_PRICE);
+                event.setOutcome(BUY_PRICE_ABOVE_MAX);
             }
         }
 
@@ -114,11 +115,11 @@ public class PriceRestrictionModule implements Listener {
             double sellPrice = PriceUtil.getSellPrice(event.getSignLine(PRICE_LINE));
 
             if (isValid("min.sell_price." + itemType) && sellPrice < (configuration.getDouble("min.sell_price." + itemType) / amount)) {
-                event.setOutcome(INVALID_PRICE);
+                event.setOutcome(SELL_PRICE_BELOW_MIN);
             }
 
             if (isValid("max.sell_price." + itemType) && sellPrice > (configuration.getDouble("max.sell_price." + itemType) / amount)) {
-                event.setOutcome(INVALID_PRICE);
+                event.setOutcome(SELL_PRICE_ABOVE_MAX);
             }
         }
     }

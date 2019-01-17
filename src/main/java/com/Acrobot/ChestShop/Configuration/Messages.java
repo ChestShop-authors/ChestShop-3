@@ -51,6 +51,12 @@ public class Messages {
     public static String CANNOT_ACCESS_THE_CHEST = "You don't have permissions to access this chest!";
 
     @PrecededBySpace
+    public static String SELL_PRICE_ABOVE_MAX = "Sell price is above maximum!";
+    public static String SELL_PRICE_BELOW_MIN ="Buy price is below minimum!";
+    public static String BUY_PRICE_ABOVE_MAX = "Buy price is above maximum!";
+    public static String BUY_PRICE_BELOW_MIN ="Buy price is below minimum!";
+
+    @PrecededBySpace
     public static String CLICK_TO_AUTOFILL_ITEM = "Click the sign with the item that this shop is for!";
     public static String NO_ITEM_IN_HAND = "You don't have an item in your hand to autofill!";
 
