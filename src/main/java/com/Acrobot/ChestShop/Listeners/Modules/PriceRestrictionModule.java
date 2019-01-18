@@ -22,6 +22,7 @@ import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_BELOW_MIN;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
 /**
  * @author Acrobot
@@ -100,7 +101,12 @@ public class PriceRestrictionModule implements Listener {
         }
 
         String itemType = material.getType().toString().toLowerCase();
-        int amount = material.getAmount();
+        int amount;
+        try {
+            amount = Integer.parseInt(event.getSignLine(QUANTITY_LINE));
+        } catch (IllegalArgumentException e) {
+            return;
+        }
 
         if (PriceUtil.hasBuyPrice(event.getSignLine(PRICE_LINE))) {
             double buyPrice = PriceUtil.getBuyPrice(event.getSignLine(PRICE_LINE));

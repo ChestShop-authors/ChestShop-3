@@ -52,7 +52,7 @@ public class Messages {
 
     @PrecededBySpace
     public static String SELL_PRICE_ABOVE_MAX = "Sell price is above maximum!";
-    public static String SELL_PRICE_BELOW_MIN ="Buy price is below minimum!";
+    public static String SELL_PRICE_BELOW_MIN ="Sell price is below minimum!";
     public static String BUY_PRICE_ABOVE_MAX = "Buy price is above maximum!";
     public static String BUY_PRICE_BELOW_MIN ="Buy price is below minimum!";
 
