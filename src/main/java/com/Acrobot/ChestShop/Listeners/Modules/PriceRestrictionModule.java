@@ -111,11 +111,11 @@ public class PriceRestrictionModule implements Listener {
         if (PriceUtil.hasBuyPrice(event.getSignLine(PRICE_LINE))) {
             double buyPrice = PriceUtil.getBuyPrice(event.getSignLine(PRICE_LINE));
 
-            if (isValid("min.buy_price." + itemType) && buyPrice < (configuration.getDouble("min.buy_price." + itemType) / amount)) {
+            if (isValid("min.buy_price." + itemType) && buyPrice < (configuration.getDouble("min.buy_price." + itemType) * amount)) {
                 event.setOutcome(BUY_PRICE_BELOW_MIN);
             }
 
-            if (isValid("max.buy_price." + itemType) && buyPrice > (configuration.getDouble("max.buy_price." + itemType) / amount)) {
+            if (isValid("max.buy_price." + itemType) && buyPrice > (configuration.getDouble("max.buy_price." + itemType) * amount)) {
                 event.setOutcome(BUY_PRICE_ABOVE_MAX);
             }
         }
@@ -123,11 +123,11 @@ public class PriceRestrictionModule implements Listener {
         if (PriceUtil.hasSellPrice(event.getSignLine(PRICE_LINE))) {
             double sellPrice = PriceUtil.getSellPrice(event.getSignLine(PRICE_LINE));
 
-            if (isValid("min.sell_price." + itemType) && sellPrice < (configuration.getDouble("min.sell_price." + itemType) / amount)) {
+            if (isValid("min.sell_price." + itemType) && sellPrice < (configuration.getDouble("min.sell_price." + itemType) * amount)) {
                 event.setOutcome(SELL_PRICE_BELOW_MIN);
             }
 
-            if (isValid("max.sell_price." + itemType) && sellPrice > (configuration.getDouble("max.sell_price." + itemType) / amount)) {
+            if (isValid("max.sell_price." + itemType) && sellPrice > (configuration.getDouble("max.sell_price." + itemType) * amount)) {
                 event.setOutcome(SELL_PRICE_ABOVE_MAX);
             }
         }
