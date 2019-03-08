@@ -82,13 +82,13 @@ permissions:
   ChestShop.mod:
     description: Allows user only to view other store chests, he can't destroy them or create an Admin Shop
     children:
-      ChestShop.name.access.*: true
+      ChestShop.othername.access.*: true
   ChestShop.name.*:
     description: Gives you the power to do create and access shops for all names.
     children:
-      ChestShop.name.create.*: true
-      ChestShop.name.destroy.*: true
-      ChestShop.name.access.*: true
+      ChestShop.othername.create.*: true
+      ChestShop.othername.destroy.*: true
+      ChestShop.othername.access.*: true
   ChestShop.name.(some name):
     description: Gives you the power to do create and access shops for (some name), for example your town.
   ChestShop.name.create.*:

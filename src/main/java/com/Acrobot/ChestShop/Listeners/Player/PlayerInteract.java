@@ -105,16 +105,16 @@ public class PlayerInteract implements Listener {
 
 
         if (ChestShopSign.hasPermission(player, OTHER_NAME_ACCESS, sign) && !ChestShopSign.isAdminShop(sign)) {
-            if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
-                if (player.isSneaking() || player.isInsideVehicle()
-                        || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+            if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
+                if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
+                    if (player.isSneaking() || player.isInsideVehicle()
+                            || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+                        return;
+                    }
+                    event.setCancelled(true);
+                    showChestGUI(player, block, sign);
                     return;
                 }
-                event.setCancelled(true);
-                showChestGUI(player, block, sign);
-                return;
-            }
-            if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
                 // don't allow owners or people with access to buy/sell at this shop
                 return;
             }
