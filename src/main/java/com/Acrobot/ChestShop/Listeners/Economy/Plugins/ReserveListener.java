@@ -51,7 +51,7 @@ public class ReserveListener implements Listener {
     }
 
     public static @Nullable ReserveListener prepareListener() {
-        if (Bukkit.getPluginManager().getPlugin("Reserve") == null || Reserve.instance().economyProvided()) {
+        if (Bukkit.getPluginManager().getPlugin("Reserve") == null || !Reserve.instance().economyProvided()) {
             return null;
         }
 
