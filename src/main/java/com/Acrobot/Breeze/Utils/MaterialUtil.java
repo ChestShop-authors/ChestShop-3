@@ -74,12 +74,15 @@ public class MaterialUtil {
             return true;
         }
 
+        // Additional checks as serialisation and de-serialisation might lead to different item meta
+        // This would only be done if the items share the same item meta type so it shouldn't be too inefficient
         // Special check for books as their pages might change when serialising (See SPIGOT-3206)
+        // Special check for explorer maps/every item with a localised name (See SPIGOT-4672)
         return one.getType() == two.getType()
                 && one.getDurability() == two.getDurability()
                 && one.getData().equals(two.getData())
                 && one.hasItemMeta() && two.hasItemMeta()
-                && one.getItemMeta() instanceof BookMeta && two.getItemMeta() instanceof BookMeta
+                && one.getItemMeta().getClass() == two.getItemMeta().getClass()
                 && one.getItemMeta().serialize().equals(two.getItemMeta().serialize());
     }
 

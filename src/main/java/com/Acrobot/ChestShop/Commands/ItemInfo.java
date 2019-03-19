@@ -14,6 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.logging.Level;
+
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo;
 
 /**
@@ -43,13 +45,17 @@ public class ItemInfo implements CommandExecutor {
         try {
             sender.sendMessage(ChatColor.WHITE + "Full Name: " + ChatColor.GRAY + MaterialUtil.getName(item));
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + "Full Name Error: " + e.getMessage());
+            sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
+            return true;
         }
 
         try {
             sender.sendMessage(ChatColor.WHITE + "Shop Sign: " + ChatColor.GRAY + MaterialUtil.getSignName(item));
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + "Shop Sign Error: " + e.getMessage());
+            sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
+            return true;
         }
 
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
