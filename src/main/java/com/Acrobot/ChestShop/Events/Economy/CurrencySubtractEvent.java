@@ -16,7 +16,7 @@ import java.util.UUID;
 public class CurrencySubtractEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    boolean subtracted;
+    boolean subtracted = false;
 
     private BigDecimal amount;
     private UUID target;

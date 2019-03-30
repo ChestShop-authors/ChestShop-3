@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
 import java.math.BigDecimal;
+import java.util.logging.Level;
 
 import javax.annotation.Nullable;
 
@@ -83,7 +84,13 @@ public class VaultListener implements Listener {
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
-            balance = provider.getBalance(lastSeen, event.getWorld().getName());
+            try {
+                balance = provider.getBalance(lastSeen, event.getWorld().getName());
+            } catch (Exception e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Could not get balance account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
+                        "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                        "If you are sure it's not this issue then please report the following error.", e);
+            }
 
             if (balance > Double.MAX_VALUE) {
                 balance = Double.MAX_VALUE;
@@ -103,12 +110,12 @@ public class VaultListener implements Listener {
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
-        if (lastSeen != null) {
-            if (provider.has(lastSeen, world.getName(), event.getDoubleAmount())) {
-                event.hasEnough(true);
-            }
-        } else {
-            event.hasEnough(false);
+        try {
+            event.hasEnough(lastSeen != null && provider.has(lastSeen, world.getName(), event.getDoubleAmount()));
+        } catch (Exception e) {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " has " + event.getDoubleAmount() + "." +
+                    "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                    "If you are sure it's not this issue then please report the following error.", e);
         }
     }
 
@@ -122,7 +129,13 @@ public class VaultListener implements Listener {
         //String lastSeen = NameManager.getLastSeenName(event.getAccount());
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
-        event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
+        try {
+            event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
+        } catch (Exception e) {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check account balance of "+ lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
+                    "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                    "If you are sure it's not this issue then please report the following error.", e);
+        }
     }
 
     @EventHandler
@@ -146,8 +159,14 @@ public class VaultListener implements Listener {
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
-            event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
+            try {
+                EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+                event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
+            } catch (Exception e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
+                        "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                        "If you are sure it's not this issue then please report the following error.", e);
+            }
         }
     }
 
@@ -162,8 +181,14 @@ public class VaultListener implements Listener {
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getTarget());
 
         if (lastSeen != null) {
-            EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
-            event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
+            try {
+                EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+                event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
+            } catch (Exception e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
+                        "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                        "If you are sure it's not this issue then please report the following error.", e);
+            }
         }
     }
 
@@ -201,18 +226,24 @@ public class VaultListener implements Listener {
             return;
         }
 
-        if (!provider.hasAccount(lastSeen, world)) {
-            event.canHold(false);
-            return;
+        try {
+            if (!provider.hasAccount(lastSeen, world)) {
+                event.canHold(false);
+                return;
+            }
+
+            EconomyResponse response = provider.depositPlayer(lastSeen, world, event.getDoubleAmount());
+
+            if (!response.transactionSuccess()) {
+                event.canHold(false);
+                return;
+            }
+
+            provider.withdrawPlayer(lastSeen, world, event.getDoubleAmount());
+        } catch (Exception e) {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " can hold " + event.getDoubleAmount() + "." +
+                    "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
+                    "If you are sure it's not then please report this error to the devs of ChestShop.", e);
         }
-
-        EconomyResponse response = provider.depositPlayer(lastSeen, world, event.getDoubleAmount());
-
-        if (!response.transactionSuccess()) {
-            event.canHold(false);
-            return;
-        }
-
-        provider.withdrawPlayer(lastSeen, world, event.getDoubleAmount());
     }
 }

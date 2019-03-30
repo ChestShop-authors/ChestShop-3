@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AccountCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    boolean outcome;
+    boolean outcome = false;
 
     private UUID account;
     private World world;

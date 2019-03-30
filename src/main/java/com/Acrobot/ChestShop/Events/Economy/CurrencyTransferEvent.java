@@ -19,7 +19,7 @@ public class CurrencyTransferEvent extends Event {
     private World world;
     private UUID sender;
     private UUID receiver;
-    private boolean success;
+    private boolean success = false;
 
     public CurrencyTransferEvent(BigDecimal amount, UUID sender, UUID receiver, World world) {
         this.amount = amount;
