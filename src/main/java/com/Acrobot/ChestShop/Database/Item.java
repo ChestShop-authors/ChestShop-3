@@ -14,7 +14,7 @@ public class Item {
     @DatabaseField(canBeNull = false, generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "code", canBeNull = false, unique = true)
+    @DatabaseField(columnName = "code", canBeNull = false, index = true)
     private String base64ItemCode;
 
     public Item() {

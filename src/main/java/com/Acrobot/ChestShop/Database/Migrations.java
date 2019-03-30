@@ -17,7 +17,7 @@ import java.util.logging.Level;
  * @author Andrzej Pomirski
  */
 public class Migrations {
-    public static final int CURRENT_DATABASE_VERSION = 3;
+    public static final int CURRENT_DATABASE_VERSION = 4;
 
     /**
      * Migrates a database from the given version
@@ -46,6 +46,12 @@ public class Migrations {
                     return -1;
                 }
             case 3:
+                if (migrateTo4()) {
+                    currentVersion++;
+                } else {
+                    return -1;
+                }
+            case 4:
             default:
                 break;
                 //do nothing
@@ -113,6 +119,29 @@ public class Migrations {
                 ChestShop.getBukkitLogger().log(Level.INFO, success + " accounts successfully migrated. " + error + " accounts failed to migrate!");
             }
             ChestShop.getBukkitLogger().log(Level.INFO, "Migration of accounts table finished in " + (System.currentTimeMillis() - start) / 1000.0 + "s!");
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean migrateTo4() {
+        try {
+            Dao<Item, Integer> itemsOld = DaoCreator.getDao(Item.class);
+
+            itemsOld.executeRawNoArgs("ALTER TABLE `items` RENAME TO `items-old`");
+
+            Dao<Item, Integer> items = DaoCreator.getDaoAndCreateTable(Item.class);
+
+            long start = System.currentTimeMillis();
+            try {
+                items.executeRawNoArgs("INSERT INTO `items` (id, code) SELECT id, code uuid FROM `items-old`");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            ChestShop.getBukkitLogger().log(Level.INFO, "Migration of items table finished in " + (System.currentTimeMillis() - start) / 1000.0 + "s!");
 
             return true;
         } catch (SQLException e) {
