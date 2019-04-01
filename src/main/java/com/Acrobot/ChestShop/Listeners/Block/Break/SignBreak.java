@@ -53,11 +53,9 @@ public class SignBreak implements Listener {
         Block attachedBlock = BlockUtil.getAttachedBlock(sign);
 
         if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
-            if (!block.hasMetadata(METADATA_NAME)) {
-                return;
-            }
-
-            sendShopDestroyedEvent(sign, (Player) block.getMetadata(METADATA_NAME).get(0).value());
+            sendShopDestroyedEvent(sign, block.hasMetadata(METADATA_NAME)
+                    ? (Player) block.getMetadata(METADATA_NAME).get(0).value()
+                    : null);
         }
     }
 
