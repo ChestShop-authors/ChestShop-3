@@ -164,6 +164,9 @@ public class Properties {
     @ConfigurationComment("Do you want ChestShop's messages to show up in console?")
     public static boolean LOG_TO_CONSOLE = true;
 
+    @ConfigurationComment("Should all shop removals be logged to the console?")
+    public static boolean LOG_ALL_SHOP_REMOVALS = true;
+
     @PrecededBySpace
     @ConfigurationComment("Do you want to stack all items up to 64 item stacks?")
     public static boolean STACK_TO_64 = false;
