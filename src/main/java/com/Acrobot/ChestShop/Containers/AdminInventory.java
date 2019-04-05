@@ -1,11 +1,12 @@
 package com.Acrobot.ChestShop.Containers;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.Acrobot.Breeze.Utils.MaterialUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -18,6 +19,14 @@ import org.bukkit.inventory.ItemStack;
  * @author Acrobot
  */
 public class AdminInventory implements Inventory {
+
+    private ItemStack[] content;
+    private int maxStackSize = 64;
+
+    public AdminInventory(ItemStack[] content) {
+        this.content = content;
+    }
+
     @Override
     public int getSize() {
         return Integer.MAX_VALUE;
@@ -25,11 +34,12 @@ public class AdminInventory implements Inventory {
 
     @Override
     public int getMaxStackSize() {
-        return Integer.MAX_VALUE;
+        return maxStackSize;
     }
 
     @Override
     public void setMaxStackSize(int i) {
+        maxStackSize = i;
     }
 
     @Override
@@ -39,11 +49,21 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ItemStack getItem(int i) {
+        if (content.length < i) {
+            return content[i];
+        }
         return null;
     }
 
     @Override
     public void setItem(int i, ItemStack itemStack) {
+        if (i > getSize()) {
+            throw new IllegalArgumentException("Slot is outside inventory. Max size is " + getSize());
+        }
+        if (i >= content.length) {
+            content = Arrays.copyOfRange(content, 0, i);
+        }
+        content[i] = itemStack;
     }
 
     @Override
@@ -58,49 +78,59 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ItemStack[] getContents() {
-        return new ItemStack[]{
-                new ItemStack(Material.CHEST, 1),
-                new ItemStack(Material.AIR, Integer.MAX_VALUE)
-        };
+        return content;
     }
 
     @Override
     public void setContents(ItemStack[] itemStacks) {
+        content = itemStacks;
     }
 
     @Override
     public ItemStack[] getStorageContents() {
-        return new ItemStack[0];
+        return content;
     }
 
     @Override
     public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
-
+        content = itemStacks;
     }
 
     @Override
     public boolean contains(Material material) {
-        return true;
+        return first(material) > -1;
     }
 
     @Override
     public boolean contains(ItemStack itemStack) {
-        return true;
+        return first(itemStack) > -1;
     }
 
     @Override
     public boolean contains(Material material, int i) {
-        return true;
+        int amount = 0;
+        for (ItemStack item : content) {
+            if (item != null && item.getType() == material) {
+                amount += item.getAmount();
+            }
+        }
+        return amount >= i;
     }
 
     @Override
     public boolean contains(ItemStack itemStack, int i) {
-        return true;
+        int amount = 0;
+        for (ItemStack item : content) {
+            if (MaterialUtil.equals(item, itemStack)) {
+                amount += itemStack.getAmount();
+            }
+        }
+        return amount >= i;
     }
 
     @Override
     public boolean containsAtLeast(ItemStack itemStack, int i) {
-        return true;
+        return contains(itemStack, i);
     }
 
     @Override
@@ -133,12 +163,22 @@ public class AdminInventory implements Inventory {
 
     @Override
     public int first(Material material) {
-        return 0;
+        for (int i = 0; i < content.length; i++) {
+            if (content[i] != null && content[i].getType() == material) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int first(ItemStack itemStack) {
-        return 0;
+        for (int i = 0; i < content.length; i++) {
+            if (MaterialUtil.equals(content[i], itemStack)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -184,12 +224,12 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ListIterator<ItemStack> iterator() {
-        return Collections.emptyListIterator();
+        return Arrays.asList(content).listIterator();
     }
 
     @Override
     public ListIterator<ItemStack> iterator(int i) {
-        return null;
+        return Arrays.asList(content).listIterator(i);
     }
 
     @Override

@@ -174,7 +174,7 @@ public class PlayerInteract implements Listener {
         double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
 
         Container shopBlock = uBlock.findConnectedContainer(sign);
-        Inventory ownerInventory = (adminShop ? new AdminInventory() : shopBlock != null ? shopBlock.getInventory() : null);
+        Inventory ownerInventory = shopBlock != null ? shopBlock.getInventory() : null;
 
         ItemParseEvent parseEvent = new ItemParseEvent(material);
         Bukkit.getPluginManager().callEvent(parseEvent);
@@ -191,7 +191,7 @@ public class PlayerInteract implements Listener {
         }
 
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
-            int newAmount = getStackAmount(item, ownerInventory, player, action);
+            int newAmount = adminShop ? InventoryUtil.getMaxStackSize(item) : getStackAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
                 price = (price / amount) * newAmount;
                 amount = newAmount;
@@ -201,6 +201,10 @@ public class PlayerInteract implements Listener {
         item.setAmount(amount);
 
         ItemStack[] items = InventoryUtil.getItemsStacked(item);
+
+        if (adminShop) {
+            ownerInventory = new AdminInventory(items);
+        }
 
         TransactionType transactionType = (action == buy ? BUY : SELL);
         return new PreTransactionEvent(ownerInventory, player.getInventory(), items, price, player, account, sign, transactionType);
