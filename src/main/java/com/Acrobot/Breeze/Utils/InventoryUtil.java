@@ -163,6 +163,62 @@ public class InventoryUtil {
     }
 
     /**
+     * Transfers an item from one inventory to another one
+     *
+     * @param item              Item to transfer
+     * @param sourceInventory   Inventory to transfer the item from
+     * @param targetInventory   Inventory to transfer the item to
+     * @return Number of leftover items
+     */
+    public static int transfer(ItemStack item, Inventory sourceInventory, Inventory targetInventory) {
+        return transfer(item, sourceInventory, targetInventory, item.getMaxStackSize());
+    }
+
+    /**
+     * Transfers an item from one inventory to another one
+     *
+     * @param item              Item to transfer
+     * @param sourceInventory   Inventory to transfer the item from
+     * @param targetInventory   Inventory to transfer the item to
+     * @param maxStackSize      Maximum item's stack size
+     * @return Number of leftover items
+     */
+    public static int transfer(ItemStack item, Inventory sourceInventory, Inventory targetInventory, int maxStackSize) {
+        if (item.getAmount() < 1) {
+            return 0;
+        }
+
+        int amount = item.getAmount();
+        for (ItemStack currentItem : sourceInventory) {
+            if (MaterialUtil.equals(currentItem, item)) {
+                ItemStack clone = currentItem.clone();
+                if (currentItem.getAmount() >= amount) {
+                    clone.setAmount(amount);
+                    amount = 0;
+                } else {
+                    clone.setAmount(currentItem.getAmount());
+                    amount -= clone.getAmount();
+                }
+                int leftOver = add(clone, targetInventory, maxStackSize);
+                if (leftOver > 0) {
+                    currentItem.setAmount(currentItem.getAmount() - clone.getAmount() + leftOver);
+                    if (amount > 0) {
+                        amount += leftOver;
+                    } else {
+                        return leftOver;
+                    }
+                } else {
+                    currentItem.setAmount(currentItem.getAmount() - clone.getAmount());
+                }
+            }
+            if (amount <= 0) {
+                break;
+            }
+        }
+        return amount;
+    }
+
+    /**
      * Adds an item to the inventory with given maximum stack size
      *
      * @param item         Item to add
