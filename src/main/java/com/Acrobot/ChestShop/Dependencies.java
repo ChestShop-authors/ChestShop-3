@@ -81,12 +81,12 @@ public class Dependencies {
         }
 
         if (economy == null) {
-            ChestShop.getBukkitLogger().severe("No Economy plugin found! You need to install either Vault or Reserve and a compatible economy!");
+            ChestShop.getBukkitLogger().severe("No Economy adapter found! You need to install either Vault or Reserve!");
             return false;
         }
 
         ChestShop.registerListener(economy);
-        ChestShop.getBukkitLogger().info(plugin + " loaded! Found an economy plugin!");
+        ChestShop.getBukkitLogger().info(plugin + " loaded!");
         return true;
     }
 

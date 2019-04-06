@@ -13,6 +13,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServiceRegisterEvent;
+import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.Acrobot.ChestShop.ChestShop;
@@ -31,9 +33,30 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
  * @author Acrobot
  */
 public class VaultListener implements Listener {
+    private RegisteredServiceProvider<Economy> rsp;
     private static Economy provider;
 
-    private VaultListener(Economy provider) { VaultListener.provider = provider; }
+    private VaultListener() {
+        updateEconomyProvider();
+    }
+
+    private void updateEconomyProvider() {
+        rsp = ChestShop.getBukkitServer().getServicesManager().getRegistration(Economy.class);
+
+        if (rsp != null) {
+            provider = rsp.getProvider();
+            ChestShop.getBukkitLogger().log(Level.INFO, "Using " + provider.getName() + " as the Economy provider now.");
+        }
+    }
+
+    private boolean checkSetup() {
+        if (provider == null) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "No Vault compatible Economy plugin found!");
+            ChestShop.getBukkitServer().getPluginManager().disablePlugin(ChestShop.getPlugin());
+            return false;
+        }
+        return true;
+    }
 
     public static Economy getProvider() { return provider; }
 
@@ -57,25 +80,26 @@ public class VaultListener implements Listener {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             return null;
         }
+        return new VaultListener();
+    }
 
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-
-        if (rsp == null) {
-            return null;
+    @EventHandler
+    public void onServiceRegister(ServiceRegisterEvent event) {
+        if (event.getProvider().getProvider() instanceof Economy) {
+            updateEconomyProvider();
         }
+    }
 
-        Economy provider = rsp.getProvider();
-
-        if (provider == null) {
-            return null;
-        } else {
-            return new VaultListener(provider);
+    @EventHandler
+    public void onServiceUnregister(ServiceUnregisterEvent event) {
+        if (event.getProvider().getProvider() instanceof Economy) {
+            updateEconomyProvider();
         }
     }
 
     @EventHandler
     public void onAmountCheck(CurrencyAmountEvent event) {
-        if (!event.getAmount().equals(BigDecimal.ZERO)) {
+        if (!checkSetup() || !event.getAmount().equals(BigDecimal.ZERO)) {
             return;
         }
 
@@ -102,7 +126,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
-        if (event.hasEnough()) {
+        if (!checkSetup() || event.hasEnough()) {
             return;
         }
 
@@ -121,7 +145,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onAccountCheck(AccountCheckEvent event) {
-        if (event.hasAccount()) {
+        if (!checkSetup() || event.hasAccount()) {
             return;
         }
 
@@ -140,7 +164,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyFormat(CurrencyFormatEvent event) {
-        if (!event.getFormattedAmount().isEmpty()) {
+        if (!checkSetup() || !event.getFormattedAmount().isEmpty()) {
             return;
         }
 
@@ -150,7 +174,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyAdd(CurrencyAddEvent event) {
-        if (event.isAdded()) {
+        if (!checkSetup() || event.isAdded()) {
             return;
         }
 
@@ -172,7 +196,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencySubtraction(CurrencySubtractEvent event) {
-        if (event.isSubtracted()) {
+        if (!checkSetup() || event.isSubtracted()) {
             return;
         }
 
@@ -194,7 +218,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (event.hasBeenTransferred()) {
+        if (!checkSetup() || event.hasBeenTransferred()) {
             return;
         }
 
@@ -213,7 +237,7 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount() == null || !transactionCanFail()) {
+        if (!checkSetup() || event.getAccount() == null || !transactionCanFail()) {
             return;
         }
 
