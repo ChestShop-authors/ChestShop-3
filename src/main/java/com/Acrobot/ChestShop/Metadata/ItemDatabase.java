@@ -15,13 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -85,7 +84,6 @@ public class ItemDatabase {
         AtomicInteger i = new AtomicInteger();
         AtomicInteger updated = new AtomicInteger();
         CloseableIterator<Item> it = itemDao.iterator();
-        List<Item> toUpdate = new ArrayList<>();
 
         long start = System.currentTimeMillis();
         try {
@@ -97,14 +95,19 @@ public class ItemDatabase {
                     try {
                         String serialized = (String) Base64.decodeToObject(item.getBase64ItemCode());
                         if (previousVersion < 0 || !serialized.contains("\nv: " + newVersion + "\n")) { // Hacky way to quickly check the version as it's not too big of an issue if some items don't convert
-                            ItemStack itemStack = yaml.loadAs(serialized, ItemStack.class);
-                            item.setBase64ItemCode(Base64.encodeObject(yaml.dump(itemStack)));
-                            toUpdate.add(item);
-                            itemDao.update(item);
-                            updated.getAndIncrement();
+                            try {
+                                ItemStack itemStack = yaml.loadAs(serialized, ItemStack.class);
+                                item.setBase64ItemCode(Base64.encodeObject(yaml.dump(itemStack)));
+                                itemDao.update(item);
+                                updated.getAndIncrement();
+                            } catch (YAMLException e) {
+                                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
+                            }
                         }
                     } catch (IOException | ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to convert item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ")", e);
+                    } catch (StackOverflowError e) {
+                        ChestShop.getBukkitLogger().log(Level.SEVERE, "Item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted. Sorry :(");
                     }
                     if (i.get() % 1000 == 0) {
                         ChestShop.getBukkitLogger().info("Checked " + i + " items. Updated " + updated + "...");
@@ -120,7 +123,7 @@ public class ItemDatabase {
         }
 
         ChestShop.getBukkitLogger().info("Finished updating database in " + (System.currentTimeMillis() - start) / 1000.0 + "s. " +
-                toUpdate.size() + " items out of " + i + " were updated!");
+                updated + " items out of " + i + " were updated!");
         return true;
     }
 
@@ -169,8 +172,8 @@ public class ItemDatabase {
     {
         // TODO java.lang.StackOverflowError - http://pastebin.com/eRD8wUFM - Corrupt item DB?
 
+        int id = Base62.decode(code);
         try {
-            int id = Base62.decode(code);
             Item item = itemDao.queryBuilder().where().eq("id", id).queryForFirst();
 
             if (item == null) {
@@ -179,13 +182,15 @@ public class ItemDatabase {
 
             String serialized = item.getBase64ItemCode();
 
-            return yaml.loadAs((String) Base64.decodeToObject(serialized), ItemStack.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            try {
+                return yaml.loadAs((String) Base64.decodeToObject(serialized), ItemStack.class);
+            } catch (YAMLException e) {
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException | YAMLException e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to load item with ID " + code + " (" + id + ")", e);
+        } catch (StackOverflowError e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Item with ID " + code + " (" + id + ") is corrupted. Sorry :(");
         }
 
         return null;
