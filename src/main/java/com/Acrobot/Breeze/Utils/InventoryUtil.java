@@ -138,7 +138,7 @@ public class InventoryUtil {
     public static boolean fits(ItemStack item, Inventory inventory) {
         int left = item.getAmount();
 
-        if (inventory.getMaxStackSize() == Integer.MAX_VALUE) {
+        if (inventory.getSize() == Integer.MAX_VALUE) {
             return true;
         }
 
