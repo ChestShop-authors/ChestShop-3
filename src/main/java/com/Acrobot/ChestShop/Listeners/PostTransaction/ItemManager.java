@@ -3,10 +3,13 @@ package com.Acrobot.ChestShop.Listeners.PostTransaction;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
@@ -23,8 +26,6 @@ public class ItemManager implements Listener {
         }
 
         transferItems(event.getOwnerInventory(), event.getClientInventory(), event.getStock());
-
-        event.getClient().updateInventory();
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -34,8 +35,6 @@ public class ItemManager implements Listener {
         }
 
         transferItems(event.getClientInventory(), event.getOwnerInventory(), event.getStock());
-
-        event.getClient().updateInventory();
     }
 
     private static void transferItems(Inventory sourceInventory, Inventory targetInventory, ItemStack[] items) {
@@ -47,6 +46,17 @@ public class ItemManager implements Listener {
             for (ItemStack item : items) {
                 InventoryUtil.transfer(item, sourceInventory, targetInventory);
             }
+        }
+        update(sourceInventory.getHolder());
+        update(targetInventory.getHolder());
+    }
+
+    private static void update(InventoryHolder holder) {
+        if (holder instanceof Player) {
+            ((Player) holder).updateInventory();
+        }
+        if (holder instanceof BlockState) {
+            ((BlockState) holder).update();
         }
     }
 }
