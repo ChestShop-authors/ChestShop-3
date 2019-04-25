@@ -1,11 +1,14 @@
 package com.Acrobot.Breeze.Utils;
 
+import java.math.BigDecimal;
+
 /**
  * @author Acrobot
  */
 public class PriceUtil {
-    public static final double NO_PRICE = -1;
-    public static final double FREE = 0;
+    public static final BigDecimal NO_PRICE = BigDecimal.valueOf(-1);
+    public static final BigDecimal FREE = BigDecimal.valueOf(0);
+    public static final BigDecimal MAX = BigDecimal.valueOf(Double.MAX_VALUE);
 
     public static final String FREE_TEXT = "free";
 
@@ -13,13 +16,13 @@ public class PriceUtil {
     public static final char SELL_INDICATOR = 's';
 
     /**
-     * Gets the price from the text
+     * Gets the exact price from the text
      *
      * @param text      Text to check
      * @param indicator Price indicator (for example, B for buy)
-     * @return price
+     * @return exact price
      */
-    public static double get(String text, char indicator) {
+    public static BigDecimal getExact(String text, char indicator) {
         String[] split = text.replace(" ", "").toLowerCase().split(":");
         String character = String.valueOf(indicator).toLowerCase();
 
@@ -34,18 +37,51 @@ public class PriceUtil {
                 return FREE;
             }
 
-            if (NumberUtil.isDouble(part)) {
-                double price = Double.valueOf(part);
+            try {
+                BigDecimal price = new BigDecimal(part);
 
-                if (Double.isInfinite(price) || price <= 0) {
+                if (price.compareTo(MAX) > 0 || price.compareTo(BigDecimal.ZERO) <= 0) {
                     return NO_PRICE;
                 } else {
                     return price;
                 }
-            }
+            } catch (NumberFormatException ignored) {}
         }
 
         return NO_PRICE;
+    }
+
+    /**
+     * Gets the price from the text
+     *
+     * @param text      Text to check
+     * @param indicator Price indicator (for example, B for buy)
+     * @return price
+     * @deprecated Use {@link #getExact(String, char)}
+     */
+    @Deprecated
+    public static double get(String text, char indicator) {
+        return getExact(text, indicator).doubleValue();
+    }
+
+    /**
+     * Gets the exact buy price from the text
+     *
+     * @param text Text to check
+     * @return Exact buy price
+     */
+    public static BigDecimal getExactBuyPrice(String text) {
+        return getExact(text, BUY_INDICATOR);
+    }
+
+    /**
+     * Gets the exact sell price from the text
+     *
+     * @param text Text to check
+     * @return Exact sell price
+     */
+    public static BigDecimal getExactSellPrice(String text) {
+        return getExact(text, SELL_INDICATOR);
     }
 
     /**
@@ -53,9 +89,11 @@ public class PriceUtil {
      *
      * @param text Text to check
      * @return Buy price
+     * @deprecated Use {@link #getExactBuyPrice(String)}
      */
+    @Deprecated
     public static double getBuyPrice(String text) {
-        return get(text, BUY_INDICATOR);
+        return getExactBuyPrice(text).doubleValue();
     }
 
     /**
@@ -63,9 +101,11 @@ public class PriceUtil {
      *
      * @param text Text to check
      * @return Sell price
+     * @deprecated Use {@link #getExactSellPrice(String)}
      */
+    @Deprecated
     public static double getSellPrice(String text) {
-        return get(text, SELL_INDICATOR);
+        return getExactSellPrice(text).doubleValue();
     }
 
     /**
@@ -96,7 +136,7 @@ public class PriceUtil {
      * @return If the text contains indicated price
      */
     public static boolean hasPrice(String text, char indicator) {
-        return get(text, indicator) != NO_PRICE;
+        return getExact(text, indicator).compareTo(NO_PRICE) != 0;
     }
 
     /**

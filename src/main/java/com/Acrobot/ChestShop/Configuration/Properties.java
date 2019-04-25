@@ -8,6 +8,7 @@ import com.Acrobot.Breeze.Configuration.ValueParser;
 import com.Acrobot.ChestShop.ChestShop;
 import org.bukkit.Material;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -46,6 +47,22 @@ public class Properties {
                         }
                     }
                     return set;
+                }
+                return object;
+            }
+        });
+        Configuration.registerParser("BigDecimal", new ValueParser(){
+            @Override
+            public String parseToYAML(Object object) {
+                if (object instanceof BigDecimal) {
+                    return object.toString();
+                }
+                return super.parseToYAML(object);
+            }
+
+            public Object parseToJava(Object object) {
+                if (object instanceof Double) {
+                    return BigDecimal.valueOf((Double) object);
                 }
                 return object;
             }
@@ -117,10 +134,10 @@ public class Properties {
     public static int SERVER_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Amount of money player must pay to create a shop")
-    public static double SHOP_CREATION_PRICE = 0;
+    public static BigDecimal SHOP_CREATION_PRICE = BigDecimal.valueOf(0);
 
     @ConfigurationComment("How much money do you get back when destroying a sign?")
-    public static double SHOP_REFUND_PRICE = 0;
+    public static BigDecimal SHOP_REFUND_PRICE = BigDecimal.valueOf(0);
 
     @ConfigurationComment("How many decimal places are allowed at a maximum for prices?")
     public static int PRICE_PRECISION = 2;

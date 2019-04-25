@@ -27,9 +27,9 @@ public class CreationFeeGetter implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public static void onShopCreation(PreShopCreationEvent event) {
-        double shopCreationPrice = Properties.SHOP_CREATION_PRICE;
+        BigDecimal shopCreationPrice = Properties.SHOP_CREATION_PRICE;
 
-        if (shopCreationPrice == 0) {
+        if (shopCreationPrice.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
 
@@ -43,7 +43,7 @@ public class CreationFeeGetter implements Listener {
             return;
         }
 
-        CurrencySubtractEvent subtractionEvent = new CurrencySubtractEvent(BigDecimal.valueOf(shopCreationPrice), player);
+        CurrencySubtractEvent subtractionEvent = new CurrencySubtractEvent(shopCreationPrice, player);
         ChestShop.callEvent(subtractionEvent);
 
         if (!subtractionEvent.isSubtracted()) {
@@ -54,7 +54,7 @@ public class CreationFeeGetter implements Listener {
 
         if (NameManager.getServerEconomyAccount() != null) {
             CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(
-                    BigDecimal.valueOf(shopCreationPrice),
+                    shopCreationPrice,
                     NameManager.getServerEconomyAccount().getUuid(),
                     player.getWorld());
             ChestShop.callEvent(currencyAddEvent);

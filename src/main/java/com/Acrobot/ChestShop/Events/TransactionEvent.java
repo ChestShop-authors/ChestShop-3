@@ -11,6 +11,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+
 /**
  * Represents a state after transaction has occured
  *
@@ -27,7 +29,7 @@ public class TransactionEvent extends Event implements Cancellable {
     private final Account ownerAccount;
 
     private final ItemStack[] stock;
-    private final double price;
+    private final BigDecimal exactPrice;
 
     private final Sign sign;
 
@@ -43,12 +45,12 @@ public class TransactionEvent extends Event implements Cancellable {
         this.ownerAccount = event.getOwnerAccount();
 
         this.stock = event.getStock();
-        this.price = event.getPrice();
+        this.exactPrice = event.getExactPrice();
 
         this.sign = sign;
     }
 
-    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, Account ownerAccount, ItemStack[] stock, double price, Sign sign) {
+    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, Account ownerAccount, ItemStack[] stock, BigDecimal exactPrice, Sign sign) {
         this.type = type;
 
         this.ownerInventory = ownerInventory;
@@ -58,9 +60,17 @@ public class TransactionEvent extends Event implements Cancellable {
         this.ownerAccount = ownerAccount;
 
         this.stock = stock;
-        this.price = price;
+        this.exactPrice = exactPrice;
 
         this.sign = sign;
+    }
+
+    /**
+     * @deprecated Use {@link #TransactionEvent(TransactionType, Inventory, Inventory, Player, Account, ItemStack[], BigDecimal, Sign)}
+     */
+    @Deprecated
+    public TransactionEvent(TransactionType type, Inventory ownerInventory, Inventory clientInventory, Player client, Account ownerAccount, ItemStack[] stock, double price, Sign sign) {
+        this(type, ownerInventory, clientInventory, client, ownerAccount, stock, BigDecimal.valueOf(price), sign);
     }
 
     /**
@@ -115,10 +125,23 @@ public class TransactionEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return Total price of the items
+     * Get the exact total price
+     *
+     * @return Exact total price of the items
      */
+    public BigDecimal getExactPrice() {
+        return exactPrice;
+    }
+
+    /**
+     * Get the total price
+     *
+     * @return Total price of the items
+     * @deprecated Use {@link #getExactPrice()}
+     */
+    @Deprecated
     public double getPrice() {
-        return price;
+        return exactPrice.doubleValue();
     }
 
     /**

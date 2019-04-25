@@ -32,6 +32,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -172,7 +174,7 @@ public class PlayerInteract implements Listener {
         }
 
         Action buy = Properties.REVERSE_BUTTONS ? LEFT_CLICK_BLOCK : RIGHT_CLICK_BLOCK;
-        double price = (action == buy ? PriceUtil.getBuyPrice(prices) : PriceUtil.getSellPrice(prices));
+        BigDecimal price = (action == buy ? PriceUtil.getExactBuyPrice(prices) : PriceUtil.getExactSellPrice(prices));
 
         Container shopBlock = uBlock.findConnectedContainer(sign);
         Inventory ownerInventory = shopBlock != null ? shopBlock.getInventory() : null;
@@ -194,7 +196,7 @@ public class PlayerInteract implements Listener {
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
             int newAmount = adminShop ? InventoryUtil.getMaxStackSize(item) : getStackAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
-                price = (price / amount) * newAmount;
+                price = price.divide(BigDecimal.valueOf(amount), MathContext.UNLIMITED).multiply(BigDecimal.valueOf(newAmount));
                 amount = newAmount;
             }
         }

@@ -63,7 +63,7 @@ public class TransactionMessageSender implements Listener {
     private static void sendMessage(Player player, String rawMessage, TransactionEvent event, String... replacements) {
         Location loc = event.getSign().getLocation();
         String message = Messages.prefix(rawMessage)
-                .replace("%price", Economy.formatBalance(event.getPrice()))
+                .replace("%price", Economy.formatBalance(event.getExactPrice()))
                 .replace("%world", loc.getWorld().getName())
                 .replace("%x", String.valueOf(loc.getBlockX()))
                 .replace("%y", String.valueOf(loc.getBlockY()))

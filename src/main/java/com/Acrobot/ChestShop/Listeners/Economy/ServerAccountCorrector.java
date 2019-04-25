@@ -61,6 +61,33 @@ public class ServerAccountCorrector implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
+        UUID partner = event.getPartner();
+
+        if (!NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)) {
+            return;
+        }
+
+        Account account = NameManager.getServerEconomyAccount();
+        partner = account != null ? account.getUuid() : null;
+
+        if (partner == null) {
+            return;
+        }
+
+        CurrencyTransferEvent currencyTransferEvent = new CurrencyTransferEvent(
+                event.getAmountSent(),
+                event.getAmountReceived(),
+                event.getInitiator(),
+                partner,
+                event.getDirection()
+        );
+        ChestShop.callEvent(currencyTransferEvent);
+        event.setTransferred(currencyTransferEvent.hasBeenTransferred());
+        return;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public static void onCurrencyCheck(CurrencyCheckEvent event) {
         UUID target = event.getAccount();
 

@@ -11,6 +11,8 @@ import java.util.UUID;
 /**
  * Represents an addition of goods to entity
  *
+ * Use {@link CurrencyTransferEvent} if you want to transfer money from one account to another one!
+ *
  * @author Acrobot
  */
 public class CurrencyAddEvent extends Event {

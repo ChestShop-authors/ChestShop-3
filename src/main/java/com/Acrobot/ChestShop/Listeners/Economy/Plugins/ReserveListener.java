@@ -8,12 +8,12 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -23,7 +23,7 @@ import java.math.BigDecimal;
  *
  * @author creatorfromhell
  */
-public class ReserveListener implements Listener {
+public class ReserveListener extends EconomyAdapter {
 
     private static @Nullable EconomyAPI economyAPI;
 
@@ -136,21 +136,7 @@ public class ReserveListener implements Listener {
 
     @EventHandler
     public void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (event.hasBeenTransferred()) {
-            return;
-        }
-
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
-        onCurrencySubtraction(currencySubtractEvent);
-
-        if (!currencySubtractEvent.isSubtracted()) {
-            return;
-        }
-
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
-        onCurrencyAdd(currencyAddEvent);
-
-        event.setTransferred(currencyAddEvent.isAdded());
+        processTransfer(event);
     }
 
     @EventHandler

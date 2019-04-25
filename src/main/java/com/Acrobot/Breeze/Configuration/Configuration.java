@@ -147,6 +147,9 @@ public class Configuration {
             parser = Configuration.getParser(field.getAnnotation(Parser.class).value());
         }
         if (parser == null) {
+            parser = Configuration.getParser(field.getType().getSimpleName());
+        }
+        if (parser == null) {
             parser = Configuration.DEFAULT_PARSER;
         }
         return parser;

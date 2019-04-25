@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.math.BigDecimal;
+
 import static com.Acrobot.Breeze.Utils.PriceUtil.NO_PRICE;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.SHOP_DOES_NOT_BUY_THIS_ITEM;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.SHOP_DOES_NOT_SELL_THIS_ITEM;
@@ -22,9 +24,9 @@ public class PriceValidator implements Listener {
         }
 
         TransactionEvent.TransactionType transactionType = event.getTransactionType();
-        double price = event.getPrice();
+        BigDecimal price = event.getExactPrice();
 
-        if (price == NO_PRICE) {
+        if (price.equals(NO_PRICE)) {
             if (transactionType == BUY) {
                 event.setCancelled(SHOP_DOES_NOT_BUY_THIS_ITEM);
             } else {

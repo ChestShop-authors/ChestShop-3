@@ -33,6 +33,10 @@ public class Economy {
         return !ChestShopSign.isAdminShop(inventory) || NameManager.getServerEconomyAccount() != null;
     }
 
+    /**
+     * @deprecated Directly call the {@link CurrencyAddEvent}
+     */
+    @Deprecated
     public static boolean add(UUID name, World world, double amount) {
         CurrencyAddEvent event = new CurrencyAddEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
@@ -40,6 +44,10 @@ public class Economy {
         return event.isAdded();
     }
 
+    /**
+     * @deprecated Directly call the {@link CurrencySubtractEvent}
+     */
+    @Deprecated
     public static boolean subtract(UUID name, World world, double amount) {
         CurrencySubtractEvent event = new CurrencySubtractEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
@@ -47,6 +55,10 @@ public class Economy {
         return event.isSubtracted();
     }
 
+    /**
+     * @deprecated Directly call the {@link CurrencyCheckEvent}
+     */
+    @Deprecated
     public static boolean hasEnough(UUID name, World world, double amount) {
         CurrencyCheckEvent event = new CurrencyCheckEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
@@ -54,10 +66,18 @@ public class Economy {
         return event.hasEnough();
     }
 
-    public static String formatBalance(double amount) {
-        CurrencyFormatEvent event = new CurrencyFormatEvent(BigDecimal.valueOf(amount));
+    public static String formatBalance(BigDecimal amount) {
+        CurrencyFormatEvent event = new CurrencyFormatEvent(amount);
         ChestShop.callEvent(event);
 
         return event.getFormattedAmount();
+    }
+
+    /**
+     * @deprecated Use {@link #formatBalance(BigDecimal)}
+     */
+    @Deprecated
+    public static String formatBalance(double amount) {
+        return formatBalance(BigDecimal.valueOf(amount));
     }
 }

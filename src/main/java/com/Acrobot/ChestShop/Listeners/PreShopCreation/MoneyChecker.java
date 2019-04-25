@@ -23,9 +23,9 @@ public class MoneyChecker implements Listener {
 
     @EventHandler
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        double shopCreationPrice = Properties.SHOP_CREATION_PRICE;
+        BigDecimal shopCreationPrice = Properties.SHOP_CREATION_PRICE;
 
-        if (shopCreationPrice == 0) {
+        if (shopCreationPrice.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
 
@@ -39,7 +39,7 @@ public class MoneyChecker implements Listener {
             return;
         }
 
-        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(BigDecimal.valueOf(shopCreationPrice), player);
+        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(shopCreationPrice, player);
         ChestShop.callEvent(currencyCheckEvent);
 
         if (!currencyCheckEvent.hasEnough()) {

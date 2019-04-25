@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,9 +45,9 @@ public class DiscountModule implements Listener {
         groupList = config.getKeys(false);
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPreTransaction(PreTransactionEvent event) {
-        if (event.isCancelled() || event.getTransactionType() != BUY || !(event.getOwnerInventory() instanceof AdminInventory)) {
+        if (event.getTransactionType() != BUY || !NameManager.isAdminShop(event.getOwnerAccount().getUuid())) {
             return;
         }
 
@@ -57,7 +59,7 @@ public class DiscountModule implements Listener {
 
         for (String group : groupList) {
             if (Permission.has(client, Permission.DISCOUNT + group)) {
-                event.setPrice(event.getPrice() * (config.getDouble(group) / 100));
+                event.setExactPrice(event.getExactPrice().multiply(BigDecimal.valueOf(config.getDouble(group) / 100)));
                 return;
             }
         }

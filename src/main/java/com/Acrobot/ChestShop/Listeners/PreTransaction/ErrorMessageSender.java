@@ -51,7 +51,7 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOW_MESSAGE_FULL_SHOP && !Properties.CSTOGGLE_TOGGLES_FULL_SHOP || !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
                     Location loc = event.getSign().getLocation();
                     String messageNotEnoughSpace = Messages.prefix(NOT_ENOUGH_SPACE_IN_YOUR_SHOP)
-                            .replace("%price", Economy.formatBalance(event.getPrice()))
+                            .replace("%price", Economy.formatBalance(event.getExactPrice()))
                             .replace("%seller", event.getClient().getName())
                             .replace("%world", loc.getWorld().getName())
                             .replace("%x", String.valueOf(loc.getBlockX()))
@@ -71,7 +71,7 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOW_MESSAGE_OUT_OF_STOCK && !Properties.CSTOGGLE_TOGGLES_OUT_OF_STOCK || !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
                     Location loc = event.getSign().getLocation();
                     String messageOutOfStock = Messages.prefix(NOT_ENOUGH_STOCK_IN_YOUR_SHOP)
-                            .replace("%price", Economy.formatBalance(event.getPrice()))
+                            .replace("%price", Economy.formatBalance(event.getExactPrice()))
                             .replace("%buyer", event.getClient().getName())
                             .replace("%world", loc.getWorld().getName())
                             .replace("%x", String.valueOf(loc.getBlockX()))

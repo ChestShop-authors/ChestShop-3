@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import javax.annotation.Nullable;
 
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -12,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -32,7 +32,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
  *
  * @author Acrobot
  */
-public class VaultListener implements Listener {
+public class VaultListener extends EconomyAdapter {
     private RegisteredServiceProvider<Economy> rsp;
     private static Economy provider;
 
@@ -218,21 +218,10 @@ public class VaultListener implements Listener {
 
     @EventHandler
     public void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (!checkSetup() || event.hasBeenTransferred()) {
+        if (!checkSetup()) {
             return;
         }
-
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), event.getSender(), event.getWorld());
-        onCurrencySubtraction(currencySubtractEvent);
-
-        if (!currencySubtractEvent.isSubtracted()) {
-            return;
-        }
-
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(currencySubtractEvent.getAmount(), event.getReceiver(), event.getWorld());
-        onCurrencyAdd(currencyAddEvent);
-
-        event.setTransferred(currencyAddEvent.isAdded());
+        processTransfer(event);
     }
 
     @EventHandler

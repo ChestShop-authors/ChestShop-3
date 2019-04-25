@@ -65,6 +65,10 @@ permissions:
     description: Allows user to sell to a shop
   ChestShop.nofee:
     description: User doesn't have to pay the shop creation fee.
+  ChestShop.notax.buy:
+    description: User doesn't have to pay tax when buying from a shop.
+  ChestShop.notax.sell:
+    description: User doesn't have to pay tax when selling to a shop.
   ChestShop.toggle:
     description: Allows user to toggle messages.
     default: true

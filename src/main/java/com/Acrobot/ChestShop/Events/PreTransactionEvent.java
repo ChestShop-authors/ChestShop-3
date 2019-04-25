@@ -6,11 +6,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+
+import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.OTHER;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.TRANSACTION_SUCCESFUL;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 
@@ -19,7 +23,7 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
  *
  * @author Acrobot
  */
-public class PreTransactionEvent extends Event {
+public class PreTransactionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player client;
@@ -32,22 +36,31 @@ public class PreTransactionEvent extends Event {
     private Inventory clientInventory;
 
     private ItemStack[] items;
-    private double price;
+
+    private BigDecimal exactPrice;
 
     private TransactionOutcome transactionOutcome = TRANSACTION_SUCCESFUL;
 
-    public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, double price, Player client, Account ownerAccount, Sign sign, TransactionType type) {
+    public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, BigDecimal exactPrice, Player client, Account ownerAccount, Sign sign, TransactionType type) {
         this.ownerInventory = ownerInventory;
         this.clientInventory = (clientInventory == null ? client.getInventory() : clientInventory);
 
         this.items = items;
-        this.price = price;
+        this.exactPrice = exactPrice;
 
         this.client = client;
         this.ownerAccount = ownerAccount;
 
         this.sign = sign;
         this.transactionType = type;
+    }
+
+    /**
+     * @deprecated Use {@link #PreTransactionEvent(Inventory, Inventory, ItemStack[], BigDecimal, Player, Account, Sign, TransactionType)}
+     */
+    @Deprecated
+    public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, double price, Player client, Account ownerAccount, Sign sign, TransactionType type) {
+        this(ownerInventory, clientInventory, items, BigDecimal.valueOf(price), client, ownerAccount, sign, type);
     }
 
     /**
@@ -58,19 +71,43 @@ public class PreTransactionEvent extends Event {
     }
 
     /**
-     * @return Total price of the items
+     * Get the exact total price
+     *
+     * @return Exact total price of the items
      */
+    public BigDecimal getExactPrice() {
+        return exactPrice;
+    }
+
+    /**
+     * Sets the exact price of the items
+     *
+     * @param exactPrice Price of the items
+     */
+    public void setExactPrice(BigDecimal exactPrice) {
+        this.exactPrice = exactPrice;
+    }
+
+    /**
+     * Get the total price
+     *
+     * @return Total price of the items
+     * @deprecated Use {@link #getExactPrice()}
+     */
+    @Deprecated
     public double getPrice() {
-        return price;
+        return exactPrice.doubleValue();
     }
 
     /**
      * Sets the price of the items
      *
      * @param price Price of the items
+     * @deprecated Use {@link #setExactPrice(BigDecimal)}
      */
+    @Deprecated
     public void setPrice(double price) {
-        this.price = price;
+        this.exactPrice = BigDecimal.valueOf(price);
     }
 
     /**
@@ -176,6 +213,11 @@ public class PreTransactionEvent extends Event {
      */
     public boolean isCancelled() {
         return transactionOutcome != TRANSACTION_SUCCESFUL;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        transactionOutcome = OTHER;
     }
 
     /**
