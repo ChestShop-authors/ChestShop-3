@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Listeners.PreTransaction;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
@@ -40,7 +41,7 @@ public class PartialTransactionModule implements Listener {
 
         Player client = event.getClient();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())));
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(client);
         ChestShop.callEvent(currencyAmountEvent);
@@ -106,7 +107,7 @@ public class PartialTransactionModule implements Listener {
         Player client = event.getClient();
         UUID owner = event.getOwnerAccount().getUuid();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())));
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(owner, client.getWorld());
         ChestShop.callEvent(currencyAmountEvent);
@@ -164,7 +165,7 @@ public class PartialTransactionModule implements Listener {
     }
 
     private static int getAmountOfAffordableItems(BigDecimal walletMoney, BigDecimal pricePerItem) {
-        return walletMoney.divide(pricePerItem, MathContext.UNLIMITED).setScale(0, RoundingMode.FLOOR).intValueExact();
+        return walletMoney.divide(pricePerItem, 0, RoundingMode.FLOOR).intValueExact();
     }
 
     private static ItemStack[] getItems(ItemStack[] stock, Inventory inventory) {
