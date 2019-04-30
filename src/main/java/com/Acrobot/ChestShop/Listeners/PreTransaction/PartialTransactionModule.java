@@ -41,7 +41,7 @@ public class PartialTransactionModule implements Listener {
 
         Player client = event.getClient();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), MathContext.DECIMAL128);
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(client);
         ChestShop.callEvent(currencyAmountEvent);
@@ -59,7 +59,7 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(new BigDecimal(amountAffordable)));
+            event.setExactPrice(pricePerItem.multiply(new BigDecimal(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
             event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
         }
 
@@ -72,7 +72,7 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)));
+            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
             event.setStock(itemsHad);
         }
 
@@ -85,7 +85,7 @@ public class PartialTransactionModule implements Listener {
             }
 
             event.setStock(itemsFit);
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)));
+            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
         }
 
         UUID seller = event.getOwnerAccount().getUuid();
@@ -107,7 +107,7 @@ public class PartialTransactionModule implements Listener {
         Player client = event.getClient();
         UUID owner = event.getOwnerAccount().getUuid();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), MathContext.DECIMAL128);
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(owner, client.getWorld());
         ChestShop.callEvent(currencyAmountEvent);
@@ -126,7 +126,7 @@ public class PartialTransactionModule implements Listener {
                     return;
                 }
 
-                event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(amountAffordable)));
+                event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
                 event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
             }
         }
@@ -140,7 +140,7 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)));
+            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
             event.setStock(itemsHad);
         }
 
@@ -153,7 +153,7 @@ public class PartialTransactionModule implements Listener {
             }
 
             event.setStock(itemsFit);
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)));
+            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
         }
 
         CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(event.getExactPrice(), client);
