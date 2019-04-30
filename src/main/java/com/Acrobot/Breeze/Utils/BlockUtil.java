@@ -1,12 +1,10 @@
 package com.Acrobot.Breeze.Utils;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
@@ -24,8 +22,8 @@ public class BlockUtil {
      * @return Is this block a sign?
      */
     public static boolean isSign(Block block) {
-        return block.getType() == Material.SIGN
-                || block.getType() == Material.WALL_SIGN;
+        BlockData data = block.getBlockData();
+        return data instanceof Sign || data instanceof WallSign;
     }
 
     /**

@@ -11,8 +11,8 @@ import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.material.Attachable;
 
 /**
  * @author Acrobot
@@ -46,8 +46,9 @@ public class uBlock {
     @Deprecated
     public static org.bukkit.block.Chest findConnectedChest(Sign sign) {
         BlockFace signFace = null;
-        if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
-            signFace = ((Attachable) sign.getData()).getAttachedFace();
+        BlockData data = sign.getBlockData();
+        if (data instanceof WallSign) {
+            signFace = ((WallSign) data).getFacing().getOppositeFace();
         }
         return findConnectedChest(sign.getBlock(), signFace);
     }
@@ -59,9 +60,9 @@ public class uBlock {
     public static org.bukkit.block.Chest findConnectedChest(Block block) {
         BlockFace signFace = null;
         if (BlockUtil.isSign(block)) {
-            Sign sign = (Sign) block.getState();
-            if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
-                signFace = ((Attachable) sign.getData()).getAttachedFace();
+            BlockData data = block.getBlockData();
+            if (data instanceof WallSign) {
+                signFace = ((WallSign) data).getFacing().getOppositeFace();
             }
         }
         return findConnectedChest(block, signFace);
@@ -92,19 +93,18 @@ public class uBlock {
 
     public static Container findConnectedContainer(Sign sign) {
         BlockFace signFace = null;
-        if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
-            signFace = ((Attachable) sign.getData()).getAttachedFace();
+        BlockData data = sign.getBlockData();
+        if (data instanceof WallSign) {
+            signFace = ((WallSign) data).getFacing().getOppositeFace();
         }
         return findConnectedContainer(sign.getLocation(), signFace);
     }
 
     public static Container findConnectedContainer(Block block) {
         BlockFace signFace = null;
-        if (BlockUtil.isSign(block)) {
-            Sign sign = (Sign) block.getState();
-            if (((org.bukkit.material.Sign) sign.getData()).isWallSign()) {
-                signFace = ((Attachable) sign.getData()).getAttachedFace();
-            }
+        BlockData data = block.getBlockData();
+        if (data instanceof WallSign) {
+            signFace = ((WallSign) data).getFacing().getOppositeFace();
         }
         return findConnectedContainer(block.getLocation(), signFace);
     }
