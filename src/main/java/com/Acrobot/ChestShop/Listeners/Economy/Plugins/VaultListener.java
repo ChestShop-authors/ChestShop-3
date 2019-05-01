@@ -104,7 +104,6 @@ public class VaultListener extends EconomyAdapter {
         }
 
         double balance = 0;
-        //String lastSeen = NameManager.getLastSeenName(event.getAccount());
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         if (lastSeen != null) {
@@ -119,9 +118,11 @@ public class VaultListener extends EconomyAdapter {
             if (balance > Double.MAX_VALUE) {
                 balance = Double.MAX_VALUE;
             }
+        } else {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getAccount() + " to check balance?");
         }
 
-        event.setAmount(balance);
+        event.setAmount(BigDecimal.ZERO);
     }
 
     @EventHandler
@@ -131,11 +132,10 @@ public class VaultListener extends EconomyAdapter {
         }
 
         World world = event.getWorld();
-        //String lastSeen = NameManager.getLastSeenName(event.getAccount());
         OfflinePlayer lastSeen = Bukkit.getOfflinePlayer(event.getAccount());
 
         try {
-            event.hasEnough(lastSeen != null && provider.has(lastSeen, world.getName(), event.getDoubleAmount()));
+            event.hasEnough(lastSeen != null && provider.has(lastSeen, world.getName(), event.getAmount().doubleValue()));
         } catch (Exception e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " has " + event.getDoubleAmount() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
@@ -184,13 +184,15 @@ public class VaultListener extends EconomyAdapter {
 
         if (lastSeen != null) {
             try {
-                EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+                EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getAmount().doubleValue());
                 event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
             } catch (Exception e) {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                         "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
                         "If you are sure it's not this issue then please report the following error.", e);
             }
+        } else {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getTarget() + " to add " + event.getAmount() + "?");
         }
     }
 
@@ -206,13 +208,15 @@ public class VaultListener extends EconomyAdapter {
 
         if (lastSeen != null) {
             try {
-                EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getDoubleAmount());
+                EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getAmount().doubleValue());
                 event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
             } catch (Exception e) {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                         "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
                         "If you are sure it's not this issue then please report the following error.", e);
             }
+        } else {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getTarget() + " to subtract " + event.getAmount() + "?");
         }
     }
 
@@ -236,6 +240,7 @@ public class VaultListener extends EconomyAdapter {
 
         if (lastSeen == null) {
             event.canHold(false);
+            ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getAccount() + " to check if it can hold " + event.getAmount() + "?");
             return;
         }
 
@@ -245,16 +250,16 @@ public class VaultListener extends EconomyAdapter {
                 return;
             }
 
-            EconomyResponse response = provider.depositPlayer(lastSeen, world, event.getDoubleAmount());
+            EconomyResponse response = provider.depositPlayer(lastSeen, world, event.getAmount().doubleValue());
 
             if (!response.transactionSuccess()) {
                 event.canHold(false);
                 return;
             }
 
-            provider.withdrawPlayer(lastSeen, world, event.getDoubleAmount());
+            provider.withdrawPlayer(lastSeen, world, event.getAmount().doubleValue());
         } catch (Exception e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " can hold " + event.getDoubleAmount() + "." +
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " can hold " + event.getAmount() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
                     "If you are sure it's not then please report this error to the devs of ChestShop.", e);
         }
