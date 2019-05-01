@@ -33,7 +33,7 @@ public class SignSticker implements Listener {
     }
 
     private static void stickSign(Block signBlock, String[] lines) {
-        if (signBlock.getType() != Material.SIGN) {
+        if (!(signBlock.getBlockData() instanceof Sign)) {
             return;
         }
 
