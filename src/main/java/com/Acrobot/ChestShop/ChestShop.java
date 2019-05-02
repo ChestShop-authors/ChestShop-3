@@ -146,6 +146,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     public void loadConfig() {
+        Properties.setup();
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
         Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
 

@@ -12,9 +12,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -22,7 +20,8 @@ import java.util.logging.Level;
  * @author Acrobot
  */
 public class Properties {
-    static {
+
+    public static void setup() {
         Configuration.registerParser("StringSet", new ValueParser(){
             public Object parseToJava(Object object) {
                 if (object instanceof Collection) {
