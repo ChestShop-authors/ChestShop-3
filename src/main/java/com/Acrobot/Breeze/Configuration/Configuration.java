@@ -63,9 +63,7 @@ public class Configuration {
                         writer.write(FieldParser.parse(field));
                         writer.newLine();
                     }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (IllegalArgumentException | IllegalAccessException | IOException e) {
                     e.printStackTrace();
                 }
             }

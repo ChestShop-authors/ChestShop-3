@@ -21,7 +21,7 @@ import java.util.logging.Level;
  */
 public class Properties {
 
-    public static void setup() {
+    static {
         Configuration.registerParser("StringSet", new ValueParser(){
             public Object parseToJava(Object object) {
                 if (object instanceof Collection) {
@@ -62,6 +62,10 @@ public class Properties {
             public Object parseToJava(Object object) {
                 if (object instanceof Double) {
                     return BigDecimal.valueOf((Double) object);
+                } else if (object instanceof Long) {
+                    return BigDecimal.valueOf((Long) object);
+                } else if (object instanceof Integer) {
+                    return BigDecimal.valueOf((Integer) object);
                 }
                 return object;
             }
