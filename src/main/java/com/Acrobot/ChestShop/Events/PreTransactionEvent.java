@@ -166,7 +166,7 @@ public class PreTransactionEvent extends Event implements Cancellable {
      */
     @Deprecated
     public void setOwner(OfflinePlayer owner) {
-        this.ownerAccount = NameManager.getAccount(owner.getUniqueId());
+        this.ownerAccount = NameManager.getOrCreateAccount(owner);
     }
 
     /**

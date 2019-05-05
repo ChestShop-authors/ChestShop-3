@@ -43,6 +43,25 @@ public class NameManager {
     private static int uuidVersion = -1;
 
     /**
+     * Get or create an account for a player
+     *
+     * @param player The Player to get or create the account for (only if the player has both an UUID and a name!)
+     * @return The account info
+     * @throws IllegalArgumentException when an invalid player object was passed
+     */
+    public static Account getOrCreateAccount(OfflinePlayer player) {
+        Validate.notNull(player.getName(), "Name of player is null?");
+        Validate.notNull(player.getUniqueId(), "UUID of player is null?");
+        Validate.isTrue(player.getUniqueId().version() != uuidVersion, "Invalid OfflinePlayer! " + player.getUniqueId() + " is not of server version " + uuidVersion);
+
+        Account account = getAccount(player.getUniqueId());
+        if (account == null) {
+            account = storeUsername(new PlayerDTO(player.getUniqueId(), player.getName()));
+        }
+        return account;
+    }
+
+    /**
      * Get account info from a UUID
      *
      * @param uuid The UUID of the player to get the account info
@@ -98,7 +117,8 @@ public class NameManager {
     }
 
     /**
-     * Get account info from a username that might be shortened
+     * Get account info from a username that might be shortened.
+     * If no account was found it will try to search all known players and create an account.
      *
      * @param shortName The name of the player to get the account info
      * @return The account info or <tt>null</tt> if none was found
