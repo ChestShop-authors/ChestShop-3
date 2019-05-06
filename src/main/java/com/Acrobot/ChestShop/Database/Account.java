@@ -33,8 +33,12 @@ public class Account {
     }
 
     public Account(String name, UUID uuid) {
+        this(name, NameUtil.stripUsername(name), uuid);
+    }
+
+    public Account(String name, String shortName, UUID uuid) {
         this.name = name;
-        this.shortName = NameUtil.stripUsername(name);
+        this.shortName = shortName;
         this.uuid = uuid;
     }
 

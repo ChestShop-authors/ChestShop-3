@@ -5,9 +5,11 @@ import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -123,7 +125,9 @@ public class ChestShopSign {
         String name = sign.getLine(NAME_LINE);
         if (name == null || name.isEmpty()) return false;
 
-        Account account = NameManager.getAccountFromShortName(name);
+        AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
+        Bukkit.getPluginManager().callEvent(accountQueryEvent);
+        Account account = accountQueryEvent.getAccount();
         if (account == null) {
             return player.getName().equalsIgnoreCase(name);
         }

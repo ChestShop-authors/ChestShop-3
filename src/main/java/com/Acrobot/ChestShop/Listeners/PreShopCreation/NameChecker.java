@@ -1,8 +1,10 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +32,9 @@ public class NameChecker implements Listener {
                 event.setOutcome(UNKNOWN_PLAYER);
             }
         } else {
-            Account account = NameManager.getAccountFromShortName(name);
+            AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
+            Bukkit.getPluginManager().callEvent(accountQueryEvent);
+            Account account = accountQueryEvent.getAccount();
             if (account == null) {
                 event.setOutcome(UNKNOWN_PLAYER);
             }

@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
@@ -13,7 +14,6 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -155,7 +155,9 @@ public class PlayerInteract implements Listener {
         String prices = sign.getLine(PRICE_LINE);
         String material = sign.getLine(ITEM_LINE);
 
-        Account account = NameManager.getLastAccountFromShortName(name);
+        AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
+        Bukkit.getPluginManager().callEvent(accountQueryEvent);
+        Account account = accountQueryEvent.getAccount();
         if (account == null) {
             player.sendMessage(Messages.prefix(Messages.PLAYER_NOT_FOUND));
             return null;

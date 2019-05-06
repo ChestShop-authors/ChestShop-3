@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.DaoCreator;
+import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.j256.ormlite.dao.Dao;
@@ -15,6 +16,8 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -30,7 +33,7 @@ import static com.Acrobot.ChestShop.Permission.OTHER_NAME;
  * @author Andrzej Pomirski (Acrobot)
  */
 @SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
-public class NameManager {
+public class NameManager implements Listener {
     private static Dao<Account, String> accounts;
 
     private static SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
@@ -116,6 +119,13 @@ public class NameManager {
         }
     }
 
+    @EventHandler
+    public static void onAccountQuery(AccountQueryEvent event) {
+        if (event.getAccount() == null) {
+            event.setAccount(getLastAccountFromShortName(event.getName()));
+        }
+    }
+
     /**
      * Get account info from a username that might be shortened.
      * If no account was found it will try to search all known players and create an account.
@@ -123,6 +133,7 @@ public class NameManager {
      * @param shortName The name of the player to get the account info
      * @return The account info or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty
+     * @deprecated Use the {@link AccountQueryEvent} instead!
      */
     public static Account getAccountFromShortName(String shortName) {
         return getAccountFromShortName(shortName, true);
@@ -170,8 +181,10 @@ public class NameManager {
      *
      * @param shortName The name of the player to get the last account for
      * @return The last account or <tt>null</tt> if none was found
-     * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
+     * @throws IllegalArgumentException if the username is empty
+     * @deprecated Use the {@link AccountQueryEvent} instead!
      */
+    @Deprecated
     public static Account getLastAccountFromShortName(String shortName) {
         Account account = getAccountFromShortName(shortName); // first get the account associated with the short name
         if (account != null) {
@@ -239,7 +252,9 @@ public class NameManager {
      */
     @Deprecated
     public static String getFullUsername(String shortName) {
-        Account account = getLastAccountFromShortName(shortName);
+        AccountQueryEvent accountQueryEvent = new AccountQueryEvent(shortName);
+        Bukkit.getPluginManager().callEvent(accountQueryEvent);
+        Account account = accountQueryEvent.getAccount();
         if (account != null) {
             return account.getName();
         }
@@ -276,8 +291,7 @@ public class NameManager {
         }
 
         if (latestAccount == null) {
-            latestAccount = new Account(player.getName(), player.getUniqueId());
-            latestAccount.setShortName(getNewShortenedName(player));
+            latestAccount = new Account(player.getName(), getNewShortenedName(player), player.getUniqueId());
         }
 
         latestAccount.setLastSeen(new Date());

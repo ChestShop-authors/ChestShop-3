@@ -5,11 +5,13 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Economy.Economy;
+import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,7 +41,9 @@ public class ShopRefundListener implements Listener {
             return;
         }
 
-        Account account = NameManager.getAccountFromShortName(event.getSign().getLine(NAME_LINE));
+        AccountQueryEvent accountQueryEvent = new AccountQueryEvent(event.getSign().getLine(NAME_LINE));
+        Bukkit.getPluginManager().callEvent(accountQueryEvent);
+        Account account = accountQueryEvent.getAccount();
         if (account == null) {
             return;
         }
