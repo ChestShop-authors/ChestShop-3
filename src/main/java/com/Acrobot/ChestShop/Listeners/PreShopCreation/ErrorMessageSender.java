@@ -20,6 +20,9 @@ public class ErrorMessageSender implements Listener {
         String message = null;
 
         switch (event.getOutcome()) {
+            case UNKNOWN_PLAYER:
+                message = Messages.PLAYER_NOT_FOUND;
+                break;
             case INVALID_ITEM:
                 message = Messages.INCORRECT_ITEM_ID;
                 break;
