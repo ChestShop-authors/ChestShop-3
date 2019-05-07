@@ -11,7 +11,6 @@ import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
-import com.Acrobot.ChestShop.Plugins.ChestShop;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -67,7 +66,7 @@ public class PlayerInteract implements Listener {
                 return;
             }
 
-            if (!ChestShop.canAccess(player, block)) {
+            if (!Security.canAccess(player, block)) {
                 player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
                 event.setCancelled(true);
             }

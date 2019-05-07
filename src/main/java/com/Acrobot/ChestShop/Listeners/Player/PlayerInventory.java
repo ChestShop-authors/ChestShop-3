@@ -2,7 +2,7 @@ package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Plugins.ChestShop;
+import com.Acrobot.ChestShop.Security;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -43,7 +43,7 @@ public class PlayerInventory implements Listener {
             chest = ((DoubleChest) event.getInventory().getHolder()).getLocation().getBlock();
         }
 
-        if (!ChestShop.canAccess(player, chest)) {
+        if (!Security.canAccess(player, chest)) {
             player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
             event.setCancelled(true);
         }
