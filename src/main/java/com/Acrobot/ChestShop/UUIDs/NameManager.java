@@ -55,7 +55,7 @@ public class NameManager implements Listener {
     public static Account getOrCreateAccount(OfflinePlayer player) {
         Validate.notNull(player.getName(), "Name of player is null?");
         Validate.notNull(player.getUniqueId(), "UUID of player is null?");
-        Validate.isTrue(player.getUniqueId().version() != uuidVersion, "Invalid OfflinePlayer! " + player.getUniqueId() + " is not of server version " + uuidVersion);
+        Validate.isTrue(player.getUniqueId().version() == uuidVersion, "Invalid OfflinePlayer! " + player.getUniqueId() + " is not of server version " + uuidVersion);
 
         Account account = getAccount(player.getUniqueId());
         if (account == null) {
