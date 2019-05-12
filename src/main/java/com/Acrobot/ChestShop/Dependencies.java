@@ -41,9 +41,7 @@ public class Dependencies {
         switch (dependency) {
             //Terrain protection plugins
             case WorldGuard:
-                if (Properties.WORLDGUARD_USE_FLAG) {
-                    WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
-                }
+                WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
                 break;
         }
 
