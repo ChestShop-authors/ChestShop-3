@@ -164,6 +164,8 @@ public class Properties {
     public static boolean SHOW_MESSAGE_OUT_OF_STOCK = true;
     @ConfigurationComment("Do you want to show \"Full shop\" messages?")
     public static boolean SHOW_MESSAGE_FULL_SHOP = true;
+    @ConfigurationComment("How many seconds do you want to wait before showing notifications for the same shop to the owner again?")
+    public static long NOTIFICATION_MESSAGE_COOLDOWN = 10;
 
     @PrecededBySpace
     @ConfigurationComment("Can players hide the \"Out of stock\" messages with /cstoggle?")
