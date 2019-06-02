@@ -10,8 +10,10 @@ import com.Acrobot.ChestShop.Security;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -24,9 +26,29 @@ import org.bukkit.event.Listener;
  */
 public class LightweightChestProtection implements Listener {
     private LWC lwc;
+    /**
+     * If both the server and LWC support block IDs
+     */
+    private boolean id_supported = false;
+    /**
+     * If the LWC version being used supports Materials
+     */
+    private boolean material_supported = false;
+    Method protect_by_id = null;
 
     public LightweightChestProtection() {
         this.lwc = LWC.getInstance();
+        // cheap hack
+        Class db = lwc.getPhysicalDatabase().getClass();
+        try {
+            Material.AIR.getId();
+            protect_by_id = db.getDeclaredMethod("registerProtection", int.class, Protection.Type.class, String.class, String.class, String.class, int.class, int.class, int.class);
+            id_supported = true;
+        } catch (Throwable ignore) {}
+        try {
+            db.getDeclaredMethod("registerProtection", Material.class, Protection.Type.class, String.class, String.class, String.class, int.class, int.class, int.class);
+            material_supported = true;
+        } catch (NoSuchMethodException | SecurityException ignore) {}
     }
 
     @EventHandler
@@ -98,9 +120,19 @@ public class LightweightChestProtection implements Listener {
         if (protectionEvent.isCancelled()) {
             return;
         }
-
-        // TODO: Update to new API once LWC is updated
-        Protection protection = lwc.getPhysicalDatabase().registerProtection(block.getType().getId(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+        Protection protection = null;
+        // funny bit: some versions of LWC being used on older servers don't support passing Material
+        if(material_supported) {
+            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+        } else if(id_supported) {
+            try {
+                // if we're on an older server that supports ids, use that.
+                protection = (Protection) protect_by_id.invoke(lwc.getPhysicalDatabase(), block.getType().getId(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                // something went wrong
+                id_supported = false;
+            }
+        }
 
         if (protection != null) {
             event.setProtected(true);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.griefcraft.lwc</groupId>
+  <artifactId>lwc</artifactId>
+  <version>4.8.0-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <lastUpdated>20190602210158</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>4.8.0-SNAPSHOT</value>
+        <updated>20190602210158</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
