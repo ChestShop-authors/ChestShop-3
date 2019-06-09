@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -55,8 +56,8 @@ public class SignSticker implements Listener {
 
         org.bukkit.block.Sign sign = (org.bukkit.block.Sign) signBlock.getState();
 
-        Sign signMaterial = (Sign) Bukkit.createBlockData(Material.WALL_SIGN);
-        signMaterial.setRotation(shopBlockFace.getOppositeFace());
+        WallSign signMaterial = (WallSign) Bukkit.createBlockData(Material.WALL_SIGN);
+        signMaterial.setFacing(shopBlockFace.getOppositeFace());
         sign.setBlockData(signMaterial);
 
         for (int i = 0; i < lines.length; ++i) {
