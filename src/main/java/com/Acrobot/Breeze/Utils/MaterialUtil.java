@@ -11,17 +11,22 @@ import info.somethingodd.OddItem.OddItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.nodes.Tag;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +53,14 @@ public class MaterialUtil {
     public static final int MAXIMUM_SIGN_WIDTH = (short) getMinecraftStringWidth("---------------");
 
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
+
+    private static final Yaml YAML = new Yaml(new YamlBukkitConstructor(), new YamlRepresenter(), new DumperOptions());
+
+    private static class YamlBukkitConstructor extends YamlConstructor {
+        public YamlBukkitConstructor() {
+            this.yamlConstructors.put(new Tag(Tag.PREFIX + "org.bukkit.inventory.ItemStack"), yamlConstructors.get(Tag.MAP));
+        }
+    }
 
     /**
      * Checks if the itemStack is empty or null
@@ -76,14 +89,33 @@ public class MaterialUtil {
 
         // Additional checks as serialisation and de-serialisation might lead to different item meta
         // This would only be done if the items share the same item meta type so it shouldn't be too inefficient
-        // Special check for books as their pages might change when serialising (See SPIGOT-3206)
+        // Special check for books as their pages might change when serialising (See SPIGOT-3206 and ChestShop#250)
         // Special check for explorer maps/every item with a localised name (See SPIGOT-4672)
-        return one.getType() == two.getType()
-                && one.getDurability() == two.getDurability()
-                && one.getData().equals(two.getData())
-                && one.hasItemMeta() && two.hasItemMeta()
-                && one.getItemMeta().getClass() == two.getItemMeta().getClass()
-                && one.getItemMeta().serialize().equals(two.getItemMeta().serialize());
+        if (one.getType() != two.getType()
+                || one.getDurability() != two.getDurability()
+                || !one.getData().equals(two.getData())
+                || !(one.hasItemMeta() && two.hasItemMeta())
+                || one.getItemMeta().getClass() != two.getItemMeta().getClass()) {
+            return false;
+        }
+        Map<String, Object> oneSerMeta = one.getItemMeta().serialize();
+        Map<String, Object> twoSerMeta = two.getItemMeta().serialize();
+        if (oneSerMeta.equals(twoSerMeta)) {
+            return true;
+        }
+
+        // Try to use same parsing as the YAML dumper in the ItemDatabase when generating the code as the last resort
+        ItemStack oneDumped = YAML.loadAs(YAML.dump(one), ItemStack.class);
+        if (oneDumped.isSimilar(two) || oneDumped.getItemMeta().serialize().equals(twoSerMeta)) {
+            return true;
+        }
+
+        ItemStack twoDumped = YAML.loadAs(YAML.dump(two), ItemStack.class);
+        if (oneDumped.isSimilar(twoDumped) || oneDumped.getItemMeta().serialize().equals(twoDumped.getItemMeta().serialize())) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
