@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.j256.ormlite.dao.Dao;
 
+import com.j256.ormlite.stmt.SelectArg;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -74,7 +75,7 @@ public class NameManager implements Listener {
         try {
             return uuidToAccount.get(uuid, () -> {
                 try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", uuid).queryForFirst();
+                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", new SelectArg(uuid)).queryForFirst();
                     if (account != null) {
                         account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                         shortToAccount.put(account.getShortName(), account);
@@ -103,7 +104,7 @@ public class NameManager implements Listener {
         try {
             return usernameToAccount.get(fullName, () -> {
                 try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", fullName).queryForFirst();
+                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", new SelectArg(fullName)).queryForFirst();
                     if (account != null) {
                         account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                         shortToAccount.put(account.getShortName(), account);
@@ -150,7 +151,7 @@ public class NameManager implements Listener {
             try {
                 account = shortToAccount.get(shortName, () -> {
                     try {
-                        Account a = accounts.queryBuilder().where().eq("shortName", shortName).queryForFirst();
+                        Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
                         if (a != null) {
                             a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
                             return a;
@@ -285,7 +286,7 @@ public class NameManager implements Listener {
 
         Account latestAccount = null;
         try {
-            latestAccount = accounts.queryBuilder().where().eq("uuid", uuid).and().eq("name", player.getName()).queryForFirst();
+            latestAccount = accounts.queryBuilder().where().eq("uuid", new SelectArg(uuid)).and().eq("name", new SelectArg(player.getName())).queryForFirst();
         } catch (SQLException e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
         }
