@@ -95,17 +95,17 @@ permissions:
       ChestShop.othername.access.*: true
   ChestShop.name.(some name):
     description: Gives you the power to do create and access shops for (some name), for example your town.
-  ChestShop.name.create.*:
+  ChestShop.othername.create.*:
     description: Gives you the power to do create shops for all names.
-  ChestShop.name.create.(some name):
+  ChestShop.othername.create.(some name):
     description: Gives you the power to do create shops for (some name), for example your town.
-  ChestShop.name.destroy.*:
+  ChestShop.othername.destroy.*:
     description: Gives you the power to do destroy shops with all names.
-  ChestShop.name.destroy.(some name):
+  ChestShop.othername.destroy.(some name):
     description: Gives you the power to do destroy shops with (some name), for example your town.
-  ChestShop.name.access.*:
+  ChestShop.othername.access.*:
     description: Gives you the power to do access shops for all names.
-  ChestShop.name.access.(some name):
+  ChestShop.othername.access.(some name):
     description: Gives you the power to do access shops for (some name), for example your town.
   ChestShop.shop.create.food:
     description: Allows to create a shop that sells food
