@@ -363,6 +363,9 @@ public class NameManager implements Listener {
     }
 
     public static void load() {
+        if (getUuidVersion() < 0 && !Bukkit.getOnlinePlayers().isEmpty()) {
+            setUuidVersion(Bukkit.getOnlinePlayers().iterator().next().getUniqueId().version());
+        }
         try {
             accounts = DaoCreator.getDaoAndCreateTable(Account.class);
 
