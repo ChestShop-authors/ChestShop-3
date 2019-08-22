@@ -21,21 +21,34 @@ public class NameChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
+        handleEvent(event);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public static void onPreShopCreationHighest(PreShopCreationEvent event) {
+        handleEvent(event);
+    }
+
+    private static void handleEvent(PreShopCreationEvent event) {
         String name = event.getSignLine(NAME_LINE);
         Player player = event.getPlayer();
 
-        Account account = null;
-        try {
-            if (name.isEmpty() || !NameManager.canUseName(player, OTHER_NAME_CREATE, name)) {
-                account = NameManager.getOrCreateAccount(player);
-            } else {
-                AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
-                Bukkit.getPluginManager().callEvent(accountQueryEvent);
-                account = accountQueryEvent.getAccount();
+        Account account = event.getOwnerAccount();
+        if (account == null || !account.getShortName().equalsIgnoreCase(name)) {
+            account = null;
+            try {
+                if (name.isEmpty() || !NameManager.canUseName(player, OTHER_NAME_CREATE, name)) {
+                    account = NameManager.getOrCreateAccount(player);
+                } else {
+                    AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
+                    Bukkit.getPluginManager().callEvent(accountQueryEvent);
+                    account = accountQueryEvent.getAccount();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        event.setOwnerAccount(account);
         if (account != null) {
             event.setSignLine(NAME_LINE, account.getShortName());
         } else {

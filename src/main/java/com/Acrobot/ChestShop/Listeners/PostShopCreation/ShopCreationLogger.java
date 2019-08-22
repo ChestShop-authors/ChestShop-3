@@ -22,7 +22,7 @@ public class ShopCreationLogger implements Listener {
             @Override public void run() {
                 String creator = event.getPlayer().getName();
                 String shopOwner = event.getSignLine(NAME_LINE);
-                String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop";
+                String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop" + (event.createdByOwner() ? "" : " for " + event.getOwnerAccount().getName());
 
                 String item = event.getSignLine(QUANTITY_LINE) + ' ' + event.getSignLine(ITEM_LINE);
                 String prices = event.getSignLine(PRICE_LINE);

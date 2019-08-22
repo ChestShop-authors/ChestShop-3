@@ -1,10 +1,13 @@
 package com.Acrobot.ChestShop.Events;
 
+import com.Acrobot.ChestShop.Database.Account;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import javax.annotation.Nullable;
 
 /**
  * Represents a state before shop is created
@@ -15,6 +18,7 @@ public class PreShopCreationEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private Player creator;
+    @Nullable private Account ownerAccount = null;
 
     private CreationOutcome outcome = CreationOutcome.SHOP_CREATED_SUCCESSFULLY;
     private Sign sign;
@@ -136,6 +140,25 @@ public class PreShopCreationEvent extends Event implements Cancellable {
      */
     public String[] getSignLines() {
         return signLines;
+    }
+
+    /**
+     * Get the account of the shop owner
+     *
+     * @return the Account of the shop owner; null if not found
+     */
+    @Nullable
+    public Account getOwnerAccount() {
+        return ownerAccount;
+    }
+
+    /**
+     * Set the account of the shop owner
+     *
+     * @param ownerAccount the Account of the shop owner
+     */
+    public void setOwnerAccount(@Nullable Account ownerAccount) {
+        this.ownerAccount = ownerAccount;
     }
 
     public HandlerList getHandlers() {

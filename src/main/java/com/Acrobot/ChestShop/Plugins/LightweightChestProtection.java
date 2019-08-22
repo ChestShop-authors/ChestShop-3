@@ -36,12 +36,13 @@ public class LightweightChestProtection implements Listener {
         Container connectedContainer = event.getContainer();
 
         if (Properties.PROTECT_SIGN_WITH_LWC) {
-            if (!Security.protect(player, sign.getBlock())) {
+            if (!Security.protect(player, sign.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId())) {
                 player.sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
             }
         }
 
-        if (Properties.PROTECT_CHEST_WITH_LWC && connectedContainer != null && Security.protect(player, connectedContainer.getBlock())) {
+        if (Properties.PROTECT_CHEST_WITH_LWC && connectedContainer != null
+                && Security.protect(player, connectedContainer.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId())) {
             player.sendMessage(Messages.prefix(Messages.PROTECTED_SHOP));
         }
     }
@@ -101,14 +102,14 @@ public class LightweightChestProtection implements Listener {
 
         Protection protection = null;
         try {
-            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), Protection.Type.PRIVATE, worldName, event.getProtectionOwner().toString(), "", x, y, z);
         } catch (LinkageError e) {
             try {
                 int blockId = com.griefcraft.cache.BlockCache.getInstance().getBlockId(block);
                 if (blockId < 0) {
                     return;
                 }
-                protection = lwc.getPhysicalDatabase().registerProtection(blockId, Protection.Type.PRIVATE, worldName, player.getUniqueId().toString(), "", x, y, z);
+                protection = lwc.getPhysicalDatabase().registerProtection(blockId, Protection.Type.PRIVATE, worldName, event.getProtectionOwner().toString(), "", x, y, z);
             } catch (LinkageError e2) {
                 ChestShop.getBukkitLogger().warning(
                         "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion()  + ") \n" +

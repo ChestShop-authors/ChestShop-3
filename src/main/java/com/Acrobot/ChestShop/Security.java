@@ -15,6 +15,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import java.util.UUID;
+
 /**
  * @author Acrobot
  */
@@ -23,7 +25,11 @@ public class Security {
     private static final BlockFace[] BLOCKS_AROUND = {BlockFace.UP, BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
 
     public static boolean protect(Player player, Block block) {
-        ProtectBlockEvent event = new ProtectBlockEvent(block, player);
+        return protect(player, block, player.getUniqueId());
+    }
+
+    public static boolean protect(Player player, Block block, UUID protectionOwner) {
+        ProtectBlockEvent event = new ProtectBlockEvent(block, player, protectionOwner);
         ChestShop.callEvent(event);
 
         return event.isProtected();
