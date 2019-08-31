@@ -102,7 +102,13 @@ public class ChestShopSign {
     }
 
     public static boolean isShopBlock(InventoryHolder holder) {
-        return holder instanceof BlockState && isShopBlock(((BlockState) holder).getBlock());
+        if (holder instanceof DoubleChest) {
+            return isShopBlock(((DoubleChest) holder).getLeftSide())
+                    || isShopBlock(((DoubleChest) holder).getRightSide());
+        } else if (holder instanceof BlockState) {
+            return isShopBlock(((BlockState) holder).getBlock());
+        }
+        return false;
     }
 
     public static boolean canAccess(Player player, Sign sign) {
