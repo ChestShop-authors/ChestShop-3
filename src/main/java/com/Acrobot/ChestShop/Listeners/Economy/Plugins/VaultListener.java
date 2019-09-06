@@ -122,7 +122,7 @@ public class VaultListener extends EconomyAdapter {
             ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getAccount() + " to check balance?");
         }
 
-        event.setAmount(BigDecimal.ZERO);
+        event.setAmount(BigDecimal.valueOf(balance));
     }
 
     @EventHandler
