@@ -91,12 +91,14 @@ public class MaterialUtil {
         // This would only be done if the items share the same item meta type so it shouldn't be too inefficient
         // Special check for books as their pages might change when serialising (See SPIGOT-3206 and ChestShop#250)
         // Special check for explorer maps/every item with a localised name (See SPIGOT-4672)
+        // Special check for legacy spawn eggs (See ChestShop#264)
         if (one.getType() != two.getType()
                 || one.getDurability() != two.getDurability()
-                || !one.getData().equals(two.getData())
-                || !(one.hasItemMeta() && two.hasItemMeta())
-                || one.getItemMeta().getClass() != two.getItemMeta().getClass()) {
+                || (one.hasItemMeta() && two.hasItemMeta() && one.getItemMeta().getClass() != two.getItemMeta().getClass())) {
             return false;
+        }
+        if (!one.hasItemMeta() && !two.hasItemMeta()) {
+            return true;
         }
         Map<String, Object> oneSerMeta = one.getItemMeta().serialize();
         Map<String, Object> twoSerMeta = two.getItemMeta().serialize();
