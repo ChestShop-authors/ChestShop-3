@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -114,20 +115,21 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-
-        if (ChestShopSign.hasPermission(player, OTHER_NAME_ACCESS, sign) && !ChestShopSign.isAdminShop(sign)) {
-            if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
-                if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
-                    if (player.isSneaking() || player.isInsideVehicle()
-                            || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+        if (!Permission.hasPermissionSetFalse(player, Permission.OTHER_NAME_ACCESS+".*")) {
+            if (ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
+                if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
+                    if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
+                        if (player.isSneaking() || player.isInsideVehicle()
+                                || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+                            return;
+                        }
+                        event.setCancelled(true);
+                        showChestGUI(player, block, sign);
                         return;
                     }
-                    event.setCancelled(true);
-                    showChestGUI(player, block, sign);
+                    // don't allow owners or people with access to buy/sell at this shop
                     return;
                 }
-                // don't allow owners or people with access to buy/sell at this shop
-                return;
             }
         }
 

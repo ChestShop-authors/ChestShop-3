@@ -1,10 +1,7 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Configuration.Configuration;
-import com.Acrobot.ChestShop.Commands.Give;
-import com.Acrobot.ChestShop.Commands.ItemInfo;
-import com.Acrobot.ChestShop.Commands.Toggle;
-import com.Acrobot.ChestShop.Commands.Version;
+import com.Acrobot.ChestShop.Commands.*;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Migrations;
@@ -108,6 +105,7 @@ public class ChestShop extends JavaPlugin {
         registerCommand("csVersion", new Version(), Permission.ADMIN);
         registerCommand("csGive", new Give(), Permission.ADMIN);
         registerCommand("cstoggle", new Toggle(), Permission.NOTIFY_TOGGLE);
+        registerCommand("csaccess", new AccessToggle(), Permission.ADMIN);
 
         loadConfig();
 

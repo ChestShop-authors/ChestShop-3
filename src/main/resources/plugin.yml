@@ -25,6 +25,9 @@ commands:
   cstoggle:
     description: Toggle messages to the owner of a shop
     usage: /<command>
+  csaccess:
+    description: Toggle moderator access to chestshops
+    usage: /<command>
 
 permissions:
   ChestShop.*:

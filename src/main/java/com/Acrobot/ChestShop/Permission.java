@@ -3,6 +3,8 @@ package com.Acrobot.ChestShop;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.Optional;
 
@@ -69,9 +71,38 @@ public enum Permission {
         return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase());
     }
 
-    private static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
+    public static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
         return (sender.isPermissionSet(permission) && !sender.hasPermission(permission))
                 || (sender.isPermissionSet(permission.toLowerCase()) && !sender.hasPermission(permission.toLowerCase()));
+    }
+
+    public static PermissionAttachment getPlayerPermissionAttachment(Player player)
+    {
+        PermissionAttachment pa = null;
+        PermissionAttachment paTmp = null;
+
+        for (PermissionAttachmentInfo paInfo : player.getEffectivePermissions()) {
+            paTmp = paInfo.getAttachment();
+            if ( paTmp != null && paTmp.getPlugin().equals(ChestShop.getPlugin())) {
+                pa = paTmp;
+            }
+        }
+
+        return pa;
+    }
+
+    public static boolean setPermission(Player player, String node, boolean enabled)
+    {
+        PermissionAttachment pa = getPlayerPermissionAttachment(player);
+
+        if (pa == null)
+            pa = player.addAttachment(ChestShop.getPlugin());
+
+        pa.unsetPermission(node);
+        pa.setPermission(node, enabled);
+        player.recalculatePermissions();
+
+        return true;
     }
 
     public static org.bukkit.permissions.Permission getPermission(Permission permission) {
