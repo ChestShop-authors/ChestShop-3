@@ -1,22 +1,23 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.ChestShop.Configuration.Messages;
-import com.Acrobot.ChestShop.Permission;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author KingFaris10
  */
 public class Toggle implements CommandExecutor {
-    private static final List<String> toggledPlayers = new ArrayList<String>();
+    private static final Set<UUID> toggledPlayers = new HashSet<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -30,7 +31,7 @@ public class Toggle implements CommandExecutor {
             return false;
         }
 
-        if (setIgnoring(player, !toggledPlayers.contains(player.getName()))) {
+        if (setIgnoring(player, !isIgnoring(player))) {
             player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_OFF));
         } else {
             player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_ON));
@@ -44,24 +45,28 @@ public class Toggle implements CommandExecutor {
     }
 
     public static boolean isIgnoring(OfflinePlayer player) {
-        return player != null && isIgnoring(player.getName());
+        return player != null && isIgnoring(player.getUniqueId());
     }
 
+    public static boolean isIgnoring(UUID playerId) {
+        return toggledPlayers.contains(playerId);
+    }
+
+    /**
+     * @deprecated Use {@link #isIgnoring(UUID)}
+     */
+    @Deprecated
     public static boolean isIgnoring(String playerName) {
-        return toggledPlayers.contains(playerName);
+        return isIgnoring(Bukkit.getOfflinePlayer(playerName));
     }
 
     public static boolean setIgnoring(Player player, boolean ignoring) {
         Validate.notNull(player); // Make sure the player instance is not null, in case there are any errors in the code
 
         if (ignoring) {
-            if (!toggledPlayers.contains(player.getName())) {
-                toggledPlayers.add(player.getName());
-            }
+            toggledPlayers.add(player.getUniqueId());
         } else {
-            if (toggledPlayers.contains(player.getName())) {
-                toggledPlayers.remove(player.getName());
-            }
+            toggledPlayers.remove(player.getUniqueId());
         }
 
         return ignoring;

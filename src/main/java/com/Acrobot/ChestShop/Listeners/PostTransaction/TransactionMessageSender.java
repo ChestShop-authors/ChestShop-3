@@ -27,15 +27,13 @@ public class TransactionMessageSender implements Listener {
     }
 
     protected static void sendBuyMessage(TransactionEvent event) {
-        String ownerName = event.getOwnerAccount().getName();
-
         Player player = event.getClient();
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
-            sendMessage(player, Messages.YOU_BOUGHT_FROM_SHOP, event, "owner", ownerName);
+            sendMessage(player, Messages.YOU_BOUGHT_FROM_SHOP, event, "owner", event.getOwnerAccount().getName());
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getName())) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getUuid())) {
             Player owner = Bukkit.getPlayer(event.getOwnerAccount().getUuid());
             if (owner != null) {
                 sendMessage(owner, Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
@@ -44,15 +42,13 @@ public class TransactionMessageSender implements Listener {
     }
     
     protected static void sendSellMessage(TransactionEvent event) {
-        String ownerName = event.getOwnerAccount().getName();
-
         Player player = event.getClient();
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
-            sendMessage(player, Messages.YOU_SOLD_TO_SHOP, event, "buyer", ownerName);
+            sendMessage(player, Messages.YOU_SOLD_TO_SHOP, event, "buyer", event.getOwnerAccount().getName());
         }
 
-        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(ownerName)) {
+        if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getUuid())) {
             Player owner = Bukkit.getPlayer(event.getOwnerAccount().getUuid());
             if (owner != null) {
                 sendMessage(owner, Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, event, "seller", player.getName());
