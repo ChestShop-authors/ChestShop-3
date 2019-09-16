@@ -84,8 +84,8 @@ public class Messages {
     public static String TOGGLE_MESSAGES_ON = "You will now receive messages from your shop(s).";
 
     @PrecededBySpace
-    public static String TOGGLE_ACCESS_ON = "Access to shops is enabled";
-    public static String TOGGLE_ACCESS_OFF = "Access to shops is disabled";
+    public static String TOGGLE_ACCESS_ON = "You can no longer trade at shops that you have access to";
+    public static String TOGGLE_ACCESS_OFF = "You can now trade at shops that you have access to";
 
     public static String prefix(String message) {
         return Configuration.getColoured(prefix + message);

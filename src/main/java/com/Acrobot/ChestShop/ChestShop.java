@@ -109,7 +109,7 @@ public class ChestShop extends JavaPlugin {
         registerCommand("csVersion", new Version(), Permission.ADMIN);
         registerCommand("csGive", new Give(), Permission.ADMIN);
         registerCommand("cstoggle", new Toggle(), Permission.NOTIFY_TOGGLE);
-        registerCommand("csaccess", new AccessToggle(), Permission.ADMIN);
+        registerCommand("csaccess", new AccessToggle(), Permission.ACCESS_TOGGLE);
 
         loadConfig();
 

@@ -40,6 +40,7 @@ public enum Permission {
     NO_SELL_TAX("ChestShop.notax.sell"),
 
     NOTIFY_TOGGLE("ChestShop.toggle"),
+    ACCESS_TOGGLE("ChestShop.accesstoggle"),
     ITEMINFO("ChestShop.iteminfo");
 
     private final String permission;
