@@ -25,6 +25,9 @@ commands:
   cstoggle:
     description: Toggle messages to the owner of a shop
     usage: /<command>
+  csaccess:
+    description: Allows trading at shops that you have access to
+    usage: /<command>
 
 permissions:
   ChestShop.*:
@@ -72,6 +75,9 @@ permissions:
   ChestShop.toggle:
     description: Allows user to toggle messages.
     default: true
+  ChestShop.accesstoggle:
+    description: Allows toggling of trading at shops that you have access to.
+    default: op
   ChestShop.iteminfo:
     description: Allows user to see item info with the command.
     default: true

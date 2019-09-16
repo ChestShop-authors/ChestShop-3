@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.ChestShop.Commands.AccessToggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -40,7 +41,6 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
-import static com.Acrobot.ChestShop.Permission.OTHER_NAME_ACCESS;
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_CREATE;
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
@@ -114,8 +114,7 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-
-        if (ChestShopSign.hasPermission(player, OTHER_NAME_ACCESS, sign) && !ChestShopSign.isAdminShop(sign)) {
+        if (!AccessToggle.isIgnoring(player) && ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
             if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
                 if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
                     if (player.isSneaking() || player.isInsideVehicle()
