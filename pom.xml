@@ -384,7 +384,9 @@
         <profile>
             <id>default</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!bukkit</name>
+                </property>
             </activation>
             <repositories>
                 <repository>
@@ -418,6 +420,9 @@
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
+            <properties>
+                <bukkit>true</bukkit>
+            </properties>
             <build>
                 <finalName>${project.name}-Bukkit</finalName>
                 <plugins>
