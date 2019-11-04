@@ -11,7 +11,7 @@ public class Messages {
     public static String iteminfo = "&aItem Information: &r";
 
     @PrecededBySpace
-    public static String ACCESS_DENIED = "You don't have permission to do that!";
+    public static String ACCESS_DENIED = "You don't have permission to access that shop's storage container!";
 
     @PrecededBySpace
     public static String NOT_ENOUGH_MONEY = "You don't have enough money!";
