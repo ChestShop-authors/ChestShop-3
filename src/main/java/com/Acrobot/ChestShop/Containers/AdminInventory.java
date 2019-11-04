@@ -76,6 +76,10 @@ public class AdminInventory implements Inventory {
         return new HashMap<>();
     }
 
+    public HashMap<Integer, ItemStack> removeItemAnySlot(ItemStack... items) throws IllegalArgumentException {
+        return new HashMap<>();
+    }
+
     @Override
     public ItemStack[] getContents() {
         return content;

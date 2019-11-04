@@ -4,6 +4,7 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
+import com.Acrobot.ChestShop.Listeners.Block.Break.Attached.PhysicsBreak;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -36,12 +37,19 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
  */
 public class SignBreak implements Listener {
     private static final BlockFace[] SIGN_CONNECTION_FACES = {BlockFace.SOUTH, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP};
-    private static final String METADATA_NAME = "shop_destroyer";
+    public static final String METADATA_NAME = "shop_destroyer";
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public static void onSign(BlockPhysicsEvent event) {
-        Block block = event.getBlock();
+    public SignBreak() {
+        try {
+            Class.forName("com.destroystokyo.paper.event.block.BlockDestroyEvent");
+            ChestShop.getPlugin().registerEvent((Listener) Class.forName("com.Acrobot.ChestShop.Listeners.Block.Break.Attached.PaperBlockDestroy").newInstance());
+            ChestShop.getBukkitLogger().info("Using Paper's BlockDestroyEvent instead of the BlockPhysicsEvent!");
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            ChestShop.getPlugin().registerEvent(new PhysicsBreak());
+        }
+    }
 
+    public static void handlePhysicsBreak(Block block) {
         if (!BlockUtil.isSign(block)) {
             return;
         }
@@ -148,7 +156,7 @@ public class SignBreak implements Listener {
         return player != null && NameManager.canUseName(player, OTHER_NAME_DESTROY, name);
     }
 
-    private static void sendShopDestroyedEvent(Sign sign, Player player) {
+    public static void sendShopDestroyedEvent(Sign sign, Player player) {
         Container connectedContainer = null;
 
         if (!ChestShopSign.isAdminShop(sign)) {
