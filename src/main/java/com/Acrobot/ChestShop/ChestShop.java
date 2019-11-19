@@ -40,6 +40,9 @@ import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -121,6 +124,8 @@ public class ChestShop extends JavaPlugin {
         }
 
         registerEvents();
+
+        registerPluginMessagingChannels();
 
         if (Properties.LOG_TO_FILE) {
             File log = loadFile("ChestShop.log");
@@ -379,6 +384,12 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new TaxModule());
     }
 
+    private void registerPluginMessagingChannels() {
+        if (Properties.BUNGEECORD_MESSAGES) {
+            getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        }
+    }
+
     public void registerEvent(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
     }
@@ -442,5 +453,16 @@ public class ChestShop extends JavaPlugin {
 
     public static void callEvent(Event event) {
         Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public static void sendBungeeMessage(String playerName, String message) {
+        if (Properties.BUNGEECORD_MESSAGES && !Bukkit.getOnlinePlayers().isEmpty()) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("Message");
+            out.writeUTF(playerName);
+            out.writeUTF(message);
+
+            Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        }
     }
 }

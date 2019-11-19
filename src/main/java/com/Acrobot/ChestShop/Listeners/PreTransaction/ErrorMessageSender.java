@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -121,22 +122,26 @@ public class ErrorMessageSender implements Listener {
 
     private static void sendMessageToOwner(Account ownerAccount, String message, ItemStack... stock) {
         Player player = Bukkit.getPlayer(ownerAccount.getUuid());
-        if (player != null) {
+        if (player != null || Properties.BUNGEECORD_MESSAGES) {
             message = message.replace("%material", "%item");
             String replacedMessage = message.replace("%item", MaterialUtil.getItemList(stock));
 
             if (Properties.NOTIFICATION_MESSAGE_COOLDOWN > 0) {
-                Long last = notificationCooldowns.get(player.getUniqueId(), replacedMessage);
+                Long last = notificationCooldowns.get(ownerAccount.getUuid(), replacedMessage);
                 if (last != null && last + Properties.NOTIFICATION_MESSAGE_COOLDOWN * 1000 > System.currentTimeMillis()) {
                     return;
                 }
-                notificationCooldowns.put(player.getUniqueId(), replacedMessage, System.currentTimeMillis());
+                notificationCooldowns.put(ownerAccount.getUuid(), replacedMessage, System.currentTimeMillis());
             }
 
-            if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, stock)) {
-                return;
+            if (player != null) {
+                if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, stock)) {
+                    return;
+                }
+                player.sendMessage(replacedMessage);
+            } else {
+                ChestShop.sendBungeeMessage(ownerAccount.getName(), replacedMessage);
             }
-            player.sendMessage(replacedMessage);
         }
     }
 }

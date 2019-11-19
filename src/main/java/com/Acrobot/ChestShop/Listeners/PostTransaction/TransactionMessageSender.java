@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -30,14 +31,12 @@ public class TransactionMessageSender implements Listener {
         Player player = event.getClient();
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
-            sendMessage(player, Messages.YOU_BOUGHT_FROM_SHOP, event, "owner", event.getOwnerAccount().getName());
+            sendMessage(player, event.getClient().getName(), Messages.YOU_BOUGHT_FROM_SHOP, event, "owner", event.getOwnerAccount().getName());
         }
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getUuid())) {
             Player owner = Bukkit.getPlayer(event.getOwnerAccount().getUuid());
-            if (owner != null) {
-                sendMessage(owner, Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
-            }
+            sendMessage(owner, event.getOwnerAccount().getName(), Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
         }
     }
     
@@ -45,18 +44,16 @@ public class TransactionMessageSender implements Listener {
         Player player = event.getClient();
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_CLIENT) {
-            sendMessage(player, Messages.YOU_SOLD_TO_SHOP, event, "buyer", event.getOwnerAccount().getName());
+            sendMessage(player, event.getClient().getName(), Messages.YOU_SOLD_TO_SHOP, event, "buyer", event.getOwnerAccount().getName());
         }
 
         if (Properties.SHOW_TRANSACTION_INFORMATION_OWNER && !Toggle.isIgnoring(event.getOwnerAccount().getUuid())) {
             Player owner = Bukkit.getPlayer(event.getOwnerAccount().getUuid());
-            if (owner != null) {
-                sendMessage(owner, Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, event, "seller", player.getName());
-            }
+            sendMessage(owner, event.getOwnerAccount().getName(), Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, event, "seller", player.getName());
         }
     }
     
-    private static void sendMessage(Player player, String rawMessage, TransactionEvent event, String... replacements) {
+    private static void sendMessage(Player player, String playerName, String rawMessage, TransactionEvent event, String... replacements) {
         Location loc = event.getSign().getLocation();
         String message = Messages.prefix(rawMessage)
                 .replace("%price", Economy.formatBalance(event.getExactPrice()))
@@ -68,11 +65,15 @@ public class TransactionMessageSender implements Listener {
         for (int i = 0; i + 1 < replacements.length; i+=2) {
             message = message.replace("%" + replacements[i], replacements[i + 1]);
         }
-        
-        if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, event.getStock())) {
-            return;
+
+        if (player != null) {
+            if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, event.getStock())) {
+                return;
+            }
+            player.sendMessage(message.replace("%item", MaterialUtil.getItemList(event.getStock())));
+        } else if (playerName != null) {
+            ChestShop.sendBungeeMessage(playerName, message.replace("%item", MaterialUtil.getItemList(event.getStock())));
         }
-        player.sendMessage(message.replace("%item", MaterialUtil.getItemList(event.getStock())));
     }
 
 }

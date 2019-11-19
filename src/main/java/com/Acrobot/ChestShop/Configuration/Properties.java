@@ -160,6 +160,10 @@ public class Properties {
     public static boolean ALLOW_AUTO_ITEM_FILL = true;
 
     @PrecededBySpace
+    @ConfigurationComment("Enable this if you use BungeeCord and want players to receive shop notifications on other servers")
+    public static boolean BUNGEECORD_MESSAGES = false;
+
+    @PrecededBySpace
     @ConfigurationComment("Do you want to show \"Out of stock\" messages?")
     public static boolean SHOW_MESSAGE_OUT_OF_STOCK = true;
     @ConfigurationComment("Do you want to show \"Full shop\" messages?")
