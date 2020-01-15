@@ -29,10 +29,12 @@ public class WorldGuardBuilding implements Listener {
     public void canBuild(BuildPermissionEvent event) {
         ApplicableRegionSet regions = getApplicableRegions(event.getSign().getBlock().getLocation());
 
-        if (regions != null && Properties.WORLDGUARD_USE_FLAG) {
+        if (regions == null) {
+            event.allow(false);
+        } else if (Properties.WORLDGUARD_USE_FLAG) {
             event.allow(regions.queryState(worldGuard.wrapPlayer(event.getPlayer()), WorldGuardFlags.ENABLE_SHOP) == StateFlag.State.ALLOW);
         } else {
-            event.allow(regions == null || regions.size() != 0);
+            event.allow(regions.size() > 0);
         }
     }
 
