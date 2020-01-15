@@ -246,6 +246,10 @@ public class Properties {
     public static boolean GRIEFPREVENTION_INTEGRATION = false;
 
     @PrecededBySpace
+    @ConfigurationComment("Do you want to only let people build inside RedProtect regions?")
+    public static boolean REDPROTECT_INTEGRATION = false;
+
+    @PrecededBySpace
     @ConfigurationComment("Do you want to deny shop access to unlogged users?")
     public static boolean AUTHME_HOOK = true;
 

@@ -46,6 +46,10 @@
             <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
         <repository>
+            <id>redprotect-repo</id>
+            <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -255,6 +259,19 @@
                     <artifactId>bukkit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>br.net.fabiozumbi12.RedProtect</groupId>
+            <artifactId>RedProtect-Spigot</artifactId>
+            <version>7.6.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>br.net.fabiozumbi12.RedProtect</groupId>
+            <artifactId>RedProtect-Core</artifactId>
+            <version>7.6.2</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

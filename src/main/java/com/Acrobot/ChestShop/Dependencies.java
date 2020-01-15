@@ -148,6 +148,13 @@ public class Dependencies {
                 listener = new GriefPrevenentionBuilding(plugin);
                 break;
 
+            case RedProtect:
+                if (!Properties.REDPROTECT_INTEGRATION) {
+                    return;
+                }
+                listener = new RedProtectBuilding(plugin);
+                break;
+
             //Other plugins
             case Heroes:
                 Heroes heroes = Heroes.getHeroes(plugin);
@@ -185,6 +192,7 @@ public class Dependencies {
 
         WorldGuard,
         GriefPrevention,
+        RedProtect,
 
         Heroes,
 
