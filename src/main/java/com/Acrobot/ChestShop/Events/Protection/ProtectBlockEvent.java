@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Events.Protection;
 
+import com.Acrobot.ChestShop.Security;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -16,7 +17,8 @@ public class ProtectBlockEvent extends Event {
 
     private final Player player;
     private final UUID protectionOwner;
-    private Block block;
+    private final Block block;
+    private final Security.Type type;
 
     boolean isProtected = false;
 
@@ -25,9 +27,14 @@ public class ProtectBlockEvent extends Event {
     }
 
     public ProtectBlockEvent(Block block, Player player, UUID protectionOwner) {
+        this(block, player, protectionOwner, Security.Type.PRIVATE);
+    }
+
+    public ProtectBlockEvent(Block block, Player player, UUID protectionOwner, Security.Type type) {
         this.block = block;
         this.player = player;
         this.protectionOwner = protectionOwner;
+        this.type = type;
     }
 
     public boolean isProtected() {
@@ -48,6 +55,10 @@ public class ProtectBlockEvent extends Event {
 
     public UUID getProtectionOwner() {
         return protectionOwner;
+    }
+
+    public Security.Type getType() {
+        return type;
     }
 
     public HandlerList getHandlers() {

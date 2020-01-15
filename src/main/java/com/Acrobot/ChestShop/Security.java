@@ -29,7 +29,11 @@ public class Security {
     }
 
     public static boolean protect(Player player, Block block, UUID protectionOwner) {
-        ProtectBlockEvent event = new ProtectBlockEvent(block, player, protectionOwner);
+        return protect(player, block, protectionOwner, Type.PRIVATE);
+    }
+
+    public static boolean protect(Player player, Block block, UUID protectionOwner, Type type) {
+        ProtectBlockEvent event = new ProtectBlockEvent(block, player, protectionOwner, type);
         ChestShop.callEvent(event);
 
         return event.isProtected();
@@ -93,5 +97,12 @@ public class Security {
             }
         }
         return false;
+    }
+
+    public enum Type {
+        PUBLIC,
+        PRIVATE,
+        DONATION,
+        DISPLAY
     }
 }

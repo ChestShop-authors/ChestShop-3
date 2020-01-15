@@ -27,6 +27,14 @@ public class LightweightChestProtection implements Listener {
 
     public LightweightChestProtection() {
         this.lwc = LWC.getInstance();
+        try {
+            if (Properties.PROTECT_SIGN_WITH_LWC)
+                Protection.Type.valueOf(Properties.LWC_SIGN_PROTECTION_TYPE.name());
+            if (Properties.PROTECT_CHEST_WITH_LWC)
+                Protection.Type.valueOf(Properties.LWC_CHEST_PROTECTION_TYPE.name());
+        } catch (IllegalArgumentException e) {
+            ChestShop.getBukkitLogger().warning("Your installed LWC version doesn't seem to support the configured protection type! " + e.getMessage());
+        }
     }
 
     @EventHandler
@@ -36,13 +44,13 @@ public class LightweightChestProtection implements Listener {
         Container connectedContainer = event.getContainer();
 
         if (Properties.PROTECT_SIGN_WITH_LWC) {
-            if (!Security.protect(player, sign.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId())) {
+            if (!Security.protect(player, sign.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId(), Properties.LWC_SIGN_PROTECTION_TYPE)) {
                 player.sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
             }
         }
 
         if (Properties.PROTECT_CHEST_WITH_LWC && connectedContainer != null
-                && Security.protect(player, connectedContainer.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId())) {
+                && Security.protect(player, connectedContainer.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId(), Properties.LWC_CHEST_PROTECTION_TYPE)) {
             player.sendMessage(Messages.prefix(Messages.PROTECTED_SHOP));
         }
     }
@@ -100,16 +108,31 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
+        Protection.Type type = Protection.Type.PRIVATE;
+        switch (event.getType()) {
+            case PUBLIC:
+                type = Protection.Type.PUBLIC;
+                break;
+            case DONATION:
+                type = Protection.Type.DONATION;
+                break;
+            case DISPLAY:
+                try {
+                    type = Protection.Type.valueOf("DISPLAY");
+                } catch (IllegalArgumentException ignored) {}
+                break;
+        }
+
         Protection protection = null;
         try {
-            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), Protection.Type.PRIVATE, worldName, event.getProtectionOwner().toString(), "", x, y, z);
+            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
         } catch (LinkageError e) {
             try {
                 int blockId = com.griefcraft.cache.BlockCache.getInstance().getBlockId(block);
                 if (blockId < 0) {
                     return;
                 }
-                protection = lwc.getPhysicalDatabase().registerProtection(blockId, Protection.Type.PRIVATE, worldName, event.getProtectionOwner().toString(), "", x, y, z);
+                protection = lwc.getPhysicalDatabase().registerProtection(blockId, type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
             } catch (LinkageError e2) {
                 ChestShop.getBukkitLogger().warning(
                         "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion()  + ") \n" +

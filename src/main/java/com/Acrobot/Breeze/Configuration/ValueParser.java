@@ -34,12 +34,13 @@ public class ValueParser {
     /**
      * Parses a YAML "object" to Java-compatible object
      *
+     * @param type The type of the returned object
      * @param object Object to parse
      * @return Java-compatible object
      */
-    public Object parseToJava(Object object) {
+    public <T> Object parseToJava(Class<T> type, Object object) {
         if (object instanceof ConfigurationSection) {
-            Map<String, List<String>> map = new HashMap<String, List<String>>();
+            Map<String, List<String>> map = new HashMap<>();
 
             for (String message : ((ConfigurationSection) object).getKeys(false)) {
                 map.put(message, ((ConfigurationSection) object).getStringList(message));
