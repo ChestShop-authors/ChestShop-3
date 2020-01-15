@@ -18,7 +18,7 @@ public class RedProtectBuilding implements Listener {
         this.redProtect = (RedProtect) plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void canBuild(BuildPermissionEvent event) {
         Region region = redProtect.getAPI().getRegion(event.getSign());
         event.allow(region != null && region.canBuild(event.getPlayer()));

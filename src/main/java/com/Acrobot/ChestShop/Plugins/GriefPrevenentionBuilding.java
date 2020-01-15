@@ -16,7 +16,7 @@ public class GriefPrevenentionBuilding implements Listener {
         this.griefPrevention = (GriefPrevention) plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void canBuild(BuildPermissionEvent event) {
         event.allow(griefPrevention.dataStore.getClaimAt(event.getSign(), false, null) != null);
     }

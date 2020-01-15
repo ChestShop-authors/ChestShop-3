@@ -26,7 +26,7 @@ public class WorldGuardBuilding implements Listener {
         this.worldGuardPlatform = WorldGuard.getInstance().getPlatform();
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void canBuild(BuildPermissionEvent event) {
         ApplicableRegionSet regions = getApplicableRegions(event.getSign().getBlock().getLocation());
 

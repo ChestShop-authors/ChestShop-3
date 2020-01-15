@@ -2,20 +2,20 @@ package com.Acrobot.ChestShop.Events.Protection;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
  * @author Acrobot
  */
-public class BuildPermissionEvent extends Event {
+public class BuildPermissionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private Player player;
     private Location chest, sign;
 
-    private int disallowed = 0;
-    private int received = 0;
+    private boolean allowed = true;
 
     public BuildPermissionEvent(Player player, Location chest, Location sign) {
         this.player = player;
@@ -36,24 +36,19 @@ public class BuildPermissionEvent extends Event {
     }
 
     public void allow() {
-        received++;
+        allowed = true;
     }
 
     public boolean isAllowed() {
-        return disallowed != received || received == 0;
+        return allowed;
     }
 
     public void allow(boolean yesOrNot) {
-        if (yesOrNot) {
-            allow();
-        } else {
-            disallow();
-        }
+        allowed = yesOrNot;
     }
 
     public void disallow() {
-        received++;
-        disallowed++;
+        allowed = false;
     }
 
     public HandlerList getHandlers() {
@@ -62,5 +57,15 @@ public class BuildPermissionEvent extends Event {
 
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return !isAllowed();
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        allow(!cancel);
     }
 }
