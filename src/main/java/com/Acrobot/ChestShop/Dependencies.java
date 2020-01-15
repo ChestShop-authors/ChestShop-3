@@ -5,7 +5,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -126,7 +125,6 @@ public class Dependencies {
 
             //Terrain protection plugins
             case WorldGuard:
-                WorldGuardPlugin worldGuard = (WorldGuardPlugin) plugin;
                 boolean inUse = Properties.WORLDGUARD_USE_PROTECTION || Properties.WORLDGUARD_INTEGRATION;
 
                 if (!inUse) {
@@ -134,13 +132,20 @@ public class Dependencies {
                 }
 
                 if (Properties.WORLDGUARD_USE_PROTECTION) {
-                    ChestShop.registerListener(new WorldGuardProtection(worldGuard));
+                    ChestShop.registerListener(new WorldGuardProtection(plugin));
                 }
 
                 if (Properties.WORLDGUARD_INTEGRATION) {
-                    listener = new WorldGuardBuilding(worldGuard);
+                    listener = new WorldGuardBuilding(plugin);
                 }
 
+                break;
+
+            case GriefPrevention:
+                if (!Properties.GRIEFPREVENTION_INTEGRATION) {
+                    return;
+                }
+                listener = new GriefPrevenentionBuilding(plugin);
                 break;
 
             //Other plugins
@@ -179,6 +184,7 @@ public class Dependencies {
         OddItem,
 
         WorldGuard,
+        GriefPrevention,
 
         Heroes,
 

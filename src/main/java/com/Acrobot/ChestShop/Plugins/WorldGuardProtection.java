@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Acrobot
@@ -24,8 +25,8 @@ public class WorldGuardProtection implements Listener {
     private WorldGuardPlugin worldGuard;
     private WorldGuardPlatform worldGuardPlatform;
 
-    public WorldGuardProtection(WorldGuardPlugin worldGuard) {
-        this.worldGuard = worldGuard;
+    public WorldGuardProtection(Plugin plugin) {
+        this.worldGuard =(WorldGuardPlugin) plugin;
         this.worldGuardPlatform = WorldGuard.getInstance().getPlatform();
     }
 

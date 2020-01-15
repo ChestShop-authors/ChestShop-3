@@ -232,7 +232,7 @@ public class Properties {
     public static boolean REMOVE_LWC_PROTECTION_AUTOMATICALLY = true;
 
     @PrecededBySpace
-    @ConfigurationComment("Do you want to only let people build inside regions?")
+    @ConfigurationComment("Do you want to only let people build inside WorldGuard regions?")
     public static boolean WORLDGUARD_INTEGRATION = false;
 
     @ConfigurationComment("Do you want to only let people build inside region flagged by doing /region regionName flag allow-shop allow?")
@@ -240,6 +240,10 @@ public class Properties {
 
     @ConfigurationComment("Do you want ChestShop to respect WorldGuard's chest protection?")
     public static boolean WORLDGUARD_USE_PROTECTION = false;
+
+    @PrecededBySpace
+    @ConfigurationComment("Do you want to only let people build inside GriefPrevention claims?")
+    public static boolean GRIEFPREVENTION_INTEGRATION = false;
 
     @PrecededBySpace
     @ConfigurationComment("Do you want to deny shop access to unlogged users?")
