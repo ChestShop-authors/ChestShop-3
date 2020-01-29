@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_ABOVE_MAX;
@@ -84,7 +85,7 @@ public class PriceRestrictionModule implements Listener {
             for (String typeId : section.getKeys(false)) {
                 Material material = Material.matchMaterial(typeId);
                 if (material != null) {
-                    configuration.set(sectionPath + "." + material.toString().toLowerCase(), configuration.get(sectionPath + "." + typeId));
+                    configuration.set(sectionPath + "." + material.toString().toLowerCase(Locale.ROOT), configuration.get(sectionPath + "." + typeId));
                     configuration.set(sectionPath + "." + typeId, null);
                 }
             }
@@ -101,7 +102,7 @@ public class PriceRestrictionModule implements Listener {
             return;
         }
 
-        String itemType = material.getType().toString().toLowerCase();
+        String itemType = material.getType().toString().toLowerCase(Locale.ROOT);
         int amount;
         try {
             amount = Integer.parseInt(event.getSignLine(QUANTITY_LINE));

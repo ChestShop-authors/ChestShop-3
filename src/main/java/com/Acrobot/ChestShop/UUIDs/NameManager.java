@@ -22,6 +22,7 @@ import org.bukkit.event.Listener;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -164,14 +165,14 @@ public class NameManager implements Listener {
             } catch (ExecutionException ignored) {}
         }
 
-        if (account == null && searchOfflinePlayer && !invalidPlayers.contains(shortName.toLowerCase())) {
+        if (account == null && searchOfflinePlayer && !invalidPlayers.contains(shortName.toLowerCase(Locale.ROOT))) {
             // no account with that shortname was found, try to get an offline player with that name
             OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(shortName);
             if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
                     && offlinePlayer.getUniqueId().version() == uuidVersion) {
                 account = storeUsername(new PlayerDTO(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
             } else {
-                invalidPlayers.put(shortName.toLowerCase(), true);
+                invalidPlayers.put(shortName.toLowerCase(Locale.ROOT), true);
             }
         }
         return account;

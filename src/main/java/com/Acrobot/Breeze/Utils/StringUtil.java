@@ -4,6 +4,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * @author Acrobot
@@ -18,9 +19,12 @@ public class StringUtil {
      * @return Reformatted string
      */
     public static String capitalizeFirstLetter(String string, char separator) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
         char[] separators = new char[]{separator};
 
-        return WordUtils.capitalizeFully(string, separators).replace(String.valueOf(separator), " ");
+        return WordUtils.capitalize(string.toLowerCase(Locale.ROOT), separators).replace(String.valueOf(separator), " ");
     }
 
     /**
@@ -28,7 +32,7 @@ public class StringUtil {
      *
      * @param string String to reformat
      * @return Reformatted string
-     * @see com.Acrobot.Breeze.Utils.StringUtil#capitalizeFirstLetter(String, char)
+     * @see StringUtil#capitalizeFirstLetter(String, char)
      */
     public static String capitalizeFirstLetter(String string) {
         return capitalizeFirstLetter(string, ' ');

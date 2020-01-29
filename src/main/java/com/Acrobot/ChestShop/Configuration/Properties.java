@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -42,7 +43,7 @@ public class Properties {
                             set.add((Material) o);
                         } else if (o instanceof String) {
                             try {
-                                set.add(Material.getMaterial(((String) o).toUpperCase()));
+                                set.add(Material.getMaterial(((String) o).toUpperCase(Locale.ROOT)));
                             } catch (IllegalArgumentException e) {
                                 ChestShop.getBukkitLogger().log(Level.WARNING, o + " is not a valid Material name in the config!");
                             }

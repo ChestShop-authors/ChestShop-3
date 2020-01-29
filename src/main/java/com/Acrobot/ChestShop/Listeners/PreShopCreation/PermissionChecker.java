@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
+
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.NO_PERMISSION;
 import static com.Acrobot.ChestShop.Permission.*;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
@@ -39,7 +41,7 @@ public class PermissionChecker implements Listener {
             return;
         }
 
-        String matID = item.getType().toString().toLowerCase();
+        String matID = item.getType().toString().toLowerCase(Locale.ROOT);
         if (PriceUtil.hasBuyPrice(priceLine)) {
             if (Permission.has(player, SHOP_CREATION_BUY_ID + matID)) {
                 return;

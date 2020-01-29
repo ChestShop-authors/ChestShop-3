@@ -26,6 +26,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -127,7 +128,7 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        String formatted = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").replace(' ', '_').toUpperCase();
+        String formatted = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").replace(' ', '_').toUpperCase(Locale.ROOT);
 
         Material material = MATERIAL_CACHE.get(formatted);
         if (material != null) {
@@ -394,10 +395,10 @@ public class MaterialUtil {
     private static class EnumParser<E extends Enum<E>> {
         private E parse(String name, E[] values) {
             try {
-                return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase());
+                return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException exception) {
                 E currentEnum = null;
-                String[] typeParts = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").toUpperCase().split("[ _]");
+                String[] typeParts = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").toUpperCase(Locale.ROOT).split("[ _]");
                 int length = Short.MAX_VALUE;
                 for (E e : values) {
                     String enumName = e.name();

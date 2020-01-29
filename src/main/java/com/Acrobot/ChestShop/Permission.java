@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -54,7 +55,7 @@ public enum Permission {
     }
 
     public static boolean has(CommandSender sender, String node) {
-        return sender.hasPermission(node) || sender.hasPermission(node.toLowerCase());
+        return sender.hasPermission(node) || sender.hasPermission(node.toLowerCase(Locale.ROOT));
     }
 
     public static boolean otherName(Player player, String name) {
@@ -64,15 +65,15 @@ public enum Permission {
     public static boolean otherName(Player player, Permission base, String name) {
         boolean hasBase = base != OTHER_NAME && otherName(player, OTHER_NAME, name);
         if (hasBase || has(player, base + ".*")) {
-            return !hasPermissionSetFalse(player, base+ "." + name) && !hasPermissionSetFalse(player, base + "." + name.toLowerCase());
+            return !hasPermissionSetFalse(player, base+ "." + name) && !hasPermissionSetFalse(player, base + "." + name.toLowerCase(Locale.ROOT));
         }
 
-        return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase());
+        return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase(Locale.ROOT));
     }
 
     private static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
         return (sender.isPermissionSet(permission) && !sender.hasPermission(permission))
-                || (sender.isPermissionSet(permission.toLowerCase()) && !sender.hasPermission(permission.toLowerCase()));
+                || (sender.isPermissionSet(permission.toLowerCase(Locale.ROOT)) && !sender.hasPermission(permission.toLowerCase(Locale.ROOT)));
     }
 
     public static org.bukkit.permissions.Permission getPermission(Permission permission) {

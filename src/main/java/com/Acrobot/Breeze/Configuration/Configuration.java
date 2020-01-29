@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -30,7 +31,7 @@ public class Configuration {
         @Override
         public <T> Object parseToJava(Class<T> type, Object object) {
             if (object instanceof String && type.isEnum()) {
-                return Enum.valueOf((Class<? extends Enum>) type, ((String) object).toUpperCase());
+                return Enum.valueOf((Class<? extends Enum>) type, ((String) object).toUpperCase(Locale.ROOT));
             }
             return object;
         }
@@ -62,8 +63,8 @@ public class Configuration {
                 try {
                     if (config.isSet(path)) {
                         field.set(null, getParser(field).parseToJava(field.getType(), config.get(path)));
-                    } else if (config.isSet(path.toLowerCase())) {
-                        field.set(null, getParser(field).parseToJava(field.getType(), config.get(path.toLowerCase())));
+                    } else if (config.isSet(path.toLowerCase(Locale.ROOT))) {
+                        field.set(null, getParser(field).parseToJava(field.getType(), config.get(path.toLowerCase(Locale.ROOT))));
                     } else {
                         if (field.isAnnotationPresent(PrecededBySpace.class)) {
                             writer.newLine();
@@ -131,7 +132,7 @@ public class Configuration {
      * @param valueParser The parser itself
      */
     public static void registerParser(String name, ValueParser valueParser) {
-        parsers.put(name.toLowerCase(), valueParser);
+        parsers.put(name.toLowerCase(Locale.ROOT), valueParser);
     }
 
     /**
@@ -140,7 +141,7 @@ public class Configuration {
      * @return The parser or null if it doesn't exist
      */
     public static ValueParser getParser(String name) {
-        return parsers.get(name.toLowerCase());
+        return parsers.get(name.toLowerCase(Locale.ROOT));
     }
 
     /**

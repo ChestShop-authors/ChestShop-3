@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -241,7 +242,7 @@ public class Updater {
         this.waitForThread();
         if (this.versionType != null) {
             for (ReleaseType type : ReleaseType.values()) {
-                if (this.versionType.equals(type.name().toLowerCase())) {
+                if (this.versionType.equals(type.name().toLowerCase(Locale.ROOT))) {
                     return type;
                 }
             }

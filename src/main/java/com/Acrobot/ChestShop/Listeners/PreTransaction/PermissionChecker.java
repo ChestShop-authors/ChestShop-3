@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
+
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.CLIENT_DOES_NOT_HAVE_PERMISSION;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
@@ -25,7 +27,7 @@ public class PermissionChecker implements Listener {
         TransactionEvent.TransactionType transactionType = event.getTransactionType();
 
         for (ItemStack stock : event.getStock()) {
-            String matID = stock.getType().toString().toLowerCase();
+            String matID = stock.getType().toString().toLowerCase(Locale.ROOT);
 
             boolean hasPerm;
 
