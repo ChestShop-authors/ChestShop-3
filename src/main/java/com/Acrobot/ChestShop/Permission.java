@@ -48,11 +48,7 @@ public enum Permission {
     }
 
     public static boolean otherName(Player player, String name) {
-        if (has(player, Permission.ADMIN)) {
-            return false;
-        }
-
-        return hasPermissionSet(player, OTHER_NAME + name) || hasPermissionSet(player, OTHER_NAME + name.toLowerCase());
+        return hasPermissionSet(player, OTHER_NAME + "*") || hasPermissionSet(player, OTHER_NAME + name) || hasPermissionSet(player, OTHER_NAME + name.toLowerCase());
     }
 
     private static boolean hasPermissionSet(CommandSender sender, String permission) {
