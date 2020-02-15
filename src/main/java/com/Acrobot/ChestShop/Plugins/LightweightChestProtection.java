@@ -11,6 +11,7 @@ import com.Acrobot.ChestShop.Security;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
+import com.griefcraft.scripting.event.LWCProtectionRegistrationPostEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
@@ -144,6 +145,9 @@ public class LightweightChestProtection implements Listener {
 
         if (protection != null) {
             event.setProtected(true);
+            protection.removeCache();
+            lwc.getProtectionCache().addProtection(protection);
+            lwc.getModuleLoader().dispatchEvent(new LWCProtectionRegistrationPostEvent(protection));
         }
     }
 
