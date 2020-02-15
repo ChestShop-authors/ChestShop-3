@@ -62,6 +62,7 @@ public class Messages {
 
     @PrecededBySpace
     public static String PROTECTED_SHOP = "Successfully protected the shop with LWC!";
+    public static String PROTECTED_SHOP_SIGN = "Successfully protected the shop sign with LWC!";
     public static String SHOP_CREATED = "Shop successfully created!";
     public static String SHOP_FEE_PAID = "You have been charged %amount";
     public static String SHOP_REFUNDED = "You have been refunded %amount.";
