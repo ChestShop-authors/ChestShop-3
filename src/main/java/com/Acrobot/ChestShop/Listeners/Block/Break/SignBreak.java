@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.material.Directional;
 import org.bukkit.material.PistonBaseMaterial;
@@ -115,6 +116,13 @@ public class SignBreak implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public static void onIgnite(BlockBurnEvent event) {
+        if (!canBlockBeBroken(event.getBlock(), null)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (!canBlockBeBroken(event.getBlock(), null)) {
             event.setCancelled(true);
         }
