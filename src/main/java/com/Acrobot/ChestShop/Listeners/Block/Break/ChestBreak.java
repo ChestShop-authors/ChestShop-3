@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 /**
@@ -34,6 +35,13 @@ public class ChestBreak implements Listener {
                 event.setCancelled(true);
                 return;
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (!canBeBroken(event.getBlock(), null)) {
+            event.setCancelled(true);
         }
     }
 
