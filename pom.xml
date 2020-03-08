@@ -22,16 +22,12 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
-            <id>bstats-repo</id>
-            <url>http://repo.bstats.org/content/repositories/releases/</url>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
-        </repository>
-        <repository>
-            <id>authme-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
             <id>minebench-repo</id>
@@ -98,7 +94,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit-lite</artifactId>
-            <version>1.2</version>
+            <version>1.7</version>
             <scope>compile</scope>
         </dependency>
 
