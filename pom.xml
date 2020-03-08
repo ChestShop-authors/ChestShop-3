@@ -31,7 +31,7 @@
         </repository>
         <repository>
             <id>minebench-repo</id>
-            <url>https://repo.moep.tv/</url>
+            <url>https://repo.minebench.de/</url>
         </repository>
         <repository>
             <id>local_repo</id>
