@@ -1,6 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
-import com.Acrobot.Breeze.Utils.NumberUtil;
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,9 +16,12 @@ public class QuantityChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        String quantity = event.getSignLine(QUANTITY_LINE);
+        int amount = -1;
+        try {
+            amount = Integer.parseInt(event.getSignLine(QUANTITY_LINE));
+        } catch (NumberFormatException notANumber) {}
 
-        if (!NumberUtil.isInteger(quantity)) {
+        if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
             event.setOutcome(INVALID_QUANTITY);
         }
     }

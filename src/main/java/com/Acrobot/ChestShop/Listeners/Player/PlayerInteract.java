@@ -182,15 +182,19 @@ public class PlayerInteract implements Listener {
         ItemParseEvent parseEvent = new ItemParseEvent(material);
         Bukkit.getPluginManager().callEvent(parseEvent);
         ItemStack item = parseEvent.getItem();
-        if (item == null || !NumberUtil.isInteger(quantity)) {
+        if (item == null) {
             player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
             return null;
         }
 
-        int amount = Integer.parseInt(quantity);
+        int amount = -1;
+        try {
+            amount = Integer.parseInt(quantity);
+        } catch (NumberFormatException notANumber) {}
 
-        if (amount < 1) {
-            amount = 1;
+        if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
+            player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_PRICE));
+            return null;
         }
 
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
