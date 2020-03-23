@@ -168,10 +168,14 @@ public class PlayerInteract implements Listener {
             return null;
         }
 
-        int amount = Integer.parseInt(quantity);
+        int amount = -1;
+        try {
+            amount = Integer.parseInt(quantity);
+        } catch (NumberFormatException notANumber) {}
 
-        if (amount < 1) {
-            amount = 1;
+        if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
+            player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_PRICE));
+            return null;
         }
 
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && price != PriceUtil.NO_PRICE && isAllowedForShift(action == buy)) {
