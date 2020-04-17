@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.Acrobot.Breeze.Configuration.Annotations.Parser;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -44,8 +47,24 @@ public class Configuration {
      * @param clazz Class to modify
      */
     public static void pairFileAndClass(File file, Class<?> clazz) {
+        pairFileAndClass(file, clazz, Bukkit.getLogger());
+    }
+
+    /**
+     * Loads a YAML-formatted file into a class and modifies the file if some of class's fields are missing
+     *
+     * @param file      File to load
+     * @param clazz     Class to modify
+     * @param logger    The logger to use to log some information about the pairing
+     */
+    public static void pairFileAndClass(File file, Class<?> clazz, Logger logger) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
+        boolean debug = config.getBoolean("DEBUG", false);
+
+        if (debug) {
+            logger.log(Level.INFO, "Loading configuration " + file.getName());
+        }
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
@@ -55,6 +74,9 @@ public class Configuration {
 
             for (Field field : clazz.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || !Modifier.isPublic(field.getModifiers())) {
+                    if (debug) {
+                        logger.log(Level.WARNING, "Field " + field.getName() + " is private, transient or not static!");
+                    }
                     continue;
                 }
 
@@ -73,15 +95,18 @@ public class Configuration {
                         writer.write(FieldParser.parse(field));
                         writer.newLine();
                     }
+                    if (debug) {
+                        logger.log(Level.INFO, field.getName() + ": " + Configuration.getParser(field).parseToYAML(field.get(null)));
+                    }
                 } catch (IllegalArgumentException | IllegalAccessException | IOException e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "Error while loading field " + field.getName() + " in configuration " + file.getName(), e);
                 }
             }
 
             writer.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while loading configuration " + file.getName(), e);
         }
     }
 

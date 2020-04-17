@@ -77,6 +77,10 @@ public class Properties {
         });
     }
 
+    @ConfigurationComment("Should the plugin log some messages that are useful for debugging?")
+    public static boolean DEBUG = false;
+
+    @PrecededBySpace
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = false;
 

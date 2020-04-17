@@ -153,8 +153,8 @@ public class ChestShop extends JavaPlugin {
     }
 
     public void loadConfig() {
-        Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class);
-        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class);
+        Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class, getBukkitLogger());
+        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class, getBukkitLogger());
 
         NameManager.load();
 
