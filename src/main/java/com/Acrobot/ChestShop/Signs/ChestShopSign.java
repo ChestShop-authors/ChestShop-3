@@ -33,7 +33,7 @@ public class ChestShopSign {
 
     public static final Pattern[] SHOP_SIGN_PATTERN = {
             Pattern.compile("^?[\\w -.:]*$"),
-            Pattern.compile("^[1-9][0-9]{0,6}$"),
+            Pattern.compile("^[1-9][0-9]{0,5}$"),
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
             Pattern.compile("^[\\w? #:-]+$")
     };
