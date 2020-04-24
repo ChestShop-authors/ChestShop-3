@@ -123,7 +123,7 @@ public class ReserveListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount() == null || !transactionCanFail()) {
+        if (event.getAccount() == null || !transactionCanFail() || event.canHold()) {
             return;
         }
 

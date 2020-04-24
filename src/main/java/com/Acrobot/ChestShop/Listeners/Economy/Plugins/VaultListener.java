@@ -230,7 +230,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (!checkSetup() || event.getAccount() == null || !transactionCanFail()) {
+        if (!checkSetup() || event.getAccount() == null || !transactionCanFail() || event.canHold()) {
             return;
         }
 
