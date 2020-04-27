@@ -69,7 +69,7 @@ public class NameManager implements Listener {
     public static Account getOrCreateAccount(UUID id, String name) {
         Validate.notNull(id, "UUID of player is null?");
         Validate.notNull(name, "Name of player " + id + " is null?");
-        Validate.isTrue(uuidVersion > -1 && id.version() == uuidVersion, "Invalid OfflinePlayer! " + id + " is not of server version " + uuidVersion);
+        Validate.isTrue(uuidVersion < 0 || id.version() == uuidVersion, "Invalid OfflinePlayer! " + id + " is not of server version " + uuidVersion);
 
         Account account = getAccount(id);
         if (account == null) {
