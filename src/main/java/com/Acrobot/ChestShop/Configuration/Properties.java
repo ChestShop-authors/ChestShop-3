@@ -16,6 +16,7 @@ import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -71,6 +72,23 @@ public class Properties {
                     return BigDecimal.valueOf((Long) object);
                 } else if (object instanceof Integer) {
                     return BigDecimal.valueOf((Integer) object);
+                }
+                return object;
+            }
+        });
+        Configuration.registerParser("UUID", new ValueParser() {
+            @Override
+            public String parseToYAML(Object object) {
+                if (object instanceof UUID) {
+                    return object.toString();
+                }
+                return super.parseToYAML(object);
+            }
+
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                if (object instanceof String) {
+                    return UUID.fromString((String) object);
                 }
                 return object;
             }
@@ -136,8 +154,11 @@ public class Properties {
     @ConfigurationComment("First line of your Admin Shop's sign should look like this:")
     public static String ADMIN_SHOP_NAME = "Admin Shop";
 
-    @ConfigurationComment("The economy account which Admin Shops should use and to which all taxes will go")
+    @ConfigurationComment("The name of the economy account which Admin Shops should use and to which all taxes will go")
     public static String SERVER_ECONOMY_ACCOUNT = "";
+
+    @ConfigurationComment("The uuid of the economy account for the Admin Shop. Useful for fake accounts as normally only accounts of players work")
+    public static UUID SERVER_ECONOMY_ACCOUNT_UUID = new UUID(0, 0);
 
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
     public static int TAX_AMOUNT = 0;

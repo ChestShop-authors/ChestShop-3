@@ -55,13 +55,25 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException when an invalid player object was passed
      */
     public static Account getOrCreateAccount(OfflinePlayer player) {
-        Validate.notNull(player.getName(), "Name of player is null?");
-        Validate.notNull(player.getUniqueId(), "UUID of player is null?");
-        Validate.isTrue(player.getUniqueId().version() == uuidVersion, "Invalid OfflinePlayer! " + player.getUniqueId() + " is not of server version " + uuidVersion);
+        return getOrCreateAccount(player.getUniqueId(), player.getName());
+    }
 
-        Account account = getAccount(player.getUniqueId());
+    /**
+     * Get or create an account for a player
+     *
+     * @param id The UUID of the player to get or create the account for
+     * @param name The name of the player to get or create the account fo
+     * @return The account info
+     * @throws IllegalArgumentException when id or name are null
+     */
+    public static Account getOrCreateAccount(UUID id, String name) {
+        Validate.notNull(id, "UUID of player is null?");
+        Validate.notNull(name, "Name of player " + id + " is null?");
+        Validate.isTrue(uuidVersion > -1 && id.version() == uuidVersion, "Invalid OfflinePlayer! " + id + " is not of server version " + uuidVersion);
+
+        Account account = getAccount(id);
         if (account == null) {
-            account = storeUsername(new PlayerDTO(player.getUniqueId(), player.getName()));
+            account = storeUsername(new PlayerDTO(id, name));
         }
         return account;
     }
@@ -375,10 +387,13 @@ public class NameManager implements Listener {
 
             if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
                 serverEconomyAccount = getAccount(Properties.SERVER_ECONOMY_ACCOUNT);
-                if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
-                    serverEconomyAccount = null;
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
-                }
+            }
+            if (serverEconomyAccount == null && !Properties.SERVER_ECONOMY_ACCOUNT.isEmpty() && !Properties.SERVER_ECONOMY_ACCOUNT_UUID.equals(new UUID(0, 0))) {
+                serverEconomyAccount = getOrCreateAccount(Properties.SERVER_ECONOMY_ACCOUNT_UUID, Properties.SERVER_ECONOMY_ACCOUNT);
+            }
+            if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
+                serverEconomyAccount = null;
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
