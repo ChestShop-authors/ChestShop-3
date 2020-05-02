@@ -137,7 +137,7 @@ public class NameManager implements Listener {
     @EventHandler
     public static void onAccountQuery(AccountQueryEvent event) {
         if (event.getAccount() == null) {
-            event.setAccount(getLastAccountFromShortName(event.getName()));
+            event.setAccount(getLastAccountFromShortName(event.getName(), event.searchOfflinePlayers()));
         }
     }
 
@@ -201,7 +201,19 @@ public class NameManager implements Listener {
      */
     @Deprecated
     public static Account getLastAccountFromShortName(String shortName) {
-        Account account = getAccountFromShortName(shortName); // first get the account associated with the short name
+        return getLastAccountFromShortName(shortName, true);
+    }
+
+    /**
+     * Get the information from the last time a player logged in that previously used the shortened name
+     *
+     * @param shortName The name of the player to get the last account for
+     * @param searchOfflinePlayer Whether or not to search the offline players too
+     * @return The last account or <tt>null</tt> if none was found
+     * @throws IllegalArgumentException if the username is empty
+     */
+    private static Account getLastAccountFromShortName(String shortName, boolean searchOfflinePlayer) {
+        Account account = getAccountFromShortName(shortName, searchOfflinePlayer); // first get the account associated with the short name
         if (account != null) {
             return getAccount(account.getUuid()); // then get the last account that was online with that UUID
         }
@@ -363,7 +375,10 @@ public class NameManager implements Listener {
             return true;
         }
 
-        Account account = getAccountFromShortName(name, false);
+        AccountQueryEvent queryEvent = new AccountQueryEvent(name);
+        queryEvent.searchOfflinePlayers(false);
+        ChestShop.callEvent(queryEvent);
+        Account account = queryEvent.getAccount();
         if (account == null) {
             return false;
         }
