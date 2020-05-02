@@ -3,13 +3,17 @@ package com.Acrobot.ChestShop.Plugins;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectBlockEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Security;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
+import com.griefcraft.modules.limits.LimitsModule;
+import com.griefcraft.scripting.Module;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.griefcraft.scripting.event.LWCProtectionRegistrationPostEvent;
 import org.bukkit.block.Block;
@@ -24,10 +28,12 @@ import org.bukkit.event.Listener;
  * @author Acrobot
  */
 public class LightweightChestProtection implements Listener {
-    private LWC lwc;
+    private final LWC lwc;
+    private final LimitsModule limitsModule;
 
     public LightweightChestProtection() {
         this.lwc = LWC.getInstance();
+        this.limitsModule = (LimitsModule) lwc.getModuleLoader().getModule(LimitsModule.class);
         try {
             if (Properties.PROTECT_SIGN_WITH_LWC)
                 Protection.Type.valueOf(Properties.LWC_SIGN_PROTECTION_TYPE.name());
@@ -35,6 +41,28 @@ public class LightweightChestProtection implements Listener {
                 Protection.Type.valueOf(Properties.LWC_CHEST_PROTECTION_TYPE.name());
         } catch (IllegalArgumentException e) {
             ChestShop.getBukkitLogger().warning("Your installed LWC version doesn't seem to support the configured protection type! " + e.getMessage());
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPreShopCreation(PreShopCreationEvent event) {
+        if (Properties.LWC_LIMITS_BLOCK_CREATION) {
+            if (Properties.PROTECT_SIGN_WITH_LWC) {
+                if (limitsModule.hasReachedLimit(event.getPlayer(), event.getSign().getBlock())) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
+                    return;
+                }
+            }
+
+            if (Properties.PROTECT_CHEST_WITH_LWC) {
+                Container container = uBlock.findConnectedContainer(event.getSign());
+                if (container != null && limitsModule.hasReachedLimit(event.getPlayer(), container.getBlock())) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
+                    return;
+                }
+            }
         }
     }
 

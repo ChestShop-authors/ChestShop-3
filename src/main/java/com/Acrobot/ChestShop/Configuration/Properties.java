@@ -261,6 +261,9 @@ public class Properties {
     @ConfigurationComment("Should the chest's LWC protection be removed once the shop sign is destroyed? ")
     public static boolean REMOVE_LWC_PROTECTION_AUTOMATICALLY = true;
 
+    @ConfigurationComment("Should LWC limits block shop creations?")
+    public static boolean LWC_LIMITS_BLOCK_CREATION = true;
+
     @PrecededBySpace
     @ConfigurationComment("Do you want to only let people build inside WorldGuard regions?")
     public static boolean WORLDGUARD_INTEGRATION = false;
