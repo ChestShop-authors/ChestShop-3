@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.DaoCreator;
+import com.Acrobot.ChestShop.Events.AccountAccessEvent;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -363,8 +364,22 @@ public class NameManager implements Listener {
         }
 
         Account account = getAccountFromShortName(name, false);
-        return account != null && (account.getUuid().equals(player.getUniqueId())
-                || (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, base, account.getName())));
+        if (account == null) {
+            return false;
+        }
+        if (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, base, account.getName())) {
+            return true;
+        }
+        AccountAccessEvent event = new AccountAccessEvent(player, account);
+        ChestShop.callEvent(event);
+        return event.canAccess();
+    }
+
+    @EventHandler
+    public static void onAccountAccessCheck(AccountAccessEvent event) {
+        if (!event.canAccess()) {
+            event.setAccess(event.getPlayer().getUniqueId().equals(event.getAccount().getUuid()));
+        }
     }
 
     public static boolean isAdminShop(UUID uuid) {
