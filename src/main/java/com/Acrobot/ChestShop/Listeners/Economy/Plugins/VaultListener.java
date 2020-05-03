@@ -137,7 +137,7 @@ public class VaultListener extends EconomyAdapter {
         try {
             event.hasEnough(lastSeen != null && provider.has(lastSeen, world.getName(), event.getAmount().doubleValue()));
         } catch (Exception e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " has " + event.getDoubleAmount() + "." +
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " has " + event.getAmount() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
                     "If you are sure it's not this issue then please report the following error.", e);
         }
@@ -168,7 +168,7 @@ public class VaultListener extends EconomyAdapter {
             return;
         }
 
-        String formatted = provider.format(event.getDoubleAmount());
+        String formatted = provider.format(event.getAmount().doubleValue());
         event.setFormattedAmount(formatted);
     }
 

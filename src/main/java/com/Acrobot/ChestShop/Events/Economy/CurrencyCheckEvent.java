@@ -16,7 +16,7 @@ import java.util.UUID;
 public class CurrencyCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    boolean outcome = false;
+    private boolean outcome = false;
 
     private BigDecimal amount;
     private UUID account;
@@ -59,6 +59,7 @@ public class CurrencyCheckEvent extends Event {
      * @return Amount of currency, as a double
      * @deprecated Use {@link #getAmount()} if possible
      */
+    @Deprecated
     public double getDoubleAmount() {
         return amount.doubleValue();
     }
@@ -67,7 +68,9 @@ public class CurrencyCheckEvent extends Event {
      * Sets the amount of currency transferred
      *
      * @param amount Amount to transfer
+     * @deprecated The amount should not be changed!
      */
+    @Deprecated
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
@@ -76,8 +79,9 @@ public class CurrencyCheckEvent extends Event {
      * Sets the amount of currency transferred
      *
      * @param amount Amount to transfer
-     * @deprecated Use {@link #setAmount(java.math.BigDecimal)} if possible
+     * @deprecated The amount should not be changed! Use {@link #setAmount(java.math.BigDecimal)} if possible
      */
+    @Deprecated
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
     }
@@ -100,7 +104,9 @@ public class CurrencyCheckEvent extends Event {
      * Sets the account name
      *
      * @param account Account name
+     * @deprecated The account should not be changed!
      */
+    @Deprecated
     public void setAccount(UUID account) {
         this.account = account;
     }
