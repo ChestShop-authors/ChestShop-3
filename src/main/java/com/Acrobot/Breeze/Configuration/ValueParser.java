@@ -2,10 +2,12 @@ package com.Acrobot.Breeze.Configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Acrobot
@@ -26,6 +28,13 @@ public class ValueParser {
                 sb.append("\n- ").append(parseToYAML(o));
             }
             return sb.toString();
+        } else if (object instanceof String) {
+            String[] lines = ((String) object).split("\\R");
+            if (lines.length == 1) {
+                return '\"' + String.valueOf(object) + '\"';
+            } else {
+                return "|-\n" + Arrays.stream(lines).map(s -> "  " + s).collect(Collectors.joining("\n"));
+            }
         } else {
             return '\"' + String.valueOf(object) + '\"';
         }

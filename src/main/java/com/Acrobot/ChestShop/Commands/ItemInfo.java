@@ -17,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.logging.Level;
 
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo;
+import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_fullname;
+import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_shopname;
+import static com.Acrobot.ChestShop.Configuration.Messages.replace;
 
 /**
  * @author Acrobot
@@ -41,9 +44,9 @@ public class ItemInfo implements CommandExecutor {
             return false;
         }
 
-        sender.sendMessage(Messages.prefix(iteminfo));
+        sender.sendMessage(iteminfo);
         try {
-            sender.sendMessage(ChatColor.WHITE + "Full Name: " + ChatColor.GRAY + MaterialUtil.getName(item));
+            sender.sendMessage(replace(iteminfo_fullname, "item", MaterialUtil.getName(item)));
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
@@ -51,7 +54,7 @@ public class ItemInfo implements CommandExecutor {
         }
 
         try {
-            sender.sendMessage(ChatColor.WHITE + "Shop Sign: " + ChatColor.GRAY + MaterialUtil.getSignName(item));
+            sender.sendMessage(Messages.replace(iteminfo_shopname, "item", MaterialUtil.getSignName(item)));
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
@@ -62,25 +65,5 @@ public class ItemInfo implements CommandExecutor {
         ChestShop.callEvent(event);
 
         return true;
-    }
-
-    private static String getNameAndID(ItemStack item) {
-        return MaterialUtil.getName(item);
-    }
-
-    private static String getDurability(ItemStack item) {
-        if (item.getDurability() != 0) {
-            return ChatColor.DARK_GREEN + ":" + Integer.toString(item.getDurability());
-        } else {
-            return "";
-        }
-    }
-
-    private static String getMetadata(ItemStack item) {
-        if (!item.hasItemMeta()) {
-            return "";
-        }
-
-        return ChatColor.GOLD + "#" + MaterialUtil.Metadata.getItemCode(item);
     }
 }
