@@ -19,7 +19,7 @@ import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.
  */
 public class NameChecker implements Listener {
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public static void onPreShopCreation(PreShopCreationEvent event) {
         handleEvent(event);
     }
