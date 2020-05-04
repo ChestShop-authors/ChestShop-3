@@ -121,7 +121,7 @@ public class ItemInfoListener implements Listener {
     public static void addLoreInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta.hasLore()) {
-            event.getSender().sendMessage(Messages.replace(iteminfo_lore, "lore", String.join("\n", meta.getLore())));
+            event.getSender().sendMessage(replace(iteminfo_lore, "lore", String.join("\n", meta.getLore())));
         }
     }
 }

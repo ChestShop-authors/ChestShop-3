@@ -104,6 +104,6 @@ public class Messages {
         for (int i = 0; i + 1 < replacements.length; i+=2) {
             message = message.replace("%" + replacements[i], replacements[i+1]);
         }
-        return message;
+        return Configuration.getColoured(message);
     }
 }
