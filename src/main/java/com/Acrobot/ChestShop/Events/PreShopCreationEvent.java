@@ -47,7 +47,11 @@ public class PreShopCreationEvent extends Event implements Cancellable {
      */
     @Override
     public void setCancelled(boolean cancel) {
-        outcome = CreationOutcome.OTHER;
+        if (cancel) {
+            outcome = CreationOutcome.OTHER;
+        } else {
+            outcome = CreationOutcome.SHOP_CREATED_SUCCESSFULLY;
+        }
     }
 
     /**

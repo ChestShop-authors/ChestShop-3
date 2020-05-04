@@ -217,7 +217,11 @@ public class PreTransactionEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancel) {
-        transactionOutcome = OTHER;
+        if (cancel) {
+            transactionOutcome = OTHER;
+        } else {
+            transactionOutcome = TRANSACTION_SUCCESFUL;
+        }
     }
 
     /**
