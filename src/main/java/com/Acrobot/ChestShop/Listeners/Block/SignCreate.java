@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Listeners.Block;
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -48,7 +47,12 @@ public class SignCreate implements Listener {
         PreShopCreationEvent preEvent = new PreShopCreationEvent(event.getPlayer(), sign, lines);
         ChestShop.callEvent(preEvent);
 
-        for (byte i = 0; i < event.getLines().length; ++i) {
+        if (preEvent.isCancelled() && preEvent.getOutcome() != PreShopCreationEvent.CreationOutcome.OTHER) {
+            signBlock.breakNaturally();
+            return;
+        }
+
+        for (byte i = 0; i < preEvent.getSignLines().length && i < 3; ++i) {
             event.setLine(i, preEvent.getSignLine(i));
         }
 

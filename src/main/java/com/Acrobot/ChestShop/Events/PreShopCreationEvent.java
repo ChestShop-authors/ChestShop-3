@@ -203,6 +203,10 @@ public class PreShopCreationEvent extends Event implements Cancellable {
          * For plugin use
          */
         OTHER,
+        /**
+         * Break the sign
+         */
+        OTHER_BREAK,
 
         SHOP_CREATED_SUCCESSFULLY
     }

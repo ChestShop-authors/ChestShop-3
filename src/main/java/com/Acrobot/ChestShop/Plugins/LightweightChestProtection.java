@@ -13,10 +13,11 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.model.Protection;
 import com.griefcraft.modules.limits.LimitsModule;
-import com.griefcraft.scripting.Module;
+import com.griefcraft.modules.limits.LimitsV2;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.griefcraft.scripting.event.LWCProtectionRegistrationPostEvent;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -24,16 +25,20 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.OTHER_BREAK;
+
 /**
  * @author Acrobot
  */
 public class LightweightChestProtection implements Listener {
     private final LWC lwc;
     private final LimitsModule limitsModule;
+    private final LimitsV2 limitsV2;
 
     public LightweightChestProtection() {
         this.lwc = LWC.getInstance();
         this.limitsModule = (LimitsModule) lwc.getModuleLoader().getModule(LimitsModule.class);
+        this.limitsV2 = (LimitsV2) lwc.getModuleLoader().getModule(LimitsV2.class);
         try {
             if (Properties.PROTECT_SIGN_WITH_LWC)
                 Protection.Type.valueOf(Properties.LWC_SIGN_PROTECTION_TYPE.name());
@@ -48,22 +53,27 @@ public class LightweightChestProtection implements Listener {
     public void onPreShopCreation(PreShopCreationEvent event) {
         if (Properties.LWC_LIMITS_BLOCK_CREATION) {
             if (Properties.PROTECT_SIGN_WITH_LWC) {
-                if (limitsModule.hasReachedLimit(event.getPlayer(), event.getSign().getBlock())) {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
+                if (isAtLimit(event.getPlayer(), event.getSign())) {
+                    event.setOutcome(OTHER_BREAK);
                     return;
                 }
             }
 
             if (Properties.PROTECT_CHEST_WITH_LWC) {
                 Container container = uBlock.findConnectedContainer(event.getSign());
-                if (container != null && limitsModule.hasReachedLimit(event.getPlayer(), container.getBlock())) {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(Messages.prefix(Messages.NOT_ENOUGH_PROTECTIONS));
+                if (container != null && isAtLimit(event.getPlayer(), container)) {
+                    event.setOutcome(OTHER_BREAK);
                     return;
                 }
             }
         }
+    }
+
+    private boolean isAtLimit(Player player, BlockState blockState) {
+        LWCProtectionRegisterEvent protectionEvent = new LWCProtectionRegisterEvent(player, blockState.getBlock());
+        limitsModule.onRegisterProtection(protectionEvent);
+        limitsV2.onRegisterProtection(protectionEvent);
+        return protectionEvent.isCancelled();
     }
 
     @EventHandler
@@ -164,21 +174,16 @@ public class LightweightChestProtection implements Listener {
 
         Protection protection = null;
         try {
-            protection = lwc.getPhysicalDatabase().registerProtection(block.getType(), type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
-        } catch (LinkageError e) {
-            try {
-                int blockId = com.griefcraft.cache.BlockCache.getInstance().getBlockId(block);
-                if (blockId < 0) {
-                    return;
-                }
-                protection = lwc.getPhysicalDatabase().registerProtection(blockId, type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
-            } catch (LinkageError e2) {
-                ChestShop.getBukkitLogger().warning(
-                        "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion()  + ") \n" +
-                                "Material method error: " + e.getMessage() + "\n" +
-                                "Block cache/type id error: " + e2.getMessage()
-                );
+            int blockId = com.griefcraft.cache.BlockCache.getInstance().getBlockId(block);
+            if (blockId < 0) {
+                return;
             }
+            protection = lwc.getPhysicalDatabase().registerProtection(blockId, type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
+        } catch (LinkageError e) {
+            ChestShop.getBukkitLogger().warning(
+                    "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion()  + ") \n" +
+                            "Block cache/type id error: " + e.getMessage()
+            );
         }
 
         if (protection != null) {
