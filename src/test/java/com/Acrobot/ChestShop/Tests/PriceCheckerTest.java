@@ -98,10 +98,6 @@ public class PriceCheckerTest {
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
 
-        event = new PreShopCreationEvent(null, null, getPriceString("B 0"));
-        onPreShopCreation(event);
-        assertTrue(event.isCancelled());
-
         String priceString = "5 B 5";
         assertEquals(PriceUtil.getExactBuyPrice(priceString), PriceUtil.NO_PRICE);
 
