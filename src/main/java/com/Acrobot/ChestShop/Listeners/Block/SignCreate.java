@@ -52,7 +52,7 @@ public class SignCreate implements Listener {
             return;
         }
 
-        for (byte i = 0; i < preEvent.getSignLines().length && i < 3; ++i) {
+        for (byte i = 0; i < preEvent.getSignLines().length && i < 4; ++i) {
             event.setLine(i, preEvent.getSignLine(i));
         }
 
