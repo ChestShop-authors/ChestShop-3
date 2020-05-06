@@ -41,7 +41,7 @@ public class PriceUtil {
             try {
                 BigDecimal price = new BigDecimal(part);
 
-                if (price.compareTo(MAX) > 0 || price.compareTo(BigDecimal.ZERO) <= 0) {
+                if (price.compareTo(MAX) > 0 || price.compareTo(BigDecimal.ZERO) < 0) {
                     return NO_PRICE;
                 } else {
                     return price;
