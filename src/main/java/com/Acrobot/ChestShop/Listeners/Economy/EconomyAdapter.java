@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Economy;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
@@ -44,7 +45,7 @@ public abstract class EconomyAdapter implements Listener {
         BigDecimal amountSent = event.getAmountSent();
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(amountSent, event.getSender(), event.getWorld());
         if (!NameManager.isAdminShop(event.getSender())) {
-            onCurrencySubtraction(currencySubtractEvent);
+            ChestShop.callEvent(currencySubtractEvent);
         } else {
             currencySubtractEvent.setSubtracted(true);
         }
@@ -56,7 +57,7 @@ public abstract class EconomyAdapter implements Listener {
         BigDecimal amountReceived = event.getAmountReceived().subtract(amountSent.subtract(currencySubtractEvent.getAmount()));
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(amountReceived, event.getReceiver(), event.getWorld());
         if (!NameManager.isAdminShop(event.getReceiver())) {
-            onCurrencyAdd(currencyAddEvent);
+            ChestShop.callEvent(currencyAddEvent);
         } else {
             currencyAddEvent.setAdded(true);
         }
@@ -69,7 +70,7 @@ public abstract class EconomyAdapter implements Listener {
                     event.getSender(),
                     event.getWorld()
             );
-            onCurrencyAdd(currencyResetEvent);
+            ChestShop.callEvent(currencyResetEvent);
         }
     }
 
