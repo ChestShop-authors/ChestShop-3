@@ -47,7 +47,7 @@ public class SignCreate implements Listener {
         PreShopCreationEvent preEvent = new PreShopCreationEvent(event.getPlayer(), sign, lines);
         ChestShop.callEvent(preEvent);
 
-        if (preEvent.isCancelled() && preEvent.getOutcome() != PreShopCreationEvent.CreationOutcome.OTHER) {
+        if (preEvent.getOutcome().shouldBreakSign()) {
             signBlock.breakNaturally();
             return;
         }
