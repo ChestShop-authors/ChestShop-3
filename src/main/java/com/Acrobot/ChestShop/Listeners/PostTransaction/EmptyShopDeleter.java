@@ -42,12 +42,22 @@ public class EmptyShopDeleter implements Listener {
         ShopDestroyedEvent destroyedEvent = new ShopDestroyedEvent(null, event.getSign(), connectedContainer);
         ChestShop.callEvent(destroyedEvent);
 
+        Material signType = sign.getType();
         sign.getBlock().setType(Material.AIR);
 
         if (Properties.REMOVE_EMPTY_CHESTS && !ChestShopSign.isAdminShop(ownerInventory) && InventoryUtil.isEmpty(ownerInventory)) {
             connectedContainer.getBlock().setType(Material.AIR);
         } else {
-            ownerInventory.addItem(new ItemStack(Material.SIGN, 1));
+            if (!signType.isItem()) {
+                try {
+                    signType = Material.valueOf(signType.name().replace("WALL_", ""));
+                } catch (IllegalArgumentException ignored) {}
+            }
+            if (signType.isItem()) {
+                ownerInventory.addItem(new ItemStack(signType, 1));
+            } else {
+                ChestShop.getBukkitLogger().warning("Unable to get item for sign " + signType + " to add to removed shop's container!");
+            }
         }
     }
 
