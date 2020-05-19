@@ -12,10 +12,18 @@ import org.bukkit.plugin.Plugin;
  * @author Acrobot
  */
 public class Heroes implements Listener {
-    private com.herocraftonline.heroes.Heroes heroes;
+    private final com.herocraftonline.heroes.Heroes heroes;
 
     public Heroes(com.herocraftonline.heroes.Heroes heroes) {
         this.heroes = heroes;
+    }
+
+    public static Heroes getHeroes(Plugin plugin) {
+        if (!(plugin instanceof com.herocraftonline.heroes.Heroes)) {
+            return null;
+        }
+
+        return new Heroes((com.herocraftonline.heroes.Heroes) plugin);
     }
 
     @EventHandler
@@ -33,13 +41,5 @@ public class Heroes implements Listener {
         } else {
             hero.gainExp(heroExp, HeroClass.ExperienceType.EXTERNAL, event.getPlayer().getLocation());
         }
-    }
-
-    public static Heroes getHeroes(Plugin plugin) {
-        if (!(plugin instanceof com.herocraftonline.heroes.Heroes)) {
-            return null;
-        }
-
-        return new Heroes((com.herocraftonline.heroes.Heroes) plugin);
     }
 }

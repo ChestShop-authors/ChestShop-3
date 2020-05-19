@@ -37,6 +37,10 @@ public class ProtectBlockEvent extends Event {
         this.type = type;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public boolean isProtected() {
         return isProtected;
     }
@@ -62,10 +66,6 @@ public class ProtectBlockEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -4,8 +4,6 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
-import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
@@ -23,10 +21,6 @@ public class TaxModule implements Listener {
     private static float getTax(UUID partner) {
         float taxAmount = NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)
                 ? Properties.SERVER_TAX_AMOUNT : Properties.TAX_AMOUNT;
-
-        if (taxAmount == 0) {
-            return 0;
-        }
 
         return taxAmount;
     }

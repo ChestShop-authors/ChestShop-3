@@ -20,6 +20,10 @@ public class CurrencyFormatEvent extends Event {
         this.amount = amount;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return Amount of currency
      */
@@ -52,10 +56,6 @@ public class CurrencyFormatEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Plugins;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -52,9 +51,7 @@ public class ChestShop implements Listener {
         if (uBlock.couldBeShopContainer(block)) {
             Sign sign = uBlock.getConnectedSign(block);
 
-            if (sign != null && !isShopMember(player, sign)) {
-                return false;
-            }
+            return sign == null || isShopMember(player, sign);
         }
 
         return true;

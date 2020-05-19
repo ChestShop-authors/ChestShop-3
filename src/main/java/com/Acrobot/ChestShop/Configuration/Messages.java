@@ -60,9 +60,9 @@ public class Messages {
 
     @PrecededBySpace
     public static String SELL_PRICE_ABOVE_MAX = "Sell price is above maximum!";
-    public static String SELL_PRICE_BELOW_MIN ="Sell price is below minimum!";
+    public static String SELL_PRICE_BELOW_MIN = "Sell price is below minimum!";
     public static String BUY_PRICE_ABOVE_MAX = "Buy price is above maximum!";
-    public static String BUY_PRICE_BELOW_MIN ="Buy price is below minimum!";
+    public static String BUY_PRICE_BELOW_MIN = "Buy price is below minimum!";
 
     @PrecededBySpace
     public static String CLICK_TO_AUTOFILL_ITEM = "Click the sign with the item that this shop is for!";
@@ -101,8 +101,8 @@ public class Messages {
     }
 
     public static String replace(String message, String... replacements) {
-        for (int i = 0; i + 1 < replacements.length; i+=2) {
-            message = message.replace("%" + replacements[i], replacements[i+1]);
+        for (int i = 0; i + 1 < replacements.length; i += 2) {
+            message = message.replace("%" + replacements[i], replacements[i + 1]);
         }
         return Configuration.getColoured(message);
     }

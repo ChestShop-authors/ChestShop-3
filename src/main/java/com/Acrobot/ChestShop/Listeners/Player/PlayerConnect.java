@@ -1,14 +1,13 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
+import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
+import com.Acrobot.ChestShop.UUIDs.PlayerDTO;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
-import com.Acrobot.ChestShop.UUIDs.PlayerDTO;
 
 /**
  * @author Acrobot

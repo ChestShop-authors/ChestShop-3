@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * @author Acrobot
@@ -65,7 +64,7 @@ public enum Permission {
     public static boolean otherName(Player player, Permission base, String name) {
         boolean hasBase = base != OTHER_NAME && otherName(player, OTHER_NAME, name);
         if (hasBase || has(player, base + ".*")) {
-            return !hasPermissionSetFalse(player, base+ "." + name) && !hasPermissionSetFalse(player, base + "." + name.toLowerCase(Locale.ROOT));
+            return !hasPermissionSetFalse(player, base + "." + name) && !hasPermissionSetFalse(player, base + "." + name.toLowerCase(Locale.ROOT));
         }
 
         return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase(Locale.ROOT));
@@ -82,7 +81,8 @@ public enum Permission {
             bukkitPerm = permission.getPermission();
             try {
                 Bukkit.getServer().getPluginManager().addPermission(bukkitPerm);
-            } catch (IllegalArgumentException ignored) {} // this should never happen
+            } catch (IllegalArgumentException ignored) {
+            } // this should never happen
         }
         return bukkitPerm;
     }

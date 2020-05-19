@@ -18,5 +18,5 @@ public @interface ConfigurationComment {
      *
      * @return Comment
      */
-    public String value();
+    String value();
 }

@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -24,7 +23,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
  * @author Acrobot
  */
 public class DiscountModule implements Listener {
-    private YamlConfiguration config;
+    private final YamlConfiguration config;
     private Set<String> groupList = new HashSet<String>();
 
     public DiscountModule() {

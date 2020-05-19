@@ -12,8 +12,9 @@ import org.bukkit.event.HandlerList;
 public class BuildPermissionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private Player player;
-    private Location chest, sign;
+    private final Player player;
+    private final Location chest;
+    private final Location sign;
 
     private boolean allowed = true;
 
@@ -21,6 +22,10 @@ public class BuildPermissionEvent extends Event implements Cancellable {
         this.player = player;
         this.chest = chest;
         this.sign = sign;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Player getPlayer() {
@@ -52,10 +57,6 @@ public class BuildPermissionEvent extends Event implements Cancellable {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
  * @author Acrobot
  */
 public class GriefPrevenentionBuilding implements Listener {
-    private GriefPrevention griefPrevention;
+    private final GriefPrevention griefPrevention;
 
     public GriefPrevenentionBuilding(Plugin plugin) {
         this.griefPrevention = (GriefPrevention) plugin;

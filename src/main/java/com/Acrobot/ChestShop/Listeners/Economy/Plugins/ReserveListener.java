@@ -1,13 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
-import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
+import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
@@ -24,7 +17,8 @@ import java.math.BigDecimal;
  */
 public class ReserveListener extends EconomyAdapter {
 
-    private static @Nullable EconomyAPI economyAPI;
+    private static @Nullable
+    EconomyAPI economyAPI;
 
     public ReserveListener(EconomyAPI api) {
         ReserveListener.economyAPI = api;
@@ -32,6 +26,21 @@ public class ReserveListener extends EconomyAdapter {
 
     public static EconomyAPI getProvider() {
         return economyAPI;
+    }
+
+    public static @Nullable
+    ReserveListener prepareListener() {
+        if (Bukkit.getPluginManager().getPlugin("Reserve") == null || !Reserve.instance().economyProvided()) {
+            return null;
+        }
+
+        EconomyAPI api = Reserve.instance().economy();
+
+        if (api == null) {
+            return null;
+        } else {
+            return new ReserveListener(api);
+        }
     }
 
     public boolean provided() {
@@ -47,20 +56,6 @@ public class ReserveListener extends EconomyAdapter {
                 || economyAPI.name().equals("GoldIsMoney")
                 || economyAPI.name().equals("MultiCurrency")
                 || economyAPI.name().equalsIgnoreCase("TheNewEconomy");
-    }
-
-    public static @Nullable ReserveListener prepareListener() {
-        if (Bukkit.getPluginManager().getPlugin("Reserve") == null || !Reserve.instance().economyProvided()) {
-            return null;
-        }
-
-        EconomyAPI api = Reserve.instance().economy();
-
-        if (api == null) {
-            return null;
-        } else {
-            return new ReserveListener(api);
-        }
     }
 
     @EventHandler

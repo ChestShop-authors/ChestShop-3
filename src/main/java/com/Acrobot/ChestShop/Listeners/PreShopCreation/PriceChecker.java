@@ -71,7 +71,7 @@ public class PriceChecker implements Listener {
     }
 
     private static boolean isInvalid(String part) {
-        char characters[] = {'B', 'S'};
+        char[] characters = {'B', 'S'};
 
         for (char character : characters) {
             if (part.contains(Character.toString(character))) {

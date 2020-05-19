@@ -18,20 +18,15 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_ABOVE_MAX;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_BELOW_MIN;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_ABOVE_MAX;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_BELOW_MIN;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.*;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 
 /**
  * @author Acrobot
  */
 public class PriceRestrictionModule implements Listener {
-    private YamlConfiguration configuration;
     private static final double INVALID_PATH = Double.MIN_VALUE;
+    private final YamlConfiguration configuration;
 
     public PriceRestrictionModule() {
         File file = new File(ChestShop.getFolder(), "priceLimits.yml");

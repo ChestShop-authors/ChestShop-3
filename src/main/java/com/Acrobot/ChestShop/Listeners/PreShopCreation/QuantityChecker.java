@@ -19,7 +19,8 @@ public class QuantityChecker implements Listener {
         int amount = -1;
         try {
             amount = Integer.parseInt(event.getSignLine(QUANTITY_LINE));
-        } catch (NumberFormatException notANumber) {}
+        } catch (NumberFormatException notANumber) {
+        }
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
             event.setOutcome(INVALID_QUANTITY);

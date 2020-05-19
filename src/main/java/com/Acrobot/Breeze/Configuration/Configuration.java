@@ -1,10 +1,13 @@
 package com.Acrobot.Breeze.Configuration;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.Acrobot.Breeze.Configuration.Annotations.Parser;
+import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -14,21 +17,12 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.Acrobot.Breeze.Configuration.Annotations.Parser;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.Acrobot.Breeze.Configuration.Annotations.PrecededBySpace;
-
 /**
  * A class which can be used to make configs easier to load
  *
  * @author Acrobot
  */
 public class Configuration {
-    private static Map<String, ValueParser> parsers = new HashMap<>();
     private static final ValueParser DEFAULT_PARSER = new ValueParser();
     private static final ValueParser ENUM_PARSER = new ValueParser() {
         @Override
@@ -39,6 +33,7 @@ public class Configuration {
             return object;
         }
     };
+    private static final Map<String, ValueParser> parsers = new HashMap<>();
 
     /**
      * Loads a YAML-formatted file into a class and modifies the file if some of class's fields are missing
@@ -53,9 +48,9 @@ public class Configuration {
     /**
      * Loads a YAML-formatted file into a class and modifies the file if some of class's fields are missing
      *
-     * @param file      File to load
-     * @param clazz     Class to modify
-     * @param logger    The logger to use to log some information about the pairing
+     * @param file   File to load
+     * @param clazz  Class to modify
+     * @param logger The logger to use to log some information about the pairing
      */
     public static void pairFileAndClass(File file, Class<?> clazz, Logger logger) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -153,7 +148,8 @@ public class Configuration {
 
     /**
      * Register a parser
-     * @param name The name of the parser
+     *
+     * @param name        The name of the parser
      * @param valueParser The parser itself
      */
     public static void registerParser(String name, ValueParser valueParser) {
@@ -162,6 +158,7 @@ public class Configuration {
 
     /**
      * Get a registered parser
+     *
      * @param name The name of the parser
      * @return The parser or null if it doesn't exist
      */
@@ -171,6 +168,7 @@ public class Configuration {
 
     /**
      * Get the parser that should be used for a field
+     *
      * @param field The field
      * @return The registered parser if the field has a Parser annotation or the default one
      */

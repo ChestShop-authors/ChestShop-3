@@ -67,12 +67,12 @@ public class Dependencies {
 
         Listener economy = null;
 
-        if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
+        if (Bukkit.getPluginManager().getPlugin("Reserve") != null) {
             plugin = "Reserve";
             economy = ReserveListener.prepareListener();
         }
 
-        if(Bukkit.getPluginManager().getPlugin("Vault") != null) {
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             plugin = "Vault";
             economy = VaultListener.initializeVault();
         }
@@ -181,7 +181,7 @@ public class Dependencies {
         ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " loaded.");
     }
 
-    private static enum Dependency {
+    private enum Dependency {
         LWC,
         Lockette,
         Deadbolt,

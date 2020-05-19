@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @author Acrobot
  */
 public class EntityParser {
-    private Class<?> entity;
+    private final Class<?> entity;
 
     public EntityParser(Class<?> table) {
         if (!table.isAnnotationPresent(Entity.class) || !table.isAnnotationPresent(javax.persistence.Table.class)) {
@@ -22,21 +22,6 @@ public class EntityParser {
         }
 
         entity = table;
-    }
-
-    /**
-     * Parses the class' fields to a standard SQL format
-     *
-     * @return SQLed class
-     */
-    public String parseToString() {
-        List<String> fields = new LinkedList<String>();
-
-        for (Field field : entity.getDeclaredFields()) {
-            fields.add(convertToSQL(field));
-        }
-
-        return fields.stream().collect(Collectors.joining(","));
     }
 
     /**
@@ -64,5 +49,20 @@ public class EntityParser {
         }
 
         return sqlType;
+    }
+
+    /**
+     * Parses the class' fields to a standard SQL format
+     *
+     * @return SQLed class
+     */
+    public String parseToString() {
+        List<String> fields = new LinkedList<String>();
+
+        for (Field field : entity.getDeclaredFields()) {
+            fields.add(convertToSQL(field));
+        }
+
+        return fields.stream().collect(Collectors.joining(","));
     }
 }

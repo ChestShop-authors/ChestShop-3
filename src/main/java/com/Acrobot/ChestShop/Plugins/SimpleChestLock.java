@@ -13,10 +13,18 @@ import org.bukkit.plugin.Plugin;
  * @author Acrobot
  */
 public class SimpleChestLock implements Listener {
-    private SCL scl;
+    private final SCL scl;
 
     public SimpleChestLock(SCL scl) {
         this.scl = scl;
+    }
+
+    public static SimpleChestLock getSimpleChestLock(Plugin plugin) {
+        if (!(plugin instanceof SCL)) {
+            return null;
+        }
+
+        return new SimpleChestLock((SCL) plugin);
     }
 
     @EventHandler
@@ -37,13 +45,5 @@ public class SimpleChestLock implements Listener {
         if (!scl.chests.getOwner(block).equals(playerName)) {
             event.setResult(Event.Result.DENY);
         }
-    }
-
-    public static SimpleChestLock getSimpleChestLock(Plugin plugin) {
-        if (!(plugin instanceof SCL)) {
-            return null;
-        }
-
-        return new SimpleChestLock((SCL) plugin);
     }
 }

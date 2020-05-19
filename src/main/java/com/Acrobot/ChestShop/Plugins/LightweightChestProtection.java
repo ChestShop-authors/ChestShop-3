@@ -49,33 +49,6 @@ public class LightweightChestProtection implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onPreShopCreation(PreShopCreationEvent event) {
-        if (Properties.LWC_LIMITS_BLOCK_CREATION) {
-            if (Properties.PROTECT_SIGN_WITH_LWC) {
-                if (isAtLimit(event.getPlayer(), event.getSign())) {
-                    event.setOutcome(OTHER_BREAK);
-                    return;
-                }
-            }
-
-            if (Properties.PROTECT_CHEST_WITH_LWC) {
-                Container container = uBlock.findConnectedContainer(event.getSign());
-                if (container != null && isAtLimit(event.getPlayer(), container)) {
-                    event.setOutcome(OTHER_BREAK);
-                    return;
-                }
-            }
-        }
-    }
-
-    private boolean isAtLimit(Player player, BlockState blockState) {
-        LWCProtectionRegisterEvent protectionEvent = new LWCProtectionRegisterEvent(player, blockState.getBlock());
-        limitsModule.onRegisterProtection(protectionEvent);
-        limitsV2.onRegisterProtection(protectionEvent);
-        return protectionEvent.isCancelled();
-    }
-
     @EventHandler
     public static void onShopCreation(ShopCreatedEvent event) {
         Player player = event.getPlayer();
@@ -102,6 +75,33 @@ public class LightweightChestProtection implements Listener {
         if (message != null) {
             player.sendMessage(Messages.prefix(message));
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPreShopCreation(PreShopCreationEvent event) {
+        if (Properties.LWC_LIMITS_BLOCK_CREATION) {
+            if (Properties.PROTECT_SIGN_WITH_LWC) {
+                if (isAtLimit(event.getPlayer(), event.getSign())) {
+                    event.setOutcome(OTHER_BREAK);
+                    return;
+                }
+            }
+
+            if (Properties.PROTECT_CHEST_WITH_LWC) {
+                Container container = uBlock.findConnectedContainer(event.getSign());
+                if (container != null && isAtLimit(event.getPlayer(), container)) {
+                    event.setOutcome(OTHER_BREAK);
+                    return;
+                }
+            }
+        }
+    }
+
+    private boolean isAtLimit(Player player, BlockState blockState) {
+        LWCProtectionRegisterEvent protectionEvent = new LWCProtectionRegisterEvent(player, blockState.getBlock());
+        limitsModule.onRegisterProtection(protectionEvent);
+        limitsV2.onRegisterProtection(protectionEvent);
+        return protectionEvent.isCancelled();
     }
 
     @EventHandler
@@ -168,7 +168,8 @@ public class LightweightChestProtection implements Listener {
             case DISPLAY:
                 try {
                     type = Protection.Type.valueOf("DISPLAY");
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException ignored) {
+                }
                 break;
         }
 
@@ -181,7 +182,7 @@ public class LightweightChestProtection implements Listener {
             protection = lwc.getPhysicalDatabase().registerProtection(blockId, type, worldName, event.getProtectionOwner().toString(), "", x, y, z);
         } catch (LinkageError e) {
             ChestShop.getBukkitLogger().warning(
-                    "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion()  + ") \n" +
+                    "Incompatible LWC version installed! (" + lwc.getPlugin().getName() + " v" + lwc.getVersion() + ") \n" +
                             "Block cache/type id error: " + e.getMessage()
             );
         }

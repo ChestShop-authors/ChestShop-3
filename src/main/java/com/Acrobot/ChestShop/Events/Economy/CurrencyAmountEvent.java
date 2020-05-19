@@ -15,10 +15,9 @@ import java.util.UUID;
  */
 public class CurrencyAmountEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final UUID account;
+    private final World world;
     private BigDecimal amount = BigDecimal.ZERO;
-    private UUID account;
-    private World world;
 
     public CurrencyAmountEvent(UUID account, World world) {
         this.account = account;
@@ -29,19 +28,15 @@ public class CurrencyAmountEvent extends Event {
         this(player.getUniqueId(), player.getWorld());
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return Amount of currency
      */
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    /**
-     * @return Amount of currency, as a double
-     * @deprecated Use {@link #getAmount()} if possible
-     */
-    public double getDoubleAmount() {
-        return amount.doubleValue();
     }
 
     /**
@@ -64,6 +59,14 @@ public class CurrencyAmountEvent extends Event {
     }
 
     /**
+     * @return Amount of currency, as a double
+     * @deprecated Use {@link #getAmount()} if possible
+     */
+    public double getDoubleAmount() {
+        return amount.doubleValue();
+    }
+
+    /**
      * @return The world in which the check occurs
      */
     public World getWorld() {
@@ -78,10 +81,6 @@ public class CurrencyAmountEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

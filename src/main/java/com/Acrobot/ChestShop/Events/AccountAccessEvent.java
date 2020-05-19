@@ -18,6 +18,10 @@ public class AccountAccessEvent extends PlayerEvent {
         this.account = account;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * The account to check the access for
      *
@@ -47,10 +51,6 @@ public class AccountAccessEvent extends PlayerEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

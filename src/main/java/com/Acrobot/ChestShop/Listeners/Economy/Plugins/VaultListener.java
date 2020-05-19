@@ -1,14 +1,10 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
-import java.math.BigDecimal;
-import java.util.logging.Level;
-
-import javax.annotation.Nullable;
-
+import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -17,15 +13,9 @@ import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyCheckEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyHoldEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
-import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
+import javax.annotation.Nullable;
+import java.math.BigDecimal;
+import java.util.logging.Level;
 
 /**
  * Represents a Vault connector
@@ -33,11 +23,28 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
  * @author Acrobot
  */
 public class VaultListener extends EconomyAdapter {
-    private RegisteredServiceProvider<Economy> rsp;
     private static Economy provider;
+    private RegisteredServiceProvider<Economy> rsp;
 
     private VaultListener() {
         updateEconomyProvider();
+    }
+
+    public static Economy getProvider() {
+        return provider;
+    }
+
+    /**
+     * Creates a new VaultListener and returns it (if possible)
+     *
+     * @return VaultListener
+     */
+    public static @Nullable
+    VaultListener initializeVault() {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            return null;
+        }
+        return new VaultListener();
     }
 
     private void updateEconomyProvider() {
@@ -58,8 +65,6 @@ public class VaultListener extends EconomyAdapter {
         return true;
     }
 
-    public static Economy getProvider() { return provider; }
-
     public boolean transactionCanFail() {
         if (provider == null) {
             return false;
@@ -69,18 +74,6 @@ public class VaultListener extends EconomyAdapter {
                 || provider.getName().equals("GoldIsMoney")
                 || provider.getName().equals("MultiCurrency")
                 || provider.getName().equalsIgnoreCase("TheNewEconomy");
-    }
-
-    /**
-     * Creates a new VaultListener and returns it (if possible)
-     *
-     * @return VaultListener
-     */
-    public static @Nullable VaultListener initializeVault() {
-        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            return null;
-        }
-        return new VaultListener();
     }
 
     @EventHandler
@@ -156,7 +149,7 @@ public class VaultListener extends EconomyAdapter {
         try {
             event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
         } catch (Exception e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check account balance of "+ lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check account balance of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
                     "If you are sure it's not this issue then please report the following error.", e);
         }

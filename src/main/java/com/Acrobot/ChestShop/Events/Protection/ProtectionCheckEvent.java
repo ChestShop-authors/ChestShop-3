@@ -10,11 +10,10 @@ import org.bukkit.event.HandlerList;
  */
 public class ProtectionCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final Block block;
+    private final Player player;
     private Result result = Result.DEFAULT;
     private boolean ignoreBuiltInProtection = false;
-    private Block block;
-    private Player player;
 
     public ProtectionCheckEvent(Block block, Player player) {
         this.block = block;
@@ -25,6 +24,10 @@ public class ProtectionCheckEvent extends Event {
         this.block = block;
         this.player = player;
         this.ignoreBuiltInProtection = ignoreBuiltInProtection;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public boolean isBuiltInProtectionIgnored() {
@@ -48,10 +51,6 @@ public class ProtectionCheckEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

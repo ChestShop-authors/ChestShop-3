@@ -18,22 +18,6 @@ import java.util.UUID;
 public class AccessToggle implements CommandExecutor {
     private static final Set<UUID> toggledPlayers = new HashSet<>();
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return false;
-        }
-
-        Player player = (Player) sender;
-
-        if (setIgnoring(player, !isIgnoring(player))) {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_OFF));
-        } else {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_ON));
-        }
-
-        return true;
-    }
-
     public static boolean isIgnoring(OfflinePlayer player) {
         return player != null && isIgnoring(player.getUniqueId());
     }
@@ -52,5 +36,21 @@ public class AccessToggle implements CommandExecutor {
         }
 
         return ignoring;
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+
+        Player player = (Player) sender;
+
+        if (setIgnoring(player, !isIgnoring(player))) {
+            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_OFF));
+        } else {
+            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_ON));
+        }
+
+        return true;
     }
 }

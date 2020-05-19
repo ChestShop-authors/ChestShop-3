@@ -9,7 +9,7 @@ public class SimpleCache<K, V> {
     private final LinkedHashMap<K, V> map;
 
     public SimpleCache(int cacheSize) {
-        map = new LinkedHashMap<K, V>(cacheSize * 10/9, 0.7f, true) {
+        map = new LinkedHashMap<K, V>(cacheSize * 10 / 9, 0.7f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > cacheSize;

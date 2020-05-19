@@ -46,7 +46,8 @@ public class PriceUtil {
                 } else {
                     return price;
                 }
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         return NO_PRICE;

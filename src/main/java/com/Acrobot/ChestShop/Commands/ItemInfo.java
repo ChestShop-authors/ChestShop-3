@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Commands;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import org.bukkit.Bukkit;
@@ -16,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_fullname;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_shopname;
-import static com.Acrobot.ChestShop.Configuration.Messages.replace;
+import static com.Acrobot.ChestShop.Configuration.Messages.*;
 
 /**
  * @author Acrobot

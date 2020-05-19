@@ -1,6 +1,9 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Commands.AccessToggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -167,7 +170,7 @@ public class PlayerInteract implements Listener {
         if (!adminShop) {
             AccountCheckEvent event = new AccountCheckEvent(account.getUuid(), player.getWorld());
             Bukkit.getPluginManager().callEvent(event);
-            if(!event.hasAccount()) {
+            if (!event.hasAccount()) {
                 player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
                 return null;
             }
@@ -190,7 +193,8 @@ public class PlayerInteract implements Listener {
         int amount = -1;
         try {
             amount = Integer.parseInt(quantity);
-        } catch (NumberFormatException notANumber) {}
+        } catch (NumberFormatException notANumber) {
+        }
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
             player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_PRICE));

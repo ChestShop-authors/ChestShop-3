@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Represents the filename of the database (inside ChestShop's folder)
+ *
  * @author Andrzej Pomirski
  */
 @Retention(RetentionPolicy.RUNTIME)

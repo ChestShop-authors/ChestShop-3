@@ -60,9 +60,7 @@ public class EmptyShopDeleter implements Listener {
                     }
                 }
                 return true;
-            } else if (!InventoryUtil.hasItems(stock, inventory)) {
-                return true;
-            }
+            } else return !InventoryUtil.hasItems(stock, inventory);
         }
         return false;
     }

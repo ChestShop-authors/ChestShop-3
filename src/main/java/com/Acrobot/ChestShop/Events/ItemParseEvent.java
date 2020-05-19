@@ -14,16 +14,17 @@ public class ItemParseEvent extends Event {
         this.itemString = itemString;
     }
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
     /**
      * Get the item string that should be parsed
+     *
      * @return The item string to parse
      */
     public String getItemString() {
@@ -31,15 +32,8 @@ public class ItemParseEvent extends Event {
     }
 
     /**
-     * Set the item that the string represents
-     * @param item The item for the string
-     */
-    public void setItem(ItemStack item) {
-        this.item = item;
-    }
-
-    /**
      * The item that was parsed
+     *
      * @return The parsed item or null if none was found
      */
     public ItemStack getItem() {
@@ -47,7 +41,17 @@ public class ItemParseEvent extends Event {
     }
 
     /**
+     * Set the item that the string represents
+     *
+     * @param item The item for the string
+     */
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
+
+    /**
      * Whether or not the item string of this event has a parsed item
+     *
      * @return True if an item was successfully parsed; false if not
      */
     public boolean hasItem() {

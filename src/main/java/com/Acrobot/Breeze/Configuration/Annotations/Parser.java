@@ -1,7 +1,5 @@
 package com.Acrobot.Breeze.Configuration.Annotations;
 
-import com.Acrobot.Breeze.Configuration.ValueParser;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,5 +16,5 @@ public @interface Parser {
      *
      * @return Comment
      */
-    public String value();
+    String value();
 }

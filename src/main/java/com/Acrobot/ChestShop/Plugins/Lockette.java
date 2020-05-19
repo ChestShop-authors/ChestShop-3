@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Plugins;
 
-import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;

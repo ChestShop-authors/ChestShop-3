@@ -15,12 +15,10 @@ import java.util.UUID;
  */
 public class CurrencyCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final World world;
     private boolean outcome = false;
-
     private BigDecimal amount;
     private UUID account;
-    private World world;
 
     public CurrencyCheckEvent(BigDecimal amount, UUID account, World world) {
         this.amount = amount;
@@ -30,6 +28,10 @@ public class CurrencyCheckEvent extends Event {
 
     public CurrencyCheckEvent(BigDecimal amount, Player player) {
         this(amount, player.getUniqueId(), player.getWorld());
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -56,15 +58,6 @@ public class CurrencyCheckEvent extends Event {
     }
 
     /**
-     * @return Amount of currency, as a double
-     * @deprecated Use {@link #getAmount()} if possible
-     */
-    @Deprecated
-    public double getDoubleAmount() {
-        return amount.doubleValue();
-    }
-
-    /**
      * Sets the amount of currency transferred
      *
      * @param amount Amount to transfer
@@ -84,6 +77,15 @@ public class CurrencyCheckEvent extends Event {
     @Deprecated
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
+    }
+
+    /**
+     * @return Amount of currency, as a double
+     * @deprecated Use {@link #getAmount()} if possible
+     */
+    @Deprecated
+    public double getDoubleAmount() {
+        return amount.doubleValue();
     }
 
     /**
@@ -112,10 +114,6 @@ public class CurrencyCheckEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

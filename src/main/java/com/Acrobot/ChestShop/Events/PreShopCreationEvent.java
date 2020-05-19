@@ -18,7 +18,8 @@ public class PreShopCreationEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private Player creator;
-    @Nullable private Account ownerAccount = null;
+    @Nullable
+    private Account ownerAccount = null;
 
     private CreationOutcome outcome = CreationOutcome.SHOP_CREATED_SUCCESSFULLY;
     private Sign sign;
@@ -28,6 +29,10 @@ public class PreShopCreationEvent extends Event implements Cancellable {
         this.creator = creator;
         this.sign = sign;
         this.signLines = signLines.clone();
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -82,24 +87,6 @@ public class PreShopCreationEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the sign attached to the shop
-     *
-     * @param sign Shop sign
-     */
-    public void setSign(Sign sign) {
-        this.sign = sign;
-    }
-
-    /**
-     * Sets the text on the sign
-     *
-     * @param signLines Text to set
-     */
-    public void setSignLines(String[] signLines) {
-        this.signLines = signLines;
-    }
-
-    /**
      * Sets one of the lines on the sign
      *
      * @param line Line number to set (0-3)
@@ -128,6 +115,15 @@ public class PreShopCreationEvent extends Event implements Cancellable {
     }
 
     /**
+     * Sets the sign attached to the shop
+     *
+     * @param sign Shop sign
+     */
+    public void setSign(Sign sign) {
+        this.sign = sign;
+    }
+
+    /**
      * Returns the text on the sign
      *
      * @param line Line number (0-3)
@@ -144,6 +140,15 @@ public class PreShopCreationEvent extends Event implements Cancellable {
      */
     public String[] getSignLines() {
         return signLines;
+    }
+
+    /**
+     * Sets the text on the sign
+     *
+     * @param signLines Text to set
+     */
+    public void setSignLines(String[] signLines) {
+        this.signLines = signLines;
     }
 
     /**
@@ -169,14 +174,10 @@ public class PreShopCreationEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     /**
      * Possible outcomes
      */
-    public static enum CreationOutcome {
+    public enum CreationOutcome {
         INVALID_ITEM,
         INVALID_PRICE,
         INVALID_QUANTITY,

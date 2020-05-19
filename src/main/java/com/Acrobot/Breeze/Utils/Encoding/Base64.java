@@ -1,5 +1,7 @@
 package com.Acrobot.Breeze.Utils.Encoding;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
  * <p>Homepage: <a href="http://iharder.net/base64">http://iharder.net/base64</a>.</p>
@@ -35,7 +37,7 @@ package com.Acrobot.Breeze.Utils.Encoding;
  */
 public class Base64 {
 
-/* ********  P U B L I C   F I E L D S  ******** */
+    /* ********  P U B L I C   F I E L D S  ******** */
 
 
     /**
@@ -89,7 +91,7 @@ public class Base64 {
     public final static int ORDERED = 32;
 
 
-/* ********  P R I V A T E   F I E L D S  ******** */
+    /* ********  P R I V A T E   F I E L D S  ******** */
 
 
     /**
@@ -120,7 +122,7 @@ public class Base64 {
     private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
 
 
-/* ********  S T A N D A R D   B A S E 6 4   A L P H A B E T  ******** */
+    /* ********  S T A N D A R D   B A S E 6 4   A L P H A B E T  ******** */
 
     /**
      * The 64 valid Base64 values.
@@ -179,7 +181,7 @@ public class Base64 {
     };
 
 
-/* ********  U R L   S A F E   B A S E 6 4   A L P H A B E T  ******** */
+    /* ********  U R L   S A F E   B A S E 6 4   A L P H A B E T  ******** */
 
     /**
      * Used in the URL- and Filename-safe dialect described in Section 4 of RFC3548:
@@ -242,7 +244,7 @@ public class Base64 {
 
 
 
-/* ********  O R D E R E D   B A S E 6 4   A L P H A B E T  ******** */
+    /* ********  O R D E R E D   B A S E 6 4   A L P H A B E T  ******** */
 
     /**
      * I don't get the point of this technique, but someone requested it,
@@ -306,8 +308,14 @@ public class Base64 {
     };
 
 
-/* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
+    /* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
 
+
+    /**
+     * Defeats instantiation.
+     */
+    private Base64() {
+    }
 
     /**
      * Returns one of the _SOMETHING_ALPHABET byte arrays depending on
@@ -325,7 +333,6 @@ public class Base64 {
             return _STANDARD_ALPHABET;
         }
     }    // end getAlphabet
-
 
     /**
      * Returns one of the _SOMETHING_DECODABET byte arrays depending on
@@ -345,16 +352,9 @@ public class Base64 {
     }    // end getAlphabet
 
 
-    /**
-     * Defeats instantiation.
-     */
-    private Base64() {}
 
 
-
-
-/* ********  E N C O D I N G   M E T H O D S  ******** */
-
+    /* ********  E N C O D I N G   M E T H O D S  ******** */
 
     /**
      * Encodes up to the first three bytes of array <var>threeBytes</var>
@@ -908,7 +908,7 @@ public class Base64 {
 
 
 
-/* ********  D E C O D I N G   M E T H O D S  ******** */
+    /* ********  D E C O D I N G   M E T H O D S  ******** */
 
 
     /**
@@ -1505,7 +1505,7 @@ public class Base64 {
         try {
             out = new java.io.BufferedOutputStream(
                     new java.io.FileOutputStream(outfile));
-            out.write(encoded.getBytes("US-ASCII")); // Strict, 7-bit output.
+            out.write(encoded.getBytes(StandardCharsets.US_ASCII)); // Strict, 7-bit output.
         }   // end try
         catch (java.io.IOException e) {
             throw e; // Catch and release to execute finally{}
@@ -1562,15 +1562,15 @@ public class Base64 {
      */
     public static class InputStream extends java.io.FilterInputStream {
 
-        private boolean encode;         // Encoding or decoding
+        private final boolean encode;         // Encoding or decoding
+        private final byte[] buffer;         // Small buffer holding converted data
+        private final int bufferLength;   // Length of buffer (3 or 4)
+        private final boolean breakLines;     // Break lines at less than 80 characters
+        private final int options;        // Record options used to create the stream.
+        private final byte[] decodabet;      // Local copies to avoid extra method calls
         private int position;       // Current position in the buffer
-        private byte[] buffer;         // Small buffer holding converted data
-        private int bufferLength;   // Length of buffer (3 or 4)
         private int numSigBytes;    // Number of meaningful bytes in the buffer
         private int lineLength;
-        private boolean breakLines;     // Break lines at less than 80 characters
-        private int options;        // Record options used to create the stream.
-        private byte[] decodabet;      // Local copies to avoid extra method calls
 
 
         /**
@@ -1773,16 +1773,16 @@ public class Base64 {
      */
     public static class OutputStream extends java.io.FilterOutputStream {
 
-        private boolean encode;
+        private final boolean encode;
+        private final int bufferLength;
+        private final boolean breakLines;
+        private final byte[] b4;         // Scratch used in a few places
+        private final int options;    // Record for later
+        private final byte[] decodabet;  // Local copies to avoid extra method calls
         private int position;
         private byte[] buffer;
-        private int bufferLength;
         private int lineLength;
-        private boolean breakLines;
-        private byte[] b4;         // Scratch used in a few places
         private boolean suspendEncoding;
-        private int options;    // Record for later
-        private byte[] decodabet;  // Local copies to avoid extra method calls
 
         /**
          * Constructs a {@link Base64.OutputStream} in ENCODE mode.

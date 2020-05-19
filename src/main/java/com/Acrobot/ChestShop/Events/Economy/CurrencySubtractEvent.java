@@ -10,19 +10,17 @@ import java.util.UUID;
 
 /**
  * Represents a subtraction of goods from entity
- *
+ * <p>
  * Use {@link CurrencyTransferEvent} if you want to transfer money from one account to another one!
  *
  * @author Acrobot
  */
 public class CurrencySubtractEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final UUID target;
+    private final World world;
     boolean subtracted = false;
-
     private BigDecimal amount;
-    private UUID target;
-    private World world;
 
     public CurrencySubtractEvent(BigDecimal amount, UUID target, World world) {
         this.amount = amount;
@@ -34,19 +32,15 @@ public class CurrencySubtractEvent extends Event {
         this(amount, target.getUniqueId(), target.getWorld());
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return Amount of currency
      */
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    /**
-     * @return Amount of currency, as a double
-     * @deprecated Use {@link #getAmount()} if possible
-     */
-    public double getDoubleAmount() {
-        return amount.doubleValue();
     }
 
     /**
@@ -66,6 +60,14 @@ public class CurrencySubtractEvent extends Event {
      */
     public void setAmount(double amount) {
         this.amount = BigDecimal.valueOf(amount);
+    }
+
+    /**
+     * @return Amount of currency, as a double
+     * @deprecated Use {@link #getAmount()} if possible
+     */
+    public double getDoubleAmount() {
+        return amount.doubleValue();
     }
 
     /**
@@ -99,10 +101,6 @@ public class CurrencySubtractEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

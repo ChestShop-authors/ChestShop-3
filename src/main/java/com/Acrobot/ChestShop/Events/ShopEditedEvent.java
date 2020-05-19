@@ -7,11 +7,12 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Represents an event caused by a shop modification
+ *
+ * @author Andrzej Pomirski
  * @deprecated - not yet implemented
  * TODO: Implement
- * @author Andrzej Pomirski
  */
-public class ShopEditedEvent extends Event  {
+public class ShopEditedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player modifier;
@@ -22,6 +23,10 @@ public class ShopEditedEvent extends Event  {
         this.modifier = modifier;
         this.sign = sign;
         this.signLines = signLines;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -46,10 +51,6 @@ public class ShopEditedEvent extends Event  {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

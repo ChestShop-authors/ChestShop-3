@@ -13,12 +13,16 @@ import org.bukkit.inventory.ItemStack;
 public class ItemInfoEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private CommandSender sender;
-    private ItemStack item;
+    private final CommandSender sender;
+    private final ItemStack item;
 
     public ItemInfoEvent(CommandSender sender, ItemStack item) {
         this.sender = sender;
         this.item = item;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -36,10 +40,6 @@ public class ItemInfoEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

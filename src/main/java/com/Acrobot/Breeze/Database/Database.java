@@ -1,10 +1,9 @@
 package com.Acrobot.Breeze.Database;
 
+import javax.persistence.Entity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-import javax.persistence.Entity;
 
 /**
  * Database class, which can be used to connect to JDBC
@@ -12,9 +11,9 @@ import javax.persistence.Entity;
  * @author Acrobot
  */
 public class Database {
-    private String uri;
-    private String username;
-    private String password;
+    private final String uri;
+    private final String username;
+    private final String password;
 
     public Database(String uri, String username, String password) {
         this.uri = uri;

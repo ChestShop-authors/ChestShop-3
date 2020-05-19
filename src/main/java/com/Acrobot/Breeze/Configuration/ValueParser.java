@@ -2,11 +2,7 @@ package com.Acrobot.Breeze.Configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +39,7 @@ public class ValueParser {
     /**
      * Parses a YAML "object" to Java-compatible object
      *
-     * @param type The type of the returned object
+     * @param type   The type of the returned object
      * @param object Object to parse
      * @return Java-compatible object
      */

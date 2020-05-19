@@ -16,16 +16,17 @@ public class MaterialParseEvent extends Event {
         this.data = data;
     }
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
     /**
      * Get the material string that should be parsed
+     *
      * @return The material string to parse
      */
     public String getMaterialString() {
@@ -34,6 +35,7 @@ public class MaterialParseEvent extends Event {
 
     /**
      * Get the data of legacy materials that might result in different flattening materials
+     *
      * @return The data
      */
     public short getData() {
@@ -41,15 +43,8 @@ public class MaterialParseEvent extends Event {
     }
 
     /**
-     * Set the material that the string represents
-     * @param material The material for the string
-     */
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    /**
      * The material that was parsed
+     *
      * @return The parsed material or null if none was found
      */
     public Material getMaterial() {
@@ -57,7 +52,17 @@ public class MaterialParseEvent extends Event {
     }
 
     /**
+     * Set the material that the string represents
+     *
+     * @param material The material for the string
+     */
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    /**
      * Whether or not the material string of this event has a parsed material
+     *
      * @return True if an material was successfully parsed; false if not
      */
     public boolean hasMaterial() {

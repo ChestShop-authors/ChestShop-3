@@ -5,6 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Mapping for enchanted items
+ *
  * @author Andrzej Pomirski
  */
 @DatabaseTable(tableName = "items")

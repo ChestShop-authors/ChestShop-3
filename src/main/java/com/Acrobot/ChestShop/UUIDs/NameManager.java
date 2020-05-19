@@ -1,8 +1,8 @@
 package com.Acrobot.ChestShop.UUIDs;
 
+import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.Breeze.Utils.Encoding.Base62;
 import com.Acrobot.Breeze.Utils.NameUtil;
-import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
@@ -12,7 +12,6 @@ import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.j256.ormlite.dao.Dao;
-
 import com.j256.ormlite.stmt.SelectArg;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -37,13 +36,11 @@ import static com.Acrobot.ChestShop.Permission.OTHER_NAME;
  */
 @SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
 public class NameManager implements Listener {
+    private static final SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
+    private static final SimpleCache<UUID, Account> uuidToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
+    private static final SimpleCache<String, Account> shortToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
+    private static final SimpleCache<String, Boolean> invalidPlayers = new SimpleCache<>(Properties.CACHE_SIZE);
     private static Dao<Account, String> accounts;
-
-    private static SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
-    private static SimpleCache<UUID, Account> uuidToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
-    private static SimpleCache<String, Account> shortToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
-    private static SimpleCache<String, Boolean> invalidPlayers = new SimpleCache<>(Properties.CACHE_SIZE);
-
     private static Account adminAccount;
     private static Account serverEconomyAccount;
     private static int uuidVersion = -1;
@@ -62,7 +59,7 @@ public class NameManager implements Listener {
     /**
      * Get or create an account for a player
      *
-     * @param id The UUID of the player to get or create the account for
+     * @param id   The UUID of the player to get or create the account for
      * @param name The name of the player to get or create the account fo
      * @return The account info
      * @throws IllegalArgumentException when id or name are null
@@ -175,7 +172,8 @@ public class NameManager implements Listener {
                     }
                     throw new Exception("Could not find account for " + shortName);
                 });
-            } catch (ExecutionException ignored) {}
+            } catch (ExecutionException ignored) {
+            }
         }
 
         if (account == null && searchOfflinePlayer && !invalidPlayers.contains(shortName.toLowerCase(Locale.ROOT))) {
@@ -207,7 +205,7 @@ public class NameManager implements Listener {
     /**
      * Get the information from the last time a player logged in that previously used the shortened name
      *
-     * @param shortName The name of the player to get the last account for
+     * @param shortName           The name of the player to get the last account for
      * @param searchOfflinePlayer Whether or not to search the offline players too
      * @return The last account or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty
@@ -434,11 +432,11 @@ public class NameManager implements Listener {
         return serverEconomyAccount;
     }
 
-    public static void setUuidVersion(int uuidVersion) {
-        NameManager.uuidVersion = uuidVersion;
-    }
-
     public static int getUuidVersion() {
         return uuidVersion;
+    }
+
+    public static void setUuidVersion(int uuidVersion) {
+        NameManager.uuidVersion = uuidVersion;
     }
 }

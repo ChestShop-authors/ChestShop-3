@@ -10,9 +10,7 @@ import org.junit.runners.JUnit4;
 import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Listeners.PreShopCreation.PriceChecker.onPreShopCreation;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * Created by Andrzej Pomirski (Acrobot)

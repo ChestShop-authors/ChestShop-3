@@ -25,7 +25,7 @@ public class MaterialTest {
         assertTrue(MaterialUtil.isEmpty(air));
         assertTrue(MaterialUtil.isEmpty(null));
     }
-    
+
     @Test
     public void testCodes() {
         for (Material material : Material.values()) {

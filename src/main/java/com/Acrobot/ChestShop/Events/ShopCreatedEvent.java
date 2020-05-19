@@ -22,8 +22,10 @@ public class ShopCreatedEvent extends Event {
 
     private final Sign sign;
     private final String[] signLines;
-    @Nullable private final Account ownerAccount;
-    @Nullable private final Container container;
+    @Nullable
+    private final Account ownerAccount;
+    @Nullable
+    private final Container container;
 
     @Deprecated
     public ShopCreatedEvent(Player creator, Sign sign, @Nullable Chest chest, String[] signLines) {
@@ -41,6 +43,10 @@ public class ShopCreatedEvent extends Event {
         this.container = container;
         this.signLines = signLines.clone();
         this.ownerAccount = ownerAccount;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -85,7 +91,8 @@ public class ShopCreatedEvent extends Event {
      *
      * @return Shop's container
      */
-    @Nullable public Container getContainer() {
+    @Nullable
+    public Container getContainer() {
         return container;
     }
 
@@ -93,7 +100,8 @@ public class ShopCreatedEvent extends Event {
      * @deprecated Use {@link #getContainer()}
      */
     @Deprecated
-    @Nullable public Chest getChest() {
+    @Nullable
+    public Chest getChest() {
         return container instanceof Chest ? (Chest) container : null;
     }
 
@@ -117,10 +125,6 @@ public class ShopCreatedEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

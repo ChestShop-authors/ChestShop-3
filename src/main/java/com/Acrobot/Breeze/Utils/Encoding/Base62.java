@@ -6,8 +6,8 @@ package com.Acrobot.Breeze.Utils.Encoding;
  * @author Acrobot
  */
 public class Base62 {
-    private static String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static int BASE = ALPHABET.length();
+    private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final int BASE = ALPHABET.length();
 
     /**
      * Encodes a number to Base62 string

@@ -1,48 +1,41 @@
 package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Configuration.Configuration;
-import com.Acrobot.ChestShop.Commands.Give;
-import com.Acrobot.ChestShop.Commands.ItemInfo;
-import com.Acrobot.ChestShop.Commands.Toggle;
-import com.Acrobot.ChestShop.Commands.Version;
-import com.Acrobot.ChestShop.Commands.AccessToggle;
+import com.Acrobot.ChestShop.Commands.*;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Migrations;
+import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
-import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
-import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
 import com.Acrobot.ChestShop.Listeners.Player.*;
-import com.Acrobot.ChestShop.Listeners.PreShopCreation.CreationFeeGetter;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.MessageSender;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.ShopCreationLogger;
 import com.Acrobot.ChestShop.Listeners.PostShopCreation.SignSticker;
 import com.Acrobot.ChestShop.Listeners.PostTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreShopCreation.*;
-import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.ErrorMessageSender;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.PermissionChecker;
+import com.Acrobot.ChestShop.Listeners.PreTransaction.*;
 import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRefundListener;
 import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRemovalLogger;
+import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.Updater;
-
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -51,7 +44,6 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
@@ -76,17 +68,15 @@ import java.util.logging.Logger;
  * @author Acrobot
  */
 public class ChestShop extends JavaPlugin {
+    private static final int PROJECT_BUKKITDEV_ID = 31263;
     private static ChestShop plugin;
     private static Server server;
     private static PluginDescriptionFile description;
-
     private static File dataFolder;
     private static ItemDatabase itemDatabase;
-
     private static Logger logger;
+    private final List<PluginCommand> commands = new ArrayList<>();
     private FileHandler handler;
-
-    private List<PluginCommand> commands = new ArrayList<>();
 
     public ChestShop() {
         dataFolder = getDataFolder();
@@ -94,6 +84,91 @@ public class ChestShop extends JavaPlugin {
         description = getDescription();
         server = getServer();
         plugin = this;
+    }
+
+    public static File loadFile(String string) {
+        File file = new File(dataFolder, string);
+
+        return loadFile(file);
+    }
+
+    private static File loadFile(File file) {
+        if (!file.exists()) {
+            try {
+                if (file.getParent() != null) {
+                    file.getParentFile().mkdirs();
+                }
+
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return file;
+    }
+
+    private static FileHandler loadHandler(String path) {
+        FileHandler handler = null;
+
+        try {
+            handler = new FileHandler(path, true);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return handler;
+    }
+
+    public static ItemDatabase getItemDatabase() {
+        return itemDatabase;
+    }
+
+    public static File getFolder() {
+        return dataFolder;
+    }
+
+    public static Logger getBukkitLogger() {
+        return logger;
+    }
+
+    public static Server getBukkitServer() {
+        return server;
+    }
+
+    public static String getVersion() {
+        return description.getVersion();
+    }
+
+    public static String getPluginName() {
+        return description.getName();
+    }
+
+    public static List<String> getDependencies() {
+        return description.getSoftDepend();
+    }
+
+    public static ChestShop getPlugin() {
+        return plugin;
+    }
+
+    public static void registerListener(Listener listener) {
+        plugin.registerEvent(listener);
+    }
+
+    public static void callEvent(Event event) {
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public static void sendBungeeMessage(String playerName, String message) {
+        if (Properties.BUNGEECORD_MESSAGES && !Bukkit.getOnlinePlayers().isEmpty()) {
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("Message");
+            out.writeUTF(playerName);
+            out.writeUTF(message);
+
+            Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+        }
     }
 
     @Override
@@ -234,40 +309,6 @@ public class ChestShop extends JavaPlugin {
         return true;
     }
 
-    public static File loadFile(String string) {
-        File file = new File(dataFolder, string);
-
-        return loadFile(file);
-    }
-
-    private static File loadFile(File file) {
-        if (!file.exists()) {
-            try {
-                if (file.getParent() != null) {
-                    file.getParentFile().mkdirs();
-                }
-
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return file;
-    }
-
-    private static FileHandler loadHandler(String path) {
-        FileHandler handler = null;
-
-        try {
-            handler = new FileHandler(path, true);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return handler;
-    }
-
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
 
@@ -319,6 +360,8 @@ public class ChestShop extends JavaPlugin {
             registerEvent(new ItemMoveListener());
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
 
     private void registerShopRemovalEvents() {
         registerEvent(new ShopRefundListener());
@@ -403,66 +446,11 @@ public class ChestShop extends JavaPlugin {
         new org.bstats.bukkit.MetricsLite(this, 1109);
     }
 
-    private static final int PROJECT_BUKKITDEV_ID = 31263;
-
     private void startUpdater() {
         if (Properties.TURN_OFF_UPDATES) {
             return;
         }
 
         new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-
-    public static ItemDatabase getItemDatabase() {
-        return itemDatabase;
-    }
-
-    public static File getFolder() {
-        return dataFolder;
-    }
-
-    public static Logger getBukkitLogger() {
-        return logger;
-    }
-
-    public static Server getBukkitServer() {
-        return server;
-    }
-
-    public static String getVersion() {
-        return description.getVersion();
-    }
-
-    public static String getPluginName() {
-        return description.getName();
-    }
-
-    public static List<String> getDependencies() {
-        return description.getSoftDepend();
-    }
-
-    public static ChestShop getPlugin() {
-        return plugin;
-    }
-
-    public static void registerListener(Listener listener) {
-        plugin.registerEvent(listener);
-    }
-
-    public static void callEvent(Event event) {
-        Bukkit.getPluginManager().callEvent(event);
-    }
-
-    public static void sendBungeeMessage(String playerName, String message) {
-        if (Properties.BUNGEECORD_MESSAGES && !Bukkit.getOnlinePlayers().isEmpty()) {
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Message");
-            out.writeUTF(playerName);
-            out.writeUTF(message);
-
-            Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
-        }
     }
 }

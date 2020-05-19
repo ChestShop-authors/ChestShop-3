@@ -27,11 +27,9 @@ public class PreTransactionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final Player client;
-    private Account ownerAccount;
-
     private final TransactionType transactionType;
     private final Sign sign;
-
+    private Account ownerAccount;
     private Inventory ownerInventory;
     private Inventory clientInventory;
 
@@ -61,6 +59,10 @@ public class PreTransactionEvent extends Event implements Cancellable {
     @Deprecated
     public PreTransactionEvent(Inventory ownerInventory, Inventory clientInventory, ItemStack[] items, double price, Player client, Account ownerAccount, Sign sign, TransactionType type) {
         this(ownerInventory, clientInventory, items, BigDecimal.valueOf(price), client, ownerAccount, sign, type);
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -111,19 +113,19 @@ public class PreTransactionEvent extends Event implements Cancellable {
     }
 
     /**
+     * @return Stock available
+     */
+    public ItemStack[] getStock() {
+        return items;
+    }
+
+    /**
      * Sets the stock
      *
      * @param stock Stock
      */
     public void setStock(ItemStack... stock) {
         items = stock;
-    }
-
-    /**
-     * @return Stock available
-     */
-    public ItemStack[] getStock() {
-        return items;
     }
 
     /**
@@ -186,19 +188,19 @@ public class PreTransactionEvent extends Event implements Cancellable {
     }
 
     /**
+     * @return Client's inventory
+     */
+    public Inventory getClientInventory() {
+        return clientInventory;
+    }
+
+    /**
      * Sets the client's inventory
      *
      * @param clientInventory Client's inventory
      */
     public void setClientInventory(Inventory clientInventory) {
         this.clientInventory = clientInventory;
-    }
-
-    /**
-     * @return Client's inventory
-     */
-    public Inventory getClientInventory() {
-        return clientInventory;
     }
 
     /**
@@ -225,13 +227,6 @@ public class PreTransactionEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return Transaction's outcome
-     */
-    public TransactionOutcome getTransactionOutcome() {
-        return transactionOutcome;
-    }
-
-    /**
      * Sets the outcome of the transaction
      *
      * @param reason Transction's outcome
@@ -240,11 +235,14 @@ public class PreTransactionEvent extends Event implements Cancellable {
         transactionOutcome = reason;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
+    /**
+     * @return Transaction's outcome
+     */
+    public TransactionOutcome getTransactionOutcome() {
+        return transactionOutcome;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 

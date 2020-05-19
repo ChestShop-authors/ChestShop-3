@@ -5,7 +5,6 @@ import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
-import com.Acrobot.ChestShop.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,6 +19,22 @@ import java.util.List;
  * @author Acrobot
  */
 public class Give implements CommandExecutor {
+
+    private static ItemStack getItem(String[] arguments, List<Integer> disregardedElements) {
+        StringBuilder builder = new StringBuilder(arguments.length * 5);
+
+        for (int index = 0; index < arguments.length; ++index) {
+            if (disregardedElements.contains(index)) {
+                continue;
+            }
+
+            builder.append(arguments[index]).append(' ');
+        }
+
+        ItemParseEvent parseEvent = new ItemParseEvent(builder.toString());
+        Bukkit.getPluginManager().callEvent(parseEvent);
+        return parseEvent.getItem();
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -77,21 +92,5 @@ public class Give implements CommandExecutor {
                 .replace("%player", receiver.getName())));
 
         return true;
-    }
-
-    private static ItemStack getItem(String[] arguments, List<Integer> disregardedElements) {
-        StringBuilder builder = new StringBuilder(arguments.length * 5);
-
-        for (int index = 0; index < arguments.length; ++index) {
-            if (disregardedElements.contains(index)) {
-                continue;
-            }
-
-            builder.append(arguments[index]).append(' ');
-        }
-
-        ItemParseEvent parseEvent = new ItemParseEvent(builder.toString());
-        Bukkit.getPluginManager().callEvent(parseEvent);
-        return parseEvent.getItem();
     }
 }

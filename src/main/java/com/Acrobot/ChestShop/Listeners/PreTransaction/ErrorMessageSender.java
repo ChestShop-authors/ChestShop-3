@@ -21,16 +21,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-import static com.Acrobot.ChestShop.Configuration.Messages.CLIENT_DEPOSIT_FAILED;
-import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_STOCK_IN_YOUR_SHOP;
-import static com.Acrobot.ChestShop.Configuration.Messages.NOT_ENOUGH_SPACE_IN_YOUR_SHOP;
+import static com.Acrobot.ChestShop.Configuration.Messages.*;
 
 /**
  * @author Acrobot
  */
 public class ErrorMessageSender implements Listener {
 
-    private static Table<UUID, String, Long> notificationCooldowns = HashBasedTable.create();
+    private static final Table<UUID, String, Long> notificationCooldowns = HashBasedTable.create();
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onQuit(PlayerQuitEvent event) {

@@ -1,11 +1,5 @@
 package com.Acrobot.ChestShop.Containers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +8,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 /**
  * @author Acrobot

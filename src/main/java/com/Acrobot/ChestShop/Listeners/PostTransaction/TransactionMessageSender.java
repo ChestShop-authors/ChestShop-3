@@ -39,7 +39,7 @@ public class TransactionMessageSender implements Listener {
             sendMessage(owner, event.getOwnerAccount().getName(), Messages.SOMEBODY_BOUGHT_FROM_YOUR_SHOP, event, "buyer", player.getName());
         }
     }
-    
+
     protected static void sendSellMessage(TransactionEvent event) {
         Player player = event.getClient();
 
@@ -52,7 +52,7 @@ public class TransactionMessageSender implements Listener {
             sendMessage(owner, event.getOwnerAccount().getName(), Messages.SOMEBODY_SOLD_TO_YOUR_SHOP, event, "seller", player.getName());
         }
     }
-    
+
     private static void sendMessage(Player player, String playerName, String rawMessage, TransactionEvent event, String... replacements) {
         Location loc = event.getSign().getLocation();
         String message = Messages.prefix(rawMessage)
@@ -61,8 +61,8 @@ public class TransactionMessageSender implements Listener {
                 .replace("%x", String.valueOf(loc.getBlockX()))
                 .replace("%y", String.valueOf(loc.getBlockY()))
                 .replace("%z", String.valueOf(loc.getBlockZ()));
-        
-        for (int i = 0; i + 1 < replacements.length; i+=2) {
+
+        for (int i = 0; i + 1 < replacements.length; i += 2) {
             message = message.replace("%" + replacements[i], replacements[i + 1]);
         }
 

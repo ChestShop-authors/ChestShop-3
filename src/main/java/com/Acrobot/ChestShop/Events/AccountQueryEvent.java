@@ -17,6 +17,10 @@ public class AccountQueryEvent extends Event {
         this.name = name;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public String getName() {
         return name;
     }
@@ -31,6 +35,7 @@ public class AccountQueryEvent extends Event {
 
     /**
      * Get whether or not offline player data should be searched (too)
+     *
      * @return Whether or not offline player data should be searched (too)
      */
     public boolean searchOfflinePlayers() {
@@ -39,6 +44,7 @@ public class AccountQueryEvent extends Event {
 
     /**
      * Set whether or not offline player data should be searched (too)
+     *
      * @param searchOfflinePlayers Whether or not offline player data should be searched (too)
      */
     public void searchOfflinePlayers(boolean searchOfflinePlayers) {
@@ -47,10 +53,6 @@ public class AccountQueryEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

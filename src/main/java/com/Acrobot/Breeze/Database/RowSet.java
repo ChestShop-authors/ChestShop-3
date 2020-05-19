@@ -7,7 +7,7 @@ import java.util.List;
  * @author Acrobot
  */
 public class RowSet {
-    private List<Row> rowList = new ArrayList<Row>();
+    private final List<Row> rowList = new ArrayList<Row>();
 
     /**
      * Adds a row to the set

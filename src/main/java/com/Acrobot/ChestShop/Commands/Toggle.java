@@ -19,27 +19,6 @@ import java.util.UUID;
 public class Toggle implements CommandExecutor {
     private static final Set<UUID> toggledPlayers = new HashSet<>();
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return false;
-        }
-
-        Player player = (Player) sender;
-
-        if (args.length != 0) {
-            return false;
-        }
-
-        if (setIgnoring(player, !isIgnoring(player))) {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_OFF));
-        } else {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_ON));
-        }
-
-        return true;
-    }
-
     public static void clearToggledPlayers() {
         toggledPlayers.clear();
     }
@@ -70,6 +49,27 @@ public class Toggle implements CommandExecutor {
         }
 
         return ignoring;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+
+        Player player = (Player) sender;
+
+        if (args.length != 0) {
+            return false;
+        }
+
+        if (setIgnoring(player, !isIgnoring(player))) {
+            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_OFF));
+        } else {
+            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_ON));
+        }
+
+        return true;
     }
 
 }

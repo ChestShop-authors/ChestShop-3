@@ -9,8 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.math.BigDecimal;
-
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.*;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
@@ -52,8 +50,8 @@ public class AmountAndPriceChecker implements Listener {
         Inventory clientInventory = event.getClientInventory();
 
         CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getExactPrice(),
-                                                        event.getOwnerAccount().getUuid(),
-                                                        event.getSign().getWorld());
+                event.getOwnerAccount().getUuid(),
+                event.getSign().getWorld());
         ChestShop.callEvent(currencyCheckEvent);
 
         if (!currencyCheckEvent.hasEnough()) {

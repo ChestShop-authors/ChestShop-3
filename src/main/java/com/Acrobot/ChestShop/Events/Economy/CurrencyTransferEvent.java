@@ -15,15 +15,11 @@ import java.util.UUID;
  */
 public class CurrencyTransferEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final Player initiator;
+    private final UUID partner;
+    private final Direction direction;
     private BigDecimal amountSent;
     private BigDecimal amountReceived;
-
-    private final Player initiator;
-
-    private UUID partner;
-
-    private Direction direction;
     private boolean success = false;
 
     public CurrencyTransferEvent(BigDecimal amount, Player initiator, UUID partner, Direction direction) {
@@ -47,6 +43,10 @@ public class CurrencyTransferEvent extends Event {
         this(BigDecimal.valueOf(amount), initiator, partner, direction);
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return Amount of currency sent
      * @deprecated Use {@link #getAmountSent()} and {@link #getAmountReceived()}
@@ -54,15 +54,6 @@ public class CurrencyTransferEvent extends Event {
     @Deprecated
     public BigDecimal getAmount() {
         return amountSent;
-    }
-
-    /**
-     * @return Amount of currency, as a double
-     * @deprecated Use {@link #getAmount()} if possible
-     */
-    @Deprecated
-    public double getDoubleAmount() {
-        return getAmount().doubleValue();
     }
 
     /**
@@ -86,6 +77,15 @@ public class CurrencyTransferEvent extends Event {
     @Deprecated
     public void setAmount(double amount) {
         setAmount(BigDecimal.valueOf(amount));
+    }
+
+    /**
+     * @return Amount of currency, as a double
+     * @deprecated Use {@link #getAmount()} if possible
+     */
+    @Deprecated
+    public double getDoubleAmount() {
+        return getAmount().doubleValue();
     }
 
     /**
@@ -188,12 +188,8 @@ public class CurrencyTransferEvent extends Event {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     public enum Direction {
         PARTNER,
-        INITIATOR;
+        INITIATOR
     }
 }

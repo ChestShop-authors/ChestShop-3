@@ -18,11 +18,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.regex.Matcher;
 
-import static com.Acrobot.Breeze.Utils.MaterialUtil.*;
+import static com.Acrobot.Breeze.Utils.MaterialUtil.MAXIMUM_SIGN_WIDTH;
+import static com.Acrobot.Breeze.Utils.MaterialUtil.METADATA;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.INVALID_ITEM;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.ITEM_AUTOFILL;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.AUTOFILL_CODE;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 
 /**
  * @author Acrobot

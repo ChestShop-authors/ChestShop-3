@@ -12,8 +12,8 @@ commands:
     aliases: [iinfo]
     description: Lists item id and names
     usage: |
-           /<command> §2(what's the item in hand?)
-           /<command> §7log§f §2(what's the item ID of §7LOG§2?)
+      /<command> §2(what's the item in hand?)
+      /<command> §7log§f §2(what's the item ID of §7LOG§2?)
 
   csGive:
     description: Gives an item to the appropriate player
@@ -34,20 +34,20 @@ permissions:
     description: Gives access to all ChestShop permissions
     default: op
     children:
-        ChestShop.shop.*: true
-        ChestShop.admin: true
+      ChestShop.shop.*: true
+      ChestShop.admin: true
   ChestShop.shop.*:
     description: Gives access to all user ChestShop permissions
     children:
-        ChestShop.shop.create: true
-        ChestShop.shop.buy: true
-        ChestShop.shop.sell: true
+      ChestShop.shop.create: true
+      ChestShop.shop.buy: true
+      ChestShop.shop.sell: true
     default: true
   ChestShop.shop.create:
     description: Allows the user to create a shop that sells and buys any item
     children:
-        ChestShop.shop.create.buy: true
-        ChestShop.shop.create.sell: true
+      ChestShop.shop.create.buy: true
+      ChestShop.shop.create.sell: true
   ChestShop.shop.create.buy:
     description: Allows the user to create a shop that sells any item
   ChestShop.shop.create.buy.(itemType):

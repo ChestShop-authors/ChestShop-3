@@ -24,11 +24,11 @@ import org.bukkit.plugin.Plugin;
  * @author Acrobot
  */
 public class WorldGuardProtection implements Listener {
-    private WorldGuardPlugin worldGuard;
-    private WorldGuardPlatform worldGuardPlatform;
+    private final WorldGuardPlugin worldGuard;
+    private final WorldGuardPlatform worldGuardPlatform;
 
     public WorldGuardProtection(Plugin plugin) {
-        this.worldGuard =(WorldGuardPlugin) plugin;
+        this.worldGuard = (WorldGuardPlugin) plugin;
         this.worldGuardPlatform = WorldGuard.getInstance().getPlatform();
     }
 

@@ -52,7 +52,7 @@ public class ChestBreak implements Listener {
 
         Sign shopSign = uBlock.findAnyNearbyShopSign(block);
         if (breaker != null) {
-            return  ChestShopSign.hasPermission(breaker, Permission.OTHER_NAME_DESTROY, shopSign);
+            return ChestShopSign.hasPermission(breaker, Permission.OTHER_NAME_DESTROY, shopSign);
         }
         return shopSign == null;
     }

@@ -23,11 +23,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,12 +52,6 @@ public class MaterialUtil {
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
     private static final Yaml YAML = new Yaml(new YamlBukkitConstructor(), new YamlRepresenter(), new DumperOptions());
-
-    private static class YamlBukkitConstructor extends YamlConstructor {
-        public YamlBukkitConstructor() {
-            this.yamlConstructors.put(new Tag(Tag.PREFIX + "org.bukkit.inventory.ItemStack"), yamlConstructors.get(Tag.MAP));
-        }
-    }
 
     /**
      * Checks if the itemStack is empty or null
@@ -114,11 +104,7 @@ public class MaterialUtil {
         }
 
         ItemStack twoDumped = YAML.loadAs(YAML.dump(two), ItemStack.class);
-        if (oneDumped.isSimilar(twoDumped) || oneDumped.getItemMeta().serialize().equals(twoDumped.getItemMeta().serialize())) {
-            return true;
-        }
-
-        return false;
+        return oneDumped.isSimilar(twoDumped) || oneDumped.getItemMeta().serialize().equals(twoDumped.getItemMeta().serialize());
     }
 
     /**
@@ -205,7 +191,7 @@ public class MaterialUtil {
      * Returns item's name, with a maximum width
      *
      * @param itemStack ItemStack to name
-     * @param maxWidth The max width that the name should have; 0 or below if it should be unlimited
+     * @param maxWidth  The max width that the name should have; 0 or below if it should be unlimited
      * @return ItemStack's name
      */
     public static String getName(ItemStack itemStack, int maxWidth) {
@@ -245,8 +231,8 @@ public class MaterialUtil {
     /**
      * Get an item name shortened to a max length that is still reversable by {@link #getMaterial(String)}
      *
-     * @param itemName  The name of the item
-     * @param maxWidth  The max width
+     * @param itemName The name of the item
+     * @param maxWidth The max width
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
@@ -390,6 +376,12 @@ public class MaterialUtil {
 
         String group = m.group().substring(1);
         return Metadata.getFromCode(group);
+    }
+
+    private static class YamlBukkitConstructor extends YamlConstructor {
+        public YamlBukkitConstructor() {
+            this.yamlConstructors.put(new Tag(Tag.PREFIX + "org.bukkit.inventory.ItemStack"), yamlConstructors.get(Tag.MAP));
+        }
     }
 
     private static class EnumParser<E extends Enum<E>> {

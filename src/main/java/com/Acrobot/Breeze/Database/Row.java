@@ -8,8 +8,8 @@ import java.util.*;
  * @author Acrobot
  */
 public class Row {
-    private List<String> keys = new ArrayList<String>();
-    private Map<String, String> values = new HashMap<String, String>();
+    private final List<String> keys = new ArrayList<String>();
+    private final Map<String, String> values = new HashMap<String, String>();
 
     /**
      * Puts a name/value pair inside the row

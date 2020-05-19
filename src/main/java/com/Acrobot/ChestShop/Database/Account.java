@@ -10,6 +10,7 @@ import java.util.UUID;
 
 /**
  * A mapping for an account
+ *
  * @author Andrzej Pomirski (Acrobot)
  */
 @DatabaseTable(tableName = "accounts")

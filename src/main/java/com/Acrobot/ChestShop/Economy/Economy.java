@@ -16,11 +16,12 @@ import java.util.UUID;
 
 /**
  * @author Acrobot
- *         Economy management
+ * Economy management
  */
 public class Economy {
     /**
      * Get the name of the server conomy account
+     *
      * @return The username of te server economy account
      * @deprecated Use {@link NameManager#getServerEconomyAccount()} or {@link Properties#SERVER_ECONOMY_ACCOUNT}
      */

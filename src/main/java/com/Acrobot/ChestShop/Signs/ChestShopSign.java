@@ -10,11 +10,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -73,7 +69,7 @@ public class ChestShopSign {
             return false;
         }
 
-        return uBlock.getConnectedSign((Chest) chest.getState()) != null;
+        return uBlock.getConnectedSign(chest.getState()) != null;
     }
 
     public static boolean isShopBlock(Block block) {

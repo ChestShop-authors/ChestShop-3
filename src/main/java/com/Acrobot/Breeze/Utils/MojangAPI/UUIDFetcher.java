@@ -30,38 +30,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         this.names = Arrays.asList(names);
     }
 
-    public Map<String, UUID> call() throws Exception {
-        Map<String, UUID> uuidMap = new HashMap<String, UUID>();
-        String body = buildBody(names);
-
-        for (int i = 1; i < MAX_SEARCH; i++) {
-            HttpURLConnection connection = createConnection(i);
-
-            writeBody(connection, body);
-
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-            JSONArray array = (JSONArray) jsonObject.get("profiles");
-            Number count = (Number) jsonObject.get("size");
-
-            if (count.intValue() == 0) {
-                break;
-            }
-
-            for (Object profile : array) {
-                JSONObject jsonProfile = (JSONObject) profile;
-
-                String id = (String) jsonProfile.get("id");
-                String name = (String) jsonProfile.get("name");
-
-                UUID uuid = UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
-
-                uuidMap.put(name, uuid);
-            }
-        }
-
-        return uuidMap;
-    }
-
     private static void writeBody(HttpURLConnection connection, String body) throws Exception {
         DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
 
@@ -96,5 +64,37 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
             lookups.add(jsonObject);
         }
         return JSONValue.toJSONString(lookups);
+    }
+
+    public Map<String, UUID> call() throws Exception {
+        Map<String, UUID> uuidMap = new HashMap<String, UUID>();
+        String body = buildBody(names);
+
+        for (int i = 1; i < MAX_SEARCH; i++) {
+            HttpURLConnection connection = createConnection(i);
+
+            writeBody(connection, body);
+
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+            JSONArray array = (JSONArray) jsonObject.get("profiles");
+            Number count = (Number) jsonObject.get("size");
+
+            if (count.intValue() == 0) {
+                break;
+            }
+
+            for (Object profile : array) {
+                JSONObject jsonProfile = (JSONObject) profile;
+
+                String id = (String) jsonProfile.get("id");
+                String name = (String) jsonProfile.get("name");
+
+                UUID uuid = UUID.fromString(id.substring(0, 8) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
+
+                uuidMap.put(name, uuid);
+            }
+        }
+
+        return uuidMap;
     }
 }

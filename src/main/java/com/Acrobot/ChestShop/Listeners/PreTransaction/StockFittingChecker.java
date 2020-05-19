@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
-import com.Acrobot.ChestShop.Database.Item;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

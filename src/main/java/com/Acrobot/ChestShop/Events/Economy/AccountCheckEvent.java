@@ -13,10 +13,8 @@ import java.util.UUID;
  */
 public class AccountCheckEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-
+    private final UUID account;
     boolean outcome = false;
-
-    private UUID account;
     private World world;
 
     public AccountCheckEvent(UUID account, World world) {
@@ -26,6 +24,10 @@ public class AccountCheckEvent extends Event {
 
     public AccountCheckEvent(UUID account) {
         this.account = account;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -59,10 +61,6 @@ public class AccountCheckEvent extends Event {
     }
 
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
