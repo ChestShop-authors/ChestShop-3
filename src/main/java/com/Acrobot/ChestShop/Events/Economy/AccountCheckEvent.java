@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
 import org.bukkit.World;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.util.UUID;
@@ -11,10 +10,10 @@ import java.util.UUID;
  *
  * @author Acrobot
  */
-public class AccountCheckEvent extends Event {
+public class AccountCheckEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
 
-    boolean outcome = false;
+    private boolean outcome = false;
 
     private UUID account;
     private World world;

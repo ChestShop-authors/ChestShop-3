@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Events.Economy;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -15,10 +14,8 @@ import java.util.UUID;
  *
  * @author Acrobot
  */
-public class CurrencyAddEvent extends Event {
+public class CurrencyAddEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
-
-    boolean added = false;
 
     private BigDecimal amount;
     private UUID target;
@@ -70,18 +67,22 @@ public class CurrencyAddEvent extends Event {
 
     /**
      * @return Was the money already added to the account?
+     * @deprecated Use {@link #wasHandled()}
      */
+    @Deprecated
     public boolean isAdded() {
-        return added;
+        return wasHandled();
     }
 
     /**
      * Set if the money was added to the account
      *
      * @param added Was the money added?
+     * @deprecated Use {@link #setHandled(boolean)}
      */
+    @Deprecated
     public void setAdded(boolean added) {
-        this.added = added;
+        setHandled(added);
     }
 
     /**

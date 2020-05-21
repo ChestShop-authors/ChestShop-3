@@ -15,10 +15,8 @@ import java.util.UUID;
  *
  * @author Acrobot
  */
-public class CurrencySubtractEvent extends Event {
+public class CurrencySubtractEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
-
-    boolean subtracted = false;
 
     private BigDecimal amount;
     private UUID target;
@@ -70,18 +68,22 @@ public class CurrencySubtractEvent extends Event {
 
     /**
      * @return Was the money already subtracted?
+     * @deprecated Use {@link #wasHandled()}
      */
+    @Deprecated
     public boolean isSubtracted() {
-        return subtracted;
+        return wasHandled();
     }
 
     /**
      * Set if the money was subtracted from the account
      *
      * @param subtracted Was the money subtracted?
+     * @deprecated Use {@link #setHandled(boolean)}
      */
+    @Deprecated
     public void setSubtracted(boolean subtracted) {
-        this.subtracted = subtracted;
+        setHandled(subtracted);
     }
 
     /**

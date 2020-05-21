@@ -41,7 +41,7 @@ public class Economy {
         CurrencyAddEvent event = new CurrencyAddEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
-        return event.isAdded();
+        return event.wasHandled();
     }
 
     /**
@@ -52,7 +52,7 @@ public class Economy {
         CurrencySubtractEvent event = new CurrencySubtractEvent(BigDecimal.valueOf(amount), name, world);
         ChestShop.callEvent(event);
 
-        return event.isSubtracted();
+        return event.wasHandled();
     }
 
     /**

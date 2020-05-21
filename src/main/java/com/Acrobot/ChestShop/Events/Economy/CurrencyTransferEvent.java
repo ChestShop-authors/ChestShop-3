@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author Acrobot
  */
-public class CurrencyTransferEvent extends Event {
+public class CurrencyTransferEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
 
     private BigDecimal amountSent;
@@ -24,7 +24,6 @@ public class CurrencyTransferEvent extends Event {
     private UUID partner;
 
     private Direction direction;
-    private boolean success = false;
 
     public CurrencyTransferEvent(BigDecimal amount, Player initiator, UUID partner, Direction direction) {
         this(amount, amount, initiator, partner, direction);
@@ -126,18 +125,22 @@ public class CurrencyTransferEvent extends Event {
 
     /**
      * @return If the currency has been successfully transferred
+     * @deprecated Use {@link #wasHandled()}
      */
+    @Deprecated
     public boolean hasBeenTransferred() {
-        return success;
+        return wasHandled();
     }
 
     /**
      * Sets the transaction's outcome
      *
      * @param success If the currency has been successfully transferred
+     * @deprecated Use {@link #setHandled(boolean)}
      */
+    @Deprecated
     public void setTransferred(boolean success) {
-        this.success = success;
+        setHandled(success);
     }
 
     /**

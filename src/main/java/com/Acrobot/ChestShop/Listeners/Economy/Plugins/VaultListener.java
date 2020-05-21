@@ -99,7 +99,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onAmountCheck(CurrencyAmountEvent event) {
-        if (!checkSetup() || !event.getAmount().equals(BigDecimal.ZERO)) {
+        if (!checkSetup() || event.wasHandled() || !event.getAmount().equals(BigDecimal.ZERO)) {
             return;
         }
 
@@ -118,6 +118,7 @@ public class VaultListener extends EconomyAdapter {
             if (balance > Double.MAX_VALUE) {
                 balance = Double.MAX_VALUE;
             }
+            event.setHandled(true);
         } else {
             ChestShop.getBukkitLogger().log(Level.WARNING, "The server could not get the OfflinePlayer with the UUID " + event.getAccount() + " to check balance?");
         }
@@ -127,7 +128,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
-        if (!checkSetup() || event.hasEnough()) {
+        if (!checkSetup() || event.wasHandled() || event.hasEnough()) {
             return;
         }
 
@@ -136,6 +137,7 @@ public class VaultListener extends EconomyAdapter {
 
         try {
             event.hasEnough(lastSeen != null && provider.has(lastSeen, world.getName(), event.getAmount().doubleValue()));
+            event.setHandled(true);
         } catch (Exception e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " has " + event.getAmount() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
@@ -145,7 +147,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onAccountCheck(AccountCheckEvent event) {
-        if (!checkSetup() || event.hasAccount()) {
+        if (!checkSetup() || event.wasHandled() || event.hasAccount()) {
             return;
         }
 
@@ -155,6 +157,7 @@ public class VaultListener extends EconomyAdapter {
 
         try {
             event.hasAccount(lastSeen != null && provider.hasAccount(lastSeen, world.getName()));
+            event.setHandled(true);
         } catch (Exception e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check account balance of "+ lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
@@ -164,17 +167,18 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyFormat(CurrencyFormatEvent event) {
-        if (!checkSetup() || !event.getFormattedAmount().isEmpty()) {
+        if (!checkSetup() || event.wasHandled() || !event.getFormattedAmount().isEmpty()) {
             return;
         }
 
         String formatted = provider.format(event.getAmount().doubleValue());
         event.setFormattedAmount(formatted);
+        event.setHandled(true);
     }
 
     @EventHandler
     public void onCurrencyAdd(CurrencyAddEvent event) {
-        if (!checkSetup() || event.isAdded()) {
+        if (!checkSetup() || event.wasHandled()) {
             return;
         }
 
@@ -185,7 +189,7 @@ public class VaultListener extends EconomyAdapter {
         if (lastSeen != null) {
             try {
                 EconomyResponse response = provider.depositPlayer(lastSeen, world.getName(), event.getAmount().doubleValue());
-                event.setAdded(response.type == EconomyResponse.ResponseType.SUCCESS);
+                event.setHandled(response.type == EconomyResponse.ResponseType.SUCCESS);
             } catch (Exception e) {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                         "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
@@ -198,7 +202,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencySubtraction(CurrencySubtractEvent event) {
-        if (!checkSetup() || event.isSubtracted()) {
+        if (!checkSetup() || event.wasHandled()) {
             return;
         }
 
@@ -209,7 +213,7 @@ public class VaultListener extends EconomyAdapter {
         if (lastSeen != null) {
             try {
                 EconomyResponse response = provider.withdrawPlayer(lastSeen, world.getName(), event.getAmount().doubleValue());
-                event.setSubtracted(response.type == EconomyResponse.ResponseType.SUCCESS);
+                event.setHandled(response.type == EconomyResponse.ResponseType.SUCCESS);
             } catch (Exception e) {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not add money to account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + "." +
                         "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +
@@ -230,7 +234,7 @@ public class VaultListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (!checkSetup() || event.getAccount() == null || !transactionCanFail() || event.canHold()) {
+        if (!checkSetup() || event.wasHandled() || event.getAccount() == null || !transactionCanFail() || event.canHold()) {
             return;
         }
 
@@ -254,10 +258,12 @@ public class VaultListener extends EconomyAdapter {
 
             if (!response.transactionSuccess()) {
                 event.canHold(false);
+                event.setHandled(true);
                 return;
             }
 
             provider.withdrawPlayer(lastSeen, world, event.getAmount().doubleValue());
+            event.setHandled(true);
         } catch (Exception e) {
             ChestShop.getBukkitLogger().log(Level.WARNING, "Could not check if account of " + lastSeen.getUniqueId() + "/" + lastSeen.getName() + " can hold " + event.getAmount() + "." +
                     "This is probably due to https://github.com/MilkBowl/Vault/issues/746 and has to be fixed in either Vault directly or your economy plugin." +

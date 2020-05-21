@@ -109,16 +109,16 @@ public class PartialTransactionModule implements Listener {
 
         BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), MathContext.DECIMAL128);
 
-        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(owner, client.getWorld());
-        ChestShop.callEvent(currencyAmountEvent);
-
-        BigDecimal walletMoney = currencyAmountEvent.getAmount();
 
         if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
             CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getExactPrice(), owner, client.getWorld());
             ChestShop.callEvent(currencyCheckEvent);
 
             if (!currencyCheckEvent.hasEnough()) {
+                CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(owner, client.getWorld());
+                ChestShop.callEvent(currencyAmountEvent);
+
+                BigDecimal walletMoney = currencyAmountEvent.getAmount();
                 int amountAffordable = getAmountOfAffordableItems(walletMoney, pricePerItem);
 
                 if (amountAffordable < 1) {

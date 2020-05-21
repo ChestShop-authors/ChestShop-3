@@ -46,7 +46,7 @@ public class CreationFeeGetter implements Listener {
         CurrencySubtractEvent subtractionEvent = new CurrencySubtractEvent(shopCreationPrice, player);
         ChestShop.callEvent(subtractionEvent);
 
-        if (!subtractionEvent.isSubtracted()) {
+        if (!subtractionEvent.wasHandled()) {
             event.setOutcome(PreShopCreationEvent.CreationOutcome.NOT_ENOUGH_MONEY);
             event.setSignLines(new String[4]);
             return;

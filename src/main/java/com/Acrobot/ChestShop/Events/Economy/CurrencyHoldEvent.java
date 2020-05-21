@@ -2,7 +2,6 @@ package com.Acrobot.ChestShop.Events.Economy;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -13,10 +12,10 @@ import java.util.UUID;
  *
  * @author Acrobot
  */
-public class CurrencyHoldEvent extends Event {
+public class CurrencyHoldEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
 
-    boolean canHold = true;
+    private boolean canHold = true;
 
     private BigDecimal amount;
     private UUID account;

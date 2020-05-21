@@ -37,7 +37,7 @@ public class TaxModule implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public static void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (event.hasBeenTransferred()) {
+        if (event.wasHandled()) {
             return;
         }
 

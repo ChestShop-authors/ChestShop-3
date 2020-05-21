@@ -38,7 +38,7 @@ public abstract class EconomyAdapter implements Listener {
      * @param event The CurrencyTransferEvent to process
      */
     protected void processTransfer(CurrencyTransferEvent event) {
-        if (event.hasBeenTransferred()) {
+        if (event.wasHandled()) {
             return;
         }
 
@@ -47,10 +47,10 @@ public abstract class EconomyAdapter implements Listener {
         if (!NameManager.isAdminShop(event.getSender())) {
             ChestShop.callEvent(currencySubtractEvent);
         } else {
-            currencySubtractEvent.setSubtracted(true);
+            currencySubtractEvent.setHandled(true);
         }
 
-        if (!currencySubtractEvent.isSubtracted()) {
+        if (!currencySubtractEvent.wasHandled()) {
             return;
         }
 
@@ -59,11 +59,11 @@ public abstract class EconomyAdapter implements Listener {
         if (!NameManager.isAdminShop(event.getReceiver())) {
             ChestShop.callEvent(currencyAddEvent);
         } else {
-            currencyAddEvent.setAdded(true);
+            currencyAddEvent.setHandled(true);
         }
 
-        if (currencyAddEvent.isAdded()) {
-            event.setTransferred(true);
+        if (currencyAddEvent.wasHandled()) {
+            event.setHandled(true);
         } else {
             CurrencyAddEvent currencyResetEvent = new CurrencyAddEvent(
                     currencySubtractEvent.getAmount(),

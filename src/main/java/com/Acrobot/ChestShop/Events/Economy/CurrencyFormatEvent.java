@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
  *
  * @author Acrobot
  */
-public class CurrencyFormatEvent extends Event {
+public class CurrencyFormatEvent extends EconomicEvent {
     private static final HandlerList handlers = new HandlerList();
 
     private final BigDecimal amount;

@@ -27,7 +27,7 @@ public class ServerAccountCorrector implements Listener {
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
 
-        event.setAdded(true);
+        event.setHandled(true);
         if (target == null) {
             return;
         }
@@ -35,7 +35,7 @@ public class ServerAccountCorrector implements Listener {
         CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencyAddEvent);
 
-        event.setAdded(currencyAddEvent.isAdded());
+        event.setHandled(currencyAddEvent.wasHandled());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -49,7 +49,7 @@ public class ServerAccountCorrector implements Listener {
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
 
-        event.setSubtracted(true);
+        event.setHandled(true);
         if (target == null) {
             return;
         }
@@ -57,7 +57,7 @@ public class ServerAccountCorrector implements Listener {
         CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), target, event.getWorld());
         ChestShop.callEvent(currencySubtractEvent);
 
-        event.setSubtracted(currencySubtractEvent.isSubtracted());
+        event.setHandled(currencySubtractEvent.wasHandled());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -83,8 +83,7 @@ public class ServerAccountCorrector implements Listener {
                 event.getDirection()
         );
         ChestShop.callEvent(currencyTransferEvent);
-        event.setTransferred(currencyTransferEvent.hasBeenTransferred());
-        return;
+        event.setHandled(currencyTransferEvent.wasHandled());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

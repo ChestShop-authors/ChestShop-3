@@ -65,55 +65,59 @@ public class ReserveListener extends EconomyAdapter {
 
     @EventHandler
     public void onAmountCheck(CurrencyAmountEvent event) {
-        if (!provided() || !event.getAmount().equals(BigDecimal.ZERO)) {
+        if (!provided() || event.wasHandled() || !event.getAmount().equals(BigDecimal.ZERO)) {
             return;
         }
         event.setAmount(economyAPI.getHoldings(event.getAccount(), event.getWorld().getName()));
+        event.setHandled(true);
     }
 
     @EventHandler
     public void onCurrencyCheck(CurrencyCheckEvent event) {
-        if (!provided() || event.hasEnough()) {
+        if (!provided() || event.wasHandled() || event.hasEnough()) {
             return;
         }
         event.hasEnough(economyAPI.hasHoldings(event.getAccount(),
                 event.getAmount(),
                 event.getWorld().getName()));
+        event.setHandled(true);
     }
 
     @EventHandler
     public void onAccountCheck(AccountCheckEvent event) {
-        if (!provided() || event.hasAccount()) {
+        if (!provided() || event.wasHandled() || event.hasAccount()) {
             return;
         }
         event.hasAccount(economyAPI.hasAccount(event.getAccount()));
+        event.setHandled(true);
     }
 
     @EventHandler
     public void onCurrencyFormat(CurrencyFormatEvent event) {
-        if (!event.getFormattedAmount().isEmpty()) {
+        if ( event.wasHandled() || !event.getFormattedAmount().isEmpty()) {
             return;
         }
 
         if (provided()) {
             event.setFormattedAmount(economyAPI.format(event.getAmount()));
+            event.setHandled(true);
         }
     }
 
     @EventHandler
     public void onCurrencyAdd(CurrencyAddEvent event) {
-        if (!provided() || event.isAdded()) {
+        if (!provided() || event.wasHandled()) {
             return;
         }
-        event.setAdded(economyAPI.addHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
+        event.setHandled(economyAPI.addHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
     }
 
     @EventHandler
     public void onCurrencySubtraction(CurrencySubtractEvent event) {
-        if (!provided() || event.isSubtracted()) {
+        if (!provided() || event.wasHandled()) {
             return;
         }
-        event.setSubtracted(economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
+        event.setHandled(economyAPI.removeHoldings(event.getTarget(), event.getAmount(), event.getWorld().getName()));
     }
 
     @EventHandler
@@ -123,7 +127,7 @@ public class ReserveListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount() == null || !transactionCanFail() || event.canHold()) {
+        if (event.getAccount() == null || event.wasHandled() || !transactionCanFail() || event.canHold()) {
             return;
         }
 
@@ -134,5 +138,6 @@ public class ReserveListener extends EconomyAdapter {
         }
 
         event.canHold(economyAPI.canAddHoldings(event.getAccount(), event.getAmount(), world));
+        event.setHandled(true);
     }
 }
