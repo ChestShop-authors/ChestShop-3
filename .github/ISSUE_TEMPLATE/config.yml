@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "#chestshop IRC channel on irc.spi.gt"
+    url: "https://kiwiirc.com/client/irc.spi.gt/#chestshop"
+    about: Live chat with the devs and other members of the community
+  - name: SpigotMC discussion thread
+    url: https://www.spigotmc.org/threads/chestshop.295890/
+    about: Ask and answer questions or discuss the plugin in general
