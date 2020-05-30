@@ -1,6 +1,9 @@
 ---
 name: Bug report
 about: An error that happens in the plugin.
+title: ''
+labels: ''
+assignees: ''
 
 ---
 

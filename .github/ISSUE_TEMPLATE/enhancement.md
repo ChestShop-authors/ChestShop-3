@@ -1,6 +1,9 @@
 ---
 name: Enhancement
 about: Request a feature or suggest an idea for this project
+title: ''
+labels: enhancement
+assignees: ''
 
 ---
 
