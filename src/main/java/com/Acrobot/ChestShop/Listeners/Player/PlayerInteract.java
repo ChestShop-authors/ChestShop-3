@@ -203,6 +203,20 @@ public class PlayerInteract implements Listener {
                 price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
                 amount = newAmount;
             }
+        } else if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
+            if (action != buy) {
+                int newAmount = InventoryUtil.getAmount(item, player.getInventory());
+                if (newAmount > 0) {
+                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    amount = newAmount;
+                }
+            } else if (!adminShop && ownerInventory != null) {
+                int newAmount = InventoryUtil.getAmount(item, ownerInventory);
+                if (newAmount > 0) {
+                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    amount = newAmount;
+                }
+            }
         }
 
         item.setAmount(amount);
