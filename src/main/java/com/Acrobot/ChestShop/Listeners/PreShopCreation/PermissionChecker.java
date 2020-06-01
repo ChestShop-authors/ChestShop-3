@@ -42,6 +42,13 @@ public class PermissionChecker implements Listener {
         }
 
         String matID = item.getType().toString().toLowerCase(Locale.ROOT);
+
+        String[] parts = itemLine.split("#", 2);
+        if (parts.length == 2 && Permission.hasPermissionSetFalse(player, SHOP_CREATION_ID + matID + "#" + parts[1])) {
+            event.setOutcome(NO_PERMISSION);
+            return;
+        }
+
         if (PriceUtil.hasBuyPrice(priceLine)) {
             if (Permission.has(player, SHOP_CREATION_BUY_ID + matID)) {
                 return;

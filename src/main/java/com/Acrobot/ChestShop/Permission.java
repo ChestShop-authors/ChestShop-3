@@ -71,7 +71,7 @@ public enum Permission {
         return has(player, base + "." + name) || has(player, base + "." + name.toLowerCase(Locale.ROOT));
     }
 
-    private static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
+    public static boolean hasPermissionSetFalse(CommandSender sender, String permission) {
         return (sender.isPermissionSet(permission) && !sender.hasPermission(permission))
                 || (sender.isPermissionSet(permission.toLowerCase(Locale.ROOT)) && !sender.hasPermission(permission.toLowerCase(Locale.ROOT)));
     }
