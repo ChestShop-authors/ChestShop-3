@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.CLIENT_DOES_NOT_HAVE_PERMISSION;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 
 /**
  * @author Acrobot
@@ -25,6 +26,12 @@ public class PermissionChecker implements Listener {
 
         Player client = event.getClient();
         TransactionEvent.TransactionType transactionType = event.getTransactionType();
+
+        String itemLine = event.getSign().getLine(ITEM_LINE);
+        if (itemLine.contains("#") && Permission.hasPermissionSetFalse(client, (transactionType == BUY ? Permission.BUY_ID : Permission.SELL_ID) + itemLine)) {
+            event.setCancelled(CLIENT_DOES_NOT_HAVE_PERMISSION);
+            return;
+        }
 
         for (ItemStack stock : event.getStock()) {
             String matID = stock.getType().toString().toLowerCase(Locale.ROOT);
