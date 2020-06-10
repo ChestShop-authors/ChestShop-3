@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -18,6 +18,12 @@ import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
  * @author Acrobot
  */
 public class ChestShop implements Listener {
+
+    @EventHandler
+    public static void onReload(ChestShopReloadEvent event) {
+        com.Acrobot.ChestShop.ChestShop.getPlugin().loadConfig();
+    }
+
     @EventHandler
     public static void onProtectionCheck(ProtectionCheckEvent event) {
         if (event.getResult() == Event.Result.DENY || event.isBuiltInProtectionIgnored()) {

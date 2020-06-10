@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.bukkit.Bukkit;
@@ -34,6 +35,10 @@ public class PriceRestrictionModule implements Listener {
     private static final double INVALID_PATH = Double.MIN_VALUE;
 
     public PriceRestrictionModule() {
+        load();
+    }
+
+    private void load() {
         File file = new File(ChestShop.getFolder(), "priceLimits.yml");
 
         configuration = YamlConfiguration.loadConfiguration(file);
@@ -90,6 +95,11 @@ public class PriceRestrictionModule implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onReload(ChestShopReloadEvent event) {
+        load();
     }
 
     @EventHandler

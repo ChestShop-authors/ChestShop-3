@@ -2,7 +2,7 @@ package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Containers.AdminInventory;
+import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -28,6 +28,10 @@ public class DiscountModule implements Listener {
     private Set<String> groupList = new HashSet<String>();
 
     public DiscountModule() {
+        load();
+    }
+
+    private void load() {
         config = YamlConfiguration.loadConfiguration(ChestShop.loadFile("discounts.yml"));
 
         config.options().header("This file is for discount management. You are able to do that:\n" +
@@ -43,6 +47,11 @@ public class DiscountModule implements Listener {
         }
 
         groupList = config.getKeys(false);
+    }
+
+    @EventHandler
+    public void onReload(ChestShopReloadEvent event) {
+        load();
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
