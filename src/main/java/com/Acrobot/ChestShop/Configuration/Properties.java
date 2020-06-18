@@ -102,6 +102,9 @@ public class Properties {
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = true;
 
+    @ConfigurationComment("Do you want to turn off the automatic notifications for new development builds?")
+    public static boolean TURN_OFF_DEV_UPDATE_NOTIFIER = false;
+
     @PrecededBySpace
     @ConfigurationComment("How large should the internal caches be?")
     public static int CACHE_SIZE = 1000;

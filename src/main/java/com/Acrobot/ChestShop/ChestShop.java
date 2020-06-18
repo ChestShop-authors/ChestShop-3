@@ -38,6 +38,7 @@ import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
+import com.Acrobot.ChestShop.Updater.JenkinsBuildsNotifier;
 import com.Acrobot.ChestShop.Updater.Updater;
 
 import com.google.common.io.ByteArrayDataOutput;
@@ -142,6 +143,7 @@ public class ChestShop extends JavaPlugin {
         }
 
         startStatistics();
+        startBuildNotificatier();
         startUpdater();
     }
 
@@ -412,6 +414,16 @@ public class ChestShop extends JavaPlugin {
         }
 
         new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
+    }
+
+    private static final String PROJECT_JENKINS_JOB_URL = "https://ci.minebench.de/job/ChestShop-3/";
+
+    private void startBuildNotificatier() {
+        if (Properties.TURN_OFF_DEV_UPDATE_NOTIFIER) {
+            return;
+        }
+
+        new JenkinsBuildsNotifier(this, PROJECT_JENKINS_JOB_URL);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
