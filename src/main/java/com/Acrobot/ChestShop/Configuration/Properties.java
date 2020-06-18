@@ -100,7 +100,7 @@ public class Properties {
 
     @PrecededBySpace
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
-    public static boolean TURN_OFF_UPDATES = false;
+    public static boolean TURN_OFF_UPDATES = true;
 
     @PrecededBySpace
     @ConfigurationComment("How large should the internal caches be?")

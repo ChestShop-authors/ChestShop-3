@@ -407,6 +407,7 @@ public class ChestShop extends JavaPlugin {
 
     private void startUpdater() {
         if (Properties.TURN_OFF_UPDATES) {
+            getLogger().info("Auto-updater is disabled. If you want the plugin to automatically download new releases then set 'TURN_OFF_UPDATES' to 'false' in your config.yml!");
             return;
         }
 
