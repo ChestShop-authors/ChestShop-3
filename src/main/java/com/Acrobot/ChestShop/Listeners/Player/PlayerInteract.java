@@ -134,6 +134,11 @@ public class PlayerInteract implements Listener {
             event.setCancelled(true);
         }
 
+        if (Properties.CHECK_ACCESS_FOR_SHOP_USE && !Security.canAccess(player, block, true)) {
+            player.sendMessage(Messages.prefix(Messages.TRADE_DENIED));
+            return;
+        }
+
         //Bukkit.getLogger().info("ChestShop - DEBUG - "+block.getWorld().getName()+": "+block.getLocation().getBlockX()+", "+block.getLocation().getBlockY()+", "+block.getLocation().getBlockZ());
         PreTransactionEvent pEvent = preparePreTransactionEvent(sign, player, action);
         if (pEvent == null)

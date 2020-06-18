@@ -18,6 +18,7 @@ public class Messages {
 
     @PrecededBySpace
     public static String ACCESS_DENIED = "You don't have permission to access that shop's storage container!";
+    public static String TRADE_DENIED = "You don't have permission to trade with that shop!";
 
     @PrecededBySpace
     public static String NOT_ENOUGH_MONEY = "You don't have enough money!";

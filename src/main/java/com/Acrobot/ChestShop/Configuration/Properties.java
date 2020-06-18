@@ -249,6 +249,9 @@ public class Properties {
     @ConfigurationComment("Do you want to disable the hopper protection, which prevents Hopper-Minecarts from taking items out of shops?")
     public static boolean TURN_OFF_HOPPER_PROTECTION = false;
 
+    @ConfigurationComment("Only allow users to buy/sell that have access to the sign's protection? (E.g. LWC protection)")
+    public static boolean CHECK_ACCESS_FOR_SHOP_USE = false;
+
     @ConfigurationComment("Do you want to protect shop chests with LWC?")
     public static boolean PROTECT_CHEST_WITH_LWC = false;
 

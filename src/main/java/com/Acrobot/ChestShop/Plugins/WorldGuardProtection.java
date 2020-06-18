@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
@@ -12,8 +13,11 @@ import com.sk89q.worldguard.internal.permission.RegionPermissionModel;
 import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -54,7 +58,12 @@ public class WorldGuardProtection implements Listener {
         }
         ApplicableRegionSet set = manager.getApplicableRegions(location.toVector().toBlockPoint());
 
-        if (!canAccess(localPlayer, (World) location.getExtent(), set)) {
+        StateFlag flag = Flags.CHEST_ACCESS;
+        if (BlockUtil.isSign(block)) {
+            flag = Flags.USE;
+        }
+
+        if (!canAccess(localPlayer, (World) location.getExtent(), set, flag)) {
             event.setResult(Event.Result.DENY);
         }
     }
@@ -66,9 +75,9 @@ public class WorldGuardProtection implements Listener {
                 || !wcfg.getChestProtection().isProtected(location, player);
     }
 
-    private boolean canAccess(LocalPlayer player, World world, ApplicableRegionSet set) {
+    private boolean canAccess(LocalPlayer player, World world, ApplicableRegionSet set, StateFlag flag) {
         return new RegionPermissionModel(player).mayIgnoreRegionProtection(world)
                 || set.testState(player, Flags.BUILD)
-                || set.testState(player, Flags.CHEST_ACCESS);
+                || set.testState(player, flag);
     }
 }
