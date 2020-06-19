@@ -79,25 +79,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>R8-SNAPSHOT</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
             <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit-lite</artifactId>
+            <artifactId>bstats-bukkit</artifactId>
             <version>1.7</version>
             <scope>compile</scope>
         </dependency>
@@ -327,6 +310,24 @@
         <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <forceCreation>true</forceCreation>
+                    <archive>
+                        <manifest>
+                            <addDefaultEntries>true</addDefaultEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Distribution-Type>${buildType}</Distribution-Type>
+                            <Built-At>${maven.build.timestamp}</Built-At>
+                            <Build-Jdk>${java.runtime.version}</Build-Jdk>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
@@ -347,7 +348,6 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.mcstats.bukkit</include>
                                     <include>org.bstats:*</include>
                                     <include>net.gravitydevelopment.updater</include>
                                     <include>com.j256.ormlite</include>
@@ -356,10 +356,6 @@
                                 </includes>
                             </artifactSet>
                             <relocations>
-                                <relocation>
-                                    <pattern>org.mcstats</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop.Metrics.MCStats</shadedPattern>
-                                </relocation>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>com.Acrobot.ChestShop.Metrics.BStats</shadedPattern>
@@ -394,6 +390,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <build.number>${buildNumber}</build.number>
+        <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
     </properties>
 
@@ -463,6 +460,7 @@
                 </property>
             </activation>
             <properties>
+                <buildType>manual</buildType>
                 <buildNumber>0</buildNumber>
                 <buildDescription>(compiled at ${maven.build.timestamp})</buildDescription>
             </properties>
@@ -476,6 +474,7 @@
                 </property>
             </activation>
             <properties>
+                <buildType>jenkins</buildType>
                 <buildNumber>${env.BUILD_NUMBER}</buildNumber>
                 <buildDescription>(build ${env.BUILD_NUMBER})</buildDescription>
             </properties>

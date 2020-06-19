@@ -154,4 +154,14 @@ public class NumberUtil {
                 return Integer.toString(number);
         }
     }
+
+    /**
+     * Convert a long to an integer while not overflowing but returning Integer.MAX_VALUE
+     *
+     * @param number The long to convert
+     * @return The integer value or Integer.MAX_VALUE on overflow
+     */
+    public static int toInt(long number) {
+        return number > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) number;
+    }
 }

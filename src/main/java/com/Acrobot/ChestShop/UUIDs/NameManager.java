@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.UUIDs;
 import com.Acrobot.Breeze.Utils.Encoding.Base62;
 import com.Acrobot.Breeze.Utils.NameUtil;
 import com.Acrobot.Breeze.Collection.SimpleCache;
+import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
@@ -47,6 +48,14 @@ public class NameManager implements Listener {
     private static Account adminAccount;
     private static Account serverEconomyAccount;
     private static int uuidVersion = -1;
+
+    public static int getAccountCount() {
+        try {
+            return NumberUtil.toInt(accounts.queryBuilder().countOf() - 1);
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
 
     /**
      * Get or create an account for a player

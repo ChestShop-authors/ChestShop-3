@@ -17,6 +17,12 @@ public class Messages {
     public static String iteminfo_lore = "&fLore: \n&r%lore";
 
     @PrecededBySpace
+    public static String METRICS = "&a[Shop] &fMetrics:\n" +
+            "&fAccounts: &7%accounts\n" +
+            "&fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)\n" +
+            "&fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)";
+
+    @PrecededBySpace
     public static String ACCESS_DENIED = "You don't have permission to access that shop's storage container!";
     public static String TRADE_DENIED = "You don't have permission to trade with that shop!";
 

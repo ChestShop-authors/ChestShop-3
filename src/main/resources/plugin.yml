@@ -22,6 +22,9 @@ commands:
     aliases: [chestshop]
     description: Shows the ChestShop's version
     usage: /<command>
+  csMetrics:
+    description: Shows ChestShop's metrics
+    usage: /<command>
   cstoggle:
     description: Toggle messages to the owner of a shop
     usage: /<command>
