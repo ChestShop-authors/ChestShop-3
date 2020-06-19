@@ -23,12 +23,8 @@ public class PlayerConnect implements Listener {
 
         final PlayerDTO playerDTO = new PlayerDTO(event.getPlayer());
 
-        Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                // String playerName = NameUtil.stripUsername(playerDTO.getName());
-                // UUID uuid = NameManager.getUUID(playerName);
-
+        Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+            if (NameManager.getAccount(playerDTO.getUniqueId()) != null) {
                 NameManager.storeUsername(playerDTO);
             }
         });
