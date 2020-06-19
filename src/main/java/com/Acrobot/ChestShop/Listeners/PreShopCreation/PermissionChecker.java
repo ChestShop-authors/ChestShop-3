@@ -35,7 +35,8 @@ public class PermissionChecker implements Listener {
         ItemStack item = parseEvent.getItem();
 
         if (item == null) {
-            if (!Permission.has(player, SHOP_CREATION)) {
+            if ((PriceUtil.hasBuyPrice(priceLine) && !Permission.has(player, SHOP_CREATION_BUY))
+                    || (PriceUtil.hasSellPrice(priceLine) && !Permission.has(player, SHOP_CREATION_SELL))) {
                 event.setOutcome(NO_PERMISSION);
             }
             return;

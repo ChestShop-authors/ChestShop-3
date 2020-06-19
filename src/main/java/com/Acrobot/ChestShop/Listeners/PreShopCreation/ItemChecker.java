@@ -52,7 +52,6 @@ public class ItemChecker implements Listener {
                 if (item == null) {
                     event.setSignLine(ITEM_LINE, ChatColor.BOLD + ChestShopSign.AUTOFILL_CODE);
                     event.setOutcome(ITEM_AUTOFILL);
-                    event.getPlayer().sendMessage(Messages.prefix(Messages.CLICK_TO_AUTOFILL_ITEM));
                     return;
                 }
             } else {
