@@ -451,7 +451,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     private int[] getChartArray(boolean value) {
-        return new int[]{value ? 1 : 0, value ? 0 : 1};
+        return new int[]{!value ? 1 : 0, value ? 0 : 1};
     }
 
     private static final int PROJECT_BUKKITDEV_ID = 31263;

@@ -16,13 +16,13 @@ public class MetricsModule implements Listener {
 
     private static long lastReset = System.currentTimeMillis();
 
-    private static int buyTransactionsLast = 0;
-    private static int sellTransactionsLast = 0;
+    private static int buyTransactionsLast = -1;
+    private static int sellTransactionsLast = -1;
     private static long buyTransactionsCurrent = 0;
     private static long sellTransactionsCurrent = 0;
 
-    private static int boughtItemsLast = 0;
-    private static int soldItemsLast = 0;
+    private static int boughtItemsLast = -1;
+    private static int soldItemsLast = -1;
     private static long boughtItemsCurrent = 0;
     private static long soldItemsCurrent = 0;
 
@@ -47,32 +47,32 @@ public class MetricsModule implements Listener {
 
     public static int getBuyTransactions() {
         checkReset();
-        return buyTransactionsLast;
+        return buyTransactionsLast > -1 ? buyTransactionsLast : NumberUtil.toInt(buyTransactionsCurrent);
     }
 
     public static int getSellTransactions() {
         checkReset();
-        return sellTransactionsLast;
+        return sellTransactionsLast > -1 ? sellTransactionsLast : NumberUtil.toInt(sellTransactionsCurrent);
     }
 
     public static int getTotalTransactions() {
         checkReset();
-        return buyTransactionsLast + sellTransactionsLast;
+        return getBuyTransactions() + getSellTransactions();
     }
 
     public static int getBoughtItemsCount() {
         checkReset();
-        return boughtItemsLast;
+        return boughtItemsLast > -1 ? boughtItemsLast : NumberUtil.toInt(boughtItemsCurrent);
     }
 
     public static int getSoldItemsCount() {
         checkReset();
-        return soldItemsLast;
+        return soldItemsLast > -1 ? soldItemsLast : NumberUtil.toInt(soldItemsCurrent);
     }
 
     public static int getTotalItemsCount() {
         checkReset();
-        return boughtItemsLast + soldItemsLast;
+        return getBoughtItemsCount() + getSoldItemsCount();
     }
 
     private static void checkReset() {
