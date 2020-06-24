@@ -42,7 +42,6 @@ import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.SELL;
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_CREATE;
-import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -118,7 +117,7 @@ public class PlayerInteract implements Listener {
             if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
                 if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
                     if (player.isSneaking() || player.isInsideVehicle()
-                            || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK && ChestShopSign.hasPermission(player, OTHER_NAME_DESTROY, sign))) {
+                            || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK)) {
                         return;
                     }
                     event.setCancelled(true);
@@ -131,6 +130,8 @@ public class PlayerInteract implements Listener {
         }
 
         if (action == RIGHT_CLICK_BLOCK) {
+            event.setCancelled(true);
+        } else if (action == LEFT_CLICK_BLOCK && !ChestShopSign.canAccess(player, sign)) {
             event.setCancelled(true);
         }
 
