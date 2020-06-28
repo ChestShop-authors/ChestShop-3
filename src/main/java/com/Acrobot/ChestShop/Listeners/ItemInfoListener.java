@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.Breeze.Utils.StringUtil;
-import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,10 +22,9 @@ import static com.Acrobot.Breeze.Utils.NumberUtil.toRoman;
 import static com.Acrobot.Breeze.Utils.NumberUtil.toTime;
 import static com.Acrobot.Breeze.Utils.StringUtil.capitalizeFirstLetter;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book_generatopm;
+import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book_generation;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_lore;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_repaircost;
-import static com.Acrobot.ChestShop.Configuration.Messages.replace;
 
 /**
  * @author Acrobot
@@ -110,7 +108,7 @@ public class ItemInfoListener implements Listener {
                     "pages", String.valueOf(book.getPageCount())
             );
             if (book.hasGeneration()) {
-                iteminfo_book_generatopm.send(event.getSender(),
+                iteminfo_book_generation.send(event.getSender(),
                         "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_')
                 );
             }

@@ -7,7 +7,7 @@ iteminfo_book: |-
   &fBook Title: &7%title
   &fBook Author: &7%author
   &fBook Pages: &7%pages
-iteminfo_book_generatopm: "&fBook Generation: &7%generation"
+iteminfo_book_generation: "&fBook Generation: &7%generation"
 iteminfo_lore: |-
   &fLore:
   &r%lore

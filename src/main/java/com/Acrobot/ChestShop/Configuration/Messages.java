@@ -26,7 +26,7 @@ public class Messages {
     public static Message iteminfo_shopname;
     public static Message iteminfo_repaircost;
     public static Message iteminfo_book;
-    public static Message iteminfo_book_generatopm;
+    public static Message iteminfo_book_generation;
     public static Message iteminfo_lore;
 
     public static Message METRICS;
