@@ -91,12 +91,12 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOW_MESSAGE_OUT_OF_STOCK && !Properties.CSTOGGLE_TOGGLES_OUT_OF_STOCK || !Toggle.isIgnoring(event.getOwnerAccount().getUuid())) {
                     Location loc = event.getSign().getLocation();
                     sendMessageToOwner(event.getOwnerAccount(), NOT_ENOUGH_STOCK_IN_YOUR_SHOP, new String[]{
-                            "%price", Economy.formatBalance(event.getExactPrice()),
-                            "%buyer", event.getClient().getName(),
-                            "%world", loc.getWorld().getName(),
-                            "%x", String.valueOf(loc.getBlockX()),
-                            "%y", String.valueOf(loc.getBlockY()),
-                            "%z", String.valueOf(loc.getBlockZ())
+                            "price", Economy.formatBalance(event.getExactPrice()),
+                            "buyer", event.getClient().getName(),
+                            "world", loc.getWorld().getName(),
+                            "x", String.valueOf(loc.getBlockX()),
+                            "y", String.valueOf(loc.getBlockY()),
+                            "z", String.valueOf(loc.getBlockZ())
                     }, event.getStock());
                 }
                 message = Messages.NOT_ENOUGH_STOCK;

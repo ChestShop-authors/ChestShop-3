@@ -34,16 +34,16 @@ NO_SELLING_HERE: "You can't sell here!"
 NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
 NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
 NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop](At world: &f%world\nPosition: &f%x/%y/%z)&7 is full! (%seller tried to sell)"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 
 NOT_ENOUGH_STOCK: "This shop is out of stock."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop](At world: &f%world\nPosition: &f%x/%y/%z)&7 is out of stock! (%buyer tried to buy)"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 
 YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "%buyer bought %item for %price from your shop at %world/%x/%y/%z."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 
 YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller sold %item for %price to your shop at %world/%x/%y/%z."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 
 YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
 NO_CHEST_DETECTED: "Couldn't find a chest!"
