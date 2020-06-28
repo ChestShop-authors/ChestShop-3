@@ -26,9 +26,9 @@ public class AccessToggle implements CommandExecutor {
         Player player = (Player) sender;
 
         if (setIgnoring(player, !isIgnoring(player))) {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_OFF));
+            Messages.TOGGLE_ACCESS_OFF.sendWithPrefix(player);
         } else {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_ACCESS_ON));
+            Messages.TOGGLE_ACCESS_ON.sendWithPrefix(player);
         }
 
         return true;

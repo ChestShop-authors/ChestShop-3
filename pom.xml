@@ -6,7 +6,7 @@
 
     <groupId>com.acrobot.chestshop</groupId>
     <artifactId>chestshop</artifactId>
-    <version>3.10.2-SNAPSHOT</version>
+    <version>3.11-SNAPSHOT</version>
     <description>Chest-and-sign shop plugin for Bukkit</description>
     <name>ChestShop</name>
 
@@ -67,6 +67,20 @@
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
             <version>5.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.themoep.utils</groupId>
+            <artifactId>lang-bukkit</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.themoep</groupId>
+            <artifactId>minedown</artifactId>
+            <version>1.6.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -348,6 +362,8 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
+                                    <include>de.themoep:*</include>
+                                    <include>de.themoep.utils:*</include>
                                     <include>org.bstats:*</include>
                                     <include>net.gravitydevelopment.updater</include>
                                     <include>com.j256.ormlite</include>
@@ -356,6 +372,14 @@
                                 </includes>
                             </artifactSet>
                             <relocations>
+                                <relocation>
+                                    <pattern>de.themoep.utils.lang</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Lang</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.themoep.minedown</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.MineDown</shadedPattern>
+                                </relocation>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>com.Acrobot.ChestShop.Metrics.BStats</shadedPattern>
@@ -406,7 +430,7 @@
             <id>default</id>
             <activation>
                 <property>
-                    <name>!bukkit</name>
+                    <name>!spigot</name>
                 </property>
             </activation>
             <repositories>
@@ -426,7 +450,7 @@
         </profile>
 
         <profile>
-            <id>bukkit</id>
+            <id>spigot</id>
             <repositories>
                 <repository>
                     <id>spigotmc-repo</id>
@@ -435,8 +459,8 @@
             </repositories>
             <dependencies>
                 <dependency>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
                     <version>1.13.2-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
@@ -445,7 +469,7 @@
                 <bukkit>true</bukkit>
             </properties>
             <build>
-                <finalName>${project.name}-Bukkit</finalName>
+                <finalName>${project.name}-Spigot</finalName>
                 <plugins>
                     <plugin>
                         <artifactId>maven-compiler-plugin</artifactId>

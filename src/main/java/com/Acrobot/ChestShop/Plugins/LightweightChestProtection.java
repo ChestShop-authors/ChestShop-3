@@ -82,7 +82,7 @@ public class LightweightChestProtection implements Listener {
         Sign sign = event.getSign();
         Container connectedContainer = event.getContainer();
 
-        String message = null;
+        Messages.Message message = null;
         if (Properties.PROTECT_SIGN_WITH_LWC) {
             if (Security.protect(player, sign.getBlock(), event.getOwnerAccount() != null ? event.getOwnerAccount().getUuid() : player.getUniqueId(), Properties.LWC_SIGN_PROTECTION_TYPE)) {
                 message = Messages.PROTECTED_SHOP_SIGN;
@@ -100,7 +100,7 @@ public class LightweightChestProtection implements Listener {
         }
 
         if (message != null) {
-            player.sendMessage(Messages.prefix(message));
+            message.sendWithPrefix(player);
         }
     }
 

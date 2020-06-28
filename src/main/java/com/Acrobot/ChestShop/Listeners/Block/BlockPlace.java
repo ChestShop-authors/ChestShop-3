@@ -37,14 +37,14 @@ public class BlockPlace implements Listener {
         }
 
         if (!Security.canAccess(player, placed)) {
-            event.getPlayer().sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+            Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
             event.setCancelled(true);
         }
 
         Block neighbor = uBlock.findNeighbor(placed);
 
         if (neighbor != null && !Security.canAccess(event.getPlayer(), neighbor)) {
-            event.getPlayer().sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+            Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
             event.setCancelled(true);
         }
 
@@ -88,7 +88,7 @@ public class BlockPlace implements Listener {
             }
 
             if (!Security.canAccess(event.getPlayer(), relative)) {
-                event.getPlayer().sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+                Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
                 event.setCancelled(true);
                 return;
             }

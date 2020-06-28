@@ -58,23 +58,21 @@ public class Give implements CommandExecutor {
         }
 
         if (receiver == null) {
-            sender.sendMessage(Messages.prefix(Messages.PLAYER_NOT_FOUND));
+            Messages.PLAYER_NOT_FOUND.sendWithPrefix(sender);
             return true;
         }
 
         ItemStack item = getItem(args, disregardedIndexes);
 
         if (MaterialUtil.isEmpty(item)) {
-            sender.sendMessage(Messages.prefix(Messages.INCORRECT_ITEM_ID));
+            Messages.INCORRECT_ITEM_ID.sendWithPrefix(sender);
             return true;
         }
 
         item.setAmount(quantity);
         InventoryUtil.add(item, receiver.getInventory());
 
-        sender.sendMessage(Messages.prefix(Messages.ITEM_GIVEN
-                .replace("%item", MaterialUtil.getName(item))
-                .replace("%player", receiver.getName())));
+        Messages.ITEM_GIVEN.send(sender, "item", MaterialUtil.getName(item), "player", receiver.getName());
 
         return true;
     }

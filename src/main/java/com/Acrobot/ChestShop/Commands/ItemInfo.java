@@ -44,9 +44,9 @@ public class ItemInfo implements CommandExecutor {
             return false;
         }
 
-        sender.sendMessage(replace(iteminfo));
+        iteminfo.send(sender);
         try {
-            sender.sendMessage(replace(iteminfo_fullname, "item", MaterialUtil.getName(item)));
+            iteminfo_fullname.send(sender, "item", MaterialUtil.getName(item));
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
@@ -54,7 +54,7 @@ public class ItemInfo implements CommandExecutor {
         }
 
         try {
-            sender.sendMessage(replace(iteminfo_shopname, "item", MaterialUtil.getSignName(item)));
+            iteminfo_shopname.send(sender, "item", MaterialUtil.getSignName(item));
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);

@@ -66,7 +66,7 @@ public class PlayerInteract implements Listener {
             }
 
             if (!Security.canAccess(player, block)) {
-                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+                Messages.ACCESS_DENIED.sendWithPrefix(player);
                 event.setCancelled(true);
             }
 
@@ -105,10 +105,10 @@ public class PlayerInteract implements Listener {
                         sign.update();
                     }
                 } else {
-                    player.sendMessage(Messages.prefix(Messages.NO_ITEM_IN_HAND));
+                    Messages.NO_ITEM_IN_HAND.sendWithPrefix(player);
                 }
             } else {
-                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+                Messages.ACCESS_DENIED.sendWithPrefix(player);
             }
             return;
         }
@@ -136,7 +136,7 @@ public class PlayerInteract implements Listener {
         }
 
         if (Properties.CHECK_ACCESS_FOR_SHOP_USE && !Security.canAccess(player, block, true)) {
-            player.sendMessage(Messages.prefix(Messages.TRADE_DENIED));
+            Messages.TRADE_DENIED.sendWithPrefix(player);
             return;
         }
 
@@ -163,7 +163,7 @@ public class PlayerInteract implements Listener {
         Bukkit.getPluginManager().callEvent(accountQueryEvent);
         Account account = accountQueryEvent.getAccount();
         if (account == null) {
-            player.sendMessage(Messages.prefix(Messages.PLAYER_NOT_FOUND));
+            Messages.PLAYER_NOT_FOUND.sendWithPrefix(player);
             return null;
         }
 
@@ -174,7 +174,7 @@ public class PlayerInteract implements Listener {
             AccountCheckEvent event = new AccountCheckEvent(account.getUuid(), player.getWorld());
             Bukkit.getPluginManager().callEvent(event);
             if(!event.hasAccount()) {
-                player.sendMessage(Messages.prefix(Messages.NO_ECONOMY_ACCOUNT));
+                Messages.NO_ECONOMY_ACCOUNT.sendWithPrefix(player);
                 return null;
             }
         }
@@ -189,7 +189,7 @@ public class PlayerInteract implements Listener {
         Bukkit.getPluginManager().callEvent(parseEvent);
         ItemStack item = parseEvent.getItem();
         if (item == null) {
-            player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_DETECTED));
+            Messages.INVALID_SHOP_DETECTED.sendWithPrefix(player);
             return null;
         }
 
@@ -199,7 +199,7 @@ public class PlayerInteract implements Listener {
         } catch (NumberFormatException notANumber) {}
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
-            player.sendMessage(Messages.prefix(Messages.INVALID_SHOP_PRICE));
+            Messages.INVALID_SHOP_PRICE.sendWithPrefix(player);
             return null;
         }
 
@@ -270,7 +270,7 @@ public class PlayerInteract implements Listener {
         Container container = uBlock.findConnectedContainer(sign);
 
         if (container == null) {
-            player.sendMessage(Messages.prefix(Messages.NO_CHEST_DETECTED));
+            Messages.NO_CHEST_DETECTED.sendWithPrefix(player);
             return;
         }
 

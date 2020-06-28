@@ -59,7 +59,6 @@ public class ShopRefundListener implements Listener {
             ChestShop.callEvent(currencySubtractEvent);
         }
 
-        String message = Messages.SHOP_REFUNDED.replace("%amount", Economy.formatBalance(refundPrice));
-        event.getDestroyer().sendMessage(Messages.prefix(message));
+        Messages.SHOP_REFUNDED.sendWithPrefix(event.getDestroyer(), "amount", Economy.formatBalance(refundPrice));
     }
 }

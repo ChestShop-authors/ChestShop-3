@@ -37,7 +37,7 @@ public class ItemInfoListener implements Listener {
     public static void addRepairCost(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof Repairable && ((Repairable) meta).getRepairCost() > 0) {
-            event.getSender().sendMessage(replace(iteminfo_repaircost, "cost", String.valueOf(((Repairable) meta).getRepairCost())));
+            iteminfo_repaircost.send(event.getSender(), "cost", String.valueOf(((Repairable) meta).getRepairCost()));
         }
     }
 
@@ -104,15 +104,15 @@ public class ItemInfoListener implements Listener {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
-            event.getSender().sendMessage(replace(iteminfo_book,
+            iteminfo_book.send(event.getSender(),
                     "title", book.getTitle(),
                     "author", book.getAuthor(),
                     "pages", String.valueOf(book.getPageCount())
-            ));
+            );
             if (book.hasGeneration()) {
-                event.getSender().sendMessage(replace(iteminfo_book_generatopm,
+                iteminfo_book_generatopm.send(event.getSender(),
                         "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_')
-                ));
+                );
             }
         }
     }
@@ -121,7 +121,7 @@ public class ItemInfoListener implements Listener {
     public static void addLoreInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta.hasLore()) {
-            event.getSender().sendMessage(replace(iteminfo_lore, "lore", String.join("\n", meta.getLore())));
+            iteminfo_lore.send(event.getSender(), "lore", String.join("\n", meta.getLore()));
         }
     }
 }

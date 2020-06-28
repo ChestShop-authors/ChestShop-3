@@ -2,14 +2,17 @@ package com.Acrobot.Breeze.Utils;
 
 import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.MaterialParseEvent;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
+import de.themoep.minedown.Replacer;
 import info.somethingodd.OddItem.OddItem;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
@@ -25,6 +28,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -520,7 +524,7 @@ public class MaterialUtil {
          * @param message The raw message
          * @param stock   The items in stock
          */
-        public static boolean sendMessage(Player player, String message, ItemStack[] stock) {
+        public static boolean sendMessage(Player player, Messages.Message message, ItemStack[] stock, Map<String, String> replacementMap, String... replacements) {
             if (showItem == null) {
                 return false;
             }
@@ -537,6 +541,15 @@ public class MaterialUtil {
 
             String joinedItemJson = itemJson.stream().collect(Collectors.joining("," + new JSONObject(ImmutableMap.of("text", " ")).toJSONString() + ", "));
 
+            Map<String, String> newMap = new LinkedHashMap<>(replacementMap);
+            newMap.put("material", "item");
+            BaseComponent[] components = message.getComponents(player, true, newMap, replacements);
+            player.spigot().sendMessage(new Replacer()
+                    .placeholderSuffix("")
+                    .replace("item", ComponentSerializer.parse("[" + joinedItemJson + "]"))
+                    .replaceIn(components));
+
+            /*
             String prevColor = "";
             List<String> parts = new ArrayList<>();
             for (String s : message.split("%item")) {
@@ -554,7 +567,7 @@ public class MaterialUtil {
             }
 
             showItem.tellRaw(player, messageJsonString);
-            return true;
+            */return true;
         }
     }
 }

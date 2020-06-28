@@ -45,7 +45,7 @@ public class RestrictedSign implements Listener {
 
         if (isRestricted(lines)) {
             if (!hasPermission(player, lines)) {
-                player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+                Messages.ACCESS_DENIED.sendWithPrefix(player);
                 dropSignAndCancelEvent(event);
                 return;
             }
@@ -63,7 +63,7 @@ public class RestrictedSign implements Listener {
                 return;
             }
 
-            player.sendMessage(Messages.prefix(Messages.RESTRICTED_SIGN_CREATED));
+            Messages.RESTRICTED_SIGN_CREATED.sendWithPrefix(player);
         }
     }
 

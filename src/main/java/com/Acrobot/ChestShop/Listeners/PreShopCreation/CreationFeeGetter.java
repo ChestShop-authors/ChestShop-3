@@ -60,6 +60,6 @@ public class CreationFeeGetter implements Listener {
             ChestShop.callEvent(currencyAddEvent);
         }
 
-        player.sendMessage(Messages.prefix(Messages.SHOP_FEE_PAID.replace("%amount", Economy.formatBalance(shopCreationPrice))));
+        Messages.SHOP_FEE_PAID.sendWithPrefix(player, "amount", Economy.formatBalance(shopCreationPrice));
     }
 }

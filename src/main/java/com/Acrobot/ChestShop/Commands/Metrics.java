@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
  */
 public class Metrics implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        sender.sendMessage(Messages.replace(Messages.METRICS,
+        Messages.METRICS.send(sender,
                 "accounts", String.valueOf(NameManager.getAccountCount()),
                 "totalTransactions", String.valueOf(MetricsModule.getTotalTransactions()),
                 "buyTransactions", String.valueOf(MetricsModule.getBuyTransactions()),
@@ -20,7 +20,7 @@ public class Metrics implements CommandExecutor {
                 "totalItems", String.valueOf(MetricsModule.getTotalItemsCount()),
                 "boughtItems", String.valueOf(MetricsModule.getBoughtItemsCount()),
                 "soldItems", String.valueOf(MetricsModule.getSoldItemsCount())
-        ));
+        );
         return true;
     }
 }

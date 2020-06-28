@@ -32,9 +32,9 @@ public class Toggle implements CommandExecutor {
         }
 
         if (setIgnoring(player, !isIgnoring(player))) {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_OFF));
+            Messages.TOGGLE_MESSAGES_OFF.sendWithPrefix(player);
         } else {
-            player.sendMessage(Messages.prefix(Messages.TOGGLE_MESSAGES_ON));
+            Messages.TOGGLE_MESSAGES_ON.sendWithPrefix(player);
         }
 
         return true;

@@ -14,6 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author Acrobot
  */
@@ -53,26 +56,28 @@ public class TransactionMessageSender implements Listener {
         }
     }
     
-    private static void sendMessage(Player player, String playerName, String rawMessage, TransactionEvent event, String... replacements) {
+    private static void sendMessage(Player player, String playerName, Messages.Message rawMessage, TransactionEvent event, String... replacements) {
         Location loc = event.getSign().getLocation();
-        String message = Messages.prefix(rawMessage)
-                .replace("%price", Economy.formatBalance(event.getExactPrice()))
-                .replace("%world", loc.getWorld().getName())
-                .replace("%x", String.valueOf(loc.getBlockX()))
-                .replace("%y", String.valueOf(loc.getBlockY()))
-                .replace("%z", String.valueOf(loc.getBlockZ()));
+        Map<String, String> replacementMap = new LinkedHashMap<>();
+        replacementMap.put("price", Economy.formatBalance(event.getExactPrice()));
+        replacementMap.put("world", loc.getWorld().getName());
+        replacementMap.put("x", String.valueOf(loc.getBlockX()));
+        replacementMap.put("y", String.valueOf(loc.getBlockY()));
+        replacementMap.put("z", String.valueOf(loc.getBlockZ()));
         
         for (int i = 0; i + 1 < replacements.length; i+=2) {
-            message = message.replace("%" + replacements[i], replacements[i + 1]);
+            replacementMap.put(replacements[i], replacements[i + 1]);
         }
 
         if (player != null) {
-            if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, event.getStock())) {
+            if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, rawMessage, event.getStock(), replacementMap)) {
                 return;
             }
-            player.sendMessage(message.replace("%item", MaterialUtil.getItemList(event.getStock())));
+            replacementMap.put("item", MaterialUtil.getItemList(event.getStock()));
+            rawMessage.sendWithPrefix(player, replacementMap);
         } else if (playerName != null) {
-            ChestShop.sendBungeeMessage(playerName, message.replace("%item", MaterialUtil.getItemList(event.getStock())));
+            replacementMap.put("item", MaterialUtil.getItemList(event.getStock()));
+            ChestShop.sendBungeeMessage(playerName, rawMessage, replacementMap);
         }
     }
 

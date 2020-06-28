@@ -17,7 +17,7 @@ public class ErrorMessageSender implements Listener {
             return;
         }
 
-        String message = null;
+        Messages.Message message = null;
 
         switch (event.getOutcome()) {
             case UNKNOWN_PLAYER:
@@ -70,7 +70,7 @@ public class ErrorMessageSender implements Listener {
         }
 
         if (message != null) {
-            event.getPlayer().sendMessage(Messages.prefix(message));
+            message.sendWithPrefix(event.getPlayer());
         }
     }
 }

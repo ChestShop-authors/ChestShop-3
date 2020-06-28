@@ -46,7 +46,7 @@ public class PlayerInventory implements Listener {
         }
 
         if (!Security.canAccess(player, container)) {
-            player.sendMessage(Messages.prefix(Messages.ACCESS_DENIED));
+            Messages.ACCESS_DENIED.sendWithPrefix(player);
             event.setCancelled(true);
         }
     }

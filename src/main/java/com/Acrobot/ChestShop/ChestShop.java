@@ -167,11 +167,12 @@ public class ChestShop extends JavaPlugin {
 
     public void loadConfig() {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class, getBukkitLogger());
-        Configuration.pairFileAndClass(loadFile("local.yml"), Messages.class, getBukkitLogger());
+
+        Messages.load();
 
         NameManager.load();
 
-        commands.forEach(c -> c.setPermissionMessage(Messages.prefix(Messages.ACCESS_DENIED)));
+        commands.forEach(c -> c.setPermissionMessage(Messages.ACCESS_DENIED.getTextWithPrefix(null)));
     }
 
     private void turnOffDatabaseLogging() {
@@ -515,6 +516,11 @@ public class ChestShop extends JavaPlugin {
 
     public static void callEvent(Event event) {
         Bukkit.getPluginManager().callEvent(event);
+    }
+
+    public static void sendBungeeMessage(String playerName, Messages.Message message, Map<String, String> replacementMap, String... replacements) {
+        // TODO: Component support for bungee messages?
+        sendBungeeMessage(playerName, message.getTextWithPrefix(null, replacementMap, replacements));
     }
 
     public static void sendBungeeMessage(String playerName, String message) {

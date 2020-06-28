@@ -113,6 +113,13 @@ public class Properties {
     public static int CACHE_SIZE = 1000;
 
     @PrecededBySpace
+    @ConfigurationComment("The default language when the client's language can't be found.")
+    public static String DEFAULT_LANGUAGE = "en";
+
+    @ConfigurationComment("Should the plugin try to use a language file that matches the client's locale setting?")
+    public static boolean USE_CLIENT_LOCALE = true;
+
+    @PrecededBySpace
     @ConfigurationComment("What containers are allowed to hold a shop? (Only blocks with inventories work!)")
     @Parser("MaterialSet")
     public static Set<Material> SHOP_CONTAINERS = EnumSet.of(
