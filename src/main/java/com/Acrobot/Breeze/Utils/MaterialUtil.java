@@ -525,6 +525,18 @@ public class MaterialUtil {
          * @param stock   The items in stock
          */
         public static boolean sendMessage(Player player, Messages.Message message, ItemStack[] stock, Map<String, String> replacementMap, String... replacements) {
+            return sendMessage(player, player.getName(), message, stock, replacementMap, replacements);
+        }
+
+        /**
+         * Send a message with hover info and icons
+         *
+         * @param player        The player to send the message to
+         * @param playerName    The name of the player in case he is offline and bungee messages are enabled
+         * @param message       The raw message
+         * @param stock         The items in stock
+         */
+        public static boolean sendMessage(Player player, String playerName, Messages.Message message, ItemStack[] stock, Map<String, String> replacementMap, String... replacements) {
             if (showItem == null) {
                 return false;
             }
@@ -543,31 +555,19 @@ public class MaterialUtil {
 
             Map<String, String> newMap = new LinkedHashMap<>(replacementMap);
             newMap.put("material", "item");
-            BaseComponent[] components = message.getComponents(player, true, newMap, replacements);
-            player.spigot().sendMessage(new Replacer()
+            BaseComponent[] components = new Replacer()
                     .placeholderSuffix("")
                     .replace("item", ComponentSerializer.parse("[" + joinedItemJson + "]"))
-                    .replaceIn(components));
-
-            /*
-            String prevColor = "";
-            List<String> parts = new ArrayList<>();
-            for (String s : message.split("%item")) {
-                parts.add(new JSONObject(ImmutableMap.of("text", prevColor + s)).toJSONString());
-                prevColor = ChatColor.getLastColors(s);
+                    .replaceIn(message.getComponents(player, true, newMap, replacements));
+            if (player != null) {
+                player.spigot().sendMessage(components);
+                return true;
+            } else if (playerName != null) {
+                ChestShop.sendBungeeMessage(playerName, components);
+                return true;
             }
 
-            String messageJsonString = String.join("," + joinedItemJson + ",", parts);
-
-            while (messageJsonString.startsWith(",")) {
-                messageJsonString = messageJsonString.substring(1);
-            }
-            while (messageJsonString.endsWith(",")) {
-                messageJsonString = messageJsonString.substring(0, messageJsonString.length() - 1);
-            }
-
-            showItem.tellRaw(player, messageJsonString);
-            */return true;
+            return true;
         }
     }
 }

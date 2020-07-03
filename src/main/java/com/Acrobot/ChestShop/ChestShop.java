@@ -46,6 +46,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
@@ -519,14 +521,21 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static void sendBungeeMessage(String playerName, Messages.Message message, Map<String, String> replacementMap, String... replacements) {
-        // TODO: Component support for bungee messages?
-        sendBungeeMessage(playerName, message.getTextWithPrefix(null, replacementMap, replacements));
+        sendBungeeMessage(playerName, message.getComponents(null, true, replacementMap, replacements));
     }
 
     public static void sendBungeeMessage(String playerName, String message) {
+        sendBungeeMessage(playerName, "Message", message);
+    }
+
+    public static void sendBungeeMessage(String playerName, BaseComponent[] message) {
+        sendBungeeMessage(playerName, "MessageRaw", ComponentSerializer.toString(message));
+    }
+
+    private static void sendBungeeMessage(String playerName, String channel, String message) {
         if (Properties.BUNGEECORD_MESSAGES && !Bukkit.getOnlinePlayers().isEmpty()) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Message");
+            out.writeUTF(channel);
             out.writeUTF(playerName);
             out.writeUTF(message);
 
