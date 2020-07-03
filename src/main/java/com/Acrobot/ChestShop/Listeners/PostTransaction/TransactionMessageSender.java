@@ -64,6 +64,7 @@ public class TransactionMessageSender implements Listener {
         replacementMap.put("x", String.valueOf(loc.getBlockX()));
         replacementMap.put("y", String.valueOf(loc.getBlockY()));
         replacementMap.put("z", String.valueOf(loc.getBlockZ()));
+        replacementMap.put("material", "%item");
         
         for (int i = 0; i + 1 < replacements.length; i+=2) {
             replacementMap.put(replacements[i], replacements[i + 1]);
