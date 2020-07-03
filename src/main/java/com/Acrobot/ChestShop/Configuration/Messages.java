@@ -130,7 +130,7 @@ public class Messages {
             ChestShop.getBukkitLogger().log(Level.INFO, "As long as the legacy file is used automatic language switching based on the client settings will not be supported!");
             ChestShop.getBukkitLogger().log(Level.INFO, "Import it into the corresponding language file and remove/rename the file if you don't want it anymore!");
             manager.addConfig(new BukkitLanguageConfig(ChestShop.getPlugin(), "", legacyFile, "legacy", false));
-            Properties.DEFAULT_LANGUAGE = "legacy";
+            manager.setDefaultLocale("legacy");
             Properties.USE_CLIENT_LOCALE = false;
         }
 
