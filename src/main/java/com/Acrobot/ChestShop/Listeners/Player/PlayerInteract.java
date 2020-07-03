@@ -131,7 +131,7 @@ public class PlayerInteract implements Listener {
 
         if (action == RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
-        } else if (action == LEFT_CLICK_BLOCK && !ChestShopSign.canAccess(player, sign)) {
+        } else if (action == LEFT_CLICK_BLOCK && !Properties.TURN_OFF_SIGN_PROTECTION && !ChestShopSign.canAccess(player, sign)) {
             event.setCancelled(true);
         }
 
