@@ -66,8 +66,8 @@ public class PlayerInteract implements Listener {
             }
 
             if (!Security.canAccess(player, block)) {
-                Messages.ACCESS_DENIED.sendWithPrefix(player);
                 event.setCancelled(true);
+                Messages.ACCESS_DENIED.sendWithPrefix(player);
             }
 
             return;
