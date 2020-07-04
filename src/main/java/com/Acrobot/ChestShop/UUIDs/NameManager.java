@@ -432,7 +432,9 @@ public class NameManager implements Listener {
             }
             if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
                 serverEconomyAccount = null;
-                ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
+                if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
