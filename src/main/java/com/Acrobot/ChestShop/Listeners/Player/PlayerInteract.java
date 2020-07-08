@@ -73,7 +73,7 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (!isSign(block) || player.getInventory().getItemInMainHand().getType() == Material.SIGN) // Blocking accidental sign edition
+        if (!isSign(block) || player.getInventory().getItemInMainHand().getType().name().contains("SIGN")) // Blocking accidental sign edition
             return;
 
         Sign sign = (Sign) block.getState();

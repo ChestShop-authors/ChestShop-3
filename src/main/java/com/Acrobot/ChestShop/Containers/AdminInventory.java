@@ -42,7 +42,6 @@ public class AdminInventory implements Inventory {
         maxStackSize = i;
     }
 
-    @Override
     public String getName() {
         return "Admin inventory";
     }
@@ -211,7 +210,6 @@ public class AdminInventory implements Inventory {
         return new ArrayList<>();
     }
 
-    @Override
     public String getTitle() {
         return "Admin inventory";
     }
@@ -223,6 +221,10 @@ public class AdminInventory implements Inventory {
 
     @Override
     public InventoryHolder getHolder() {
+        return null;
+    }
+
+    public InventoryHolder getHolder(boolean useSnapshot) {
         return null;
     }
 
