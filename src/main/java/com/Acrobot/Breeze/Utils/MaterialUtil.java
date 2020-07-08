@@ -132,7 +132,7 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        String formatted = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").replace(' ', '_').toUpperCase(Locale.ROOT);
+        String formatted = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
 
         Material material = MATERIAL_CACHE.get(formatted);
         if (material != null) {
@@ -402,7 +402,7 @@ public class MaterialUtil {
                 return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException exception) {
                 E currentEnum = null;
-                String[] typeParts = name.replaceAll("([a-z])([A-Z1-9])", "$1_$2").toUpperCase(Locale.ROOT).split("[ _]");
+                String[] typeParts = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).split("[ _]");
                 int length = Short.MAX_VALUE;
                 for (E e : values) {
                     String enumName = e.name();
