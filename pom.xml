@@ -466,7 +466,7 @@
                 </dependency>
             </dependencies>
             <properties>
-                <bukkit>true</bukkit>
+                <spigot>true</spigot>
             </properties>
             <build>
                 <finalName>${project.name}-Spigot</finalName>
