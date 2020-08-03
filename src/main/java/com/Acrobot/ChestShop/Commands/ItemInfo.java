@@ -39,31 +39,10 @@ public class ItemInfo implements CommandExecutor {
             Bukkit.getPluginManager().callEvent(parseEvent);
             item = parseEvent.getItem();
         }
-
+    
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
-
-        if (event.isCancelled() || MaterialUtil.isEmpty(item)) {
-            return false;
-        }
-
-        iteminfo.send(sender);
-        try {
-            iteminfo_fullname.send(sender, "item", MaterialUtil.getName(item));
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
-            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
-            return true;
-        }
-
-        try {
-            iteminfo_shopname.send(sender, "item", MaterialUtil.getSignName(item));
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
-            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
-            return true;
-        }
-
-        return true;
+    
+        return !event.isCancelled() && !MaterialUtil.isEmpty(item);
     }
 }
