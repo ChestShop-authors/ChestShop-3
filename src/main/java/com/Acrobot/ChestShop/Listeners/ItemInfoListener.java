@@ -30,6 +30,27 @@ import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_repaircost;
  * @author Acrobot
  */
 public class ItemInfoListener implements Listener {
+    
+    @EventHandler(priority =  EventPriority.LOW)
+    public static void messageSender (ItemInfoEvent event) {
+        CommandSender sender = event.getSender();
+        ItemStack item = event.getItem();
+        iteminfo.send(sender);
+        try {
+            iteminfo_fullname.send(sender, "item", MaterialUtil.getName(item));
+        } catch (IllegalArgumentException e) {
+            event.getSender().sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
+            return;
+        }
+        
+        try {
+            iteminfo_shopname.send(sender, "item", MaterialUtil.getSignName(item));
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
+        }
+    }
 
     @EventHandler
     public static void addRepairCost(ItemInfoEvent event) {
