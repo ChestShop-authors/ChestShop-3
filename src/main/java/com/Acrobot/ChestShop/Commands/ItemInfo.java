@@ -40,7 +40,10 @@ public class ItemInfo implements CommandExecutor {
             item = parseEvent.getItem();
         }
 
-        if (MaterialUtil.isEmpty(item)) {
+        ItemInfoEvent event = new ItemInfoEvent(sender, item);
+        ChestShop.callEvent(event);
+
+        if (event.isCancelled() || MaterialUtil.isEmpty(item)) {
             return false;
         }
 
@@ -60,9 +63,6 @@ public class ItemInfo implements CommandExecutor {
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
             return true;
         }
-
-        ItemInfoEvent event = new ItemInfoEvent(sender, item);
-        ChestShop.callEvent(event);
 
         return true;
     }
