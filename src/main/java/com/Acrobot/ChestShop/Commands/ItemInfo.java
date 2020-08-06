@@ -43,6 +43,6 @@ public class ItemInfo implements CommandExecutor {
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
     
-        return !event.isCancelled() && !MaterialUtil.isEmpty(item);
+        return !MaterialUtil.isEmpty(item);
     }
 }
