@@ -30,9 +30,9 @@ import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_repaircost;
  * @author Acrobot
  */
 public class ItemInfoListener implements Listener {
-    
+
     @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
-    public static void messageHandler (ItemInfoEvent event) {
+    public static void messageHandler(ItemInfoEvent event) {
         CommandSender sender = event.getSender();
         ItemStack item = event.getItem();
         iteminfo.send(sender);
@@ -51,17 +51,17 @@ public class ItemInfoListener implements Listener {
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public static void addRepairCost (ItemInfoEvent event) {
+    public static void addRepairCost(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof Repairable && ((Repairable) meta).getRepairCost() > 0) {
             iteminfo_repaircost.send(event.getSender(), "cost", String.valueOf(((Repairable) meta).getRepairCost()));
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public static void addEnchantment (ItemInfoEvent event) {
+    public static void addEnchantment(ItemInfoEvent event) {
         ItemStack item = event.getItem();
         ItemMeta meta = item.getItemMeta();
         CommandSender sender = event.getSender();
@@ -76,9 +76,9 @@ public class ItemInfoListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public static void addPotionInfo (ItemInfoEvent event) {
+    public static void addPotionInfo(ItemInfoEvent event) {
         ItemStack item = event.getItem();
         
         if (item.getType() != Material.POTION || item.getDurability() == 0) {
@@ -117,9 +117,9 @@ public class ItemInfoListener implements Listener {
             sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public static void addBookInfo (ItemInfoEvent event) {
+    public static void addBookInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
@@ -129,9 +129,9 @@ public class ItemInfoListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public static void addLoreInfo (ItemInfoEvent event) {
+    public static void addLoreInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta.hasLore()) {
             iteminfo_lore.send(event.getSender(), "lore", String.join("\n", meta.getLore()));
