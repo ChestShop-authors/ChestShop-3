@@ -43,7 +43,7 @@ public class ItemInfoListener implements Listener {
             ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
             return;
         }
-    
+
         try {
             iteminfo_shopname.send(sender, "item", MaterialUtil.getSignName(item));
         } catch (IllegalArgumentException e) {
@@ -65,11 +65,11 @@ public class ItemInfoListener implements Listener {
         ItemStack item = event.getItem();
         ItemMeta meta = item.getItemMeta();
         CommandSender sender = event.getSender();
-    
+
         for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
             sender.sendMessage(ChatColor.AQUA + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
         }
-    
+
         if (meta instanceof EnchantmentStorageMeta) {
             for (Map.Entry<Enchantment, Integer> enchantment : ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet()) {
                 sender.sendMessage(ChatColor.YELLOW + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
@@ -80,39 +80,39 @@ public class ItemInfoListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public static void addPotionInfo(ItemInfoEvent event) {
         ItemStack item = event.getItem();
-    
+
         if (item.getType() != Material.POTION || item.getDurability() == 0) {
             return;
         }
-    
+
         Potion potion;
-    
+
         try {
             potion = Potion.fromItemStack(item);
         } catch (IllegalArgumentException ex) {
             return;
         }
-    
+
         StringBuilder message = new StringBuilder(50);
-    
+
         message.append(ChatColor.GRAY);
-    
+
         if (potion.getType() == null) {
             return;
         }
-    
+
         if (potion.isSplash()) {
             message.append("Splash ");
         }
-    
+
         message.append("Potion of ");
         message.append(capitalizeFirstLetter(potion.getType().name(), '_')).append(' ');
         message.append(toRoman(potion.getLevel()));
-    
+
         CommandSender sender = event.getSender();
-    
+
         sender.sendMessage(message.toString());
-    
+
         for (PotionEffect effect : potion.getEffects()) {
             sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
         }
@@ -123,9 +123,15 @@ public class ItemInfoListener implements Listener {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
-            iteminfo_book.send(event.getSender(), "title", book.getTitle(), "author", book.getAuthor(), "pages", String.valueOf(book.getPageCount()));
+            iteminfo_book.send(event.getSender(),
+                               "title", book.getTitle(),
+                               "author", book.getAuthor(),
+                               "pages", String.valueOf(book.getPageCount())
+            );
             if (book.hasGeneration()) {
-                iteminfo_book_generation.send(event.getSender(), "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_'));
+                iteminfo_book_generation.send(event.getSender(),
+                                              "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_')
+                );
             }
         }
     }
