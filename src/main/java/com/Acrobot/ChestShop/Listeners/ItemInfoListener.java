@@ -124,13 +124,13 @@ public class ItemInfoListener implements Listener {
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
             iteminfo_book.send(event.getSender(),
-                               "title", book.getTitle(),
-                               "author", book.getAuthor(),
-                               "pages", String.valueOf(book.getPageCount())
+                    "title", book.getTitle(),
+                    "author", book.getAuthor(),
+                    "pages", String.valueOf(book.getPageCount())
             );
             if (book.hasGeneration()) {
                 iteminfo_book_generation.send(event.getSender(),
-                                              "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_')
+                        "generation", StringUtil.capitalizeFirstLetter(book.getGeneration().name(), '_')
                 );
             }
         }
