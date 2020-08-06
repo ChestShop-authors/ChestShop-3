@@ -39,10 +39,10 @@ public class ItemInfo implements CommandExecutor {
             Bukkit.getPluginManager().callEvent(parseEvent);
             item = parseEvent.getItem();
         }
-    
+
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
-    
+
         return !MaterialUtil.isEmpty(item);
     }
 }
