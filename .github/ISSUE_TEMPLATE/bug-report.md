@@ -13,9 +13,14 @@ assignees: ''
  
 #### Plugin Config
 <!-- The full config.yml file of ChestShop. -->
+<details>
+  <summary>Config</summary>
+  
  ```yaml
  [Put the config here]
  ```
+ 
+ </details>
  
 #### Server Version
 <!-- The full server version that you are running from /version -->
@@ -23,9 +28,14 @@ assignees: ''
  
 #### Server Log
 <!-- The full latest.log file, especially important if you have a stack trace -->
+<details>
+  <summary>Log</summary>
+
 ```
 [Your log here]
 ```
+
+</details>
 
 #### What other plugins are you running?
 <!-- List of your plugins, ideally with the version -->
@@ -39,6 +49,6 @@ assignees: ''
 <!-- Explain what you expected to happen after performing the previously described steps -->
 
 
-### Additional context
+#### Additional context
 <!-- Add any other context or screenshots about the feature request here. -->
 
