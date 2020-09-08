@@ -433,7 +433,12 @@ public class NameManager implements Listener {
             if (serverEconomyAccount == null || serverEconomyAccount.getUuid() == null) {
                 serverEconomyAccount = null;
                 if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '" + Properties.SERVER_ECONOMY_ACCOUNT + "' doesn't seem to be the name of a known player! Please log in at least once in order for the server economy account to work.");
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Server economy account setting '"
+                            + Properties.SERVER_ECONOMY_ACCOUNT
+                            + "' doesn't seem to be the name of a known player account!" +
+                            " Please specify the SERVER_ECONOMY_ACCOUNT_UUID" +
+                            " or log in at least once and create a player shop with that account" +
+                            " in order for the server economy account to work.");
                 }
             }
         } catch (SQLException e) {
