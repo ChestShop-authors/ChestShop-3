@@ -9,22 +9,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class LockettePro implements Listener {
-	
-	@EventHandler
-	public static void onProtectionCheck(ProtectionCheckEvent event) {
-		if (event.getResult() == Event.Result.DENY) {
-			return;
-		}
-		
-		Player player = event.getPlayer();
-		Block block = event.getBlock();
-		
-		if (!LocketteProAPI.isProtected(block)) {
-			return;
-		}
-		
-		if (LocketteProAPI.isLocked(block) && !LocketteProAPI.isOwner(block, player)) {
-			event.setResult(Event.Result.DENY);
-		}
-	}
+
+    @EventHandler
+    public static void onProtectionCheck(ProtectionCheckEvent event) {
+        if (event.getResult() == Event.Result.DENY) {
+            return;
+        }
+        
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        
+        if (!LocketteProAPI.isProtected(block)) {
+            return;
+        }
+        
+        if (LocketteProAPI.isLocked(block) && !LocketteProAPI.isOwner(block, player)) {
+            event.setResult(Event.Result.DENY);
+        }
+    }
 }

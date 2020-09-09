@@ -209,7 +209,7 @@ public class Dependencies implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
-        if(ChestShop.getDependencies().contains(plugin.getName())) {
+        if (ChestShop.getDependencies().contains(plugin.getName())) {
             loadPlugin(plugin.getName(), plugin);
         }
     }
