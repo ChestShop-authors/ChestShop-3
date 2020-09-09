@@ -96,7 +96,6 @@ public class Dependencies implements Listener {
         try {
             dependency = Dependency.valueOf(name);
         } catch (IllegalArgumentException exception) {
-            System.out.println("FAIL: " + name);
             return;
         }
 
