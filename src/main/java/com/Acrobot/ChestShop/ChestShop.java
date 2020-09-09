@@ -299,6 +299,8 @@ public class ChestShop extends JavaPlugin {
     private void registerEvents() {
         registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
 
+        registerEvent(new Dependencies());
+        
         registerEvent(new NameManager());
 
         registerPreShopCreationEvents();

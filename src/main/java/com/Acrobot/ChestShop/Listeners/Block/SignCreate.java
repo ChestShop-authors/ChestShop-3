@@ -55,11 +55,15 @@ public class SignCreate implements Listener {
         for (byte i = 0; i < preEvent.getSignLines().length && i < 4; ++i) {
             event.setLine(i, preEvent.getSignLine(i));
         }
-
+    
+        System.out.println(preEvent.getOutcome());
+        
         if (preEvent.isCancelled()) {
             return;
         }
-
+    
+        System.out.println("TEST HERE");
+        
         ShopCreatedEvent postEvent = new ShopCreatedEvent(preEvent.getPlayer(), preEvent.getSign(), uBlock.findConnectedContainer(preEvent.getSign()), preEvent.getSignLines(), preEvent.getOwnerAccount());
         ChestShop.callEvent(postEvent);
     }

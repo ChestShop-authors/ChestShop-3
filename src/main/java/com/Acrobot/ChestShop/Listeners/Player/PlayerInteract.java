@@ -20,6 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -275,6 +276,10 @@ public class PlayerInteract implements Listener {
         }
 
         if (!Security.canAccess(player, signBlock)) {
+            return;
+        }
+        
+        if (!Security.canAccess(player, container.getBlock())) {
             return;
         }
 
