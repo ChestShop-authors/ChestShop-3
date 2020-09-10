@@ -56,7 +56,7 @@ public class Dependencies implements Listener {
 
         for (String dependency : ChestShop.getDependencies()) {
             Plugin plugin = pluginManager.getPlugin(dependency);
-    
+
             if (plugin != null && plugin.isEnabled()) {
                 loadPlugin(dependency, plugin);
             }
