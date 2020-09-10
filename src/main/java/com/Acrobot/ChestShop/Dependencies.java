@@ -6,7 +6,10 @@ import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -14,7 +17,7 @@ import org.bukkit.plugin.PluginManager;
 /**
  * @author Acrobot
  */
-public class Dependencies {
+public class Dependencies implements Listener {
 
     public static void initializePlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -106,6 +109,9 @@ public class Dependencies {
             case Lockette:
                 listener = new Lockette();
                 break;
+            case LockettePro:
+                listener = new LockettePro();
+                break;
             case Deadbolt:
                 listener = new Deadbolt();
                 break;
@@ -184,6 +190,7 @@ public class Dependencies {
     private static enum Dependency {
         LWC,
         Lockette,
+        LockettePro,
         Deadbolt,
         SimpleChestLock,
         Residence,
@@ -197,5 +204,13 @@ public class Dependencies {
         Heroes,
 
         ShowItem
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEnable(PluginEnableEvent event) {
+        Plugin plugin = event.getPlugin();
+        if (ChestShop.getDependencies().contains(plugin.getName())) {
+            loadPlugin(plugin.getName(), plugin);
+        }
     }
 }
