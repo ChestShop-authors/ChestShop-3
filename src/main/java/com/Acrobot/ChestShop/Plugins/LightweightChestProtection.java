@@ -23,6 +23,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.OTHER_BREAK;
@@ -104,9 +105,9 @@ public class LightweightChestProtection implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onProtectionCheck(ProtectionCheckEvent event) {
-        if (event.getResult() == Event.Result.DENY) {
+        if (event.getResult() == Event.Result.DENY && !Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
             return;
         }
 
@@ -121,6 +122,8 @@ public class LightweightChestProtection implements Listener {
 
         if (!lwc.canAccessProtection(player, protection) || protection.getType() == Protection.Type.DONATION) {
             event.setResult(Event.Result.DENY);
+        } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+            event.setResult(Event.Result.ALLOW);
         }
     }
 
