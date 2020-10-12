@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
+import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
@@ -115,7 +116,7 @@ public class PriceRestrictionModule implements Listener {
         String itemType = material.getType().toString().toLowerCase(Locale.ROOT);
         int amount;
         try {
-            amount = Integer.parseInt(event.getSignLine(QUANTITY_LINE));
+            amount = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
         } catch (IllegalArgumentException e) {
             return;
         }

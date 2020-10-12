@@ -196,7 +196,7 @@ public class PlayerInteract implements Listener {
 
         int amount = -1;
         try {
-            amount = Integer.parseInt(quantity);
+            amount = QuantityUtil.parseQuantity(quantity);
         } catch (NumberFormatException notANumber) {}
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {

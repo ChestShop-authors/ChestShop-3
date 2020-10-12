@@ -17,9 +17,11 @@ import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
+import com.Acrobot.ChestShop.Listeners.Inventory.InventoryClose;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.MetricsModule;
+import com.Acrobot.ChestShop.Listeners.PreShopCreation.StockCounterModifier;
 import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
@@ -77,7 +79,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.jar.JarFile;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -308,6 +309,7 @@ public class ChestShop extends JavaPlugin {
         registerPostShopCreationEvents();
         registerPostTransactionEvents();
         registerShopRemovalEvents();
+        registerInventoryEvents();
 
         registerModules();
 
@@ -380,12 +382,14 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ShopValidator());
         registerEvent(new SpamClickProtector());
         registerEvent(new StockFittingChecker());
+        registerEvent(new StockCounterModifier());
     }
 
     private void registerPostTransactionEvents() {
         registerEvent(new EconomicModule());
         registerEvent(new EmptyShopDeleter());
         registerEvent(new ItemManager());
+        registerEvent(new StockCounterManager());
         registerEvent(new TransactionLogger());
         registerEvent(new TransactionMessageSender());
     }
@@ -401,6 +405,10 @@ public class ChestShop extends JavaPlugin {
     private void registerEconomicalModules() {
         registerEvent(new ServerAccountCorrector());
         registerEvent(new TaxModule());
+    }
+
+    private void registerInventoryEvents() {
+        registerEvent(new InventoryClose());
     }
 
     private void registerPluginMessagingChannels() {

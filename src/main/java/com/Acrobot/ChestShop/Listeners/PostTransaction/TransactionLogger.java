@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
+
 import static com.Acrobot.Breeze.Utils.InventoryUtil.mergeSimilarStacks;
 import static com.Acrobot.Breeze.Utils.MaterialUtil.getName;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;

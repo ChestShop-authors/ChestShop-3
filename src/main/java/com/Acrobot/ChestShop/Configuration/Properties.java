@@ -315,4 +315,8 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("Add icons and make item names hoverable in transaction messages when ShowItem is installed?")
     public static boolean SHOWITEM_MESSAGE = true;
+
+    @PrecededBySpace
+    @ConfigurationComment("Add stock counter to quantity line?")
+    public static boolean USE_STOCK_COUNTER = false;
 }
