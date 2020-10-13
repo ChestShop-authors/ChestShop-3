@@ -10,9 +10,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
@@ -27,7 +24,7 @@ public class InventoryClose implements Listener {
             return;
         }
 
-        for (Sign shopSign : uBlock.findNearbyShopSigns(event.getInventory().getHolder())) {
+        for (Sign shopSign : uBlock.findConnectedShopSigns(event.getInventory().getHolder())) {
             if (ChestShopSign.isAdminShop(shopSign)) {
                 return;
             }

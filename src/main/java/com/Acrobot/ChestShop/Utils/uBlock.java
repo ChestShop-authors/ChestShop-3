@@ -151,8 +151,9 @@ public class uBlock {
         return ownerShopSign;
     }
 
-    public static List<Sign> findNearbyShopSigns(InventoryHolder chestShopInventoryHolder) {
+    public static List<Sign> findConnectedShopSigns(InventoryHolder chestShopInventoryHolder) {
         List<Sign> result = new ArrayList<>();
+
 
         if (chestShopInventoryHolder instanceof DoubleChest) {
             BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
@@ -166,11 +167,11 @@ public class uBlock {
             Block rightChest = rightChestSide.getBlock();
 
             if (ChestShopSign.isShopBlock(leftChest)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(leftChest));
+                result.addAll(uBlock.findConnectedShopSigns(leftChest));
             }
 
             if (ChestShopSign.isShopBlock(rightChest)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(rightChest));
+                result.addAll(uBlock.findConnectedShopSigns(rightChest));
             }
         }
 
@@ -178,24 +179,29 @@ public class uBlock {
             Block chestBlock = ((BlockState) chestShopInventoryHolder).getBlock();
 
             if (ChestShopSign.isShopBlock(chestBlock)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(chestBlock));
+                result.addAll(uBlock.findConnectedShopSigns(chestBlock));
             }
         }
 
         return result;
     }
 
-    public static List<Sign> findAllNearbyShopSigns(Block block) {
+    public static List<Sign> findConnectedShopSigns(Block chestBlock) {
         List<Sign> result = new ArrayList<>();
 
         for (BlockFace bf : SHOP_FACES) {
-            Block faceBlock = block.getRelative(bf);
+            Block faceBlock = chestBlock.getRelative(bf);
 
             if (!BlockUtil.isSign(faceBlock)) {
                 continue;
             }
 
             Sign sign = (Sign) faceBlock.getState();
+
+            Container signContainer = findConnectedContainer(sign);
+            if (!chestBlock.equals(signContainer.getBlock())) {
+                continue;
+            }
 
             if (ChestShopSign.isValid(sign)) {
                 result.add(sign);

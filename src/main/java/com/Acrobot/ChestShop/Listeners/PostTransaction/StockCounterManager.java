@@ -7,13 +7,10 @@ import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Signs.StockCounter;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.List;
 
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
@@ -43,7 +40,7 @@ public class StockCounterManager implements Listener {
             return;
         }
 
-        for (Sign shopSign : uBlock.findNearbyShopSigns(event.getOwnerInventory().getHolder())) {
+        for (Sign shopSign : uBlock.findConnectedShopSigns(event.getOwnerInventory().getHolder())) {
             StockCounter.updateCounterOnQuantityLine(shopSign, event.getOwnerInventory());
         }
     }
