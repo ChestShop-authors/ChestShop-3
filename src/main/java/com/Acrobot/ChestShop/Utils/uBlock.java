@@ -14,6 +14,9 @@ import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Acrobot
  */
@@ -150,6 +153,26 @@ public class uBlock {
         }
 
         return ownerShopSign;
+    }
+
+    public static List<Sign> findAllNearbyShopSigns(Block block) {
+        List<Sign> result = new ArrayList<>();
+
+        for (BlockFace bf : SHOP_FACES) {
+            Block faceBlock = block.getRelative(bf);
+
+            if (!BlockUtil.isSign(faceBlock)) {
+                continue;
+            }
+
+            Sign sign = (Sign) faceBlock.getState();
+
+            if (ChestShopSign.isValid(sign)) {
+                result.add(sign);
+            }
+        }
+
+        return result;
     }
 
     public static Sign findAnyNearbyShopSign(Block block) {

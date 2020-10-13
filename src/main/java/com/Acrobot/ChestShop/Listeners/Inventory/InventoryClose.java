@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
 /**
@@ -24,25 +26,24 @@ public class InventoryClose implements Listener {
             return;
         }
 
-        Sign shopSign = StockCounter.determineChestShopSign(event.getInventory().getHolder());
-        if (shopSign == null || ChestShopSign.isAdminShop(shopSign)) {
-            return;
-        }
-
-        if (!Properties.USE_STOCK_COUNTER) {
-            if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
-                StockCounter.removeCounterFromQuantityLine(shopSign);
+        for (Sign shopSign : StockCounter.findNearbyShopSigns(event.getInventory().getHolder())) {
+            if (ChestShopSign.isAdminShop(shopSign)) {
+                return;
             }
-            return;
+
+            if (!Properties.USE_STOCK_COUNTER) {
+                if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
+                    StockCounter.removeCounterFromQuantityLine(shopSign);
+                }
+                continue;
+            }
+
+            if (Properties.MAX_SHOP_AMOUNT > 99999) {
+                ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
+                return;
+            }
+
+            StockCounter.updateCounterOnQuantityLine(shopSign, event.getInventory());
         }
-
-        if (Properties.MAX_SHOP_AMOUNT > 99999) {
-            ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-            return;
-        }
-
-        ItemStack itemTradedByShop = StockCounter.determineItemTradedByShop(shopSign);
-
-        StockCounter.updateCounterOnQuantityLine(shopSign, itemTradedByShop, event.getInventory());
     }
 }

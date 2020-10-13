@@ -6,8 +6,13 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Signs.StockCounter;
+import org.bukkit.Bukkit;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.util.List;
 
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
@@ -16,7 +21,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
  */
 public class StockCounterManager implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public static void onTransaction(final TransactionEvent event) {
         if (!Properties.USE_STOCK_COUNTER) {
             if (QuantityUtil.quantityLineContainsCounter(event.getSign().getLine(QUANTITY_LINE))) {
@@ -34,6 +39,9 @@ public class StockCounterManager implements Listener {
             return;
         }
 
-        StockCounter.updateCounterOnQuantityLine(event.getSign(), event.getStock()[0], event.getOwnerInventory());
+        for (Sign shopSign : StockCounter.findNearbyShopSigns(event.getOwnerInventory().getHolder())) {
+            Bukkit.getLogger().info("Updating stock counter.");
+            StockCounter.updateCounterOnQuantityLine(shopSign, event.getOwnerInventory());
+        }
     }
 }
