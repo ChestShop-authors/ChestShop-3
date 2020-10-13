@@ -4,11 +4,7 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Container;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.WallSign;
@@ -153,6 +149,40 @@ public class uBlock {
         }
 
         return ownerShopSign;
+    }
+
+    public static List<Sign> findNearbyShopSigns(InventoryHolder chestShopInventoryHolder) {
+        List<Sign> result = new ArrayList<>();
+
+        if (chestShopInventoryHolder instanceof DoubleChest) {
+            BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
+            BlockState rightChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getRightSide();
+
+            if (leftChestSide == null || rightChestSide == null) {
+                return result;
+            }
+
+            Block leftChest = leftChestSide.getBlock();
+            Block rightChest = rightChestSide.getBlock();
+
+            if (ChestShopSign.isShopBlock(leftChest)) {
+                result.addAll(uBlock.findAllNearbyShopSigns(leftChest));
+            }
+
+            if (ChestShopSign.isShopBlock(rightChest)) {
+                result.addAll(uBlock.findAllNearbyShopSigns(rightChest));
+            }
+        }
+
+        else if (chestShopInventoryHolder instanceof BlockState) {
+            Block chestBlock = ((BlockState) chestShopInventoryHolder).getBlock();
+
+            if (ChestShopSign.isShopBlock(chestBlock)) {
+                result.addAll(uBlock.findAllNearbyShopSigns(chestBlock));
+            }
+        }
+
+        return result;
     }
 
     public static List<Sign> findAllNearbyShopSigns(Block block) {

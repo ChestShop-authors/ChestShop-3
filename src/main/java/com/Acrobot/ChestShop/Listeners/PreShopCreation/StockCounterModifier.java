@@ -22,35 +22,29 @@ public class StockCounterModifier implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        int amount;
+        int quantity;
         try {
-            amount = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
-        } catch (IllegalArgumentException e) {
+            quantity = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
+        } catch (IllegalArgumentException invalidQuantity) {
             return;
         }
 
-        if (!Properties.USE_STOCK_COUNTER) {
-            if (QuantityUtil.quantityLineContainsCounter(event.getSignLine(QUANTITY_LINE))) {
-                event.setSignLine(QUANTITY_LINE, Integer.toString(amount));
-            }
+        if (QuantityUtil.quantityLineContainsCounter(event.getSignLine(QUANTITY_LINE))) {
+            event.setSignLine(QUANTITY_LINE, Integer.toString(quantity));
+        }
+
+        if (!Properties.USE_STOCK_COUNTER || ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE))) {
             return;
         }
 
         if (Properties.MAX_SHOP_AMOUNT > 99999) {
             ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-            if (QuantityUtil.quantityLineContainsCounter(event.getSignLine(QUANTITY_LINE))) {
-                event.setSignLine(QUANTITY_LINE, Integer.toString(amount));
-            }
-            return;
-        }
-
-        if (ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE))) {
             return;
         }
 
         ItemStack itemTradedByShop = StockCounter.determineItemTradedByShop(event.getSignLine(ITEM_LINE));
         Inventory chestShopInventory = uBlock.findConnectedContainer(event.getSign()).getInventory();
 
-        event.setSignLine(QUANTITY_LINE, StockCounter.getQuantityLineWithCounter(amount, itemTradedByShop, chestShopInventory));
+        event.setSignLine(QUANTITY_LINE, StockCounter.getQuantityLineWithCounter(quantity, itemTradedByShop, chestShopInventory));
     }
 }

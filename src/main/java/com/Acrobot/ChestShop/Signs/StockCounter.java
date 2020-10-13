@@ -68,38 +68,4 @@ public class StockCounter {
         Bukkit.getPluginManager().callEvent(parseEvent);
         return parseEvent.getItem();
     }
-
-    public static List<Sign> findNearbyShopSigns(InventoryHolder chestShopInventoryHolder) {
-        List<Sign> result = new ArrayList<>();
-
-        if (chestShopInventoryHolder instanceof DoubleChest) {
-            BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
-            BlockState rightChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getRightSide();
-
-            if (leftChestSide == null || rightChestSide == null) {
-                return result;
-            }
-
-            Block leftChest = leftChestSide.getBlock();
-            Block rightChest = rightChestSide.getBlock();
-
-            if (ChestShopSign.isShopBlock(leftChest)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(leftChest));
-            }
-
-            if (ChestShopSign.isShopBlock(rightChest)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(rightChest));
-            }
-        }
-
-        else if (chestShopInventoryHolder instanceof BlockState) {
-            Block chestBlock = ((BlockState) chestShopInventoryHolder).getBlock();
-
-            if (ChestShopSign.isShopBlock(chestBlock)) {
-                result.addAll(uBlock.findAllNearbyShopSigns(chestBlock));
-            }
-        }
-
-        return result;
-    }
 }

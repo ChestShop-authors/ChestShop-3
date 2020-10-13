@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Signs.StockCounter;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +27,7 @@ public class InventoryClose implements Listener {
             return;
         }
 
-        for (Sign shopSign : StockCounter.findNearbyShopSigns(event.getInventory().getHolder())) {
+        for (Sign shopSign : uBlock.findNearbyShopSigns(event.getInventory().getHolder())) {
             if (ChestShopSign.isAdminShop(shopSign)) {
                 return;
             }
@@ -40,6 +41,9 @@ public class InventoryClose implements Listener {
 
             if (Properties.MAX_SHOP_AMOUNT > 99999) {
                 ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
+                if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
+                    StockCounter.removeCounterFromQuantityLine(shopSign);
+                }
                 return;
             }
 

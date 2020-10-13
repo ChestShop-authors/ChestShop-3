@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Signs.StockCounter;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -32,15 +33,17 @@ public class StockCounterManager implements Listener {
 
         if (Properties.MAX_SHOP_AMOUNT > 99999) {
             ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
+            if (QuantityUtil.quantityLineContainsCounter(event.getSign().getLine(QUANTITY_LINE))) {
+                StockCounter.removeCounterFromQuantityLine(event.getSign());
+            }
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSign()) || event.getStock().length == 0) {
+        if (ChestShopSign.isAdminShop(event.getSign())) {
             return;
         }
 
-        for (Sign shopSign : StockCounter.findNearbyShopSigns(event.getOwnerInventory().getHolder())) {
-            Bukkit.getLogger().info("Updating stock counter.");
+        for (Sign shopSign : uBlock.findNearbyShopSigns(event.getOwnerInventory().getHolder())) {
             StockCounter.updateCounterOnQuantityLine(shopSign, event.getOwnerInventory());
         }
     }
