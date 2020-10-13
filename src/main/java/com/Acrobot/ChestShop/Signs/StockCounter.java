@@ -3,16 +3,11 @@ package com.Acrobot.ChestShop.Signs;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
-import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.block.*;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 import java.util.IllegalFormatException;
-import java.util.List;
 
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
 
@@ -42,14 +37,14 @@ public class StockCounter {
     }
 
     public static void removeCounterFromQuantityLine(Sign sign) {
-        int amount;
+        int quantity;
         try {
-            amount = QuantityUtil.parseQuantity(sign.getLine(QUANTITY_LINE));
+            quantity = QuantityUtil.parseQuantity(sign.getLine(QUANTITY_LINE));
         } catch (IllegalFormatException invalidQuantity) {
             return;
         }
 
-        sign.setLine(QUANTITY_LINE, Integer.toString(amount));
+        sign.setLine(QUANTITY_LINE, Integer.toString(quantity));
         sign.update(true);
     }
 
