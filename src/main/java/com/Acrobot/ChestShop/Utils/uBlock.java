@@ -4,7 +4,12 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.Location;
-import org.bukkit.block.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
+import org.bukkit.block.Sign;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.WallSign;
@@ -153,7 +158,6 @@ public class uBlock {
 
     public static List<Sign> findConnectedShopSigns(InventoryHolder chestShopInventoryHolder) {
         List<Sign> result = new ArrayList<>();
-
 
         if (chestShopInventoryHolder instanceof DoubleChest) {
             BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
