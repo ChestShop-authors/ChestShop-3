@@ -61,11 +61,11 @@ public class StockCounterModule implements Listener {
 
     @EventHandler
     public static void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getLocation() == null) {
+        if (!event.getInventory().getType().isCreatable()) {
             return;
         }
 
-        if (!ChestShopSign.isShopBlock(event.getInventory().getLocation().getBlock())) {
+        if (event.getInventory().getLocation() == null || !ChestShopSign.isShopBlock(event.getInventory().getLocation().getBlock())) {
             return;
         }
 
