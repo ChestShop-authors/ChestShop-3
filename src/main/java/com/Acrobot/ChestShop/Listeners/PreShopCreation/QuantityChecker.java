@@ -1,7 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 
 import com.Acrobot.Breeze.Utils.QuantityUtil;
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import org.bukkit.event.EventHandler;
