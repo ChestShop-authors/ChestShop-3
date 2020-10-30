@@ -1,0 +1,91 @@
+prefix: "&a[Shop] &f"
+iteminfo: "&aItem Info:&f"
+iteminfo_fullname: "&fVoller Name: &7%item"
+iteminfo_shopname: "&fShop Name: &7%item"
+iteminfo_repaircost: "&fReparaturkosten: &7%cost"
+iteminfo_book: |-
+  &fBuch Title: &7%title
+  &fAuthor: &7%author
+  &fSeitenanzahl: &7%pages
+iteminfo_book_generatopm: "&fBuch Ausgabe: &7%generation"
+iteminfo_lore: |-
+  &fBeschreibung:
+  &r%lore
+
+METRICS: |-
+  &a[Shop] &fStatistik:
+  &fShopbesitzer: &7%accounts
+  &fTransaktionen in den letzten 30 Minuten: &7%totalTransactions &f(Käufe: &7%buyTransactions &fVerkäufe: &7%sellTransactions&f)
+  &fGehandelte Items in den letzten 30 Minuten: &7%totalItems &f(gekauft: &7%boughtItems &fverkauft: &7%soldItems&f)
+
+ACCESS_DENIED: "Du kannst diese Kiste nicht öffnen da dir der Shop nicht gehört!"
+TRADE_DENIED: "Du hast keine Berechtigung, um mit diesem Shop zu handeln!"
+
+NOT_ENOUGH_MONEY: "Du hast zu wenig Geld!"
+NOT_ENOUGH_MONEY_SHOP: "Der Shop Besitzer hat zu wenig Geld!"
+
+CLIENT_DEPOSIT_FAILED: "Einzahlung auf dein Konto fehlgeschlagen!"
+SHOP_DEPOSIT_FAILED: "Einzahlung auf das Konto des Shop Inhabers fehlgeschlagen!"
+NO_ECONOMY_ACCOUNT: "Der Shopbesitzer hat keinen Economy Account!"
+
+NO_BUYING_HERE: "Du kannst an diesem Shop nichts kaufen!"
+NO_SELLING_HERE: "Du kannst an diesem Shop nichts verkaufen!"
+
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Du hast nicht genug Platz in deinem Inventar!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Die Truhe ist voll!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Du hast nicht ausreichend Items zum verkaufen!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: |-
+  [&7Dein &f%item&7 Shop ist &fvoll&7! &8(Mehr Infos)](&7Verkäufer: &f%seller
+  &7Price: &f%price
+  &7In Welt: &f%world
+  &7Position: &f%x/%y/%z)
+
+NOT_ENOUGH_STOCK: "Dieses Item ist ausverkauft."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: |-
+  [&7Dein &f%item&7 Shop ist &fleer&7! &8(Mehr Infos)](&7Käufer: &f%buyer
+  &7Preis: &f%price
+  &7In Welt: &f%world
+  &7Position: &f%x/%y/%z)
+
+YOU_BOUGHT_FROM_SHOP: "&7Du hast &f%item&7 von &f%owner&7 zum Preis von &f%price&7 gekauft."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[&f%buyer&7 hat &f%item&7 zum Preis von &f%price&7 gekauft.](&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
+
+YOU_SOLD_TO_SHOP: "&7Du hast &f%item&7 an &f%buyer&7 zum Preis von &f%price&7 verkauft."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[&f%seller&7 hat dir &f%item&7 zum Preis von &f%price&7 verkauft.](&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
+
+YOU_CANNOT_CREATE_SHOP: "Du kannst diesen Shop nicht erstellen!"
+NO_CHEST_DETECTED: "Keine Truhe gefunden!"
+INVALID_SHOP_DETECTED: "Der Shop kann nicht genutzt werden!"
+INVALID_SHOP_PRICE: "Der Shop hat einen Preis der nicht genutzt werden kann!"
+INVALID_SHOP_QUANTITY: "Der Shop hat eine Mengenangabe die nicht genutzt werden kann!"
+CANNOT_ACCESS_THE_CHEST: "Du hast keine Berechtigung, um auf diese Truhe zuzugreifen!"
+
+SELL_PRICE_ABOVE_MAX: "Verkaufspreis ist über dem Maximum!"
+SELL_PRICE_BELOW_MIN: "Verkaufspreis ist unter dem Minimum!"
+BUY_PRICE_ABOVE_MAX: "Kaufpreis ist über dem Maximum!"
+BUY_PRICE_BELOW_MIN: "Kaufpreis ist unter dem Minimum!"
+
+CLICK_TO_AUTOFILL_ITEM: "Klicke das Schild mit dem Item welches in dem Shop verkauft werden soll!"
+NO_ITEM_IN_HAND: "Du hast kein Item in deiner Hand um das Schild zu beschreiben!"
+
+PROTECTED_SHOP: "Truhe erfolgreich mit LWC gesichert!"
+PROTECTED_SHOP_SIGN: "Schild erfolgreich mit LWC gesichert!"
+SHOP_CREATED: "Shop erfolgreich erstellt!"
+SHOP_FEE_PAID: "Dir wurden %amount berechnet."
+SHOP_REFUNDED: "Dir wurden %amount erstattet."
+ITEM_GIVEN: "%player hat %item erhalten."
+
+RESTRICTED_SIGN_CREATED: "Schild erfolgreich erstellt!"
+
+PLAYER_NOT_FOUND: "Spieler nicht gefunden!"
+NO_PERMISSION: "Du hast dazu keine Rechte!"
+INCORRECT_ITEM_ID: "Die Item ID ist nicht in Ordnung!"
+NOT_ENOUGH_PROTECTIONS: "Sicherung konnte nicht erstellt werden!"
+
+CANNOT_CREATE_SHOP_HERE: "Du kannst hier keinen Shop erstellen!"
+
+TOGGLE_MESSAGES_OFF: "Du wirst keine Nachrichten mehr von deinen Shops erhalten."
+TOGGLE_MESSAGES_ON: "Du wirst wieder Nachrichten von deinen Shops erhalten."
+
+TOGGLE_ACCESS_ON: "Du kannst nicht mehr mit Shops handeln auf die du zugreifen kannst"
+TOGGLE_ACCESS_OFF: "Du kannst nun mit Shops handeln auf die du zugreifen kannst"
