@@ -9,10 +9,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.InventoryHolder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Acrobot
@@ -150,6 +154,65 @@ public class uBlock {
         }
 
         return ownerShopSign;
+    }
+
+    public static List<Sign> findConnectedShopSigns(InventoryHolder chestShopInventoryHolder) {
+        List<Sign> result = new ArrayList<>();
+
+        if (chestShopInventoryHolder instanceof DoubleChest) {
+            BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
+            BlockState rightChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getRightSide();
+
+            if (leftChestSide == null || rightChestSide == null) {
+                return result;
+            }
+
+            Block leftChest = leftChestSide.getBlock();
+            Block rightChest = rightChestSide.getBlock();
+
+            if (ChestShopSign.isShopBlock(leftChest)) {
+                result.addAll(uBlock.findConnectedShopSigns(leftChest));
+            }
+
+            if (ChestShopSign.isShopBlock(rightChest)) {
+                result.addAll(uBlock.findConnectedShopSigns(rightChest));
+            }
+        }
+
+        else if (chestShopInventoryHolder instanceof BlockState) {
+            Block chestBlock = ((BlockState) chestShopInventoryHolder).getBlock();
+
+            if (ChestShopSign.isShopBlock(chestBlock)) {
+                result.addAll(uBlock.findConnectedShopSigns(chestBlock));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<Sign> findConnectedShopSigns(Block chestBlock) {
+        List<Sign> result = new ArrayList<>();
+
+        for (BlockFace bf : SHOP_FACES) {
+            Block faceBlock = chestBlock.getRelative(bf);
+
+            if (!BlockUtil.isSign(faceBlock)) {
+                continue;
+            }
+
+            Sign sign = (Sign) faceBlock.getState();
+
+            Container signContainer = findConnectedContainer(sign);
+            if (!chestBlock.equals(signContainer.getBlock())) {
+                continue;
+            }
+
+            if (ChestShopSign.isValid(sign)) {
+                result.add(sign);
+            }
+        }
+
+        return result;
     }
 
     public static Sign findAnyNearbyShopSign(Block block) {

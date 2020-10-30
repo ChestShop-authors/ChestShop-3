@@ -20,6 +20,7 @@ import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.MetricsModule;
+import com.Acrobot.ChestShop.Listeners.Modules.StockCounterModule;
 import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
@@ -77,7 +78,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.jar.JarFile;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -394,6 +394,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new DiscountModule());
         registerEvent(new MetricsModule());
         registerEvent(new PriceRestrictionModule());
+        registerEvent(new StockCounterModule());
 
         registerEconomicalModules();
     }
