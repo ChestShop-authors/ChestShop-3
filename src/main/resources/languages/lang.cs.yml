@@ -57,7 +57,6 @@ SELL_PRICE_BELOW_MIN: "Prodejní cena je nižší než nastavené minimum!"
 BUY_PRICE_ABOVE_MAX: "Nákupní cena je vyšší než nastavené maximum!"
 BUY_PRICE_BELOW_MIN: "Nákupní cena je nižší než nastavené maximum!"
 
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
 CLICK_TO_AUTOFILL_ITEM: "Klikni na ceduli s předmětem, který chceš prodávat!"
 NO_ITEM_IN_HAND: "Nemáš v ruce předmět, automatické předvyplnění není možné!"
 
@@ -80,6 +79,5 @@ CANNOT_CREATE_SHOP_HERE: "Zde není možné vytvořit obchod!"
 TOGGLE_MESSAGES_OFF: "Zprávy z tvých obchodů již nebudou nadále zobrazovány."
 TOGGLE_MESSAGES_ON: "Zprávy z tvých obchodů budou zase zobrazovány."
 
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to."
 TOGGLE_ACCESS_ON: "Nadále již nemůžeš obchodovat s obchody, do kterých máš přístup."
 TOGGLE_ACCESS_OFF: "Opět můžeš obchodovat s obchody, do kterých máš přístup."
