@@ -20,6 +20,8 @@ METRICS: |-
 
 ACCESS_DENIED: "Du kannst diese Kiste nicht öffnen da dir der Shop nicht gehört!"
 TRADE_DENIED: "Du hast keine Berechtigung, um mit diesem Shop zu handeln!"
+TRADE_DENIED_ACCESS_PERMS: "Du darfst nicht mit Shops handeln auf die du zugreifen kannst!"
+TRADE_DENIED_CREATIVE_MODE: "Du darfst nicht mit Shops handeln während du im Kreativmodus bist!"
 
 NOT_ENOUGH_MONEY: "Du hast zu wenig Geld!"
 NOT_ENOUGH_MONEY_SHOP: "Der Shop Besitzer hat zu wenig Geld!"

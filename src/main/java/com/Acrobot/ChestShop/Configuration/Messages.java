@@ -33,6 +33,8 @@ public class Messages {
 
     public static Message ACCESS_DENIED;
     public static Message TRADE_DENIED;
+    public static Message TRADE_DENIED_ACCESS_PERMS;
+    public static Message TRADE_DENIED_CREATIVE_MODE;
 
     public static Message NOT_ENOUGH_MONEY;
     public static Message NOT_ENOUGH_MONEY_SHOP;

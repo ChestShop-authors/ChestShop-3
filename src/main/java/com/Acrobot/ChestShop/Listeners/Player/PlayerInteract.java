@@ -126,6 +126,7 @@ public class PlayerInteract implements Listener {
                     return;
                 }
                 // don't allow owners or people with access to buy/sell at this shop
+                Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
                 return;
             }
         }

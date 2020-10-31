@@ -20,6 +20,8 @@ METRICS: |-
 
 ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
 TRADE_DENIED: "You don't have permission to trade with that shop!"
+TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
+TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
 
 NOT_ENOUGH_MONEY: "You don't have enough money!"
 NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"

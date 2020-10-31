@@ -21,8 +21,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.Acrobot.ChestShop.Configuration.Messages.CLIENT_DEPOSIT_FAILED;
@@ -113,6 +111,9 @@ public class ErrorMessageSender implements Listener {
                 break;
             case INVALID_SHOP:
                 message = Messages.INVALID_SHOP_DETECTED;
+                break;
+            case CREATIVE_MODE_PROTECTION:
+                message = Messages.TRADE_DENIED_CREATIVE_MODE;
                 break;
             default:
                 break;
