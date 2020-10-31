@@ -150,7 +150,7 @@ public class Properties {
     public static String SHIFT_ALLOWS = "ALL";
 
     @ConfigurationComment("Can shop's chest be opened by owner with right-clicking a shop's sign?")
-    public static boolean ALLOW_SIGN_CHEST_OPEN = true;
+    public static boolean ALLOW_SIGN_CHEST_OPEN = false;
 
     @ConfigurationComment("If true, when you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign.")
     public static boolean ALLOW_LEFT_CLICK_DESTROYING = true;
