@@ -35,3 +35,4 @@ Links
 * [BukkitDev site](http://dev.bukkit.org/projects/chestshop/)
 * [SpigotMC site](https://www.spigotmc.org/resources/chestshop.51856/)
 * [Bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+)
+* [Localization](https://crowdin.com/project/chestshop-3)

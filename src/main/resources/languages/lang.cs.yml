@@ -7,6 +7,7 @@ iteminfo_book: |-
   &fTitul knihy: &7%title
   &fAutor knihy: &7%author
   &fPočet stran: &7%pages
+
 iteminfo_book_generation: "&fGenerace knihy: &7%generation"
 iteminfo_lore: |-
   &fLore:

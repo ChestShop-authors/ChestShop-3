@@ -7,7 +7,8 @@ iteminfo_book: |-
   &fBuch Title: &7%title
   &fAuthor: &7%author
   &fSeitenanzahl: &7%pages
-iteminfo_book_generatopm: "&fBuch Ausgabe: &7%generation"
+
+iteminfo_book_generation: "&fBuch Ausgabe: &7%generation"
 iteminfo_lore: |-
   &fBeschreibung:
   &r%lore
