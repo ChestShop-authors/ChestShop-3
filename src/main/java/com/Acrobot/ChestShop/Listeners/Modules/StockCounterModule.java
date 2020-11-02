@@ -54,9 +54,11 @@ public class StockCounterModule implements Listener {
         }
 
         ItemStack itemTradedByShop = determineItemTradedByShop(event.getSignLine(ITEM_LINE));
-        Inventory chestShopInventory = uBlock.findConnectedContainer(event.getSign()).getInventory();
+        if (itemTradedByShop != null) {
+            Inventory chestShopInventory = uBlock.findConnectedContainer(event.getSign()).getInventory();
 
-        event.setSignLine(QUANTITY_LINE, getQuantityLineWithCounter(quantity, itemTradedByShop, chestShopInventory));
+            event.setSignLine(QUANTITY_LINE, getQuantityLineWithCounter(quantity, itemTradedByShop, chestShopInventory));
+        }
     }
 
     @EventHandler
