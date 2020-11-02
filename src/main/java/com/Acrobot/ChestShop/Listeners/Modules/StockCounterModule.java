@@ -10,6 +10,7 @@ import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,9 +56,10 @@ public class StockCounterModule implements Listener {
 
         ItemStack itemTradedByShop = determineItemTradedByShop(event.getSignLine(ITEM_LINE));
         if (itemTradedByShop != null) {
-            Inventory chestShopInventory = uBlock.findConnectedContainer(event.getSign()).getInventory();
-
-            event.setSignLine(QUANTITY_LINE, getQuantityLineWithCounter(quantity, itemTradedByShop, chestShopInventory));
+            Container container = uBlock.findConnectedContainer(event.getSign());
+            if (container != null) {
+                event.setSignLine(QUANTITY_LINE, getQuantityLineWithCounter(quantity, itemTradedByShop, container.getInventory()));
+            }
         }
     }
 
