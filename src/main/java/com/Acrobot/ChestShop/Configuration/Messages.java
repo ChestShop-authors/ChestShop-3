@@ -125,6 +125,11 @@ public class Messages {
         }
         manager = new LanguageManager(ChestShop.getPlugin(), Properties.DEFAULT_LANGUAGE);
 
+        if (manager.getDefaultConfig() == null) {
+            manager.setDefaultLocale("en");
+            ChestShop.getBukkitLogger().log(Level.WARNING, "There is no language file for your DEFAULT_LANGUAGE config setting of '" + Properties.DEFAULT_LANGUAGE + "' in your languages folder! Using default English as default until you have created one or changed the config option to another, existing language file.");
+        }
+
         // Legacy locale.yml file
         File legacyFile = new File(ChestShop.getPlugin().getDataFolder(), "local.yml");
         if (legacyFile.exists()) {
