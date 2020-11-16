@@ -79,7 +79,9 @@ public class NameManager implements Listener {
     public static Account getOrCreateAccount(UUID id, String name) {
         Validate.notNull(id, "UUID of player is null?");
         Validate.notNull(name, "Name of player " + id + " is null?");
-        Validate.isTrue(uuidVersion < 0 || id.version() == uuidVersion, "Invalid OfflinePlayer! " + id + " is not of server version " + uuidVersion);
+        Validate.isTrue(!Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || id.version() == uuidVersion,
+                "Invalid OfflinePlayer! " + id + " has version " + id.version() + " and not server version " + uuidVersion + ". " +
+                        "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
 
         Account account = getAccount(id);
         if (account == null) {
@@ -191,7 +193,7 @@ public class NameManager implements Listener {
             // no account with that shortname was found, try to get an offline player with that name
             OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(shortName);
             if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
-                    && offlinePlayer.getUniqueId().version() == uuidVersion) {
+                    && (!Properties.ENSURE_CORRECT_PLAYERID || offlinePlayer.getUniqueId().version() == uuidVersion)) {
                 account = storeUsername(new PlayerDTO(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
             } else {
                 invalidPlayers.put(shortName.toLowerCase(Locale.ROOT), true);
@@ -415,8 +417,12 @@ public class NameManager implements Listener {
     }
 
     public static void load() {
-        if (getUuidVersion() < 0 && !Bukkit.getOnlinePlayers().isEmpty()) {
-            setUuidVersion(Bukkit.getOnlinePlayers().iterator().next().getUniqueId().version());
+        if (getUuidVersion() < 0) {
+            if (Bukkit.getOnlineMode()) {
+                setUuidVersion(4);
+            } else if (!Bukkit.getOnlinePlayers().isEmpty()) {
+                setUuidVersion(Bukkit.getOnlinePlayers().iterator().next().getUniqueId().version());
+            }
         }
         try {
             accounts = DaoCreator.getDaoAndCreateTable(Account.class);
