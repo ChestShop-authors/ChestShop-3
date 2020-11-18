@@ -427,7 +427,8 @@ public class ChestShop extends JavaPlugin {
                 "total", MetricsModule.getTotalTransactions(),
                 "buy", MetricsModule.getBuyTransactions(),
                 "sell", MetricsModule.getSellTransactions()
-        )));bStats.addCustomChart(new Metrics.MultiLineChart("itemCount", () -> ImmutableMap.of(
+        )));
+        bStats.addCustomChart(new Metrics.MultiLineChart("itemCount", () -> ImmutableMap.of(
                 "total", MetricsModule.getTotalItemsCount(),
                 "buy", MetricsModule.getSoldItemsCount(),
                 "sell", MetricsModule.getBoughtItemsCount()
@@ -438,6 +439,7 @@ public class ChestShop extends JavaPlugin {
 
         bStats.addCustomChart(new Metrics.AdvancedBarChart("pluginProperties", () -> {
             Map<String, int[]> map = new LinkedHashMap<>();
+            map.put("ensure-correct-playerid", getChartArray(Properties.ENSURE_CORRECT_PLAYERID));
             map.put("reverse-buttons", getChartArray(Properties.REVERSE_BUTTONS));
             map.put("shift-sells-in-stacks", getChartArray(Properties.SHIFT_SELLS_IN_STACKS));
             map.put("shift-sells-everything", getChartArray(Properties.SHIFT_SELLS_EVERYTHING));
