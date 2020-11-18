@@ -373,6 +373,7 @@ public class ChestShop extends JavaPlugin {
             registerEvent(new AmountAndPriceChecker());
         }
 
+        registerEvent(new InvalidNameIgnorer());
         registerEvent(new CreativeModeIgnorer());
         registerEvent(new ErrorMessageSender());
         registerEvent(new PermissionChecker());

@@ -32,10 +32,10 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[] SHOP_SIGN_PATTERN = {
-            Pattern.compile("^?[\\w -.:]*$"),
+            Pattern.compile("^?[\\w \\-.:]*$"),
             Pattern.compile("^[1-9][0-9]{0,5}$|^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$"),
             Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
-            Pattern.compile("^[\\w? #:-]+$")
+            Pattern.compile("^[\\w? #:\\-]+$")
     };
     public static final String AUTOFILL_CODE = "?";
 
