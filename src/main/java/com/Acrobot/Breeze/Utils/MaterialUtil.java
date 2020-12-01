@@ -6,12 +6,10 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.MaterialParseEvent;
-import com.google.common.collect.ImmutableMap;
 import de.themoep.ShowItem.api.ShowItem;
-import de.themoep.minedown.Replacer;
+import de.themoep.minedown.adventure.Replacer;
 import info.somethingodd.OddItem.OddItem;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConstructor;
@@ -21,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONObject;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -35,7 +32,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftCharWidth;
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
@@ -541,29 +537,27 @@ public class MaterialUtil {
                 return false;
             }
 
-            List<String> itemJson = new ArrayList<>();
+            Component itemComponent = Component.empty();
             for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
                 try {
-                    itemJson.add(showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player));
+                    itemComponent.append(showItem.getItemConverter().createComponent(item, Level.FINE).toTextComponent(player));
                 } catch (Exception e) {
                     ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());
                     return false;
                 }
             }
 
-            String joinedItemJson = itemJson.stream().collect(Collectors.joining("," + new JSONObject(ImmutableMap.of("text", " ")).toJSONString() + ", "));
-
             Map<String, String> newMap = new LinkedHashMap<>(replacementMap);
             newMap.put("material", "item");
-            BaseComponent[] components = new Replacer()
+            Component component = new Replacer()
                     .placeholderSuffix("")
-                    .replace("item", ComponentSerializer.parse("[" + joinedItemJson + "]"))
-                    .replaceIn(message.getComponents(player, true, newMap, replacements));
+                    .replace("item",itemComponent)
+                    .replaceIn(message.getComponent(player, true, newMap, replacements));
             if (player != null) {
-                player.spigot().sendMessage(components);
+                ChestShop.getAudiences().player(player).sendMessage(component);
                 return true;
             } else if (playerName != null) {
-                ChestShop.sendBungeeMessage(playerName, components);
+                ChestShop.sendBungeeMessage(playerName, component);
                 return true;
             }
 

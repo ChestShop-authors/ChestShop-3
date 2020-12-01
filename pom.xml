@@ -83,9 +83,29 @@
 
         <dependency>
             <groupId>de.themoep</groupId>
-            <artifactId>minedown</artifactId>
-            <version>1.6.1-SNAPSHOT</version>
+            <artifactId>minedown-adventure</artifactId>
+            <version>1.6.2-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bukkit</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.2.0</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Should be kept in sync with Mojang -->
@@ -312,7 +332,7 @@
         <dependency>
             <groupId>de.themoep.showitem</groupId>
             <artifactId>api</artifactId>
-            <version>1.2.24</version>
+            <version>1.6.3</version>
             <scope>provided</scope>
         </dependency>
 
@@ -375,6 +395,7 @@
                                 <includes>
                                     <include>de.themoep:*</include>
                                     <include>de.themoep.utils:*</include>
+                                    <include>net.kyori:*</include>
                                     <include>org.bstats:*</include>
                                     <include>net.gravitydevelopment.updater</include>
                                     <include>com.j256.ormlite</include>
@@ -385,11 +406,15 @@
                             <relocations>
                                 <relocation>
                                     <pattern>de.themoep.utils.lang</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop.Lang</shadedPattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.Lang</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>de.themoep.minedown</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop.MineDown</shadedPattern>
+                                    <pattern>de.themoep.minedown.adventure</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.MineDown</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.Kyori</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
@@ -401,11 +426,11 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>com.j256.ormlite</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop.ORMlite</shadedPattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.ORMlite</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>javax.persistence</pattern>
-                                    <shadedPattern>com.Acrobot.ChestShop.javax.persistence</shadedPattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.javax.persistence</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -506,7 +531,7 @@
                 <dependency>
                     <groupId>com.destroystokyo.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.16.1-R0.1-SNAPSHOT</version>
+                    <version>1.16.4-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

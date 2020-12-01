@@ -47,6 +47,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.apache.logging.log4j.Level;
@@ -93,6 +96,8 @@ public class ChestShop extends JavaPlugin {
     private static Server server;
     private static PluginDescriptionFile description;
 
+    private static BukkitAudiences audiences;
+
     private static File dataFolder;
     private static ItemDatabase itemDatabase;
 
@@ -116,6 +121,7 @@ public class ChestShop extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        audiences = BukkitAudiences.create(this);
         turnOffDatabaseLogging();
         if (!handleMigrations()) {
             return;
@@ -518,6 +524,10 @@ public class ChestShop extends JavaPlugin {
         return plugin;
     }
 
+    public static BukkitAudiences getAudiences() {
+        return audiences;
+    }
+
     public static void registerListener(Listener listener) {
         plugin.registerEvent(listener);
     }
@@ -527,7 +537,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     public static void sendBungeeMessage(String playerName, Messages.Message message, Map<String, String> replacementMap, String... replacements) {
-        sendBungeeMessage(playerName, message.getComponents(null, true, replacementMap, replacements));
+        sendBungeeMessage(playerName, message.getComponent(null, true, replacementMap, replacements));
     }
 
     public static void sendBungeeMessage(String playerName, String message) {
@@ -536,6 +546,10 @@ public class ChestShop extends JavaPlugin {
 
     public static void sendBungeeMessage(String playerName, BaseComponent[] message) {
         sendBungeeMessage(playerName, "MessageRaw", ComponentSerializer.toString(message));
+    }
+
+    public static void sendBungeeMessage(String playerName, Component message) {
+        sendBungeeMessage(playerName, "MessageRaw", GsonComponentSerializer.gson().serialize(message));
     }
 
     private static void sendBungeeMessage(String playerName, String channel, String message) {

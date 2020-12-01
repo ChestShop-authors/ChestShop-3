@@ -2,11 +2,13 @@ package com.Acrobot.ChestShop.Configuration;
 
 import com.Acrobot.Breeze.Configuration.Configuration;
 import com.Acrobot.ChestShop.ChestShop;
-import de.themoep.minedown.MineDown;
+import de.themoep.minedown.adventure.MineDown;
 import de.themoep.utils.lang.bukkit.BukkitLanguageConfig;
 import de.themoep.utils.lang.bukkit.LanguageManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
@@ -154,22 +156,27 @@ public class Messages {
         }
 
         public void sendWithPrefix(CommandSender sender, Map<String, String> replacementMap, String... replacements) {
-            sender.spigot().sendMessage(getComponents(sender, true, replacementMap, replacements));
+            ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, true, replacementMap, replacements));
         }
 
         public void sendWithPrefix(CommandSender sender, Map<String, String> replacements) {
-            sender.spigot().sendMessage(getComponents(sender, true, replacements));
+            ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, true, replacements));
         }
 
         public void sendWithPrefix(CommandSender sender, String... replacements) {
-            sender.spigot().sendMessage(getComponents(sender, true, Collections.emptyMap(), replacements));
+            ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, true, Collections.emptyMap(), replacements));
         }
 
         public void send(CommandSender sender, String... replacements) {
-            sender.spigot().sendMessage(getComponents(sender, false, Collections.emptyMap(), replacements));
+            ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, false, Collections.emptyMap(), replacements));
         }
 
+        @Deprecated
         public BaseComponent[] getComponents(CommandSender sender, boolean prefixSuffix, Map<String, String> replacementMap, String... replacements) {
+            return BungeeComponentSerializer.get().serialize(getComponent(sender, prefixSuffix, replacementMap, replacements));
+        }
+
+        public Component getComponent(CommandSender sender, boolean prefixSuffix, Map<String, String> replacementMap, String... replacements) {
             MineDown mineDown = new MineDown("%prefix" + getLang(sender));
             mineDown.placeholderSuffix("");
             mineDown.replace("prefix", prefixSuffix ? prefix.getLang(sender) : "");
@@ -183,7 +190,7 @@ public class Messages {
         }
 
         public String getTextWithPrefix(CommandSender sender, Map<String, String> replacementMap, String... replacements) {
-            return TextComponent.toLegacyText(getComponents(sender, true, replacementMap, replacements));
+            return LegacyComponentSerializer.legacySection().serialize(getComponent(sender, true, replacementMap, replacements));
         }
 
         public String getTextWithPrefix(CommandSender sender, String... replacements) {
