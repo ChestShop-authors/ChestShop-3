@@ -189,6 +189,10 @@ public class AdminInventory implements Inventory {
         return 0;
     }
 
+    public boolean isEmpty() {
+        return false;
+    }
+
     @Override
     public void remove(Material material) {
     }
