@@ -131,10 +131,10 @@ public class Properties {
     @ConfigurationComment("(In 1/1000th of a second) How often can a player use the shop sign?")
     public static int SHOP_INTERACTION_INTERVAL = 250;
 
-    @ConfigurationComment("Do you want to allow using shops to people in creative mode?")
+    @ConfigurationComment("Do you want to block people in creative mode from using shops?")
     public static boolean IGNORE_CREATIVE_MODE = true;
 
-    @ConfigurationComment("Do you want to allow using shops to people who have access to it due to their permissions? (owners are always ignored)")
+    @ConfigurationComment("Do you want to block people who have access to a shop due to their permissions from using it? (owners are always ignored)")
     public static boolean IGNORE_ACCESS_PERMS = true;
 
     @ConfigurationComment("If true, people will buy with left-click and sell with right-click.")
