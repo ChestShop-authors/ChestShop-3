@@ -10,6 +10,9 @@ import de.themoep.ShowItem.api.ShowItem;
 import de.themoep.minedown.adventure.Replacer;
 import info.somethingodd.OddItem.OddItem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConstructor;
@@ -537,10 +540,10 @@ public class MaterialUtil {
                 return false;
             }
 
-            Component itemComponent = Component.empty();
+            TextComponent.Builder itemComponent = Component.text();
             for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
                 try {
-                    itemComponent.append(showItem.getItemConverter().createComponent(item, Level.FINE).toTextComponent(player));
+                    itemComponent.append(GsonComponentSerializer.gson().deserialize(showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player)));
                 } catch (Exception e) {
                     ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());
                     return false;
@@ -551,7 +554,7 @@ public class MaterialUtil {
             newMap.put("material", "item");
             Component component = new Replacer()
                     .placeholderSuffix("")
-                    .replace("item",itemComponent)
+                    .replace("item",itemComponent.build())
                     .replaceIn(message.getComponent(player, true, newMap, replacements));
             if (player != null) {
                 ChestShop.getAudiences().player(player).sendMessage(component);
