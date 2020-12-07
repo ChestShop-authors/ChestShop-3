@@ -1,0 +1,68 @@
+---
+prefix: "&a[상점] &r"
+iteminfo: "&a아이템 정보: &r"
+iteminfo_fullname: "&fFull Name: &7%item"
+iteminfo_shopname: "&fShop Sign: &7%item"
+iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo_book: |-
+  &fBook Title: &7%title
+  &fBook Author: &7%author
+  &fBook Pages: &7%pages
+iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_lore: |-
+  &fLore:
+  &r%lore
+METRICS: |-
+  &a[Shop] &fMetrics:
+  &fAccounts: &7%accounts
+  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+ACCESS_DENIED: "당신은 그것을 할 권한이 없습니다!"
+TRADE_DENIED: "You don't have permission to trade with that shop!"
+TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
+TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+NOT_ENOUGH_MONEY: "당신은 충분한 돈을 가지고 있지 않습니다!"
+NOT_ENOUGH_MONEY_SHOP: "상점 주인은 돈을 충분히 가지고 있지 않습니다!"
+CLIENT_DEPOSIT_FAILED: "당신의 계좌로 돈을 입금하는 것을 실패했습니다!"
+SHOP_DEPOSIT_FAILED: "상점 주인에게로 돈 입금이 실패되었습니다!"
+NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_BUYING_HERE: "당신은 여기서 살 수 없습니다!"
+NO_SELLING_HERE: "당신은 여기서 팔 수 없습니다!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "당신의 인벤토리에 충분한 공간이 없습니다!"
+NOT_ENOUGH_SPACE_IN_CHEST: "창고에 공간이 충분하지 않습니다!"
+NOT_ENOUGH_ITEMS_TO_SELL: "당신은 판매할 아이템을 충분히 가지고 있지 않습니다!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "이 상점은 재고가 바닥났습니다!"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "당신의 %material 상점은 재고가 바닥났습니다!"
+YOU_BOUGHT_FROM_SHOP: "당신은 %owner님으로부터 %price에 %item을/를 구매했습니다."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "%buyer님은 %item을/를 %price에 구매했습니다."
+YOU_SOLD_TO_SHOP: "당신은 %price에 %item을/를 %buyer님에게 팔았습니다"
+SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller님은 %item을/를 %price에 팔았습니다."
+YOU_CANNOT_CREATE_SHOP: "당신은 이 종류의 상점을 만들 수 없습니다!"
+NO_CHEST_DETECTED: "창고를 찾을 수 없습니다!"
+INVALID_SHOP_DETECTED: "그 상점은 사용할 수 없습니다!"
+INVALID_SHOP_PRICE: "The shop has an invalid price!"
+INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+CANNOT_ACCESS_THE_CHEST: "당신은 이 상자에 접근할 권한이 없습니다!"
+SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
+SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
+BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
+BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
+CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
+NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+PROTECTED_SHOP: "성공적으로 상점이 LWC로 보호되었습니다!"
+PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+SHOP_CREATED: "상점이 성공적으로 만들어졌습니다!"
+SHOP_FEE_PAID: "당신은 %amount 만큼 수수료를 지불했습니다."
+SHOP_REFUNDED: "당신은 %amount 만큼 환불받았습니다."
+ITEM_GIVEN: "Given %item to %player."
+RESTRICTED_SIGN_CREATED: "표지판이 성공적으로 만들어졌습니다!"
+PLAYER_NOT_FOUND: "Player not found!"
+NO_PERMISSION: "당신은 그것을 할 권한을 가지고 있지 않습니다!"
+INCORRECT_ITEM_ID: "잘못된 아이템 ID를 입력하였습니다!"
+NOT_ENOUGH_PROTECTIONS: "보호를 만들 수 없습니다!"
+CANNOT_CREATE_SHOP_HERE: "당신은 여기에 상점을 만들 수 없습니다!"
+TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
+TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
+TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
+TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"

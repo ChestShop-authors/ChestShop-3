@@ -1,0 +1,68 @@
+---
+prefix: "&a[Bolt] &r"
+iteminfo: "'&aTárgy Információ: &r"
+iteminfo_fullname: "&fTeljes Név: &7%item"
+iteminfo_shopname: "&fBolt Tábla: &7%item"
+iteminfo_repaircost: "&fJavítási Költség: &7%cost"
+iteminfo_book: |-
+  &fKönyvcím: &7%title
+  &fKönyv Szerző: &7%author
+  &fKönyvoldalak: &7%pages
+iteminfo_book_generation: "&fKönyv Generáció: &7%generation"
+iteminfo_lore: |-
+  &fLore:
+  &r%lore
+METRICS: |-
+  &a[Bolt] &fMetrikák:
+  &fFiókok: &7%accounts
+  &fÁtlagos tranzakciók: &7%totalTransactions &f(vétel: &7%buyTransactions &feladás: &7%sellTransactions&f)
+  &fÁtlagos tárgy kereskedések: &7%totalItems &f(vásárolt: &7%boughtItems &feladott: &7%soldItems&f)
+ACCESS_DENIED: "Nincs engedélyed hozzáférni ennek a boltnak a tárolójához!"
+TRADE_DENIED: "Nincs engedélyed kereskedni ebben a boltban!"
+TRADE_DENIED_ACCESS_PERMS: "Nem kereskedhetsz olyan boltokban, amelyekhez hozzáférsz!"
+TRADE_DENIED_CREATIVE_MODE: "Nem kereskedhetsz a boltokban kreatív módban!"
+NOT_ENOUGH_MONEY: "Nincs elég pénzed!"
+NOT_ENOUGH_MONEY_SHOP: "A bolt tulajnak nincs elég pénze!"
+CLIENT_DEPOSIT_FAILED: "A számládra történő befizetés nem sikerült!"
+SHOP_DEPOSIT_FAILED: "A pénzbefizetés a bolt tulajnak sikertelen!"
+NO_ECONOMY_ACCOUNT: "A bolt tulajnak nincs gazdasági számlája!"
+NO_BUYING_HERE: "Itt nem lehet vásárolni!"
+NO_SELLING_HERE: "Itt nem lehet eladni!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Nincs elég hely a készletedben!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Nincs elég hely a ládában!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Nincs elég tárgyad az eladáshoz!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 bolt tele van!](&f%seller&7 próbált eladni\n&7Ebben a világban: &f%world\n&7Ezen a helyen: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "Ez a bolt kifogyott."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 bolt kifogyott!](&f%buyer&7 próbált vásárolni\n&7Ebben a világban: &f%world\n&7Ezen a helyen: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "Vettél %item-t %owner-től/-tól %price-t."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer vásárolt %item-t %price-t.](&7Ebben a világban: &f%world\n&7Ezen a helyen: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "Eladtál %item-t %buyer-nak/-nek %price-t."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller eladott %item-t %price-t.](&7Eben a világban: &f%world\n&7Ezen a helyen: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "Nem hozhatsz létre ilyen típusú boltot!"
+NO_CHEST_DETECTED: "Nem található egy láda!"
+INVALID_SHOP_DETECTED: "A bolt nem használható!"
+INVALID_SHOP_PRICE: "A bolt ára érvénytelen!"
+INVALID_SHOP_QUANTITY: "A bolt mennyisége érvénytelen!"
+CANNOT_ACCESS_THE_CHEST: "Nincs engedélyed hozzáférni ehhez a ládához!"
+SELL_PRICE_ABOVE_MAX: "Az eladási ár meghaladja a maximumot!"
+SELL_PRICE_BELOW_MIN: "Az eladási ár a minimum alatt van!"
+BUY_PRICE_ABOVE_MAX: "A vételár meghaladja a maximumot!"
+BUY_PRICE_BELOW_MIN: "A vételár a minimum alatt van!"
+CLICK_TO_AUTOFILL_ITEM: "Kattints a táblára azzal a tárggyal, ami a bolthoz tartozik!"
+NO_ITEM_IN_HAND: "Nincs egy tárgy a kezedben az automatikus feltöltéshez!"
+PROTECTED_SHOP: "Sikeresen levédted a boltot az LWC-vel!"
+PROTECTED_SHOP_SIGN: "Sikeresen levédted a bolt táblát az LWC-vel!"
+SHOP_CREATED: "A bolt sikeresen létrehozva!"
+SHOP_FEE_PAID: "Felszámolásra került %amount"
+SHOP_REFUNDED: "Visszatérítésre került %amount."
+ITEM_GIVEN: "%item adva %player-nak/-nek."
+RESTRICTED_SIGN_CREATED: "A tábla sikeresen létrehozva!"
+PLAYER_NOT_FOUND: "Játékos nem található!"
+NO_PERMISSION: "Ehhez nincs engedélyed!"
+INCORRECT_ITEM_ID: "Érvénytelen tárgy id-t adtál meg!"
+NOT_ENOUGH_PROTECTIONS: "Nem sikerült létrehozni egy levédést!"
+CANNOT_CREATE_SHOP_HERE: "Itt nem lehet boltot létrehozni!"
+TOGGLE_MESSAGES_OFF: "Nem fogsz több üzeneteket kapni a boltodról, vagy boltjaidról."
+TOGGLE_MESSAGES_ON: "Mostantól üzeneteket fogsz kapni a boltodról, vagy boltjaidról."
+TOGGLE_ACCESS_ON: "Már nem kereskedhetsz olyan boltokban, amelyekhez hozzáférsz"
+TOGGLE_ACCESS_OFF: "Most kereskedhetsz olyan boltokban, amelyekhez hozzáférsz"
