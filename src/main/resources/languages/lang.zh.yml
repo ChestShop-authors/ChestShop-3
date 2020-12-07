@@ -1,0 +1,68 @@
+---
+prefix: "&a[商店] &r"
+iteminfo: "&a物品信息: &r"
+iteminfo_fullname: "&fFull Name: &7%item"
+iteminfo_shopname: "&fShop Sign: &7%item"
+iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo_book: |-
+  &fBook Title: &7%title
+  &fBook Author: &7%author
+  &fBook Pages: &7%pages
+iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_lore: |-
+  &fLore:
+  &r%lore
+METRICS: |-
+  &a[Shop] &fMetrics:
+  &fAccounts: &7%accounts
+  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+ACCESS_DENIED: "你没有足够的权限!"
+TRADE_DENIED: "You don't have permission to trade with that shop!"
+TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
+TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+NOT_ENOUGH_MONEY: "你没有足够的金钱!"
+NOT_ENOUGH_MONEY_SHOP: "商店老板没有足够的金钱!"
+CLIENT_DEPOSIT_FAILED: "金钱存入你的帐户失败!"
+SHOP_DEPOSIT_FAILED: "金钱存入商店老板的帐户失败!"
+NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_BUYING_HERE: "你不能在这里买!"
+NO_SELLING_HERE: "你不能在这里卖!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "这个箱子没有足够的库存!"
+NOT_ENOUGH_SPACE_IN_CHEST: "这个箱子没有足够的空间!"
+NOT_ENOUGH_ITEMS_TO_SELL: "你没有足够的物品可以出售!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "这家商店断货了."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "你商店的 %material 断货了!"
+YOU_BOUGHT_FROM_SHOP: "你花费 %price 买下 %owner 的物品 %item ."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "%buyer 花费 %price 买下你的物品 %item ."
+YOU_SOLD_TO_SHOP: "你以 %price 的价格卖出物品 %item 给 %buyer ."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller 以 %price 的价格卖出物品 %item 给你."
+YOU_CANNOT_CREATE_SHOP: "你不能创建这种类型的商店!"
+NO_CHEST_DETECTED: "找不到箱子!"
+INVALID_SHOP_DETECTED: "这个商店无法使用!"
+INVALID_SHOP_PRICE: "The shop has an invalid price!"
+INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+CANNOT_ACCESS_THE_CHEST: "你没有权限打开这个箱子!"
+SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
+SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
+BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
+BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
+CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
+NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+PROTECTED_SHOP: "LWC成功保护了商店!"
+PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+SHOP_CREATED: "商店创建成功!"
+SHOP_FEE_PAID: "扣除你 %amount"
+SHOP_REFUNDED: "退还你 %amount"
+ITEM_GIVEN: "Given %item to %player."
+RESTRICTED_SIGN_CREATED: "告示牌创建成功!"
+PLAYER_NOT_FOUND: "Player not found!"
+NO_PERMISSION: "你没有权限!"
+INCORRECT_ITEM_ID: "你指定的物品ID无效!"
+NOT_ENOUGH_PROTECTIONS: "无法创建保护!"
+CANNOT_CREATE_SHOP_HERE: "你不能在这里创建商店!"
+TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
+TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
+TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
+TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
