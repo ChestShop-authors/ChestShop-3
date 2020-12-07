@@ -1,3 +1,8 @@
 files:
   - source: /src/main/resources/languages/lang.en.yml
     translation: /src/main/resources/languages/lang.%two_letters_code%.yml
+    languages_mapping:
+      two_letters_code:
+        zh-TW: zh_TW
+        pt-BR: pt_BR
+        es-MX: es_MX
