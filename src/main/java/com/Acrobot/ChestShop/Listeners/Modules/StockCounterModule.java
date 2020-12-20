@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -65,7 +66,7 @@ public class StockCounterModule implements Listener {
 
     @EventHandler
     public static void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getLocation() == null || !ChestShopSign.isShopBlock(event.getInventory().getLocation().getBlock())) {
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null || !ChestShopSign.isShopBlock(event.getInventory().getLocation().getBlock())) {
             return;
         }
 
