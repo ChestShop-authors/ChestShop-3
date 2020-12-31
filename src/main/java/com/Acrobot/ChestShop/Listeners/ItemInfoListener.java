@@ -31,7 +31,28 @@ import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_repaircost;
  */
 public class ItemInfoListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
+    public static void messageHandler(ItemInfoEvent event) {
+        CommandSender sender = event.getSender();
+        ItemStack item = event.getItem();
+        iteminfo.send(sender);
+        try {
+            iteminfo_fullname.send(sender, "item", MaterialUtil.getName(item));
+        } catch (IllegalArgumentException e) {
+            event.getSender().sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
+            return;
+        }
+
+        try {
+            iteminfo_shopname.send(sender, "item", MaterialUtil.getSignName(item));
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "Error while generating shop sign name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public static void addRepairCost(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof Repairable && ((Repairable) meta).getRepairCost() > 0) {
@@ -39,7 +60,7 @@ public class ItemInfoListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void addEnchantment(ItemInfoEvent event) {
         ItemStack item = event.getItem();
         ItemMeta meta = item.getItemMeta();
@@ -56,7 +77,7 @@ public class ItemInfoListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void addPotionInfo(ItemInfoEvent event) {
         ItemStack item = event.getItem();
 
@@ -97,7 +118,7 @@ public class ItemInfoListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void addBookInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta instanceof BookMeta) {
@@ -115,7 +136,7 @@ public class ItemInfoListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void addLoreInfo(ItemInfoEvent event) {
         ItemMeta meta = event.getItem().getItemMeta();
         if (meta.hasLore()) {
