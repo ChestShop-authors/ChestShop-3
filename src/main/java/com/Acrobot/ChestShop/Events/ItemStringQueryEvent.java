@@ -9,16 +9,13 @@ public class ItemStringQueryEvent extends Event {
 
     private String itemString = null;
     private final ItemStack item;
-    private final int maxLength;
 
     /**
      * Query the item string representation of a certain item with a certain length
      * @param item      The item to query the string for
-     * @param maxLength The maximum length the string should have. <= 0 means unlimited
      */
-    public ItemStringQueryEvent(ItemStack item, int maxLength) {
+    public ItemStringQueryEvent(ItemStack item) {
         this.item = item;
-        this.maxLength = maxLength;
     }
 
     @Override
@@ -36,14 +33,6 @@ public class ItemStringQueryEvent extends Event {
      */
     public ItemStack getItem() {
         return item;
-    }
-
-    /**
-     * Get the maximum length that the item string should have. <= 0 means unlimited
-     * @return The maximum string length
-     */
-    public int getMaxLength() {
-        return maxLength;
     }
 
     /**

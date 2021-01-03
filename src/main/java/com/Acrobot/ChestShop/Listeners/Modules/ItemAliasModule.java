@@ -36,7 +36,7 @@ public class ItemAliasModule implements Listener {
         configuration = YamlConfiguration.loadConfiguration(file);
 
         configuration.options().header(
-                "This file specified optional aliases for certain item codes. (Use the sign name from /iteminfo)"
+                "This file specified optional aliases for certain item codes. (Use the full name from /iteminfo)"
                         + "\nPlease note that these aliases should fit on a sign for it to work properly!"
         );
 

@@ -228,10 +228,12 @@ public class MaterialUtil {
         }
 
         String code = StringUtil.capitalizeFirstLetter(itemName, '_');
-        int codeWidth = getMinecraftStringWidth(code + durability + metaData);
-        if (maxWidth > 0 && codeWidth > maxWidth) {
-            int exceeding = codeWidth - maxWidth;
-            code = getShortenedName(code, getMinecraftStringWidth(code) - exceeding);
+        if (maxWidth > 0) {
+            int codeWidth = getMinecraftStringWidth(code + durability + metaData);
+            if (codeWidth > maxWidth) {
+                int exceeding = codeWidth - maxWidth;
+                code = getShortenedName(code, getMinecraftStringWidth(code) - exceeding);
+            }
         }
 
         return code + durability + metaData;
