@@ -81,7 +81,7 @@ public class ItemAliasModule implements Listener {
 
             if (aliases.containsKey(event.getItemString())) {
                 newCode = aliases.get(event.getItemString());
-            } else if (!event.getItemString().contains("#") && aliases.containsKey(event.getItemString().toLowerCase(Locale.ROOT))) {
+            } else if (!event.getItemString().contains("#")) {
                 newCode = aliases.get(event.getItemString().toLowerCase(Locale.ROOT));
             } else {
                 String[] parts = event.getItemString().split("#", 2);
