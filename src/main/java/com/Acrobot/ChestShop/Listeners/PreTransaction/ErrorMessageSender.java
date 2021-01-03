@@ -8,6 +8,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Table;
@@ -129,7 +130,7 @@ public class ErrorMessageSender implements Listener {
         if (player != null || Properties.BUNGEECORD_MESSAGES) {
 
             if (Properties.NOTIFICATION_MESSAGE_COOLDOWN > 0) {
-                String cacheKey = message.getKey() + "|" + String.join(",", replacements) + "|" + MaterialUtil.getItemList(stock);
+                String cacheKey = message.getKey() + "|" + String.join(",", replacements) + "|" + ItemUtil.getItemList(stock);
                 Long last = notificationCooldowns.get(ownerAccount.getUuid(), cacheKey);
                 if (last != null && last + Properties.NOTIFICATION_MESSAGE_COOLDOWN * 1000 > System.currentTimeMillis()) {
                     return;
@@ -141,11 +142,11 @@ public class ErrorMessageSender implements Listener {
                 if (Properties.SHOWITEM_MESSAGE && MaterialUtil.Show.sendMessage(player, message, stock, Collections.emptyMap(), replacements)) {
                     return;
                 }
-                String items = MaterialUtil.getItemList(stock);
+                String items = ItemUtil.getItemList(stock);
                 message.sendWithPrefix(player,
                         ImmutableMap.of("material", items, "item", items), replacements);
             } else {
-                String items = MaterialUtil.getItemList(stock);
+                String items = ItemUtil.getItemList(stock);
                 ChestShop.sendBungeeMessage(ownerAccount.getName(), message,
                         ImmutableMap.of("material", items, "item", items), replacements);
             }

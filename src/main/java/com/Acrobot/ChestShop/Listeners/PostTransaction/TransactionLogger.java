@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import static com.Acrobot.Breeze.Utils.InventoryUtil.mergeSimilarStacks;
-import static com.Acrobot.Breeze.Utils.MaterialUtil.getName;
+import static com.Acrobot.ChestShop.Utils.ItemUtil.getName;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
 /**

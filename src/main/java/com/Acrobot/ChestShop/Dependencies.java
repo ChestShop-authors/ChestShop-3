@@ -171,9 +171,6 @@ public class Dependencies implements Listener {
 
                 listener = heroes;
                 break;
-            case OddItem:
-                MaterialUtil.Odd.initialize();
-                break;
             case ShowItem:
                 MaterialUtil.Show.initialize(plugin);
                 break;
@@ -194,8 +191,6 @@ public class Dependencies implements Listener {
         Deadbolt,
         SimpleChestLock,
         Residence,
-
-        OddItem,
 
         WorldGuard,
         GriefPrevention,

@@ -4,13 +4,11 @@ import com.Acrobot.Breeze.Collection.SimpleCache;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.MaterialParseEvent;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import de.themoep.ShowItem.api.ShowItem;
 import de.themoep.minedown.adventure.Replacer;
-import info.somethingodd.OddItem.OddItem;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
@@ -158,7 +156,9 @@ public class MaterialUtil {
      *
      * @param items The items to get the information from
      * @return The list, including the amount and names of the items
+     * @deprecated Use {@link ItemUtil#getItemList(ItemStack[])} instead!
      */
+    @Deprecated
     public static String getItemList(ItemStack[] items) {
         ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
 
@@ -173,6 +173,7 @@ public class MaterialUtil {
 
     /**
      * Returns item's name
+     * Use {@link ItemUtil#getName(ItemStack, int)} if you want to get name aliases too!
      *
      * @param itemStack ItemStack to name
      * @return ItemStack's name
@@ -196,6 +197,7 @@ public class MaterialUtil {
 
     /**
      * Returns item's name, just like on the sign
+     * Use {@link ItemUtil#getSignName(ItemStack)} if you want to get name aliases too!
      *
      * @param itemStack ItemStack to name
      * @return ItemStack's name
@@ -205,15 +207,15 @@ public class MaterialUtil {
     }
 
     /**
-     * Returns item's name, with a maximum width
+     * Returns item's name, with a maximum width.
+     * Use {@link ItemUtil#getName(ItemStack, int)} if you want to get name aliases too!
      *
      * @param itemStack ItemStack to name
      * @param maxWidth The max width that the name should have; 0 or below if it should be unlimited
      * @return ItemStack's name
      */
     public static String getName(ItemStack itemStack, int maxWidth) {
-        String alias = Odd.getAlias(itemStack);
-        String itemName = alias != null ? alias : itemStack.getType().toString();
+        String itemName = itemStack.getType().toString();
 
         String durability = "";
         if (itemStack.getDurability() != 0) {
@@ -232,17 +234,7 @@ public class MaterialUtil {
             code = getShortenedName(code, getMinecraftStringWidth(code) - exceeding);
         }
 
-        code += durability + metaData;
-
-        ItemParseEvent parseEvent = new ItemParseEvent(code);
-        Bukkit.getPluginManager().callEvent(parseEvent);
-        ItemStack codeItem = parseEvent.getItem();
-        if (!equals(itemStack, codeItem)) {
-            throw new IllegalArgumentException("Cannot generate code for item " + itemStack + " with maximum length of " + maxWidth
-                    + " (code " + code + " results in item " + codeItem + ")");
-        }
-
-        return code;
+        return code + durability + metaData;
     }
 
     /**
@@ -321,12 +313,6 @@ public class MaterialUtil {
      * @return ItemStack
      */
     public static ItemStack getItem(String itemName) {
-        ItemStack itemStack = Odd.getFromString(itemName);
-
-        if (itemStack != null) {
-            return itemStack;
-        }
-
         String[] split = itemName.split("[:\\-#]");
         for (int i = 0; i < split.length; i++) {
             split[i] = split[i].trim();
@@ -340,7 +326,7 @@ public class MaterialUtil {
             return null;
         }
 
-        itemStack = new ItemStack(material);
+        ItemStack itemStack = new ItemStack(material);
 
         ItemMeta meta = getMetadata(itemName);
 
@@ -455,52 +441,6 @@ public class MaterialUtil {
          */
         public static String getItemCode(ItemStack item) {
             return ChestShop.getItemDatabase().getItemCode(item);
-        }
-    }
-
-    public static class Odd {
-        private static boolean isInitialized = false;
-
-        /**
-         * Returns the item stack from OddItem plugin
-         *
-         * @param itemName Item name to parse
-         * @return itemStack that was parsed
-         */
-        public static ItemStack getFromString(String itemName) {
-            if (!isInitialized) {
-                return null;
-            }
-
-            String name = itemName.replace(':', ';');
-
-            try {
-                return OddItem.getItemStack(name);
-            } catch (Exception ex) {
-                return null;
-            }
-        }
-
-        public static String getAlias(ItemStack itemStack) {
-            if (!isInitialized) {
-                return null;
-            }
-
-            try {
-                Collection<String> aliases = OddItem.getAliases(itemStack);
-                if (!aliases.isEmpty()) {
-                    return aliases.iterator().next();
-                }
-            } catch (Exception ignored) {
-            }
-            return null;
-        }
-
-        /**
-         * Lets the class know that it's safe to use the OddItem methods now
-         */
-        public static void initialize() {
-            isInitialized = true;
         }
     }
 

@@ -18,7 +18,9 @@ import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
+import com.Acrobot.ChestShop.Listeners.Item.ItemStringListener;
 import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
+import com.Acrobot.ChestShop.Listeners.Modules.ItemAliasModule;
 import com.Acrobot.ChestShop.Listeners.Modules.MetricsModule;
 import com.Acrobot.ChestShop.Listeners.Modules.StockCounterModule;
 import com.Acrobot.ChestShop.Listeners.SignParseListener;
@@ -329,6 +331,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerTeleport());
 
         registerEvent(new SignParseListener());
+        registerEvent(new ItemStringListener());
         registerEvent(new ItemInfoListener());
         registerEvent(new GarbageTextListener());
 
@@ -398,6 +401,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     private void registerModules() {
+        registerEvent(new ItemAliasModule());
         registerEvent(new DiscountModule());
         registerEvent(new MetricsModule());
         registerEvent(new PriceRestrictionModule());
@@ -532,8 +536,9 @@ public class ChestShop extends JavaPlugin {
         plugin.registerEvent(listener);
     }
 
-    public static void callEvent(Event event) {
+    public static <E extends Event> E callEvent(E event) {
         Bukkit.getPluginManager().callEvent(event);
+        return event;
     }
 
     public static void sendBungeeMessage(String playerName, Messages.Message message, Map<String, String> replacementMap, String... replacements) {

@@ -5,6 +5,7 @@ import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.NumberUtil;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,7 +73,7 @@ public class Give implements CommandExecutor {
         item.setAmount(quantity);
         InventoryUtil.add(item, receiver.getInventory());
 
-        Messages.ITEM_GIVEN.send(sender, "item", MaterialUtil.getName(item), "player", receiver.getName());
+        Messages.ITEM_GIVEN.send(sender, "item", ItemUtil.getName(item), "player", receiver.getName());
 
         return true;
     }

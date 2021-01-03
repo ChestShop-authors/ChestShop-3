@@ -140,23 +140,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>info.somethingodd</groupId>
-            <artifactId>odditem</artifactId>
-            <version>0.9.5</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         
         <dependency>
             <groupId>com.herocraftonline.heroes</groupId>

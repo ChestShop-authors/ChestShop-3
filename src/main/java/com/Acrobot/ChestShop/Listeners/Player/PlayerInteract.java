@@ -14,6 +14,7 @@ import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -88,7 +89,7 @@ public class PlayerInteract implements Listener {
                 if (!MaterialUtil.isEmpty(item)) {
                     String itemCode;
                     try {
-                        itemCode = MaterialUtil.getSignName(item);
+                        itemCode = ItemUtil.getSignName(item);
                     } catch (IllegalArgumentException e) {
                         player.sendMessage(ChatColor.RED + "Error while generating shop sign item name. Please contact an admin or take a look at the console/log!");
                         com.Acrobot.ChestShop.ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating shop sign item name", e);

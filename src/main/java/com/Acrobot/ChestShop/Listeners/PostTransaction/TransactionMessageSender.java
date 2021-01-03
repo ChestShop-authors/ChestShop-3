@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -75,10 +76,10 @@ public class TransactionMessageSender implements Listener {
         }
 
         if (player != null) {
-            replacementMap.put("item", MaterialUtil.getItemList(event.getStock()));
+            replacementMap.put("item", ItemUtil.getItemList(event.getStock()));
             rawMessage.sendWithPrefix(player, replacementMap);
         } else if (playerName != null) {
-            replacementMap.put("item", MaterialUtil.getItemList(event.getStock()));
+            replacementMap.put("item", ItemUtil.getItemList(event.getStock()));
             ChestShop.sendBungeeMessage(playerName, rawMessage, replacementMap);
         }
     }
