@@ -1,9 +1,12 @@
 package com.Acrobot.ChestShop.Logging;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
@@ -14,7 +17,24 @@ public class FileFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        return getDateAndTime() + ' ' + record.getMessage() + '\n';
+        StringBuilder message = new StringBuilder(getDateAndTime());
+
+        if (record.getLevel() != Level.INFO) {
+            message.append(' ').append(record.getLevel().getLocalizedName());
+        }
+
+        message.append(' ').append(record.getMessage());
+
+        if (record.getThrown() != null) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            pw.println();
+            record.getThrown().printStackTrace(pw);
+            pw.close();
+            message.append(sw.toString());
+        }
+
+        return message.append('\n').toString();
     }
 
     private String getDateAndTime() {
