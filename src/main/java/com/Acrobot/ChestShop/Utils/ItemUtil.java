@@ -64,10 +64,10 @@ public class ItemUtil {
                     int colonIndex = code.indexOf(':');
                     String material = code;
                     String rest = "";
-                    if (poundIndex > 0 && poundIndex < colonIndex) {
+                    if (poundIndex > 0 && (colonIndex < 0 || poundIndex < colonIndex)) {
                         material = code.substring(0, poundIndex);
                         rest = code.substring(poundIndex);
-                    } else if (colonIndex > 0 && colonIndex < poundIndex) {
+                    } else if (colonIndex > 0 && (poundIndex < 0 || colonIndex < poundIndex)) {
                         material = code.substring(0, colonIndex);
                         rest = code.substring(colonIndex);
                     }
