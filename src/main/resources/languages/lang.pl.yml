@@ -1,13 +1,13 @@
 ---
 prefix: "§a[Sklep] §r"
 iteminfo: "§aInfo. o przedmiocie: §r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo_fullname: "&fPełna Nazwa: &7%item"
+iteminfo_shopname: "&fTabliczka Sklepu: &7%item"
+iteminfo_repaircost: "&fKoszt Naprawy: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
+  &fTytuł książki: &7%title
+  &fAutor książki: &7%author
+  &fStrony książki: &7%pwieku
 iteminfo_book_generation: "&fBook Generation: &7%generation"
 iteminfo_lore: |-
   &fLore:
