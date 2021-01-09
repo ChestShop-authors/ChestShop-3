@@ -7,16 +7,16 @@ iteminfo_repaircost: "&fKoszt Naprawy: &7%cost"
 iteminfo_book: |-
   &fTytuł książki: &7%title
   &fAutor książki: &7%author
-  &fStrony książki: &7%pwieku
+  &fStrony książki: &7%pages
 iteminfo_book_generation: "&fGenerowanie Książki: &7%generation"
 iteminfo_lore: |-
   &fOpis:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+  &a[Shop] &fStatystyki:
+  &fLiczba Kont: &7%accounts
+  &fŚrednie transakcje: &7%totalTransactions &f(Kup: &7%buyTransactions &fSprzedaj: &7%sellTransactions&f)
+  &fŚrednie wymienione przedmioty: &7%totalItems &f(Kupione: &7%boughtItems &fSprzedane: &7%soldItems&f)
 ACCESS_DENIED: "Nie masz uprawnień do przeglądania zawartości sklepu."
 TRADE_DENIED: "Nie masz pozwolenia, aby handlować w tym sklepie!"
 TRADE_DENIED_ACCESS_PERMS: "Nie możesz handlować w sklepach, do których masz dostęp!"
