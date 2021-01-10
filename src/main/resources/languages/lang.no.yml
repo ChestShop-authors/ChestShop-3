@@ -1,9 +1,9 @@
 ---
 prefix: "&a[Shop] &r"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo: "&aGjenstandsinformasjon: &r"
+iteminfo_fullname: "&fFullt navn: &7%item"
+iteminfo_shopname: "&fButikk-skilt: &7%item"
+iteminfo_repaircost: "&fReperasjonskostnad: &7%cost"
 iteminfo_book: |-
   &fBook Title: &7%title
   &fBook Author: &7%author
