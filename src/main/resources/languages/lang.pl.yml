@@ -1,5 +1,5 @@
 ---
-prefix: "§a[Sklep] §r"
+prefix: "&a[Sklep] &r"
 iteminfo: "§aInfo. o przedmiocie: §r"
 iteminfo_fullname: "&fPełna Nazwa: &7%item"
 iteminfo_shopname: "&fNazwa Sklepu: &7%item"
