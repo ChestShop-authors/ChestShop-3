@@ -31,11 +31,16 @@ public class ChestShopSign {
     public static final byte PRICE_LINE = 2;
     public static final byte ITEM_LINE = 3;
 
-    public static final Pattern[] SHOP_SIGN_PATTERN = {
-            Pattern.compile("^?[\\w \\-.:]*$"),
-            Pattern.compile("^[1-9][0-9]{0,5}$|^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$"),
-            Pattern.compile("(?i)^[\\d.bs(free) :]+$"),
-            Pattern.compile("^[\\w? #:\\-]+$")
+    public static final Pattern[][] SHOP_SIGN_PATTERN = {
+            { Pattern.compile("^?[\\w \\-.:]*$") },
+            { Pattern.compile("^[1-9][0-9]{0,5}$"), Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$") },
+            {
+                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?)|free))( *: *([BS] *((\\d*([.e]\\d+)?)|free)))?$"),
+                Pattern.compile("(?i)^(((\\d*([.e]\\d+)?)|free) *[BS])( *: *([BS] *((\\d*([.e]\\d+)?)|free)))?$"),
+                Pattern.compile("(?i)^(((\\d*([.e]\\d+)?)|free) *[BS]) *: *(((\\d*([.e]\\d+)?)|free) *[BS])$"),
+                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?)|free)) *: *(((\\d*([.e]\\d+)?)|free) *[BS])$"),
+            },
+            { Pattern.compile("^[\\w? #:\\-]+$") }
     };
     public static final String AUTOFILL_CODE = "?";
 
@@ -143,7 +148,14 @@ public class ChestShopSign {
 
     public static boolean isValidPreparedSign(String[] lines) {
         for (int i = 0; i < 4; i++) {
-            if (!SHOP_SIGN_PATTERN[i].matcher(lines[i]).matches()) {
+            boolean matches = false;
+            for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
+                if (pattern.matcher(lines[i]).matches()) {
+                    matches = true;
+                    break;
+                }
+            }
+            if (!matches) {
                 return false;
             }
         }
