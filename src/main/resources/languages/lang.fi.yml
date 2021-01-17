@@ -1,7 +1,7 @@
 ---
 prefix: "&a[Shop] &r"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
+iteminfo: "&aTavaran tiedot: &r"
+iteminfo_fullname: "&fKoko nimi: &7%item"
 iteminfo_shopname: "&fShop Sign: &7%item"
 iteminfo_repaircost: "&fRepair Cost: &7%cost"
 iteminfo_book: |-
