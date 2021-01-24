@@ -19,9 +19,7 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -232,7 +230,11 @@ public class PlayerInteract implements Listener {
 
         ItemStack[] items = InventoryUtil.getItemsStacked(item);
 
-        if (adminShop) {
+        // Create virtual admin inventory if
+        // - it's an admin shop
+        // - there is no container for the shop sign
+        // - the config doesn't force unlimited admin shop stock
+        if (adminShop && (ownerInventory == null || Properties.FORCE_UNLIMITED_ADMIN_SHOP)) {
             ownerInventory = new AdminInventory(action == buy ? Arrays.stream(items).map(ItemStack::clone).toArray(ItemStack[]::new) : new ItemStack[0]);
         }
 

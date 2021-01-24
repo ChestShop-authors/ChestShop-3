@@ -165,11 +165,7 @@ public class SignBreak implements Listener {
     }
 
     public static void sendShopDestroyedEvent(Sign sign, Player player) {
-        Container connectedContainer = null;
-
-        if (!ChestShopSign.isAdminShop(sign)) {
-            connectedContainer = uBlock.findConnectedContainer(sign.getBlock());
-        }
+        Container connectedContainer = uBlock.findConnectedContainer(sign.getBlock());
 
         Event event = new ShopDestroyedEvent(player, sign, connectedContainer);
         ChestShop.callEvent(event);

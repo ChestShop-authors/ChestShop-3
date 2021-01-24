@@ -25,14 +25,12 @@ public class ChestChecker implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         String nameLine = event.getSignLine(NAME_LINE);
 
-        if (ChestShopSign.isAdminShop(nameLine)) {
-            return;
-        }
-
         Container connectedContainer = uBlock.findConnectedContainer(event.getSign().getBlock());
 
         if (connectedContainer == null) {
-            event.setOutcome(NO_CHEST);
+            if (!ChestShopSign.isAdminShop(nameLine)) {
+                event.setOutcome(NO_CHEST);
+            }
             return;
         }
 

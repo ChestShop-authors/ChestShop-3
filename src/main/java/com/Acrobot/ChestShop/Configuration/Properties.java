@@ -170,6 +170,9 @@ public class Properties {
     @ConfigurationComment("First line of your Admin Shop's sign should look like this:")
     public static String ADMIN_SHOP_NAME = "Admin Shop";
 
+    @ConfigurationComment("Make all admin shops be unlimited even if they have a shop container at the sign")
+    public static boolean FORCE_UNLIMITED_ADMIN_SHOP = false;
+
     @ConfigurationComment("The name of the economy account which Admin Shops should use and to which all taxes will go")
     public static String SERVER_ECONOMY_ACCOUNT = "";
 

@@ -27,9 +27,13 @@ public class EmptyShopDeleter implements Listener {
             return;
         }
 
-        Inventory ownerInventory = event.getOwnerInventory();
         Sign sign = event.getSign();
-        Container connectedContainer = uBlock.findConnectedContainer(sign);
+
+        if (ChestShopSign.isAdminShop(sign)) {
+            return;
+        }
+
+        Inventory ownerInventory = event.getOwnerInventory();
 
         if (!shopShouldBeRemoved(ownerInventory, event.getStock())) {
             return;
@@ -38,6 +42,8 @@ public class EmptyShopDeleter implements Listener {
         if (!isInRemoveWorld(sign)) {
             return;
         }
+
+        Container connectedContainer = uBlock.findConnectedContainer(sign);
 
         ShopDestroyedEvent destroyedEvent = new ShopDestroyedEvent(null, event.getSign(), connectedContainer);
         ChestShop.callEvent(destroyedEvent);
@@ -62,7 +68,7 @@ public class EmptyShopDeleter implements Listener {
     }
 
     private static boolean shopShouldBeRemoved(Inventory inventory, ItemStack[] stock) {
-        if (Properties.REMOVE_EMPTY_SHOPS && !ChestShopSign.isAdminShop(inventory)) {
+        if (Properties.REMOVE_EMPTY_SHOPS) {
             if (Properties.ALLOW_PARTIAL_TRANSACTIONS) {
                 for (ItemStack itemStack : stock) {
                     if (inventory.containsAtLeast(itemStack, 1)) {

@@ -46,7 +46,8 @@ public class StockCounterModule implements Listener {
             event.setSignLine(QUANTITY_LINE, Integer.toString(quantity));
         }
 
-        if (!Properties.USE_STOCK_COUNTER || ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE))) {
+        if (!Properties.USE_STOCK_COUNTER
+                || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE)))) {
             return;
         }
 
@@ -71,11 +72,8 @@ public class StockCounterModule implements Listener {
         }
 
         for (Sign shopSign : uBlock.findConnectedShopSigns(event.getInventory().getHolder())) {
-            if (ChestShopSign.isAdminShop(shopSign)) {
-                return;
-            }
-
-            if (!Properties.USE_STOCK_COUNTER) {
+            if (!Properties.USE_STOCK_COUNTER
+                    || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(shopSign))) {
                 if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
                     removeCounterFromQuantityLine(shopSign);
                 }
@@ -111,7 +109,7 @@ public class StockCounterModule implements Listener {
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSign())) {
+        if (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSign())) {
             return;
         }
 
