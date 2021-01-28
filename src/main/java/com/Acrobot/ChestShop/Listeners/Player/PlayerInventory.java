@@ -16,6 +16,8 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
+
 /**
  * @author Acrobot
  */
@@ -30,7 +32,7 @@ public class PlayerInventory implements Listener {
             return;
         }
 
-        InventoryHolder holder = event.getInventory().getHolder();
+        InventoryHolder holder = getHolder(event.getInventory(), false);
         if (!(holder instanceof BlockState) && !(holder instanceof DoubleChest)) {
             return;
         }

@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.SHOP_IS_RESTRICTED;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
 
@@ -56,7 +57,7 @@ public class RestrictedSign implements Listener {
                 return;
             }
 
-            Sign sign = (Sign) connectedSign.getState();
+            Sign sign = (Sign) getState(connectedSign, false);
 
             if (!ChestShopSign.hasPermission(player, Permission.OTHER_NAME_DESTROY, sign)) {
                 dropSignAndCancelEvent(event);
@@ -84,7 +85,7 @@ public class RestrictedSign implements Listener {
         Block currentBlock = location.getBlock();
 
         if (BlockUtil.isSign(currentBlock)) {
-            Sign sign = (Sign) currentBlock.getState();
+            Sign sign = (Sign) getState(currentBlock, false);
 
             if (isRestricted(sign)) {
                 return sign;
@@ -100,7 +101,7 @@ public class RestrictedSign implements Listener {
                 continue;
             }
 
-            Sign sign = (Sign) relative.getState();
+            Sign sign = (Sign) getState(relative, false);
 
             if (!BlockUtil.getAttachedBlock(sign).equals(currentBlock)) {
                 continue;
@@ -116,7 +117,7 @@ public class RestrictedSign implements Listener {
 
     public static boolean isRestrictedShop(Sign sign) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
-        return BlockUtil.isSign(blockUp) && isRestricted(((Sign) blockUp.getState()).getLines());
+        return BlockUtil.isSign(blockUp) && isRestricted(((Sign) getState(blockUp, false)).getLines());
     }
 
     public static boolean isRestricted(String[] lines) {
@@ -129,7 +130,7 @@ public class RestrictedSign implements Listener {
 
     public static boolean canAccess(Sign sign, Player player) {
         Block blockUp = sign.getBlock().getRelative(BlockFace.UP);
-        return !BlockUtil.isSign(blockUp) || hasPermission(player, ((Sign) blockUp.getState()).getLines());
+        return !BlockUtil.isSign(blockUp) || hasPermission(player, ((Sign) getState(blockUp, false)).getLines());
     }
 
     public static boolean canDestroy(Player player, Sign sign) {
@@ -139,7 +140,7 @@ public class RestrictedSign implements Listener {
 
     public static Sign getAssociatedSign(Sign restricted) {
         Block down = restricted.getBlock().getRelative(BlockFace.DOWN);
-        return BlockUtil.isSign(down) ? (Sign) down.getState() : null;
+        return BlockUtil.isSign(down) ? (Sign) getState(down, false) : null;
     }
 
     public static boolean hasPermission(Player p, String[] lines) {

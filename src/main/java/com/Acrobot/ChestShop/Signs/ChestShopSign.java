@@ -22,6 +22,8 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
+
 /**
  * @author Acrobot
  */
@@ -66,7 +68,7 @@ public class ChestShopSign {
     }
 
     public static boolean isValid(Block sign) {
-        return BlockUtil.isSign(sign) && isValid((Sign) sign.getState());
+        return BlockUtil.isSign(sign) && isValid((Sign) getState(sign, false));
     }
 
     /**
@@ -78,7 +80,7 @@ public class ChestShopSign {
             return false;
         }
 
-        return uBlock.getConnectedSign((Chest) chest.getState()) != null;
+        return uBlock.getConnectedSign(chest) != null;
     }
 
     public static boolean isShopBlock(Block block) {

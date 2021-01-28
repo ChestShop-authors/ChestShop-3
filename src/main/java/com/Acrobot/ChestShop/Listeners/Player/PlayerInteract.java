@@ -37,6 +37,7 @@ import java.math.MathContext;
 import java.util.Arrays;
 import java.util.logging.Level;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
@@ -76,7 +77,7 @@ public class PlayerInteract implements Listener {
         if (!isSign(block) || player.getInventory().getItemInMainHand().getType().name().contains("SIGN")) // Blocking accidental sign edition
             return;
 
-        Sign sign = (Sign) block.getState();
+        Sign sign = (Sign) getState(block, false);
         if (!ChestShopSign.isValid(sign)) {
             return;
         }

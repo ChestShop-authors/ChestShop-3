@@ -18,6 +18,8 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
+
 /**
  * @author Acrobot
  */
@@ -223,7 +225,7 @@ public class uBlock {
                 continue;
             }
 
-            Sign sign = (Sign) faceBlock.getState();
+            Sign sign = (Sign) getState(faceBlock, false);
 
             if (ChestShopSign.isValid(sign)) {
                 return sign;

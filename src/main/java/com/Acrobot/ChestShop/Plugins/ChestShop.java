@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 
 /**
@@ -44,7 +45,7 @@ public class ChestShop implements Listener {
         }
 
         if (isSign(block)) {
-            Sign sign = (Sign) block.getState();
+            Sign sign = (Sign) getState(block, false);
 
             if (!ChestShopSign.isValid(sign)) {
                 return true;

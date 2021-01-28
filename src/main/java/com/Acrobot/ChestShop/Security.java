@@ -17,6 +17,8 @@ import org.bukkit.event.Event;
 
 import java.util.UUID;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
+
 /**
  * @author Acrobot
  */
@@ -83,7 +85,7 @@ public class Security {
                 continue;
             }
 
-            Sign sign = (Sign) block.getState();
+            Sign sign = (Sign) getState(block, false);
 
             if (!ChestShopSign.isValid(sign) || !BlockUtil.getAttachedBlock(sign).equals(baseBlock)) {
                 continue;

@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.InventoryHolder;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
+
 /**
  * A fix for a CraftBukkit bug.
  *
@@ -18,7 +20,7 @@ public class PlayerTeleport implements Listener {
 
     @EventHandler
     public static void onPlayerTeleport(PlayerTeleportEvent event) {
-        InventoryHolder holder = event.getPlayer().getOpenInventory().getTopInventory().getHolder();
+        InventoryHolder holder = getHolder(event.getPlayer().getOpenInventory().getTopInventory(), false);
         if (!(holder instanceof BlockState)) {
             return;
         }

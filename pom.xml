@@ -449,7 +449,7 @@
             <id>default</id>
             <activation>
                 <property>
-                    <name>!spigot</name>
+                    <name>!dontrundefault</name>
                 </property>
             </activation>
             <repositories>
@@ -462,7 +462,7 @@
                 <dependency>
                     <groupId>com.destroystokyo.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.13.2-R0.1-SNAPSHOT</version>
+                    <version>1.16.5-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -485,7 +485,7 @@
                 </dependency>
             </dependencies>
             <properties>
-                <spigot>true</spigot>
+                <dontrundefault>true</dontrundefault>
             </properties>
             <build>
                 <finalName>${project.name}-Spigot</finalName>
@@ -503,7 +503,7 @@
         </profile>
 
         <profile>
-            <id>latest</id>
+            <id>backwards</id>
             <repositories>
                 <repository>
                     <id>paper-repo</id>
@@ -514,10 +514,26 @@
                 <dependency>
                     <groupId>com.destroystokyo.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.16.4-R0.1-SNAPSHOT</version>
+                    <version>1.13.2-R0.1-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
+            <properties>
+                <dontrundefault>true</dontrundefault>
+            </properties>
+            <build>
+                <finalName>${project.name}-1.13.2</finalName>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/PaperLatest*.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <profile>

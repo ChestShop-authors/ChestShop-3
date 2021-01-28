@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.IllegalFormatException;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
@@ -67,11 +68,11 @@ public class StockCounterModule implements Listener {
 
     @EventHandler
     public static void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null || !ChestShopSign.isShopBlock(event.getInventory().getLocation().getBlock())) {
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null || !uBlock.couldBeShopContainer(event.getInventory().getLocation().getBlock())) {
             return;
         }
 
-        for (Sign shopSign : uBlock.findConnectedShopSigns(event.getInventory().getHolder())) {
+        for (Sign shopSign : uBlock.findConnectedShopSigns(getHolder(event.getInventory(), false))) {
             if (!Properties.USE_STOCK_COUNTER
                     || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(shopSign))) {
                 if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
@@ -113,7 +114,7 @@ public class StockCounterModule implements Listener {
             return;
         }
 
-        for (Sign shopSign : uBlock.findConnectedShopSigns(event.getOwnerInventory().getHolder())) {
+        for (Sign shopSign : uBlock.findConnectedShopSigns( getHolder(event.getOwnerInventory(), false))) {
             updateCounterOnQuantityLine(shopSign, event.getOwnerInventory());
         }
     }

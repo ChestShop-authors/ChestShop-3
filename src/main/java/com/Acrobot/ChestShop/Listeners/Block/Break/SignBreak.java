@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
@@ -55,11 +56,11 @@ public class SignBreak implements Listener {
             return;
         }
 
-        Sign sign = (Sign) block.getState();
+        Sign sign = (Sign) getState(block, false);
         Block attachedBlock = BlockUtil.getAttachedBlock(sign);
 
         if (attachedBlock.getType() == Material.AIR && ChestShopSign.isValid(sign)) {
-            sendShopDestroyedEvent(sign, block.hasMetadata(METADATA_NAME)
+            sendShopDestroyedEvent((Sign) block.getState(), block.hasMetadata(METADATA_NAME)
                     ? (Player) block.getMetadata(METADATA_NAME).get(0).value()
                     : null);
         }
