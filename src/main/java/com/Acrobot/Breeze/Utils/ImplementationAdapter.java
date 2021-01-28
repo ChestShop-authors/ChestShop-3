@@ -1,7 +1,5 @@
 package com.Acrobot.Breeze.Utils;
 
-import com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestHolder;
-import com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.Inventory;
@@ -16,15 +14,17 @@ public class ImplementationAdapter {
 
     static {
         try {
-            InventoryHolder.class.getMethod("getHolder", boolean.class);
-            HOLDER_PROVIDER = PaperLatestHolder.PROVIDER;
-        } catch (NoSuchMethodException e) {
+            Inventory.class.getMethod("getHolder", boolean.class);
+            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestHolder");
+            HOLDER_PROVIDER = (BiFunction<Inventory, Boolean, InventoryHolder>) c.getDeclaredField("PROVIDER").get(null);
+        } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             HOLDER_PROVIDER = (inventory, useSnapshot) -> inventory.getHolder();
         }
         try {
             Block.class.getMethod("getState", boolean.class);
-            STATE_PROVIDER = PaperLatestState.PROVIDER;
-        } catch (NoSuchMethodException e) {
+            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestState");
+            STATE_PROVIDER = (BiFunction<Block, Boolean, BlockState>) c.getDeclaredField("PROVIDER").get(null);
+        } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             STATE_PROVIDER = (block, useSnapshot) -> block.getState();
         }
     }
