@@ -65,6 +65,10 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException when an invalid player object was passed
      */
     public static Account getOrCreateAccount(OfflinePlayer player) {
+        Validate.notNull(player.getName(), "Name of player " + player.getUniqueId() + " is null?");
+        Validate.isTrue(!(player instanceof Player) || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
+                "Invalid OfflinePlayer! " + player.getUniqueId() + " has version " + player.getUniqueId().version() + " and not server version " + uuidVersion + ". " +
+                        "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
         return getOrCreateAccount(player.getUniqueId(), player.getName());
     }
 
@@ -79,9 +83,6 @@ public class NameManager implements Listener {
     public static Account getOrCreateAccount(UUID id, String name) {
         Validate.notNull(id, "UUID of player is null?");
         Validate.notNull(name, "Name of player " + id + " is null?");
-        Validate.isTrue(!Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || id.version() == uuidVersion,
-                "Invalid OfflinePlayer! " + id + " has version " + id.version() + " and not server version " + uuidVersion + ". " +
-                        "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
 
         Account account = getAccount(id);
         if (account == null) {
@@ -161,6 +162,7 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException if the username is empty
      * @deprecated Use the {@link AccountQueryEvent} instead!
      */
+    @Deprecated
     public static Account getAccountFromShortName(String shortName) {
         return getAccountFromShortName(shortName, true);
     }
@@ -206,19 +208,6 @@ public class NameManager implements Listener {
      * Get the information from the last time a player logged in that previously used the shortened name
      *
      * @param shortName The name of the player to get the last account for
-     * @return The last account or <tt>null</tt> if none was found
-     * @throws IllegalArgumentException if the username is empty
-     * @deprecated Use the {@link AccountQueryEvent} instead!
-     */
-    @Deprecated
-    public static Account getLastAccountFromShortName(String shortName) {
-        return getLastAccountFromShortName(shortName, true);
-    }
-
-    /**
-     * Get the information from the last time a player logged in that previously used the shortened name
-     *
-     * @param shortName The name of the player to get the last account for
      * @param searchOfflinePlayer Whether or not to search the offline players too
      * @return The last account or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty
@@ -229,87 +218,6 @@ public class NameManager implements Listener {
             return getAccount(account.getUuid()); // then get the last account that was online with that UUID
         }
         return null;
-    }
-
-    /**
-     * Get the UUID from a player's (non-shortened) username
-     *
-     * @param username The player's username
-     * @return The UUID or <tt>null</tt> if the UUID can't be found or an error occurred
-     * @deprecated Use {@link NameManager#getAccount(String)}
-     */
-    @Deprecated
-    public static UUID getUUID(String username) {
-        Validate.notEmpty(username, "username cannot be null or empty!");
-        Player player = Bukkit.getPlayer(username);
-        if (player != null) {
-            return player.getUniqueId();
-        }
-        Account account = getAccount(username);
-        if (account != null) {
-            return account.getUuid();
-        }
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
-        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getUniqueId() != null) {
-            return offlinePlayer.getUniqueId();
-        }
-        return null;
-    }
-
-    /**
-     * Get the username from a player's UUID
-     *
-     * @param uuid The UUID of the player
-     * @return The username that is stored or <tt>null</tt> if none was found
-     * @deprecated Use {@link NameManager#getAccount(UUID)}
-     */
-    @Deprecated
-    public static String getUsername(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
-        if (player != null) {
-            return player.getName();
-        }
-        Account account = getAccount(uuid);
-        if (account != null) {
-            return account.getName();
-        }
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-        if (offlinePlayer != null && offlinePlayer.hasPlayedBefore() && offlinePlayer.getName() != null) {
-            return offlinePlayer.getName();
-        }
-        return null;
-    }
-
-    /**
-     * Get the full username from another username that might be shortened
-     *
-     * @param shortName The name of the player to get the full username for
-     * @return The full username or <tt>null</tt> if none was found
-     * @throws IllegalArgumentException if the username is not a shortened name and longer than 15 chars
-     * @deprecated Use {@link NameManager#getAccountFromShortName(String)}
-     */
-    @Deprecated
-    public static String getFullUsername(String shortName) {
-        AccountQueryEvent accountQueryEvent = new AccountQueryEvent(shortName);
-        Bukkit.getPluginManager().callEvent(accountQueryEvent);
-        Account account = accountQueryEvent.getAccount();
-        if (account != null) {
-            return account.getName();
-        }
-        return null;
-    }
-
-    /**
-     * Get the short username from a full username
-     *
-     * @param fullName The name of the player to get the short username for
-     * @return The short username or <tt>null</tt> if none was found
-     * @deprecated Use {@link NameManager#getAccount(String)}
-     */
-    @Deprecated
-    public static String getShortUsername(String fullName) {
-        Account account = getAccount(fullName);
-        return account != null ? account.getShortName() : null;
     }
 
     /**
@@ -367,14 +275,6 @@ public class NameManager implements Listener {
         }
 
         return shortenedName;
-    }
-
-    /**
-     * @deprecated Use {@link #canUseName(Player, Permission, String)} to provide specific information about how the player wants to use the name
-     */
-    @Deprecated
-    public static boolean canUseName(Player player, String name) {
-        return canUseName(player, OTHER_NAME, name);
     }
 
     public static boolean canUseName(Player player, Permission base, String name) {

@@ -150,26 +150,6 @@ public class PreTransactionEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return Shop's owner
-     * @deprecated Use {@link #getOwnerAccount}
-     */
-    @Deprecated
-    public OfflinePlayer getOwner() {
-        return Bukkit.getOfflinePlayer(ownerAccount.getUuid());
-    }
-
-    /**
-     * Sets the shop's owner
-     *
-     * @param owner Shop owner
-     * @deprecated Use {@link #setOwnerAccount(Account)}
-     */
-    @Deprecated
-    public void setOwner(OfflinePlayer owner) {
-        this.ownerAccount = NameManager.getOrCreateAccount(owner);
-    }
-
-    /**
      * @return Owner's inventory
      */
     public Inventory getOwnerInventory() {
