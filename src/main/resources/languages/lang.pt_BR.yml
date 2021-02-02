@@ -6,15 +6,20 @@ iteminfo_shopname: "&fNome para a loja: &7%item"
 iteminfo_repaircost: "&fCusto de reparo: &7%cost"
 iteminfo_book: |-
   &fTítulo do livro: &7%title
+  &fAutor do Livro: &7%author
+  &fPáginas do Livro: &7%pages
 iteminfo_book_generation: "&fGeração do livro: &7%generation"
 iteminfo_lore: |-
   &fDescrição:
 METRICS: |-
-  &a[Shop] &fMétricas:
+  &a[Shop] &fMetricas:
+  &fContas: &7%contas
+  &fTransações médias: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fMédia dos itens comercializados: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
 ACCESS_DENIED: "Você não tem permissão para aceder ao baú da loja!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+TRADE_DENIED: "Você não tem permissão para negociar com essa loja!"
+TRADE_DENIED_ACCESS_PERMS: "Você não pode negociar com lojas às quais você tem acesso!"
+TRADE_DENIED_CREATIVE_MODE: "Você não pode negociar com lojas enquanto estiver no modo criativo!"
 NOT_ENOUGH_MONEY: "Saldo insuficiente!"
 NOT_ENOUGH_MONEY_SHOP: "O dono da loja não tem dinheiro suficiente!"
 CLIENT_DEPOSIT_FAILED: "Falha ao depositar dinheiro na sua conta!"
@@ -45,7 +50,7 @@ BUY_PRICE_BELOW_MIN: "Preço de compra abaixo do mínimo!"
 CLICK_TO_AUTOFILL_ITEM: "Clique na placa segurando o item a que se destina esta loja!"
 NO_ITEM_IN_HAND: "Você não está segurando um item para preencher automaticamente!"
 PROTECTED_SHOP: "Shop protegido com LWC com sucesso!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "Protegeu com sucesso o letreiro da loja com LWC!"
 SHOP_CREATED: "Shop criado com sucesso!"
 SHOP_FEE_PAID: "Vendido por %amount"
 SHOP_REFUNDED: "Reembolsado por %amount."
