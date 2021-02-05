@@ -89,6 +89,7 @@ public class Messages {
     public static Message PLAYER_NOT_FOUND;
     public static Message NO_PERMISSION;
     public static Message INCORRECT_ITEM_ID;
+    public static Message INVALID_CLIENT_NAME;
     public static Message NOT_ENOUGH_PROTECTIONS;
 
     public static Message CANNOT_CREATE_SHOP_HERE;

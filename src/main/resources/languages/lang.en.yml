@@ -75,6 +75,7 @@ RESTRICTED_SIGN_CREATED: "Sign successfully created!"
 PLAYER_NOT_FOUND: "Player not found!"
 NO_PERMISSION: "You don't have permissions to do that!"
 INCORRECT_ITEM_ID: "You have specified an invalid item id!"
+INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
 
 CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"

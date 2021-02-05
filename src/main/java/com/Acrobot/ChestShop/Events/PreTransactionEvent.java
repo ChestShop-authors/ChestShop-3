@@ -247,6 +247,7 @@ public class PreTransactionEvent extends Event implements Cancellable {
         NOT_ENOUGH_STOCK_IN_INVENTORY,
 
         INVALID_SHOP,
+        INVALID_CLIENT_NAME,
 
         SPAM_CLICKING_PROTECTION,
         CREATIVE_MODE_PROTECTION,

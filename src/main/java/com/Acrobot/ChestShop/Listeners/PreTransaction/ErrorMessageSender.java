@@ -113,6 +113,9 @@ public class ErrorMessageSender implements Listener {
             case INVALID_SHOP:
                 message = Messages.INVALID_SHOP_DETECTED;
                 break;
+            case INVALID_CLIENT_NAME:
+                message = Messages.INVALID_CLIENT_NAME;
+                break;
             case CREATIVE_MODE_PROTECTION:
                 message = Messages.TRADE_DENIED_CREATIVE_MODE;
                 break;

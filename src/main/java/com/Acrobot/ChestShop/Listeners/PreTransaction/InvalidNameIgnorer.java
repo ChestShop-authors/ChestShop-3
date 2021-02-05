@@ -20,7 +20,7 @@ public class InvalidNameIgnorer implements Listener {
 
         String name = event.getClient().getName();
         if (ChestShopSign.isAdminShop(name) || !USERNAME_PATTERN.matcher(name).matches()) {
-            event.setCancelled(PreTransactionEvent.TransactionOutcome.CLIENT_DOES_NOT_HAVE_PERMISSION);
+            event.setCancelled(PreTransactionEvent.TransactionOutcome.INVALID_CLIENT_NAME);
         }
     }
 }
