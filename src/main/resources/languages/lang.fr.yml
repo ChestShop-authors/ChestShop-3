@@ -1,5 +1,5 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "&a[Shop]"
 iteminfo: "&aInformation sur l'Objet: &f"
 iteminfo_fullname: "&fNom Complet: &7%item"
 iteminfo_shopname: "&fPanneau du Magasin: &7%item"
