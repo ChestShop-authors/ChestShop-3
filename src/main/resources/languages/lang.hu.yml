@@ -1,5 +1,12 @@
 ---
 prefix: "&a[Bolt] &r"
+shopinfo: |-
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
 iteminfo: "'&aTárgy Információ: &r"
 iteminfo_fullname: "&fTeljes Név: &7%item"
 iteminfo_shopname: "&fBolt Tábla: &7%item"
@@ -62,6 +69,7 @@ NO_PERMISSION: "Ehhez nincs engedélyed!"
 INCORRECT_ITEM_ID: "Érvénytelen tárgy id-t adtál meg!"
 INVALID_CLIENT_NAME: "A felhasználóneved nem egy érvényes Minecraft felhasználónév!"
 NOT_ENOUGH_PROTECTIONS: "Nem sikerült létrehozni egy levédést!"
+NO_SHOP_FOUND: "No shop found."
 CANNOT_CREATE_SHOP_HERE: "Itt nem lehet boltot létrehozni!"
 TOGGLE_MESSAGES_OFF: "Nem fogsz több üzeneteket kapni a boltodról, vagy boltjaidról."
 TOGGLE_MESSAGES_ON: "Mostantól üzeneteket fogsz kapni a boltodról, vagy boltjaidról."
