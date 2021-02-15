@@ -1,5 +1,12 @@
 ---
 prefix: "&a[Kauppa] &r"
+shopinfo: |-
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
 iteminfo: "&aTavaran tiedot: &r"
 iteminfo_fullname: "&fKoko nimi: &7%item"
 iteminfo_shopname: "&fKaupan kyltti: &7%item"
@@ -62,6 +69,7 @@ NO_PERMISSION: "Sinulla ei ole siihen oikeuksia!"
 INCORRECT_ITEM_ID: "Olet määrittänyt virheellisen kohteen tunnuksen!"
 INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "Suojausta ei voitu luoda!"
+NO_SHOP_FOUND: "No shop found."
 CANNOT_CREATE_SHOP_HERE: "Et voi luoda kauppaa täällä!"
 TOGGLE_MESSAGES_OFF: "Et enää saa viestejä kaupoistasi."
 TOGGLE_MESSAGES_ON: "Saat nyt viestejä kaupoistasi."
