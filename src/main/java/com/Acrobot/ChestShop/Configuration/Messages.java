@@ -23,6 +23,11 @@ import java.util.logging.Level;
  */
 public class Messages {
     public static Message prefix;
+
+    public static Message shopinfo;
+    public static Message shopinfo_buy;
+    public static Message shopinfo_sell;
+
     public static Message iteminfo;
     public static Message iteminfo_fullname;
     public static Message iteminfo_shopname;
@@ -91,6 +96,7 @@ public class Messages {
     public static Message INCORRECT_ITEM_ID;
     public static Message INVALID_CLIENT_NAME;
     public static Message NOT_ENOUGH_PROTECTIONS;
+    public static Message NO_SHOP_FOUND;
 
     public static Message CANNOT_CREATE_SHOP_HERE;
 
@@ -170,6 +176,10 @@ public class Messages {
 
         public void send(CommandSender sender, String... replacements) {
             ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, false, Collections.emptyMap(), replacements));
+        }
+
+        public void send(CommandSender sender, Map<String, String> replacements) {
+            ChestShop.getAudiences().sender(sender).sendMessage(getComponent(sender, false, replacements));
         }
 
         @Deprecated

@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop;
 import com.Acrobot.Breeze.Configuration.Configuration;
 import com.Acrobot.ChestShop.Commands.Give;
 import com.Acrobot.ChestShop.Commands.ItemInfo;
+import com.Acrobot.ChestShop.Commands.ShopInfo;
 import com.Acrobot.ChestShop.Commands.Toggle;
 import com.Acrobot.ChestShop.Commands.Version;
 import com.Acrobot.ChestShop.Commands.AccessToggle;
@@ -23,6 +24,7 @@ import com.Acrobot.ChestShop.Listeners.ItemInfoListener;
 import com.Acrobot.ChestShop.Listeners.Modules.ItemAliasModule;
 import com.Acrobot.ChestShop.Listeners.Modules.MetricsModule;
 import com.Acrobot.ChestShop.Listeners.Modules.StockCounterModule;
+import com.Acrobot.ChestShop.Listeners.ShopInfoListener;
 import com.Acrobot.ChestShop.Listeners.SignParseListener;
 import com.Acrobot.ChestShop.Listeners.Modules.DiscountModule;
 import com.Acrobot.ChestShop.Listeners.Modules.PriceRestrictionModule;
@@ -130,6 +132,7 @@ public class ChestShop extends JavaPlugin {
         }
 
         registerCommand("iteminfo", new ItemInfo(), Permission.ITEMINFO);
+        registerCommand("shopinfo", new ShopInfo(), Permission.SHOPINFO);
         registerCommand("csVersion", new Version(), Permission.ADMIN);
         registerCommand("csMetrics", new com.Acrobot.ChestShop.Commands.Metrics(), Permission.ADMIN);
         registerCommand("csGive", new Give(), Permission.ADMIN);
@@ -333,6 +336,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new SignParseListener());
         registerEvent(new ItemStringListener());
         registerEvent(new ItemInfoListener());
+        registerEvent(new ShopInfoListener());
         registerEvent(new GarbageTextListener());
 
         Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");

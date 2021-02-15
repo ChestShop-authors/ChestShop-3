@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
 import com.Acrobot.Breeze.Utils.*;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Commands.AccessToggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -10,6 +11,7 @@ import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
+import com.Acrobot.ChestShop.Events.ShopInfoEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
@@ -61,17 +63,24 @@ public class PlayerInteract implements Listener {
         Action action = event.getAction();
         Player player = event.getPlayer();
 
-        if (Properties.USE_BUILT_IN_PROTECTION && isShopBlock(block)) {
-            if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+        if (Properties.USE_BUILT_IN_PROTECTION && uBlock.couldBeShopContainer(block)) {
+            Sign sign = uBlock.getConnectedSign(block);
+            if (sign != null) {
+                if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+                    return;
+                }
+
+                if (!Security.canAccess(player, block)) {
+                    event.setCancelled(true);
+                    if (Permission.has(player, Permission.SHOPINFO)) {
+                        ChestShop.callEvent(new ShopInfoEvent(player, sign));
+                    } else {
+                        Messages.ACCESS_DENIED.send(player);
+                    }
+                }
+
                 return;
             }
-
-            if (!Security.canAccess(player, block)) {
-                event.setCancelled(true);
-                Messages.ACCESS_DENIED.sendWithPrefix(player);
-            }
-
-            return;
         }
 
         if (!isSign(block) || player.getInventory().getItemInMainHand().getType().name().contains("SIGN")) // Blocking accidental sign edition

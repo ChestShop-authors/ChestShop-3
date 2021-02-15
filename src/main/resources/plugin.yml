@@ -14,7 +14,10 @@ commands:
     usage: |
            /<command> §2(what's the item in hand?)
            /<command> §7log§f §2(what's the item ID of §7LOG§2?)
-
+  shopinfo:
+    aliases: [sinfo,shop]
+    description: Shows information about the shop looked at
+    usage: /<command> §2(information about the looked at shop)
   csGive:
     description: Gives an item to the appropriate player
     usage: /<command> <item code> (amount) (player)
@@ -83,6 +86,9 @@ permissions:
     default: op
   ChestShop.iteminfo:
     description: Allows user to see item info with the command.
+    default: true
+  ChestShop.shopinfo:
+    description: Allows user to see shop info with the command or middle click on shop sign/container.
     default: true
   ChestShop.admin:
     description: Allows user to modify/destroy other stores and create an Admin Shops

@@ -1,4 +1,13 @@
 prefix: "&a[Shop] &r"
+
+shopinfo: |-
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+
 iteminfo: "&aItem Information: &r"
 iteminfo_fullname: "&fFull Name: &7%item"
 iteminfo_shopname: "&fShop Sign: &7%item"
@@ -77,6 +86,7 @@ NO_PERMISSION: "You don't have permissions to do that!"
 INCORRECT_ITEM_ID: "You have specified an invalid item id!"
 INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
+NO_SHOP_FOUND: "No shop found."
 
 CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
 

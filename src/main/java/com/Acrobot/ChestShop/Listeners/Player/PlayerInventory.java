@@ -1,12 +1,17 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Events.ShopInfoEvent;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Security;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,7 +64,16 @@ public class PlayerInventory implements Listener {
         }
 
         if (!canAccess) {
-            Messages.ACCESS_DENIED.sendWithPrefix(player);
+            if (Permission.has(player, Permission.SHOPINFO)) {
+                for (Block container : containers) {
+                    Sign sign = uBlock.getConnectedSign(container);
+                    if (sign != null) {
+                        ChestShop.callEvent(new ShopInfoEvent((Player) event.getPlayer(), sign));
+                    }
+                }
+            } else {
+                Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
+            }
             event.setCancelled(true);
         }
     }

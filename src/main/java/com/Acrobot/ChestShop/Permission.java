@@ -42,7 +42,8 @@ public enum Permission {
 
     NOTIFY_TOGGLE("ChestShop.toggle"),
     ACCESS_TOGGLE("ChestShop.accesstoggle"),
-    ITEMINFO("ChestShop.iteminfo");
+    ITEMINFO("ChestShop.iteminfo"),
+    SHOPINFO("ChestShop.shopinfo");
 
     private final String permission;
 
