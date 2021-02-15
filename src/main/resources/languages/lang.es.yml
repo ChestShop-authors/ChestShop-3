@@ -1,5 +1,12 @@
 ---
 prefix: "§a[Tienda] §r"
+shopinfo: |-
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
 iteminfo: "§aInformacion del Item: §r"
 iteminfo_fullname: "&fNombre Completo MC: &7%item"
 iteminfo_shopname: "&fNombre del item para poner en el cartel: &7%item"
@@ -56,6 +63,7 @@ NO_PERMISSION: "Tu no tienes permiso para hacer esto!"
 INCORRECT_ITEM_ID: "El ID del item especificado no es valido!"
 INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "Has llegado al limite de protecciones!"
+NO_SHOP_FOUND: "No shop found."
 CANNOT_CREATE_SHOP_HERE: "¡No puedes crear una tienda aquí!"
 TOGGLE_MESSAGES_OFF: "Ya no recibirás los mensajes de su(s) tienda(s)."
 TOGGLE_MESSAGES_ON: "Ahora ya recibirás los mensajes de su(s) tienda(s)."
