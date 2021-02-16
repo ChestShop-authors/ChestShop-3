@@ -1,12 +1,12 @@
 ---
 prefix: "&a[Bolt] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  &aBolt Információ:
+  &fTulaj: &7%owner
+  &fKészlet: &7%stock
+  &fTárgy: &7%item
+shopinfo_buy: "&7%amount &fdarab vásárlása &7%price-t"
+shopinfo_sell: "&7%amount &fdarab eladása &7%price-t"
 iteminfo: "'&aTárgy Információ: &r"
 iteminfo_fullname: "&fTeljes Név: &7%item"
 iteminfo_shopname: "&fBolt Tábla: &7%item"
