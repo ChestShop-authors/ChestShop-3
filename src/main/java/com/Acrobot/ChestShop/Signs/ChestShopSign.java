@@ -34,7 +34,6 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[][] SHOP_SIGN_PATTERN = {
-            { Pattern.compile("^?[\\w \\-.:]*$") },
             { Pattern.compile("^[1-9][0-9]{0,5}$"), Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$") },
             {
                 Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?)|free))( *: *([BS] *((\\d*([.e]\\d+)?)|free)))?$"),
@@ -149,10 +148,17 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-        for (int i = 0; i < 4; i++) {
+    	if ((!isAdminShop(lines[0])) && (lines[0].length() > 0)) {
+    		Pattern PlayernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
+    		if (!PlayernamePattern.matcher(lines[0]).matches()) {
+    			return false;
+    		}
+    	}
+    		
+        for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
-                if (pattern.matcher(lines[i]).matches()) {
+                if (pattern.matcher(lines[i+1]).matches()) {
                     matches = true;
                     break;
                 }
