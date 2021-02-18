@@ -197,6 +197,9 @@ public class Properties {
     @ConfigurationComment("This makes sure that the UUIDs of player shop accounts match the server's online-mode setting. Disabling this might lead to issues with offline players and is therefore unsupported!")
     public static boolean ENSURE_CORRECT_PLAYERID = true;
 
+    @ConfigurationComment("This regexp validates the name of the player. If the name doesn't match, the player will neither be able to create a valid shop sign, nor buy/sell from a shop. Note to Bedrock players: If you have Floodgate on your server, you should set this regexp to ^[*]*\\\\w+$ and ENSURE_CORRECT_PLAYERID to false")
+    public static String VALID_PLAYERNAME_REGEXP = "^\\\\w+$";
+
     @PrecededBySpace
     @ConfigurationComment("Should we block shops that sell things for more than they buy? (This prevents newbies from creating shops that would be exploited)")
     public static boolean BLOCK_SHOPS_WITH_SELL_PRICE_HIGHER_THAN_BUY_PRICE = true;
