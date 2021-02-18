@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.PreTransaction;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.EventHandler;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class InvalidNameIgnorer implements Listener {
 
-    private final static Pattern USERNAME_PATTERN = Pattern.compile("^\\w+$");
+    private final static Pattern USERNAME_PATTERN = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreTransaction(PreTransactionEvent event) {
