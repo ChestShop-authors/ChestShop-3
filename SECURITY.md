@@ -7,8 +7,8 @@ and which ones are supported with security updates if necessary.
 
 | Version       | Active development | Security Fixes     |
 | ------------- | ------------------ | ------------------ |
-| 3.11 (latest) | :heavy_check_mark: | :heavy_check_mark: |
-| < 3.11        | :x:                | :x:                |
+| latest        | :heavy_check_mark: | :heavy_check_mark: |
+| < latest      | :x:                | :x:                |
 | 3.9.3-1.12    | :x:                | :heavy_check_mark: |
 | 3.9.2-1.8.8   | :x:                | :heavy_check_mark: |
 
