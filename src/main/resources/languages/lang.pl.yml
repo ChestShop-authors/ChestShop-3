@@ -20,7 +20,7 @@ iteminfo_lore: |-
   &fOpis:
   &r%lore
 METRICS: |-
-  &a[Shop] &fStatystyki:
+  &a[Sklep] &fStatystyki:
   &fLiczba Kont: &7%accounts
   &fŚrednie transakcje: &7%totalTransactions &f(Kup: &7%buyTransactions &fSprzedaj: &7%sellTransactions&f)
   &fŚrednie wymienione przedmioty: &7%totalItems &f(Kupione: &7%boughtItems &fSprzedane: &7%soldItems&f)
@@ -44,7 +44,7 @@ NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[Sklep z %item&7 w cenie %price jest pusty!](&f%
 YOU_BOUGHT_FROM_SHOP: "Kupiles %item od %owner za %price."
 SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer kupił %item za %price.](&7W świecie: &f%world\n&7Na pozycji: &f%x/%y/%z)"
 YOU_SOLD_TO_SHOP: "Sprzedales %item dla %buyer za %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller sprzedal tobie %item za %price"
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sprzedał %item za %price.](&7W świecie: &f%world\n&7Na pozycji: &f%x/%y/%z)"
 YOU_CANNOT_CREATE_SHOP: "Nie mozesz stworzyc sklepu tego typu!"
 NO_CHEST_DETECTED: "Nie znaleziono skrzyni!"
 INVALID_SHOP_DETECTED: "Sklep nie może być używany (być może brakuje skrzyni)!"
