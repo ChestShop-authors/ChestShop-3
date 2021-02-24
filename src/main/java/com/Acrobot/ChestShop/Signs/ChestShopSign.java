@@ -148,13 +148,13 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-    	if ((!isAdminShop(lines[0])) && (lines[0].length() > 0)) {
-    		Pattern PlayernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
-    		if (!PlayernamePattern.matcher(lines[0]).matches()) {
-    			return false;
-    		}
-    	}
-    		
+        if ((!isAdminShop(lines[0])) && (lines[0].length() > 0)) {
+            Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
+            if (!playernamePattern.matcher(lines[0]).matches()) {
+                return false;
+            }
+        }
+
         for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
