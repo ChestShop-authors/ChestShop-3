@@ -29,8 +29,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
-import static com.Acrobot.ChestShop.Permission.OTHER_NAME;
-
 /**
  * Lets you save/cache username and UUID relations
  *
@@ -149,13 +147,12 @@ public class NameManager implements Listener {
     @EventHandler
     public static void onAccountQuery(AccountQueryEvent event) {
         if (event.getAccount() == null) {
-            event.setAccount(getLastAccountFromShortName(event.getName(), event.searchOfflinePlayers()));
+            event.setAccount(getLastAccountFromName(event.getName(), event.searchOfflinePlayers()));
         }
     }
 
     /**
      * Get account info from a username that might be shortened.
-     * If no account was found it will try to search all known players and create an account.
      *
      * @param shortName The name of the player to get the account info
      * @return The account info or <tt>null</tt> if none was found
@@ -164,56 +161,49 @@ public class NameManager implements Listener {
      */
     @Deprecated
     public static Account getAccountFromShortName(String shortName) {
-        return getAccountFromShortName(shortName, true);
-    }
-
-    private static Account getAccountFromShortName(String shortName, boolean searchOfflinePlayer) {
-
         Validate.notEmpty(shortName, "shortName cannot be null or empty!");
         Account account = null;
 
-        if (shortName.length() > 15) {
-            account = getAccount(shortName);
-        } else {
-            try {
-                account = shortToAccount.get(shortName, () -> {
-                    try {
-                        Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
-                        if (a != null) {
-                            a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                            return a;
-                        }
-                    } catch (SQLException e) {
-                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
+        try {
+            account = shortToAccount.get(shortName, () -> {
+                try {
+                    Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
+                    if (a != null) {
+                        a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                        return a;
                     }
-                    throw new Exception("Could not find account for " + shortName);
-                });
-            } catch (ExecutionException ignored) {}
-        }
-
-        if (account == null && searchOfflinePlayer && !invalidPlayers.contains(shortName.toLowerCase(Locale.ROOT))) {
-            // no account with that shortname was found, try to get an offline player with that name
-            OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(shortName);
-            if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
-                    && (!Properties.ENSURE_CORRECT_PLAYERID || offlinePlayer.getUniqueId().version() == uuidVersion)) {
-                account = storeUsername(new PlayerDTO(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
-            } else {
-                invalidPlayers.put(shortName.toLowerCase(Locale.ROOT), true);
-            }
-        }
+                } catch (SQLException e) {
+                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
+                }
+                throw new Exception("Could not find account for " + shortName);
+            });
+        } catch (ExecutionException ignored) {}
         return account;
     }
 
     /**
-     * Get the information from the last time a player logged in that previously used the shortened name
+     * Get the information from the last time a player logged in that previously used the (shortened) name
      *
-     * @param shortName The name of the player to get the last account for
+     * @param name The name of the player to get the last account for
      * @param searchOfflinePlayer Whether or not to search the offline players too
      * @return The last account or <tt>null</tt> if none was found
      * @throws IllegalArgumentException if the username is empty
      */
-    private static Account getLastAccountFromShortName(String shortName, boolean searchOfflinePlayer) {
-        Account account = getAccountFromShortName(shortName, searchOfflinePlayer); // first get the account associated with the short name
+    private static Account getLastAccountFromName(String name, boolean searchOfflinePlayer) {
+        Account account = getAccountFromShortName(name); // first get the account associated with the short name
+        if (account == null) {
+            account = getAccount(name);
+        }
+        if (account == null && searchOfflinePlayer && !invalidPlayers.contains(name.toLowerCase(Locale.ROOT))) {
+            // no account with that shortname was found, try to get an offline player with that name
+            OfflinePlayer offlinePlayer = ChestShop.getBukkitServer().getOfflinePlayer(name);
+            if (offlinePlayer != null && offlinePlayer.getName() != null && offlinePlayer.getUniqueId() != null
+                    && (!Properties.ENSURE_CORRECT_PLAYERID || offlinePlayer.getUniqueId().version() == uuidVersion)) {
+                account = storeUsername(new PlayerDTO(offlinePlayer.getUniqueId(), offlinePlayer.getName()));
+            } else {
+                invalidPlayers.put(name.toLowerCase(Locale.ROOT), true);
+            }
+        }
         if (account != null) {
             return getAccount(account.getUuid()); // then get the last account that was online with that UUID
         }
@@ -264,14 +254,14 @@ public class NameManager implements Listener {
     private static String getNewShortenedName(PlayerDTO player) {
         String shortenedName = NameUtil.stripUsername(player.getName());
 
-        Account account = getAccountFromShortName(shortenedName, false);
+        Account account = getAccountFromShortName(shortenedName);
         if (account == null) {
             return shortenedName;
         }
         for (int id = 0; account != null; id++) {
             String baseId = Base62.encode(id);
             shortenedName = NameUtil.stripUsername(player.getName(), 15 - 1 - baseId.length()) + ":" + baseId;
-            account = getAccountFromShortName(shortenedName, false);
+            account = getAccountFromShortName(shortenedName);
         }
 
         return shortenedName;
