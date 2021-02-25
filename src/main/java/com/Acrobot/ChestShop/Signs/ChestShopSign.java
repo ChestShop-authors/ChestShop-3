@@ -148,13 +148,32 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
+        // If the shop owner (playername) line (first line) is not blank (auto-filled) or the admin shop string, we need to validate it
         if ((!isAdminShop(lines[0])) && (lines[0].length() > 0)) {
+            // The shop owner line can now be a verbatim playername, or (if the name is too long) a shortened name followed by a ':' then a base62 encoded ID
+
+            // Prepare regexp pattern defined in the configuration file
             Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
-            if (!playernamePattern.matcher(lines[0]).matches()) {
+
+            String playername = null;
+            int lastColon = lines[0].lastIndexOf(":");
+
+            if (lastColon > -1) {
+                // Found a ':' so this is a shortened name. Extract everything before the last ':'.
+                playername = lines[0].substring(0, lastColon - 1);
+            }
+            else {
+                // Not found - this is a verbatim playername
+                playername = lines[0];
+            }
+
+            // If the playername doesn't match, this is not a valid sign, so return
+            if (!playernamePattern.matcher(playername).matches()) {
                 return false;
             }
         }
 
+        // The first line is valid. Now validate the last 3 lines against the predefined regexp patterns.
         for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
@@ -167,6 +186,8 @@ public class ChestShopSign {
                 return false;
             }
         }
+
+        // All lines are looking good. If the price line contains only one ':', then this is a valid prepared sign.
         return lines[PRICE_LINE].indexOf(':') == lines[PRICE_LINE].lastIndexOf(':');
     }
 }
