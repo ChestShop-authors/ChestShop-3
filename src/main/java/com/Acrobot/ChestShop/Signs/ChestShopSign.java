@@ -148,23 +148,20 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-        // If the shop owner (playername) line (first line) is not blank (auto-filled) or the admin shop string, we need to validate it
-        if ((!isAdminShop(lines[0])) && (lines[0].length() > 0)) {
-            // The shop owner line can now be a verbatim playername, or (if the name is too long) a shortened name followed by a ':' then a base62 encoded ID
+        // The first line is the name of the shop owner
+        String playername = lines[0];
 
-            // Prepare regexp pattern defined in the configuration file
-            Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP);
+        // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
+        if ((!isAdminShop(playername)) && (playername.length() > 0)) {
 
-            String playername = null;
-            int lastColon = lines[0].lastIndexOf(":");
+            // Prepare regexp patterns
+            Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP); // regexp from config file
+            Pattern shortenedPlayernamePattern = Pattern.compile(":[A-Za-z0-9]+$");          // regexp to match ':' and a base62 encoded string
 
-            if (lastColon > -1) {
-                // Found a ':' so this is a shortened name. Extract everything before the last ':'.
-                playername = lines[0].substring(0, lastColon - 1);
-            }
-            else {
-                // Not found - this is a verbatim playername
-                playername = lines[0];
+            // If the playername is 15 characters (full line), this could be a shortened playername
+            if ((playername.length() == 15) && (shortenedPlayernamePattern.matcher(playername).matches())) {
+                // Playername matches the shortened playername pattern, so validate everything before the last ':'
+                playername = playername.substring(0, playername.lastIndexOf(":") - 1);
             }
 
             // If the playername doesn't match, this is not a valid sign, so return
