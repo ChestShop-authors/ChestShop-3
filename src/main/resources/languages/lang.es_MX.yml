@@ -1,12 +1,13 @@
 ---
 prefix: "&a[Tienda] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  Información de la Tienda
+  &aInformación de la Tienda:
+  &fDueño: &7%owner
+  &fEn inventario: &7%stock
+  &fArticulo: &7%item
+shopinfo_buy: "&fCompraste &7%amount &fpor &7%price"
+shopinfo_sell: "&fVendiste &7%amount &fpor &7%price"
 iteminfo: "Información de &aItem: &r"
 iteminfo_fullname: "&fNombre completo: &7%item"
 iteminfo_shopname: "&fCartel Tienda: &7%item"
@@ -19,9 +20,9 @@ iteminfo_lore: |-
 METRICS: |-
   &a[Tienda] &fMétricas:
 ACCESS_DENIED: "¡No tienes permiso para acceder al almacenamiento de esa tienda!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+TRADE_DENIED: "¡No tienes permiso para comerciar con esa tienda!"
+TRADE_DENIED_ACCESS_PERMS: "¡No puedes comerciar con tiendas a las que tienes acceso!"
+TRADE_DENIED_CREATIVE_MODE: "¡No puedes comerciar con tiendas mientras estés en modo creativo!"
 NOT_ENOUGH_MONEY: "No tienes suficiente dinero!"
 NOT_ENOUGH_MONEY_SHOP: "El dueño de la tienda no tiene suficiente dinero!"
 CLIENT_DEPOSIT_FAILED: "Depósito de dinero a tu cuenta fallido!"
@@ -52,7 +53,7 @@ BUY_PRICE_BELOW_MIN: "¡El precio de compra está por debajo del mínimo!"
 CLICK_TO_AUTOFILL_ITEM: "¡Haga clic en el letrero con el ítem que es para esta tienda!"
 NO_ITEM_IN_HAND: "¡No tienes un ítem en tu mano para autocompletar!"
 PROTECTED_SHOP: "Tienda exitosamente protegida con LWC!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "¡Has protegido con éxito el cartel de la tienda con LWC!"
 SHOP_CREATED: "Tienda creada exitosamente!"
 SHOP_FEE_PAID: "Se te ha cobrado %amount"
 SHOP_REFUNDED: "Se te ha reintegrado %amount"
@@ -61,9 +62,9 @@ RESTRICTED_SIGN_CREATED: "Cartel creado exitosamente!"
 PLAYER_NOT_FOUND: "Jugador no encontrado!"
 NO_PERMISSION: "No tienes permiso para hacer eso!"
 INCORRECT_ITEM_ID: "Has especificado un id de artículo inválido!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "¡Tu nombre de usuario no es un nombre de usuario válido de Minecraft!"
 NOT_ENOUGH_PROTECTIONS: "No ha sido posible crear una protección!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "Tienda no encontrada."
 CANNOT_CREATE_SHOP_HERE: "No puedes crear una tienda aquí!"
 TOGGLE_MESSAGES_OFF: "Ya no recibirá mensajes de su(s) tienda(s)."
 TOGGLE_MESSAGES_ON: "Ahora recibirá mensajes de su(s) tienda(s)."
