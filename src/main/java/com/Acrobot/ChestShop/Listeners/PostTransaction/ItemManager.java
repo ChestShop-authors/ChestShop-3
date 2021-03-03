@@ -1,9 +1,12 @@
 package com.Acrobot.ChestShop.Listeners.PostTransaction;
 
+import com.Acrobot.Breeze.Utils.ImplementationAdapter;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -54,9 +57,11 @@ public class ItemManager implements Listener {
     private static void update(InventoryHolder holder) {
         if (holder instanceof Player) {
             ((Player) holder).updateInventory();
-        }
-        if (holder instanceof BlockState) {
+        } else if (holder instanceof BlockState) {
             ((BlockState) holder).update();
+        } else if (holder instanceof DoubleChest) {
+            update(ImplementationAdapter.getLeftSide((DoubleChest) holder, false));
+            update(ImplementationAdapter.getRightSide((DoubleChest) holder, false));
         }
     }
 }
