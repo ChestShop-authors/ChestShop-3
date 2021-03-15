@@ -1,12 +1,12 @@
 ---
 prefix: "§a[Tienda] §r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
+  &aInformación de la tienda:
+  &fPropietario: &7%owner
   &fStock: &7%stock
   &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+shopinfo_buy: "&fCompra &7%amount &fpor &7%price"
+shopinfo_sell: "&fVende &7%amount &fpor &7%price"
 iteminfo: "§aInformacion del Item: §r"
 iteminfo_fullname: "&fNombre Completo MC: &7%item"
 iteminfo_shopname: "&fNombre del item para poner en el cartel: &7%item"
@@ -52,7 +52,7 @@ BUY_PRICE_BELOW_MIN: "¡El precio de compra está por debajo del máximo!"
 CLICK_TO_AUTOFILL_ITEM: "¡Golpea el cartel con el item que quieres en esta tienda!"
 NO_ITEM_IN_HAND: "¡No tienes un artículo en tu mano para autollenar!"
 PROTECTED_SHOP: "Tienda protegida satisfactoriamente!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "¡Has protegido el cartel de la tienda con LWC correctamente!"
 SHOP_CREATED: "Tienda creada correctamente!"
 SHOP_FEE_PAID: "Han sido cargados %amount"
 SHOP_REFUNDED: "Has reembolsado %amount."
