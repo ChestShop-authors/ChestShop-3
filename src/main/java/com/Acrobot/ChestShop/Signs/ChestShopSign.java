@@ -34,7 +34,6 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[][] SHOP_SIGN_PATTERN = {
-            { Pattern.compile("^?[\\w \\-.:]*$") },
             { Pattern.compile("^[1-9][0-9]{0,5}$"), Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$") },
             {
                 Pattern.compile("(?i)^((\\d*([.e]\\d+)?)|free)$"),
@@ -150,10 +149,33 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-        for (int i = 0; i < 4; i++) {
+        // The first line is the name of the shop owner
+        String playername = lines[0];
+
+        // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
+        if ((!isAdminShop(playername)) && (playername.length() > 0)) {
+
+            // Prepare regexp patterns
+            Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP); // regexp from config file
+            Pattern playernameWithIdPattern = Pattern.compile(":[A-Za-z0-9]+$"); // regexp to match ':' and a base62 encoded string
+
+            // Check if the playername has an ID. This can happen on duplicate or too long names
+            if (playernameWithIdPattern.matcher(playername).matches()) {
+                // Playername matches the id pattern, so validate everything before the last ':'
+                playername = playername.substring(0, playername.lastIndexOf(":") - 1);
+            }
+
+            // If the playername doesn't match, this is not a valid sign, so return
+            if (!playernamePattern.matcher(playername).matches()) {
+                return false;
+            }
+        }
+
+        // The first line is valid. Now validate the last 3 lines against the predefined regexp patterns.
+        for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
-                if (pattern.matcher(lines[i]).matches()) {
+                if (pattern.matcher(lines[i+1]).matches()) {
                     matches = true;
                     break;
                 }
@@ -162,6 +184,8 @@ public class ChestShopSign {
                 return false;
             }
         }
+
+        // All lines are looking good. If the price line contains only one ':', then this is a valid prepared sign.
         return lines[PRICE_LINE].indexOf(':') == lines[PRICE_LINE].lastIndexOf(':');
     }
 }
