@@ -156,11 +156,11 @@ public class ChestShopSign {
 
             // Prepare regexp patterns
             Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP); // regexp from config file
-            Pattern shortenedPlayernamePattern = Pattern.compile(":[A-Za-z0-9]+$");          // regexp to match ':' and a base62 encoded string
+            Pattern playernameWithIdPattern = Pattern.compile(":[A-Za-z0-9]+$"); // regexp to match ':' and a base62 encoded string
 
-            // If the playername is 15 characters (full line), this could be a shortened playername
-            if ((playername.length() == 15) && (shortenedPlayernamePattern.matcher(playername).matches())) {
-                // Playername matches the shortened playername pattern, so validate everything before the last ':'
+            // Check if the playername has an ID. This can happen on duplicate or too long names
+            if (playernameWithIdPattern.matcher(playername).matches()) {
+                // Playername matches the id pattern, so validate everything before the last ':'
                 playername = playername.substring(0, playername.lastIndexOf(":") - 1);
             }
 
