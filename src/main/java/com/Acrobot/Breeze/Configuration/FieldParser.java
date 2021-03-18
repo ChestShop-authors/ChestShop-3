@@ -19,7 +19,9 @@ public class FieldParser {
         StringBuilder builder = new StringBuilder(50);
 
         if (field.isAnnotationPresent(ConfigurationComment.class)) {
-            builder.append("# ").append(field.getAnnotation(ConfigurationComment.class).value()).append('\n');
+            for (String commentLine : field.getAnnotation(ConfigurationComment.class).value().split("\n")) {
+                builder.append("# ").append(commentLine).append('\n');
+            }
         }
 
         ValueParser parser = Configuration.getParser(field);
