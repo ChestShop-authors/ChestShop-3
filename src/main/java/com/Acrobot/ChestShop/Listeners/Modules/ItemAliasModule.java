@@ -78,7 +78,7 @@ public class ItemAliasModule implements Listener {
                     length = (short) entry.getValue().length();
                     code = entry.getKey();
                 } else if (typeParts.length > 1) {
-                    String[] nameParts = entry.getValue().split("[ _]");
+                    String[] nameParts = entry.getValue().toUpperCase(Locale.ROOT).split("[ _]");
                     if (typeParts.length == nameParts.length) {
                         boolean matched = true;
                         for (int i = 0; i < nameParts.length; i++) {
