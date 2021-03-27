@@ -252,7 +252,7 @@ public class MaterialUtil {
         if (width <= maxWidth) {
             return itemName;
         }
-        String[] itemParts = itemName.split(" ");
+        String[] itemParts = itemName.split("[ \\-]");
         itemName = String.join("", itemParts);
         width = getMinecraftStringWidth(itemName);
         if (width <= maxWidth) {
