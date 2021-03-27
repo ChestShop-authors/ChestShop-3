@@ -1,9 +1,7 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.Breeze.Utils.StringUtil;
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
-import com.Acrobot.ChestShop.Utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -19,18 +17,14 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Map;
-import java.util.logging.Level;
 
 import static com.Acrobot.Breeze.Utils.NumberUtil.toRoman;
 import static com.Acrobot.Breeze.Utils.NumberUtil.toTime;
 import static com.Acrobot.Breeze.Utils.StringUtil.capitalizeFirstLetter;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book_generation;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_fullname;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_lore;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_repaircost;
-import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_shopname;
 
 /**
  * @author Acrobot
@@ -123,9 +117,11 @@ public class ItemInfoListener implements Listener {
 
     @EventHandler
     public static void addLoreInfo(ItemInfoEvent event) {
-        ItemMeta meta = event.getItem().getItemMeta();
-        if (meta.hasLore()) {
-            iteminfo_lore.send(event.getSender(), "lore", String.join("\n", meta.getLore()));
+        if (event.getItem().hasItemMeta()) {
+            ItemMeta meta = event.getItem().getItemMeta();
+            if (meta.hasLore()) {
+                iteminfo_lore.send(event.getSender(), "lore", String.join("\n", meta.getLore()));
+            }
         }
     }
 }
