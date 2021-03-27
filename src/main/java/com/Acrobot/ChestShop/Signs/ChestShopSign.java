@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
@@ -157,12 +158,11 @@ public class ChestShopSign {
 
             // Prepare regexp patterns
             Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP); // regexp from config file
-            Pattern playernameWithIdPattern = Pattern.compile(":[A-Za-z0-9]+$"); // regexp to match ':' and a base62 encoded string
-
+            Matcher playernameWithIdMatcher = Pattern.compile("^(.+):[A-Za-z0-9]+$").matcher(playername); // regexp to match ':' and a base62 encoded string
             // Check if the playername has an ID. This can happen on duplicate or too long names
-            if (playernameWithIdPattern.matcher(playername).matches()) {
+            if (playernameWithIdMatcher.matches()) {
                 // Playername matches the id pattern, so validate everything before the last ':'
-                playername = playername.substring(0, playername.lastIndexOf(":") - 1);
+                playername = playernameWithIdMatcher.group(1);
             }
 
             // If the playername doesn't match, this is not a valid sign, so return
