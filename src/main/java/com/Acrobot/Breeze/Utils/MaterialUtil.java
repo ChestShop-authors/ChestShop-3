@@ -102,24 +102,41 @@ public class MaterialUtil {
         if (!one.hasItemMeta() && !two.hasItemMeta()) {
             return true;
         }
-        Map<String, Object> oneSerMeta = one.getItemMeta().serialize();
-        Map<String, Object> twoSerMeta = two.getItemMeta().serialize();
+        ItemMeta oneMeta = one.getItemMeta();
+        ItemMeta twoMeta = two.getItemMeta();
+        // return true if both are null or same, false if only one is null
+        if (oneMeta == twoMeta || oneMeta == null || twoMeta == null) {
+            return oneMeta == twoMeta;
+        }
+        Map<String, Object> oneSerMeta = oneMeta.serialize();
+        Map<String, Object> twoSerMeta = twoMeta.serialize();
         if (oneSerMeta.equals(twoSerMeta)) {
             return true;
         }
 
         // Try to use same parsing as the YAML dumper in the ItemDatabase when generating the code as the last resort
         ItemStack oneDumped = YAML.loadAs(YAML.dump(one), ItemStack.class);
-        if (oneDumped.isSimilar(two) || oneDumped.getItemMeta().serialize().equals(twoSerMeta)) {
+        if (oneDumped.isSimilar(two)) {
+            return true;
+        }
+
+        ItemMeta oneDumpedMeta = oneDumped.getItemMeta();
+        if (oneDumpedMeta != null && oneDumpedMeta.serialize().equals(twoSerMeta)) {
             return true;
         }
 
         ItemStack twoDumped = YAML.loadAs(YAML.dump(two), ItemStack.class);
-        if (oneDumped.isSimilar(twoDumped) || oneDumped.getItemMeta().serialize().equals(twoDumped.getItemMeta().serialize())) {
+        if (oneDumped.isSimilar(twoDumped)) {
             return true;
         }
 
-        return false;
+        ItemMeta twoDumpedMeta = twoDumped.getItemMeta();
+        if (oneDumpedMeta != null && twoDumpedMeta != null && oneDumpedMeta.serialize().equals(twoDumpedMeta.serialize())) {
+            return true;
+        }
+
+        // return true if both are null or same, false otherwise
+        return oneDumpedMeta == twoDumpedMeta;
     }
 
     /**
