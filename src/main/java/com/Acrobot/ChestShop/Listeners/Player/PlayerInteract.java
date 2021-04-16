@@ -113,6 +113,8 @@ public class PlayerInteract implements Listener {
                             sign.setLine(i, changeEvent.getLine(i));
                         }
                         sign.update();
+                    } else {
+                        event.setCancelled(true);
                     }
                 } else {
                     Messages.NO_ITEM_IN_HAND.sendWithPrefix(player);
