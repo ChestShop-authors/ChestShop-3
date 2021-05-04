@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import com.webkonsept.bukkit.simplechestlock.SCL;
 import org.bukkit.block.Block;
@@ -36,6 +37,8 @@ public class SimpleChestLock implements Listener {
 
         if (!scl.chests.getOwner(block).equals(playerName)) {
             event.setResult(Event.Result.DENY);
+        } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+            event.setResult(Event.Result.ALLOW);
         }
     }
 

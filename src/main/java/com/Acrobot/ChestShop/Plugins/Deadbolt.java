@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,6 +27,8 @@ public class Deadbolt implements Listener {
 
         if (!com.daemitus.deadbolt.Deadbolt.isAuthorized(player, block)) {
             event.setResult(Event.Result.DENY);
+        } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+            event.setResult(Event.Result.ALLOW);
         }
     }
 }

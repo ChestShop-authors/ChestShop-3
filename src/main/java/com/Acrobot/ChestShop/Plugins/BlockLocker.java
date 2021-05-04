@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -22,8 +23,14 @@ public class BlockLocker implements Listener {
         }
 
         Block block = event.getBlock();
-        if (BlockLockerAPIv2.isProtected(block) && !BlockLockerAPIv2.isOwner(event.getPlayer(), block)) {
+        if (!BlockLockerAPIv2.isProtected(block)) {
+            return;
+        }
+
+        if (!BlockLockerAPIv2.isOwner(event.getPlayer(), block)) {
             event.setResult(Event.Result.DENY);
+        } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+            event.setResult(Event.Result.ALLOW);
         }
     }
 }

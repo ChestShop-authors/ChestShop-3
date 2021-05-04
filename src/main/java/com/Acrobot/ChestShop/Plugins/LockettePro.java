@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Plugins;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
 import me.crafter.mc.lockettepro.LocketteProAPI;
 import org.bukkit.block.Block;
@@ -19,12 +20,14 @@ public class LockettePro implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         
-        if (!LocketteProAPI.isProtected(block)) {
+        if (!LocketteProAPI.isProtected(block) && !LocketteProAPI.isLocked(block)) {
             return;
         }
         
-        if (LocketteProAPI.isLocked(block) && !LocketteProAPI.isOwner(block, player)) {
+        if (!LocketteProAPI.isUser(block, player)) {
             event.setResult(Event.Result.DENY);
+        } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
+            event.setResult(Event.Result.ALLOW);
         }
     }
 }
