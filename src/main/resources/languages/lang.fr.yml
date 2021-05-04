@@ -1,5 +1,14 @@
 ---
 prefix: "&a[Shop] &r"
+
+shopinfo: |-
+  &aInformations sur le shop:
+  &fPropriétaire: &7%owner
+  &fStocks: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fAchète en &7%amount &fpour &7%price"
+shopinfo_sell: "&fVends en &7%amount &fpour &7%price"
+
 iteminfo: "&aInformation sur l'Objet: &f"
 iteminfo_fullname: "&fNom Complet: &7%item"
 iteminfo_shopname: "&fPanneau du Magasin: &7%item"
