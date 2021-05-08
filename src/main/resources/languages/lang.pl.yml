@@ -1,12 +1,12 @@
 ---
 prefix: "&a[Sklep] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  &aInformacje o sklepie:
+  &fWłaściciel: &7%owner
+  &fIlość: &7%stock
+  &fPrzedmiot: &7%item
+shopinfo_buy: "&fKup &7%amount &fza &7%price"
+shopinfo_sell: "&fSprzedaj &7%amount &fza &7%price"
 iteminfo: "§aInfo. o przedmiocie: §r"
 iteminfo_fullname: "&fPełna Nazwa: &7%item"
 iteminfo_shopname: "&fNazwa Sklepu: &7%item"
@@ -67,9 +67,9 @@ RESTRICTED_SIGN_CREATED: "Znak zostal pomyslnie utworzony!"
 PLAYER_NOT_FOUND: "Nie znaleziono gracza!"
 NO_PERMISSION: "Nie masz do tego uprawnien!"
 INCORRECT_ITEM_ID: "Niepoprawne ID bloku/przedmiotu!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "Twoja nick nie jest poprawną nazwą użytkownika Minecraft!"
 NOT_ENOUGH_PROTECTIONS: "Nie mozesz zabezpieczyc wiekszej ilosci skrzyn!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "Nie znaleziono sklepu."
 CANNOT_CREATE_SHOP_HERE: "Nie mozesz stworzyc tu sklepu!"
 TOGGLE_MESSAGES_OFF: "Nie bedziesz juz otrzymywac wiadomosci ze swoich sklepów"
 TOGGLE_MESSAGES_ON: "Od teraz bedziesz otrzymywal wiadomosci ze swoich sklepów"
