@@ -67,7 +67,7 @@ public class PlayerInteract implements Listener {
             Sign sign = uBlock.getConnectedSign(block);
             if (sign != null) {
 
-                if (!Security.canAccess(player, block, Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
+                if (!Security.canView(player, block, Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
                     if (Permission.has(player, Permission.SHOPINFO)) {
                         ChestShop.callEvent(new ShopInfoEvent(player, sign));
                         event.setCancelled(true);

@@ -55,7 +55,7 @@ public class PlayerInventory implements Listener {
         boolean canAccess = false;
         for (Block container : containers) {
             if (ChestShopSign.isShopBlock(container)) {
-                if (Security.canAccess(player, container)) {
+                if (Security.canView(player, container, false)) {
                     canAccess = true;
                 }
             } else {

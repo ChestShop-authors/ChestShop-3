@@ -13,6 +13,7 @@ public class ProtectionCheckEvent extends Event {
 
     private Result result = Result.DEFAULT;
     private boolean ignoreBuiltInProtection = false;
+    private boolean checkManagement = true;
     private Block block;
     private Player player;
 
@@ -27,8 +28,19 @@ public class ProtectionCheckEvent extends Event {
         this.ignoreBuiltInProtection = ignoreBuiltInProtection;
     }
 
+    public ProtectionCheckEvent(Block block, Player player, boolean ignoreBuiltInProtection, boolean checkManagement) {
+        this.block = block;
+        this.player = player;
+        this.ignoreBuiltInProtection = ignoreBuiltInProtection;
+        this.checkManagement = checkManagement;
+    }
+
     public boolean isBuiltInProtectionIgnored() {
         return ignoreBuiltInProtection;
+    }
+
+    public boolean checkCanManage() {
+        return checkManagement;
     }
 
     public Result getResult() {

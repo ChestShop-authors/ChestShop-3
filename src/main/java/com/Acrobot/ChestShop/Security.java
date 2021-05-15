@@ -52,6 +52,13 @@ public class Security {
         return event.getResult() != Event.Result.DENY;
     }
 
+    public static boolean canView(Player player, Block block, boolean ignoreDefaultProtection) {
+        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefaultProtection, false);
+        ChestShop.callEvent(event);
+
+        return event.getResult() != Event.Result.DENY;
+    }
+
     public static boolean canPlaceSign(Player player, Sign sign) {
         Block baseBlock = BlockUtil.getAttachedBlock(sign);
 
