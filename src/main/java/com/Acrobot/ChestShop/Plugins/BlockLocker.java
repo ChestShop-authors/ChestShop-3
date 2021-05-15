@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.Acrobot.ChestShop.Events.Protection.ProtectionCheckEvent;
@@ -14,11 +15,9 @@ import nl.rutgerkok.blocklocker.BlockLockerAPIv2;
  * @author Acrobot
  */
 public class BlockLocker implements Listener {
-
-
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onProtectionCheck(ProtectionCheckEvent event) {
-        if (event.getResult() == Event.Result.DENY) {
+        if (event.getResult() == Event.Result.DENY && !Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
             return;
         }
 
