@@ -66,16 +66,14 @@ public class PlayerInteract implements Listener {
         if (Properties.USE_BUILT_IN_PROTECTION && uBlock.couldBeShopContainer(block)) {
             Sign sign = uBlock.getConnectedSign(block);
             if (sign != null) {
-                if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
-                    return;
-                }
 
-                if (!Security.canAccess(player, block)) {
-                    event.setCancelled(true);
+                if (!Security.canAccess(player, block, Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY)) {
                     if (Permission.has(player, Permission.SHOPINFO)) {
                         ChestShop.callEvent(new ShopInfoEvent(player, sign));
-                    } else {
+                        event.setCancelled(true);
+                    } else if (!Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
                         Messages.ACCESS_DENIED.send(player);
+                        event.setCancelled(true);
                     }
                 }
 
