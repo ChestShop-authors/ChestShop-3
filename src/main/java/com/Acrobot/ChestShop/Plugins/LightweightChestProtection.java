@@ -120,7 +120,7 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
-        if (!lwc.canAccessProtection(player, protection) || protection.getType() == Protection.Type.DONATION) {
+        if (!lwc.canAccessProtection(player, protection) && !protection.getType().name().equals("DONATION") && !protection.getType().name().equals("DISPLAY")) {
             event.setResult(Event.Result.DENY);
         } else if (Properties.TURN_OFF_DEFAULT_PROTECTION_WHEN_PROTECTED_EXTERNALLY) {
             event.setResult(Event.Result.ALLOW);
