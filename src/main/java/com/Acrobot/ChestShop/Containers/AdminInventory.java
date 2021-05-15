@@ -209,6 +209,10 @@ public class AdminInventory implements Inventory {
     public void clear() {
     }
 
+    public int close() {
+        return 0;
+    }
+
     @Override
     public List<HumanEntity> getViewers() {
         return new ArrayList<>();
