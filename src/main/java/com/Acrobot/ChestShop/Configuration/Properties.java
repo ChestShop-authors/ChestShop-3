@@ -200,7 +200,7 @@ public class Properties {
     @ConfigurationComment("This regexp validates the name of the player. If the name doesn't match, the player will neither be able to create a valid shop sign, nor buy/sell from a shop.\n" +
             "Note for Bedrock support: If you have Floodgate on your server, you should set this regexp to ^\\\\*?\\\\w+$ and ENSURE_CORRECT_PLAYERID to false\n" +
             "If your Floodgate prefix is not *, change the first * in the regexp (the one before the question mark) to whatever your prefix is.")
-    public static String VALID_PLAYERNAME_REGEXP = "^\\\\w+$";
+    public static String VALID_PLAYERNAME_REGEXP = "^\\w+$";
 
     @PrecededBySpace
     @ConfigurationComment("Should we block shops that sell things for more than they buy? (This prevents newbies from creating shops that would be exploited)")

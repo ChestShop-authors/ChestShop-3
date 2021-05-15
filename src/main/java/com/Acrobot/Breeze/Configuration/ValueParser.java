@@ -31,9 +31,9 @@ public class ValueParser {
         } else if (object instanceof String) {
             String[] lines = ((String) object).split("\\R");
             if (lines.length == 1) {
-                return '\"' + String.valueOf(object) + '\"';
+                return '\"' + String.valueOf(object).replace("\\", "\\\\") + '\"';
             } else {
-                return "|-\n" + Arrays.stream(lines).map(s -> "  " + s).collect(Collectors.joining("\n"));
+                return "|-\n" + Arrays.stream(lines).map(s -> "  " + s.replace("\\", "\\\\")).collect(Collectors.joining("\n"));
             }
         } else {
             return '\"' + String.valueOf(object) + '\"';
