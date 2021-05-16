@@ -524,6 +524,7 @@ public class MaterialUtil {
 
             Map<String, String> newMap = new LinkedHashMap<>(replacementMap);
             newMap.put("material", "item");
+            newMap.remove("item");
             Component component = new Replacer()
                     .placeholderSuffix("")
                     .replace("item",itemComponent.build())
