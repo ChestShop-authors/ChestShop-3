@@ -495,6 +495,19 @@ public class MaterialUtil {
          * @param stock         The items in stock
          */
         public static boolean sendMessage(Player player, String playerName, Messages.Message message, ItemStack[] stock, Map<String, String> replacementMap, String... replacements) {
+            return sendMessage(player, playerName, message, true, stock, replacementMap, replacements);
+        }
+
+        /**
+         * Send a message with hover info and icons
+         *
+         * @param player        The player to send the message to
+         * @param playerName    The name of the player in case he is offline and bungee messages are enabled
+         * @param message       The raw message
+         * @param showPrefix    If the prefix should show
+         * @param stock         The items in stock
+         */
+        public static boolean sendMessage(Player player, String playerName, Messages.Message message, boolean showPrefix, ItemStack[] stock, Map<String, String> replacementMap, String... replacements) {
             if (showItem == null) {
                 return false;
             }
@@ -514,7 +527,7 @@ public class MaterialUtil {
             Component component = new Replacer()
                     .placeholderSuffix("")
                     .replace("item",itemComponent.build())
-                    .replaceIn(message.getComponent(player, true, newMap, replacements));
+                    .replaceIn(message.getComponent(player, showPrefix, newMap, replacements));
             if (player != null) {
                 ChestShop.getAudiences().player(player).sendMessage(component);
                 return true;
