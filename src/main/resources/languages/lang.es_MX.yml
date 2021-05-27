@@ -14,6 +14,8 @@ iteminfo_shopname: "&fCartel Tienda: &7%item"
 iteminfo_repaircost: "&fCosto de reparación: &7%cost"
 iteminfo_book: |-
   &fTitulo del libro: &7%title
+  &fNombre del autor: &7%author
+  &fNumero de paginas: &7%pages
 iteminfo_book_generation: "&fGeneración de libros: &7%generation"
 iteminfo_lore: |-
   &fLore:
