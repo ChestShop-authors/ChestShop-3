@@ -15,7 +15,7 @@ iteminfo_book: |-
   &fKirjan otsikko: &7%title
   &fKirjan tekijä: &7%author
   &fKirjan sivumäärä: &7%pages
-iteminfo_book_generation: "&fKirjan luonti: &7%generation"
+iteminfo_book_generation: "&fKirjan sukupolvi: &7%generation"
 iteminfo_lore: |-
   &fInfoteksti:
   &r%lore
