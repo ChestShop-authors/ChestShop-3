@@ -436,6 +436,17 @@ public class ChestShop extends JavaPlugin {
             bStats.addCustomChart(new Metrics.SimplePie("distributionType", () -> dist));
         } catch (IOException ignored) {}
 
+        String serverVersion = getServer().getBukkitVersion().split("-")[0];
+        bStats.addCustomChart(createStaticDrilldownStat("versionMcSelf", serverVersion, getDescription().getVersion()));
+        bStats.addCustomChart(createStaticDrilldownStat("versionSelfMc", getDescription().getVersion(), serverVersion));
+
+        String javaVersion = System.getProperty("java.version");
+        bStats.addCustomChart(createStaticDrilldownStat("versionJavaSelf", javaVersion, getDescription().getVersion()));
+        bStats.addCustomChart(createStaticDrilldownStat("versionSelfJava", getDescription().getVersion(), javaVersion));
+
+        bStats.addCustomChart(createStaticDrilldownStat("versionJavaMc", javaVersion, serverVersion));
+        bStats.addCustomChart(createStaticDrilldownStat("versionMcJava", serverVersion, javaVersion));
+
         bStats.addCustomChart(new Metrics.SingleLineChart("shopAccounts", NameManager::getAccountCount));
         bStats.addCustomChart(new Metrics.MultiLineChart("transactionCount", () -> ImmutableMap.of(
                 "total", MetricsModule.getTotalTransactions(),
@@ -471,6 +482,11 @@ public class ChestShop extends JavaPlugin {
         }));
         bStats.addCustomChart(new Metrics.SimpleBarChart("shopContainers",
                 () -> Properties.SHOP_CONTAINERS.stream().map(Material::name).collect(Collectors.toMap(k -> k, k -> 1))));
+    }
+
+    private Metrics.DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
+        final Map<String, Map<String, Integer>> map = ImmutableMap.of(value1, ImmutableMap.of(value2, 1));
+        return new Metrics.DrilldownPie(statId, () -> map);
     }
 
     private int[] getChartArray(boolean value) {
