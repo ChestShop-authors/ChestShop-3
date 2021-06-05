@@ -1,44 +1,44 @@
 ---
 prefix: "&a[商店] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  &a商店信息:
+  &f擁有者: &7%owner
+  &f庫存: &7%stock
+  &f物品: &7%item
+shopinfo_buy: "&f購買 &7%amount &f售價為 &7%price"
+shopinfo_sell: "&f出售 &7%amount &f售價為 &7%price"
 iteminfo: "&a物品訊息: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo_fullname: "&f全名：&7%item"
+iteminfo_shopname: "&f商店告示牌: &7%item"
+iteminfo_repaircost: "&f修理費用: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &f書名: &7%title
+  &f書籍作者: &7%author
+  &f書頁: &7%pages
+iteminfo_book_generation: "&f圖書世代: &7%generation"
 iteminfo_lore: |-
-  &fLore:
+  &f知識:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+  &a[Shop] &f指標： 
+  &f賬戶：&7%accounts
+  &f平均交易次數：&7%totalTransactions &f（buy：&7%buyTransactions &fsell：&7%sellTransactions&f） 
+  &f平均交易物品：&7%totalItems &f（bought：&7%boughtItems &fsold：&7%soldItems&f）
 ACCESS_DENIED: "你沒有足夠的許可權!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+TRADE_DENIED: "您沒有權限與該商店進行交易！"
+TRADE_DENIED_ACCESS_PERMS: "您不能再在您有權訪問的商店進行交易!"
+TRADE_DENIED_CREATIVE_MODE: "&c你不能在創造模式下使用商店交易。"
 NOT_ENOUGH_MONEY: "你沒有足夠的金錢!"
 NOT_ENOUGH_MONEY_SHOP: "商店老闆沒有足夠的金錢!"
 CLIENT_DEPOSIT_FAILED: "金錢存入你的帳戶失敗!"
 SHOP_DEPOSIT_FAILED: "金錢存入商店老闆的帳戶失敗!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_ECONOMY_ACCOUNT: "店主的經濟賬戶不存在！"
 NO_BUYING_HERE: "你不能在這裡買!"
 NO_SELLING_HERE: "你不能在這裡賣!"
 NOT_ENOUGH_SPACE_IN_INVENTORY: "這個箱子沒有足夠的庫存!"
 NOT_ENOUGH_SPACE_IN_CHEST: "這個箱子沒有足夠的空間!"
 NOT_ENOUGH_ITEMS_TO_SELL: "你沒有足夠的物品可以出售!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 店鋪已滿！](&f%seller&7 嘗試出售 \n&7世界：&f%world\n&7在位置：&f%x/%y/%z)"
 NOT_ENOUGH_STOCK: "這家商店斷貨了."
 NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "你商店的 %material 斷貨了!"
 YOU_BOUGHT_FROM_SHOP: "你花費 %price 買下 %owner 的物品 %item ."
@@ -48,30 +48,30 @@ SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller 以 %price 的價格賣出物品 %item 給�
 YOU_CANNOT_CREATE_SHOP: "你不能創建這種類型的商店!"
 NO_CHEST_DETECTED: "找不到箱子!"
 INVALID_SHOP_DETECTED: "這個商店無法使用!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+INVALID_SHOP_PRICE: "該商店的價格無效!"
+INVALID_SHOP_QUANTITY: "該商店的數量無效!"
 CANNOT_ACCESS_THE_CHEST: "你沒有許可權開啟這個箱子!"
-SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
-SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
-BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
-BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+SELL_PRICE_ABOVE_MAX: "售價高於最高價！"
+SELL_PRICE_BELOW_MIN: "售價低於最低價！"
+BUY_PRICE_ABOVE_MAX: "購買價格高於最高價！"
+BUY_PRICE_BELOW_MIN: "購買價格低於最低價！"
+CLICK_TO_AUTOFILL_ITEM: "點擊帶有該店鋪商品的標誌！"
+NO_ITEM_IN_HAND: "您手上沒有要自動填充的物品！"
 PROTECTED_SHOP: "LWC成功保護了商店!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "用LWC成功保護了商店!"
 SHOP_CREATED: "商店創建成功!"
 SHOP_FEE_PAID: "扣除你 %amount"
 SHOP_REFUNDED: "退還你 %amount"
-ITEM_GIVEN: "Given %item to %player."
+ITEM_GIVEN: "將%item给予一名%player"
 RESTRICTED_SIGN_CREATED: "告示牌創建成功!"
-PLAYER_NOT_FOUND: "Player not found!"
+PLAYER_NOT_FOUND: "玩家未找到"
 NO_PERMISSION: "你沒有許可權!"
 INCORRECT_ITEM_ID: "你指定的物品ID無效!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "您的用戶名不是有效的 Minecraft 用戶名！"
 NOT_ENOUGH_PROTECTIONS: "無法創建保護!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "沒有找到商店"
 CANNOT_CREATE_SHOP_HERE: "你不能在這裡創建商店!"
-TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
+TOGGLE_MESSAGES_OFF: "您將不再收到來自您商店的消息."
 TOGGLE_MESSAGES_ON: "您現在將收到來自您商店的消息."
 TOGGLE_ACCESS_ON: "您不能再在您有權訪問的商店進行交易"
 TOGGLE_ACCESS_OFF: "您現在可以在您可以訪問的商店進行交易"
