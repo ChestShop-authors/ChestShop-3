@@ -14,7 +14,7 @@ iteminfo_repaircost: "&fLagnings-kostnad: &7%cost"
 iteminfo_book: |-
   &fBokens Titel: &7%title
   &fBokens Författare: &7%author
-  &fBokens sidor: &7%pages
+  &fBokens Sidor: &7%pages
 iteminfo_book_generation: "&fBok-generation: &7%generation"
 iteminfo_lore: |-
   &fBeskrivning:
