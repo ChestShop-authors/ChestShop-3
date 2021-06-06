@@ -1,5 +1,12 @@
 ---
-prefix: "&a[Shop] &f"
+prefix: "&a[Shop] &r"
+shopinfo: |-
+  &aShop-Informationen:
+  &fBesitzer: &7%owner
+  &fVerfügbar: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fKaufe &7%amount &ffür &7%price"
+shopinfo_sell: "&fVerkaufe &7%amount &ffür &7%price"
 iteminfo: "&aItem Info:&f"
 iteminfo_fullname: "&fVoller Name: &7%item"
 iteminfo_shopname: "&fShop Name: &7%item"
@@ -60,7 +67,9 @@ RESTRICTED_SIGN_CREATED: "Schild erfolgreich erstellt!"
 PLAYER_NOT_FOUND: "Spieler nicht gefunden!"
 NO_PERMISSION: "Du hast dazu keine Rechte!"
 INCORRECT_ITEM_ID: "Die Item ID ist nicht in Ordnung!"
+INVALID_CLIENT_NAME: "Dein Benutzername ist kein gültiger Minecraft Benutzername!"
 NOT_ENOUGH_PROTECTIONS: "Sicherung konnte nicht erstellt werden!"
+NO_SHOP_FOUND: "Kein Shop gefunden."
 CANNOT_CREATE_SHOP_HERE: "Du kannst hier keinen Shop erstellen!"
 TOGGLE_MESSAGES_OFF: "Du wirst keine Nachrichten mehr von deinen Shops erhalten."
 TOGGLE_MESSAGES_ON: "Du wirst wieder Nachrichten von deinen Shops erhalten."

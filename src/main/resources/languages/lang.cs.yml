@@ -1,5 +1,12 @@
 ---
 prefix: "&a[Shop] &r"
+shopinfo: |-
+  &aInformace o obchodu:
+  &fMajitel: &7%owner
+  &fSkladem: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fKoupit &7%amount &fza &7%price"
+shopinfo_sell: "&fProdat &7%amount &fza &7%price"
 iteminfo: "&aInformace o předmětu: &r"
 iteminfo_fullname: "&fCelý název: &7%item"
 iteminfo_shopname: "&fNákupní cedule: &7%item"
@@ -60,7 +67,9 @@ RESTRICTED_SIGN_CREATED: "Cedule vytvořena!"
 PLAYER_NOT_FOUND: "Hráč nenalezen!"
 NO_PERMISSION: "Na tuto akci nemáš oprávnění!"
 INCORRECT_ITEM_ID: "Neplatný ID předmětu!"
+INVALID_CLIENT_NAME: "Vaše uživatelské jméno není platným uživatelským jménem Minecraftu!"
 NOT_ENOUGH_PROTECTIONS: "Ochrana nemohla být vytvořena!"
+NO_SHOP_FOUND: "Nebyl nalezen žádný obchod."
 CANNOT_CREATE_SHOP_HERE: "Zde není možné vytvořit obchod!"
 TOGGLE_MESSAGES_OFF: "Zprávy z tvých obchodů již nebudou nadále zobrazovány."
 TOGGLE_MESSAGES_ON: "Zprávy z tvých obchodů budou zase zobrazovány."

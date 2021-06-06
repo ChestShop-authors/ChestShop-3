@@ -1,66 +1,75 @@
 ---
-prefix: "&a[Shop] &r"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+prefix: "&a[Affär] &r"
+shopinfo: |-
+  &aAffär-information:
+  &fÄgare: &7%owner
+  &fLager: &7%stock
+  &fArtikel: &7%item
+shopinfo_buy: "&fKöp &7%amount &fför &7%price"
+shopinfo_sell: "&fSälj &7%amount &fför &7%price"
+iteminfo: "&aArtikel-information: &r"
+iteminfo_fullname: "&fFullt Namn: &7%item"
+iteminfo_shopname: "&fAffär-skylt: &7%item"
+iteminfo_repaircost: "&fLagnings-kostnad: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fBokens Titel: &7%title
+  &fBokens Författare: &7%author
+  &fBokens Sidor: &7%pages
+iteminfo_book_generation: "&fBok-generation: &7%generation"
 iteminfo_lore: |-
-  &fLore:
+  &fBeskrivning:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
-ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
-NOT_ENOUGH_MONEY: "You don't have enough money!"
-NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
-CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
-SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
-NO_BUYING_HERE: "You can't buy here!"
-NO_SELLING_HERE: "You can't sell here!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
-NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
-NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "This shop is out of stock."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
-NO_CHEST_DETECTED: "Couldn't find a chest!"
-INVALID_SHOP_DETECTED: "The shop cannot be used!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
-CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
-SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
-SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
-BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
-BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
-PROTECTED_SHOP: "Successfully protected the shop with LWC!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
-SHOP_CREATED: "Shop successfully created!"
-SHOP_FEE_PAID: "You have been charged %amount"
-SHOP_REFUNDED: "You have been refunded %amount."
-ITEM_GIVEN: "Given %item to %player."
-RESTRICTED_SIGN_CREATED: "Sign successfully created!"
-PLAYER_NOT_FOUND: "Player not found!"
+  &a[Affär] &fMetrics:
+  &fKonton: &7%accounts
+  &fGenomsnittlig transaktion: &7%totalTransactions &f(köp: &7%buyTransactions &fsälj: &7%sellTransactions&f)
+  &fGenomsnittliga artiklar byteshandlade: &7%totalItems &f(köpt: &7%boughtItems &fsålt: &7%soldItems&f)
+ACCESS_DENIED: "Du har inte behörighet att komma åt butikens kista!"
+TRADE_DENIED: "Du har inte tillstånd att byteshandla med denna affär!"
+TRADE_DENIED_ACCESS_PERMS: "Du kan inte byteshandla med butiker som du har tillgång till!"
+TRADE_DENIED_CREATIVE_MODE: "Du kan inte byteshandla med butiker medan du är i kreativt läge!"
+NOT_ENOUGH_MONEY: "Du har inte råd!"
+NOT_ENOUGH_MONEY_SHOP: "Affärsägaren har inte tillräckligt med pengar!"
+CLIENT_DEPOSIT_FAILED: "Pengarna kunde inte sättas in på ditt konto!"
+SHOP_DEPOSIT_FAILED: "Pengarna kunde inte sättas in hos ägaren!"
+NO_ECONOMY_ACCOUNT: "Affärsägaren har inget bankkonto!"
+NO_BUYING_HERE: "Du kan inte köpa här!"
+NO_SELLING_HERE: "Du kan inte sälja här!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Du har inte tillräckligt med plats i ditt personliga förråd!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Det finns inte tillräckligt med utrymme i kistan!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Du har inte tillräckligt med föremål för att sälja!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 affären är full!](&f%seller&7 försökte att sälja\n&7Värld: &f%world\n&7Exakta koordinater: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "Denna affär har slut på lager."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 affärens lager är slut!](&f%buyer&7 försökte köpa\n&7Värld: &f%world\n&7Exakta koordinater: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "Du köpte %item från %owner för %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer köpte %item för %price.](&7Värld: &f%world\n&7Exakta koordinater: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "Du sålde %item till %buyer för %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sålde %item för %price.](&7Värld: &f%world\n&7Exakta koordinater: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "Du kan inte skapa denna typ av affär!"
+NO_CHEST_DETECTED: "Kunde inte hitta en kista!"
+INVALID_SHOP_DETECTED: "Affären kan inte användas!"
+INVALID_SHOP_PRICE: "Affären har ett ogiltigt pris!"
+INVALID_SHOP_QUANTITY: "Affären har ett ogiltigt antal!"
+CANNOT_ACCESS_THE_CHEST: "Du har inte behörighet att komma åt denna kista!"
+SELL_PRICE_ABOVE_MAX: "Säljpriset är mer än max!"
+SELL_PRICE_BELOW_MIN: "Säljpriset är under det minsta!"
+BUY_PRICE_ABOVE_MAX: "Priset är över max!"
+BUY_PRICE_BELOW_MIN: "Priset är för lågt!"
+CLICK_TO_AUTOFILL_ITEM: "Klicka på skylten med det föremål som denna affär kommer sälja/köpa!"
+NO_ITEM_IN_HAND: "Du har inte ett föremål i handen för att autofylla!"
+PROTECTED_SHOP: "Affären lyckades bli skyddad med LWC!"
+PROTECTED_SHOP_SIGN: "Affärsskylten lyckades bli skyddad med LWC!"
+SHOP_CREATED: "Affären har skapats!"
+SHOP_FEE_PAID: "Du har blivit avdragen %amount"
+SHOP_REFUNDED: "Du har återbetalats %amount."
+ITEM_GIVEN: "Gav %item till %player."
+RESTRICTED_SIGN_CREATED: "Skylt skapad!"
+PLAYER_NOT_FOUND: "Spelaren hittades inte!"
 NO_PERMISSION: "You don't have permissions to do that!"
 INCORRECT_ITEM_ID: "You have specified an invalid item id!"
+INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
+NO_SHOP_FOUND: "No shop found."
 CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
 TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
 TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."

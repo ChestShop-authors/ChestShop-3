@@ -1,26 +1,33 @@
 ---
 prefix: "&a[Shop] &r"
+shopinfo: |-
+  &aInformations du shop:
+  &fPropriétaire: &7%owner
+  &fStock: &7%stock
+  &fItem: &7%item
+shopinfo_buy: "&fAchète &7%amount &fpour &7%price"
+shopinfo_sell: "&fVend &7%amount &fpour &7%price"
 iteminfo: "&aInformation sur l'Objet: &f"
 iteminfo_fullname: "&fNom Complet: &7%item"
 iteminfo_shopname: "&fPanneau du Magasin: &7%item"
 iteminfo_repaircost: "&fCoût de la réparation: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fTitre du livre: &7%title
+  &fAuteur du livre : &7%author
+  &fNombre de pages: &7%pages
+iteminfo_book_generation: "&fGénération du livre: &7%generation"
 iteminfo_lore: |-
   &fLore:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+  &a[Shop] &fMetrics :
+  &fComptes : &7%account
+  &fTransactions moyennes : &7%totalTransactions &f(achetez : &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fArticles moyens échangés : &7%totalItems &f(achetés : &7%boughtItems &fsold: &7%soldItems&f)
 ACCESS_DENIED: "Vous n'êtes pas autorisé à accéder au conteneur de stockage de ce magasin !"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+TRADE_DENIED: "Vous n'avez pas la permission d'utiliser ceci!"
+TRADE_DENIED_ACCESS_PERMS: "Vous ne pouvez pas commercer avec des boutiques auxquelles vous avez accès !"
+TRADE_DENIED_CREATIVE_MODE: "&cVous ne pouvez pas utiliser une boutique en mode créatif!"
 NOT_ENOUGH_MONEY: "Vous n'avez pas assez de monnaie !"
 NOT_ENOUGH_MONEY_SHOP: "Le vendeur n'a pas assez de monnaie !"
 CLIENT_DEPOSIT_FAILED: "Le dépôt d'argent sur votre compte a echoué!"
@@ -31,13 +38,13 @@ NO_SELLING_HERE: "Vous ne pouvez pas vendre ici !"
 NOT_ENOUGH_SPACE_IN_INVENTORY: "Vous n'avez plus de place dans votre inventaire !"
 NOT_ENOUGH_SPACE_IN_CHEST: "Il n'y a pas assez d'espaces dans le coffre !"
 NOT_ENOUGH_ITEMS_TO_SELL: "Vous n'avez pas assez d'objet à vendre"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[La boutique%price %item&7 est pleine!](&f%seller&7 a essayé de vendre\n&7Dans le monde : &f%world\n&7À la position: &f%x/%y/%z)"
 NOT_ENOUGH_STOCK: "Ce Magasin est vide."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[La boutique%price %item&7 est en rupture!](&f%buyer&7 a essayé d'acheter\n&7Dans le monde : &f%world\n&7À la position: &f%x/%y/%z)"
 YOU_BOUGHT_FROM_SHOP: "Vous avez acheté %amount %item a %owner pour %price."
 SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer a acheté %item pour %price.](&7Dans le monde: &f%world\n&7Aux coordonnées: &f%x/%y/%z)"
 YOU_SOLD_TO_SHOP: "Vous avez vendu %amount %item à %buyer pour %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller a vendu %item pour %price.](&7Dans le monde: &f%world\n&7Aux coordonnées: &f%x/%y/%z)"
 YOU_CANNOT_CREATE_SHOP: "Vous ne pouvez pas créer ce type de Magasin !"
 NO_CHEST_DETECTED: "Impossible de trouver le coffre !"
 INVALID_SHOP_DETECTED: "Ce magasin ne peut pas être utilisé."
@@ -60,9 +67,11 @@ RESTRICTED_SIGN_CREATED: "La création de panneau a réussi!"
 PLAYER_NOT_FOUND: "Le joueur n'a pas pu être trouvé !"
 NO_PERMISSION: "Vous n'avez pas la permission pour faire cela!"
 INCORRECT_ITEM_ID: "Vous avez spécifié une ID invalide !"
+INVALID_CLIENT_NAME: "Votre nom d'utilisateur n'est pas un nom d'utilisateur Minecraft valide !"
 NOT_ENOUGH_PROTECTIONS: "Impossible de créer une protection !"
+NO_SHOP_FOUND: "Aucun magasin trouvé."
 CANNOT_CREATE_SHOP_HERE: "Vous ne pouvez pas créer de magasin ici !"
 TOGGLE_MESSAGES_OFF: "Vous ne recevrez plus de messages en provenance de vos magasins."
 TOGGLE_MESSAGES_ON: "Vous pouvez maintenant recevoir des messages en provenance de vos magasins."
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+TOGGLE_ACCESS_ON: "Vous ne pouvez pas commercer avec des boutiques auxquelles vous avez accès"
+TOGGLE_ACCESS_OFF: "Vous pouvez commercer avec des boutiques auxquelles vous avez accès"
