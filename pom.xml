@@ -456,7 +456,7 @@
             <id>default</id>
             <activation>
                 <property>
-                    <name>!dontrundefault</name>
+                    <name>!testprofile</name>
                 </property>
             </activation>
             <repositories>
@@ -477,6 +477,12 @@
 
         <profile>
             <id>spigot</id>
+            <activation>
+                <property>
+                    <name>testprofile</name>
+                    <value>spigot</value>
+                </property>
+            </activation>
             <repositories>
                 <repository>
                     <id>spigotmc-repo</id>
@@ -491,9 +497,6 @@
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
-            <properties>
-                <dontrundefault>true</dontrundefault>
-            </properties>
             <build>
                 <finalName>${project.name}-Spigot</finalName>
                 <plugins>
@@ -511,6 +514,12 @@
 
         <profile>
             <id>backwards</id>
+            <activation>
+                <property>
+                    <name>testprofile</name>
+                    <value>backwards</value>
+                </property>
+            </activation>
             <repositories>
                 <repository>
                     <id>paper-repo</id>
@@ -525,9 +534,6 @@
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
-            <properties>
-                <dontrundefault>true</dontrundefault>
-            </properties>
             <build>
                 <finalName>${project.name}-1.13.2</finalName>
                 <plugins>
