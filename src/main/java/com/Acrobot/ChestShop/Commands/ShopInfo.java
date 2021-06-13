@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 public class ShopInfo implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            Block target = ((Player) sender).getTargetBlock(5);
+            Block target = ((Player) sender).getTargetBlockExact(5);
             if (target != null) {
                 Sign sign = null;
                 if (ChestShopSign.isValid(target)) {
