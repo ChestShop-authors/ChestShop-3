@@ -98,7 +98,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.7.0</version>
+            <version>4.8.1</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
