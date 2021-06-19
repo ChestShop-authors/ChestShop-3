@@ -6,6 +6,13 @@ labels: ''
 assignees: ''
 
 ---
+<!--                          !!! README !!!
+
+Please check if there are already similar issues open, also please test if your issue
+ isn't already fixed by trying the latest development build:
+ https://ci.minebench.de/job/ChestShop-3/
+ 
+-->
 
 #### Plugin Version
 <!-- The full plugin version that you are running from /version ChestShop -->
