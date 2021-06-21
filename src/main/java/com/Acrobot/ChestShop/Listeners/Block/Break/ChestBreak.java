@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Block.Break;
 
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
@@ -21,6 +22,7 @@ public class ChestBreak implements Listener {
     public static void onChestBreak(BlockBreakEvent event) {
         if (!canBeBroken(event.getBlock(), event.getPlayer())) {
             event.setCancelled(true);
+            Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
         }
     }
 
@@ -50,7 +52,7 @@ public class ChestBreak implements Listener {
             return true;
         }
 
-        Sign shopSign = uBlock.findAnyNearbyShopSign(block);
+        Sign shopSign = uBlock.getConnectedSign(block);
         if (breaker != null) {
             return  ChestShopSign.hasPermission(breaker, Permission.OTHER_NAME_DESTROY, shopSign);
         }

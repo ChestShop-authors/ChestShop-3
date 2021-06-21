@@ -39,6 +39,7 @@ public class BlockPlace implements Listener {
         if (!Security.canAccess(player, placed)) {
             Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
             event.setCancelled(true);
+            return;
         }
 
         Block neighbor = uBlock.findNeighbor(placed);

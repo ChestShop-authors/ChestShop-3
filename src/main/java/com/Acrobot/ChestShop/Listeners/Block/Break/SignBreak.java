@@ -2,6 +2,7 @@ package com.Acrobot.ChestShop.Listeners.Block.Break;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Listeners.Block.Break.Attached.PhysicsBreak;
@@ -70,6 +71,7 @@ public class SignBreak implements Listener {
     public static void onSignBreak(BlockBreakEvent event) {
         if (!canBlockBeBroken(event.getBlock(), event.getPlayer())) {
             event.setCancelled(true);
+            Messages.ACCESS_DENIED.sendWithPrefix(event.getPlayer());
             if (isSign(event.getBlock())) {
                 event.getBlock().getState().update();
             }
