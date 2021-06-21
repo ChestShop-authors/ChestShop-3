@@ -134,6 +134,7 @@ public class uBlock {
         return null;
     }
 
+    @Deprecated
     public static Sign findValidShopSign(Block block, String originalName) {
         Sign ownerShopSign = null;
 
@@ -221,7 +222,13 @@ public class uBlock {
         for (BlockFace bf : SHOP_FACES) {
             Block faceBlock = block.getRelative(bf);
 
-            if (!BlockUtil.isSign(faceBlock)) {
+            BlockData data = faceBlock.getBlockData();
+            if (data instanceof WallSign) {
+                if (((WallSign) data).getFacing() != bf
+                        && couldBeShopContainer(faceBlock.getRelative(((WallSign) data).getFacing().getOppositeFace()))) {
+                    continue;
+                }
+            } else if (!(data instanceof org.bukkit.block.data.type.Sign)) {
                 continue;
             }
 
