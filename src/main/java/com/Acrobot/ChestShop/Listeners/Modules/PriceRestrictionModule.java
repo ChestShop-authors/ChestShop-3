@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Listeners.Modules;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
+import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
@@ -124,24 +125,32 @@ public class PriceRestrictionModule implements Listener {
         if (PriceUtil.hasBuyPrice(event.getSignLine(PRICE_LINE))) {
             BigDecimal buyPrice = PriceUtil.getExactBuyPrice(event.getSignLine(PRICE_LINE));
 
-            if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(BigDecimal.valueOf(configuration.getDouble("min.buy_price." + itemType) * amount)) < 0) {
+            BigDecimal minBuyPrice = BigDecimal.valueOf(configuration.getDouble("min.buy_price." + itemType) * amount);
+            if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(minBuyPrice) < 0) {
                 event.setOutcome(BUY_PRICE_BELOW_MIN);
+                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(), "minprice", minBuyPrice.toPlainString());
             }
 
-            if (isValid("max.buy_price." + itemType) && buyPrice.compareTo(BigDecimal.valueOf(configuration.getDouble("max.buy_price." + itemType) * amount)) > 0) {
+            BigDecimal maxBuyPrice = BigDecimal.valueOf(configuration.getDouble("max.buy_price." + itemType) * amount);
+            if (isValid("max.buy_price." + itemType) && buyPrice.compareTo(maxBuyPrice) > 0) {
                 event.setOutcome(BUY_PRICE_ABOVE_MAX);
+                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(),  "maxprice", maxBuyPrice.toPlainString());
             }
         }
 
         if (PriceUtil.hasSellPrice(event.getSignLine(PRICE_LINE))) {
             BigDecimal sellPrice = PriceUtil.getExactSellPrice(event.getSignLine(PRICE_LINE));
 
-            if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(BigDecimal.valueOf(configuration.getDouble("min.sell_price." + itemType) * amount)) < 0) {
+            BigDecimal minSellPrice = BigDecimal.valueOf(configuration.getDouble("min.sell_price." + itemType) * amount);
+            if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(minSellPrice) < 0) {
                 event.setOutcome(SELL_PRICE_BELOW_MIN);
+                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "minprice", minSellPrice.toPlainString());
             }
 
-            if (isValid("max.sell_price." + itemType) && sellPrice.compareTo(BigDecimal.valueOf(configuration.getDouble("max.sell_price." + itemType) * amount)) > 0) {
+            BigDecimal maxSellPrice = BigDecimal.valueOf(configuration.getDouble("max.sell_price." + itemType) * amount);
+            if (isValid("max.sell_price." + itemType) && sellPrice.compareTo(maxSellPrice) > 0) {
                 event.setOutcome(SELL_PRICE_ABOVE_MAX);
+                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "maxprice", maxSellPrice.toPlainString());
             }
         }
     }
