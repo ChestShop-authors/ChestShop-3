@@ -128,7 +128,7 @@ public class PriceRestrictionModule implements Listener {
             BigDecimal minBuyPrice = BigDecimal.valueOf(configuration.getDouble("min.buy_price." + itemType) * amount);
             if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(minBuyPrice) < 0) {
                 event.setOutcome(BUY_PRICE_BELOW_MIN);
-                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(), "minprice", minBuyPrice.toPlainString());
+                Messages.BUY_PRICE_BELOW_MIN.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(), "minprice", minBuyPrice.toPlainString());
             }
 
             BigDecimal maxBuyPrice = BigDecimal.valueOf(configuration.getDouble("max.buy_price." + itemType) * amount);
@@ -144,13 +144,13 @@ public class PriceRestrictionModule implements Listener {
             BigDecimal minSellPrice = BigDecimal.valueOf(configuration.getDouble("min.sell_price." + itemType) * amount);
             if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(minSellPrice) < 0) {
                 event.setOutcome(SELL_PRICE_BELOW_MIN);
-                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "minprice", minSellPrice.toPlainString());
+                Messages.SELL_PRICE_BELOW_MIN.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "minprice", minSellPrice.toPlainString());
             }
 
             BigDecimal maxSellPrice = BigDecimal.valueOf(configuration.getDouble("max.sell_price." + itemType) * amount);
             if (isValid("max.sell_price." + itemType) && sellPrice.compareTo(maxSellPrice) > 0) {
                 event.setOutcome(SELL_PRICE_ABOVE_MAX);
-                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "maxprice", maxSellPrice.toPlainString());
+                Messages.SELL_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "maxprice", maxSellPrice.toPlainString());
             }
         }
     }
