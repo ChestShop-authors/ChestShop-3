@@ -43,9 +43,10 @@ public class Properties {
                         if (o instanceof Material) {
                             set.add((Material) o);
                         } else if (o instanceof String) {
-                            try {
-                                set.add(Material.getMaterial(((String) o).toUpperCase(Locale.ROOT)));
-                            } catch (IllegalArgumentException e) {
+                            Material m = Material.getMaterial(((String) o).toUpperCase(Locale.ROOT));
+                            if (m != null) {
+                                set.add(m);
+                            } else {
                                 ChestShop.getBukkitLogger().log(Level.WARNING, o + " is not a valid Material name in the config!");
                             }
                         }
