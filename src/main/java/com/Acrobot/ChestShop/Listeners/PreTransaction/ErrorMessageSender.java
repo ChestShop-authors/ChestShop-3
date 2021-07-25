@@ -52,10 +52,10 @@ public class ErrorMessageSender implements Listener {
 
         switch (event.getTransactionOutcome()) {
             case SHOP_DOES_NOT_BUY_THIS_ITEM:
-                message = Messages.NO_BUYING_HERE;
+                message = Messages.NO_SELLING_HERE;
                 break;
             case SHOP_DOES_NOT_SELL_THIS_ITEM:
-                message = Messages.NO_SELLING_HERE;
+                message = Messages.NO_BUYING_HERE;
                 break;
             case CLIENT_DOES_NOT_HAVE_PERMISSION:
                 message = Messages.NO_PERMISSION;

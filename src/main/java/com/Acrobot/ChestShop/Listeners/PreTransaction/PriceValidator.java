@@ -28,9 +28,9 @@ public class PriceValidator implements Listener {
 
         if (price.equals(NO_PRICE)) {
             if (transactionType == BUY) {
-                event.setCancelled(SHOP_DOES_NOT_BUY_THIS_ITEM);
-            } else {
                 event.setCancelled(SHOP_DOES_NOT_SELL_THIS_ITEM);
+            } else {
+                event.setCancelled(SHOP_DOES_NOT_BUY_THIS_ITEM);
             }
         }
     }
