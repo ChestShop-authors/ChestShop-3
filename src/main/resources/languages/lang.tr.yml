@@ -2,9 +2,9 @@
 prefix: "&a[Shop] &r"
 shopinfo: |-
   &aDükkan Bilgisi:
-  &fSahip: &7%owner 
+  &fSahip:&7 %owner 
   &fStok: &7%stock 
-  &fEşya: &7%item
+  &fEşya:&7 %item
 shopinfo_buy: "&7%price &fücret karşılığında &7%amount &fadet satın al"
 shopinfo_sell: "&7%price &fücret karşılığında &7%amount &fadet sat"
 iteminfo: "&aEşya Bilgisi: &r"
