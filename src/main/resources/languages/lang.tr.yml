@@ -20,7 +20,7 @@ iteminfo_lore: |-
   &fAçıklama:
   &r%lore
 METRICS: |-
-  &a[Shop] &fÖlçütler:
+  &a[Market] &fÖlçütler:
   &fHesaplar:&7 %accounts
   &fİşlem ortalamaları:&7 %totalTransactions &f(alış:&7 %buyTransactions &fsatış:&7 %sellTransactions&f)
   &fEşya ticareti ortalamaları:&7 %totalItems &f(alınan:&7 %boughtItems &fsatılan:&7 %soldItems&f)
