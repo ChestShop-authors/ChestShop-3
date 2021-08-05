@@ -1,0 +1,90 @@
+name: Bug report
+description: Report an error that happens in the plugin.
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Please check if there are already similar issues open, also please test if your issue
+        isn't already fixed by trying the latest development build: https://ci.minebench.de/job/ChestShop-3/
+
+  - type: textarea
+    attributes:
+      label: What is happening?
+      description: Explain what happens and what steps should be done to reproduce the issue. Ideally with pictures and the full error log!
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What did you expect to happen?
+      description: Explain what you expected to happen after performing the previously described steps
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Plugin Version
+      description: The full plugin version that you are running from `/version ChestShop`
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Plugin Config
+      description: The full `config.yml` file of ChestShop.
+      value:  |
+        <details>
+          <summary>Config</summary>
+
+         ```yaml
+         [Put the config here]
+         ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Server Version
+      description: The full server version that you are running from `/version`.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Server Log
+      description: The full `latest.log` file, especially important if you have a stack trace
+      value: |
+        <details>
+          <summary>Log</summary>
+
+          ```
+          [Your log here]
+          ```
+
+        </details>
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What other plugins are you running?
+      description: List of your plugins, ideally with the version
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Agreements
+      description: Please agree to the following.
+      options:
+        - label: I have checked if there are already similar issues open.
+          required: true
+        - label: I am running the latest build available from https://ci.minebench.de/job/ChestShop-3/.
+          required: true
+        - label: I am running a version that has support for the type of issue.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.
