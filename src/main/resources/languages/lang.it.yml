@@ -14,7 +14,7 @@ iteminfo_repaircost: "&fCosto riparazione: &7%cost"
 iteminfo_book: |-
   &fTitolo del libro: &7%title
   &fAutore del libro: &7%author
-  &fNumero pagine: &7%petà
+  &fNumero pagine: &7%pages
 iteminfo_book_generation: "&fGenerazione libro: &7%generation"
 iteminfo_lore: |-
   &fLore:
