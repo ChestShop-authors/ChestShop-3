@@ -22,6 +22,10 @@ public class BlockUtil {
      * @return Is this block a sign?
      */
     public static boolean isSign(Block block) {
+        if (!isLoaded(block)) {
+            return false;
+        }
+
         BlockData data = block.getBlockData();
         return data instanceof Sign || data instanceof WallSign;
     }
@@ -33,7 +37,7 @@ public class BlockUtil {
      * @return Is this block a chest?
      */
     public static boolean isChest(Block block) {
-        return block.getBlockData() instanceof org.bukkit.block.data.type.Chest;
+        return BlockUtil.isLoaded(block) && block.getBlockData() instanceof org.bukkit.block.data.type.Chest;
     }
 
     /**
@@ -106,5 +110,15 @@ public class BlockUtil {
         player.openInventory(inventory);
 
         return true;
+    }
+
+    /**
+     * Check if the chunk a block is in is loaded
+     *
+     * @param block The block to check
+     * @return Whether or not the chunk is loaded
+     */
+    public static boolean isLoaded(Block block) {
+        return block.getWorld().isChunkLoaded(block.getX() >> 4, block.getZ() >> 4);
     }
 }

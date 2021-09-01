@@ -51,6 +51,9 @@ public class uBlock {
      */
     @Deprecated
     public static org.bukkit.block.Chest findConnectedChest(Sign sign) {
+        if (!BlockUtil.isLoaded(sign.getBlock())) {
+            return null;
+        }
         BlockFace signFace = null;
         BlockData data = sign.getBlockData();
         if (data instanceof WallSign) {
@@ -79,6 +82,10 @@ public class uBlock {
      */
     @Deprecated
     private static org.bukkit.block.Chest findConnectedChest(Block block, BlockFace signFace) {
+        if (!BlockUtil.isLoaded(block)) {
+            return null;
+        }
+
         if (signFace != null) {
             Block faceBlock = block.getRelative(signFace);
             if (BlockUtil.isChest(faceBlock)) {
@@ -98,6 +105,10 @@ public class uBlock {
     }
 
     public static Container findConnectedContainer(Sign sign) {
+        if (!BlockUtil.isLoaded(sign.getBlock())) {
+            return null;
+        }
+
         BlockFace signFace = null;
         BlockData data = sign.getBlockData();
         if (data instanceof WallSign) {
@@ -107,6 +118,10 @@ public class uBlock {
     }
 
     public static Container findConnectedContainer(Block block) {
+        if (!BlockUtil.isLoaded(block)) {
+            return null;
+        }
+
         BlockFace signFace = null;
         BlockData data = block.getBlockData();
         if (data instanceof WallSign) {
@@ -221,6 +236,9 @@ public class uBlock {
     public static Sign findAnyNearbyShopSign(Block block) {
         for (BlockFace bf : SHOP_FACES) {
             Block faceBlock = block.getRelative(bf);
+            if (!BlockUtil.isLoaded(faceBlock)) {
+                continue;
+            }
 
             BlockData data = faceBlock.getBlockData();
             if (data instanceof WallSign) {
@@ -247,6 +265,10 @@ public class uBlock {
     }
 
     public static Block findNeighbor(Block block) {
+        if (!BlockUtil.isLoaded(block)) {
+            return null;
+        }
+
         BlockData blockData = block.getBlockData();
         if (!(blockData instanceof Chest)) {
             return null;
@@ -275,6 +297,10 @@ public class uBlock {
         }
 
         Block neighborBlock = block.getRelative(chestFace);
+        if (!BlockUtil.isLoaded(neighborBlock)) {
+            return null;
+        }
+
         if (neighborBlock.getType() == block.getType()) {
             return neighborBlock;
         }
@@ -287,7 +313,7 @@ public class uBlock {
     }
 
     public static boolean couldBeShopContainer(Block block) {
-        return block != null && Properties.SHOP_CONTAINERS.contains(block.getType());
+        return block != null && BlockUtil.isLoaded(block) && Properties.SHOP_CONTAINERS.contains(block.getType());
     }
 
     public static boolean couldBeShopContainer(InventoryHolder holder) {
