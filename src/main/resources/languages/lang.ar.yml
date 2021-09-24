@@ -1,5 +1,5 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "[متجر]"
 shopinfo: |-
   &aShop Information:
   &fOwner: &7%owner
