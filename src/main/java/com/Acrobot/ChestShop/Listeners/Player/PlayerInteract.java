@@ -134,6 +134,14 @@ public class PlayerInteract implements Listener {
                     showChestGUI(player, block, sign);
                     return;
                 }
+                if (player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
+                        || player.getInventory().getItemInMainHand().getType().name().endsWith("INK_SAC")) {
+                    if (Properties.SIGN_DYING) {
+                        return;
+                    } else {
+                        event.setCancelled(true);
+                    }
+                }
                 // don't allow owners or people with access to buy/sell at this shop
                 Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
                 return;

@@ -153,6 +153,9 @@ public class Properties {
     @ConfigurationComment("Can shop's chest be opened by owner with right-clicking a shop's sign?")
     public static boolean ALLOW_SIGN_CHEST_OPEN = false;
 
+    @ConfigurationComment("If true, the owner of a chest shop can click with a dye / ink sac to dye the sign.")
+    public static boolean SIGN_DYING = false;
+
     @ConfigurationComment("If true, when you left-click your own shop sign you won't open chest's inventory, but instead you will start destroying the sign.")
     public static boolean ALLOW_LEFT_CLICK_DESTROYING = true;
 
