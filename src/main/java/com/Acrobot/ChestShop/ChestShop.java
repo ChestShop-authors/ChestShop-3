@@ -469,6 +469,7 @@ public class ChestShop extends JavaPlugin {
             map.put("shift-sells-in-stacks", getChartArray(Properties.SHIFT_SELLS_IN_STACKS));
             map.put("shift-sells-everything", getChartArray(Properties.SHIFT_SELLS_EVERYTHING));
             map.put("allow-sign-chest-open", getChartArray(!Properties.ALLOW_SIGN_CHEST_OPEN));
+            map.put("sign-dying", getChartArray(!Properties.SIGN_DYING));
             map.put("remove-empty-shops", getChartArray(!Properties.REMOVE_EMPTY_SHOPS));
             map.put("remove-empty-chests", getChartArray(!Properties.REMOVE_EMPTY_CHESTS));
             map.put("uses-server-economy-account", getChartArray(!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()));
