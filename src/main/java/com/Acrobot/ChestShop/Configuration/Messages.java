@@ -190,7 +190,11 @@ public class Messages {
         public Component getComponent(CommandSender sender, boolean prefixSuffix, Map<String, String> replacementMap, String... replacements) {
             MineDown mineDown = new MineDown("%prefix" + getLang(sender));
             mineDown.placeholderSuffix("");
-            mineDown.replace("prefix", prefixSuffix ? prefix.getLang(sender) : "");
+            if (prefixSuffix) {
+                mineDown.replace("prefix", MineDown.parse(prefix.getLang(sender)));
+            } else {
+                mineDown.replace("prefix", "");
+            }
             mineDown.replace(replacementMap);
             mineDown.replace(replacements);
             return mineDown.toComponent();
