@@ -66,7 +66,7 @@ public class TaxModule implements Listener {
             ChestShop.getBukkitLogger().info(String.format(TAX_SENT_MESSAGE, taxAmount, taxSent, taxedSentAmount));
 
             BigDecimal taxReceived = getTaxAmount(event.getAmountReceived(), taxAmount);
-            BigDecimal taxedReceivedAmount = event.getAmountReceived().subtract(taxSent);
+            BigDecimal taxedReceivedAmount = event.getAmountReceived().subtract(taxReceived);
             event.setAmountReceived(taxedReceivedAmount);
             ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, taxReceived, taxedReceivedAmount));
         }
