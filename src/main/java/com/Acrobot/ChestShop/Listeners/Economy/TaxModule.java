@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class TaxModule implements Listener {
     private static final String TAX_RECEIVED_MESSAGE = "Applied a tax of %1$f percent (%2$.2f) to the received amount for a resulting price of %3$.2f";
-    private static final String TAX_SENT_MESSAGE = "Applied a tax of %1$f percent (%2$.2f) to the sent amount for a resulting price of %3$.2f";
+    private static final String TAX_SENT_MESSAGE = "Reduced buy price by tax of %1$f percent (%2$.2f) for a resulting price of %3$.2f as the buyer has the buy tax bypass permission";
 
     private static float getTax(UUID partner) {
         float taxAmount = NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)
@@ -60,11 +60,13 @@ public class TaxModule implements Listener {
                 ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, tax, taxedAmount));
             }
         } else if (event.getDirection() == CurrencyTransferEvent.Direction.PARTNER && Permission.has(event.getInitiator(), Permission.NO_BUY_TAX)) {
+            // Reduce paid amount as the buyer has permission to not pay taxes
             BigDecimal taxSent = getTaxAmount(event.getAmountSent(), taxAmount);
             BigDecimal taxedSentAmount = event.getAmountSent().subtract(taxSent);
             event.setAmountSent(taxedSentAmount);
             ChestShop.getBukkitLogger().info(String.format(TAX_SENT_MESSAGE, taxAmount, taxSent, taxedSentAmount));
 
+            // Reduce the amount that the seller receives anyways even though tax wasn't paid as that shouldn't make a difference for the seller
             BigDecimal taxReceived = getTaxAmount(event.getAmountReceived(), taxAmount);
             BigDecimal taxedReceivedAmount = event.getAmountReceived().subtract(taxReceived);
             event.setAmountReceived(taxedReceivedAmount);
