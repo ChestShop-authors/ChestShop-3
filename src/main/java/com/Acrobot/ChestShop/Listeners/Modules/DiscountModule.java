@@ -24,6 +24,7 @@ import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
  * @author Acrobot
  */
 public class DiscountModule implements Listener {
+    private static final String DISCOUNT_MESSAGE = "Applied a discount of %1$f percent for a resulting price of %2$.2f";
     private YamlConfiguration config;
     private Set<String> groupList = new HashSet<String>();
 
@@ -68,7 +69,10 @@ public class DiscountModule implements Listener {
 
         for (String group : groupList) {
             if (Permission.has(client, Permission.DISCOUNT + group)) {
-                event.setExactPrice(event.getExactPrice().multiply(BigDecimal.valueOf(config.getDouble(group) / 100)));
+                double discount = config.getDouble(group);
+                BigDecimal discountedPrice = event.getExactPrice().multiply(BigDecimal.valueOf(discount / 100));
+                event.setExactPrice(discountedPrice);
+                ChestShop.getBukkitLogger().info(String.format(DISCOUNT_MESSAGE, discount, discountedPrice));
                 return;
             }
         }

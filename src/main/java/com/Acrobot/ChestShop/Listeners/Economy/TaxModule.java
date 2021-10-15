@@ -4,8 +4,6 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
-import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.EventHandler;
@@ -19,6 +17,8 @@ import java.util.UUID;
  * @author Acrobot
  */
 public class TaxModule implements Listener {
+    private static final String TAX_RECEIVED_MESSAGE = "Applied a tax of %1$f percent (%2$.2f) to the received amount for a resulting price of %3$.2f";
+    private static final String TAX_SENT_MESSAGE = "Applied a tax of %1$f percent (%2$.2f) to the sent amount for a resulting price of %3$.2f";
 
     private static float getTax(UUID partner) {
         float taxAmount = NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)
@@ -49,17 +49,26 @@ public class TaxModule implements Listener {
         if (!Permission.has(event.getInitiator(), event.getDirection() == CurrencyTransferEvent.Direction.PARTNER ? Permission.NO_BUY_TAX : Permission.NO_SELL_TAX)) {
             if (!NameManager.isServerEconomyAccount(event.getReceiver())) {
                 BigDecimal tax = getTaxAmount(event.getAmountReceived(), taxAmount);
-                event.setAmountReceived(event.getAmountReceived().subtract(tax));
+                BigDecimal taxedAmount = event.getAmountReceived().subtract(tax);
+                event.setAmountReceived(taxedAmount);
                 if (NameManager.getServerEconomyAccount() != null) {
                     ChestShop.callEvent(new CurrencyAddEvent(
                             tax,
                             NameManager.getServerEconomyAccount().getUuid(),
                             event.getWorld()));
                 }
+                ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, tax, taxedAmount));
             }
         } else if (event.getDirection() == CurrencyTransferEvent.Direction.PARTNER && Permission.has(event.getInitiator(), Permission.NO_BUY_TAX)) {
-            event.setAmountSent(event.getAmountSent().subtract(getTaxAmount(event.getAmountSent(), taxAmount)));
-            event.setAmountReceived(event.getAmountReceived().subtract(getTaxAmount(event.getAmountReceived(), taxAmount)));
+            BigDecimal taxSent = getTaxAmount(event.getAmountSent(), taxAmount);
+            BigDecimal taxedSentAmount = event.getAmountSent().subtract(taxSent);
+            event.setAmountSent(taxedSentAmount);
+            ChestShop.getBukkitLogger().info(String.format(TAX_SENT_MESSAGE, taxAmount, taxSent, taxedSentAmount));
+
+            BigDecimal taxReceived = getTaxAmount(event.getAmountReceived(), taxAmount);
+            BigDecimal taxedReceivedAmount = event.getAmountReceived().subtract(taxSent);
+            event.setAmountReceived(taxedReceivedAmount);
+            ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, taxReceived, taxedReceivedAmount));
         }
     }
 }
