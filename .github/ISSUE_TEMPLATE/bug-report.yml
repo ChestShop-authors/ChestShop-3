@@ -78,10 +78,9 @@ body:
       description: Please agree to the following.
       options:
         - label: I have checked if there are already similar issues open.
-          required: true
-        - label: I am running the latest build available from https://ci.minebench.de/job/ChestShop-3/.
-          required: true
-        - label: I am running a version that has support for the type of issue.
+        - label: I am running the latest development version available from https://ci.minebench.de/job/ChestShop-3/.
+        - label: The version [has support](https://github.com/ChestShop-authors/ChestShop-3/security/policy#supported-versions) for this type of issue.
+        - label: I have provided all requested information and agree to the terms of the [project's license](https://github.com/ChestShop-authors/ChestShop-3/blob/master/LICENSE)
           required: true
 
   - type: textarea
