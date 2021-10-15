@@ -74,6 +74,7 @@ public class Messages {
     public static Message INVALID_SHOP_QUANTITY;
     public static Message CANNOT_ACCESS_THE_CHEST;
 
+    public static Message SELL_PRICE_HIGHER_THAN_BUY_PRICE;
     public static Message SELL_PRICE_ABOVE_MAX;
     public static Message SELL_PRICE_BELOW_MIN;
     public static Message BUY_PRICE_ABOVE_MAX;

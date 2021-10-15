@@ -33,7 +33,7 @@ public class ErrorMessageSender implements Listener {
                 message = Messages.INVALID_SHOP_QUANTITY;
                 break;
             case SELL_PRICE_HIGHER_THAN_BUY_PRICE:
-                message = Messages.YOU_CANNOT_CREATE_SHOP;
+                message = Messages.SELL_PRICE_HIGHER_THAN_BUY_PRICE;
                 break;
             case NO_CHEST:
                 message = Messages.NO_CHEST_DETECTED;
