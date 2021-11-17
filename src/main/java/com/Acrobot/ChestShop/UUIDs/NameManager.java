@@ -277,7 +277,6 @@ public class NameManager implements Listener {
         }
 
         AccountQueryEvent queryEvent = new AccountQueryEvent(name);
-        queryEvent.searchOfflinePlayers(false);
         ChestShop.callEvent(queryEvent);
         Account account = queryEvent.getAccount();
         if (account == null) {

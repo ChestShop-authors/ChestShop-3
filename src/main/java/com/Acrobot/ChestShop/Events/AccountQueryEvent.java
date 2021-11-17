@@ -11,7 +11,7 @@ public class AccountQueryEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final String name;
     private Account account = null;
-    private boolean searchOfflinePlayers = true;
+    private boolean searchOfflinePlayers = false;
 
     public AccountQueryEvent(String name) {
         this.name = name;
@@ -38,7 +38,8 @@ public class AccountQueryEvent extends Event {
     }
 
     /**
-     * Set whether or not offline player data should be searched (too)
+     * Set whether or not offline player data should be searched (too).
+     * This could lead to network lookups if the player by the name never joined the server!
      * @param searchOfflinePlayers Whether or not offline player data should be searched (too)
      */
     public void searchOfflinePlayers(boolean searchOfflinePlayers) {
