@@ -5,6 +5,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Permission;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -18,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
 
 /**
  * @author Acrobot
@@ -63,7 +63,7 @@ public class DiscountModule implements Listener {
 
         Player client = event.getClient();
 
-        if (!PriceUtil.hasBuyPrice(event.getSign().getLine(PRICE_LINE))) {
+        if (!PriceUtil.hasBuyPrice(ChestShopSign.getPrice(event.getSign()))) {
             return;
         }
 

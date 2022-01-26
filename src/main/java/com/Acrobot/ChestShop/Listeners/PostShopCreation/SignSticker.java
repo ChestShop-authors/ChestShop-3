@@ -13,8 +13,6 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
-
 /**
  * @author Acrobot
  */
@@ -26,7 +24,7 @@ public class SignSticker implements Listener {
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE))) {
+        if (ChestShopSign.isAdminShop(event.getSign())) {
             return;
         }
 

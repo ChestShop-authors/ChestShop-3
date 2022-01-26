@@ -33,7 +33,6 @@ import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 import static com.Acrobot.Breeze.Utils.BlockUtil.getAttachedBlock;
 import static com.Acrobot.Breeze.Utils.BlockUtil.isSign;
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
@@ -145,7 +144,7 @@ public class SignBreak implements Listener {
                 continue;
             }
 
-            if (Properties.TURN_OFF_SIGN_PROTECTION || canDestroyShop(breaker, sign.getLine(NAME_LINE))) {
+            if (Properties.TURN_OFF_SIGN_PROTECTION || canDestroyShop(breaker, ChestShopSign.getOwner(sign))) {
                 brokenBlocks.add(sign);
             } else {
                 canBeBroken = false;

@@ -8,8 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
-
 /**
  * @author Acrobot
  */
@@ -18,25 +16,23 @@ public class ShopCreationLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopCreation(final ShopCreatedEvent event) {
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override public void run() {
-                String creator = event.getPlayer().getName();
-                String shopOwner = event.getSignLine(NAME_LINE);
-                String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop" + (event.createdByOwner() ? "" : " for " + event.getOwnerAccount().getName());
+        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+            String creator = event.getPlayer().getName();
+            String shopOwner = ChestShopSign.getOwner(event.getSignLines());
+            String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop" + (event.createdByOwner() ? "" : " for " + event.getOwnerAccount().getName());
 
-                String item = event.getSignLine(QUANTITY_LINE) + ' ' + event.getSignLine(ITEM_LINE);
-                String prices = event.getSignLine(PRICE_LINE);
-                String location = LocationUtil.locationToString(event.getSign().getLocation());
+            String item = ChestShopSign.getQuantity(event.getSign()) + ' ' + ChestShopSign.getItem(event.getSign());
+            String prices = ChestShopSign.getPrice(event.getSign());
+            String location = LocationUtil.locationToString(event.getSign().getLocation());
 
-                String message = String.format(CREATION_MESSAGE,
-                        creator,
-                        typeOfShop,
-                        item,
-                        prices,
-                        location);
+            String message = String.format(CREATION_MESSAGE,
+                    creator,
+                    typeOfShop,
+                    item,
+                    prices,
+                    location);
 
-                ChestShop.getBukkitLogger().info(message);
-            }
+            ChestShop.getBukkitLogger().info(message);
         });
     }
 }

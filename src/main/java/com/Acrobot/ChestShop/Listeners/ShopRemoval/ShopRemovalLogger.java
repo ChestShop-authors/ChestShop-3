@@ -9,8 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.*;
-
 /**
  * @author Acrobot
  */
@@ -23,24 +21,22 @@ public class ShopRemovalLogger implements Listener {
             return;
         }
 
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), new Runnable() {
-            @Override public void run() {
-                String shopOwner = event.getSign().getLine(NAME_LINE);
-                String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "An Admin Shop" : "A shop belonging to " + shopOwner;
+        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+            String shopOwner = ChestShopSign.getOwner(event.getSign());
+            String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "An Admin Shop" : "A shop belonging to " + shopOwner;
 
-                String item = event.getSign().getLine(QUANTITY_LINE) + ' ' + event.getSign().getLine(ITEM_LINE);
-                String prices = event.getSign().getLine(PRICE_LINE);
-                String location = LocationUtil.locationToString(event.getSign().getLocation());
+            String item = ChestShopSign.getQuantity(event.getSign()) + ' ' + ChestShopSign.getItem(event.getSign());
+            String prices = ChestShopSign.getPrice(event.getSign());
+            String location = LocationUtil.locationToString(event.getSign().getLocation());
 
-                String message = String.format(REMOVAL_MESSAGE,
-                        typeOfShop,
-                        event.getDestroyer() != null ? event.getDestroyer().getName() : "???",
-                        item,
-                        prices,
-                        location);
+            String message = String.format(REMOVAL_MESSAGE,
+                    typeOfShop,
+                    event.getDestroyer() != null ? event.getDestroyer().getName() : "???",
+                    item,
+                    prices,
+                    location);
 
-                ChestShop.getBukkitLogger().info(message);
-            }
+            ChestShop.getBukkitLogger().info(message);
         });
     }
 }

@@ -31,7 +31,7 @@ public class ItemChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        String itemCode = event.getSignLine(ITEM_LINE);
+        String itemCode = ChestShopSign.getItem(event.getSignLines());
 
         ItemParseEvent parseEvent = new ItemParseEvent(itemCode);
         Bukkit.getPluginManager().callEvent(parseEvent);

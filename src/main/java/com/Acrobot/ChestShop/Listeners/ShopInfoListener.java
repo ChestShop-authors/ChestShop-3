@@ -3,11 +3,9 @@ package com.Acrobot.ChestShop.Listeners;
 import com.Acrobot.Breeze.Utils.InventoryUtil;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.PriceUtil;
-import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
-import com.Acrobot.ChestShop.Economy.Economy;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyFormatEvent;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
@@ -23,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -34,15 +31,15 @@ public class ShopInfoListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public static void showShopInfo(ShopInfoEvent event) {
         if (ChestShopSign.isValid(event.getSign())) {
-            String nameLine = event.getSign().getLine(ChestShopSign.NAME_LINE);
+            String nameLine = ChestShopSign.getOwner(event.getSign());
             int amount;
             try {
-                amount = QuantityUtil.parseQuantity(event.getSign().getLine(ChestShopSign.QUANTITY_LINE));
+                amount = ChestShopSign.getQuantity(event.getSign());
             } catch (NumberFormatException notANumber) {
                 Messages.INVALID_SHOP_DETECTED.sendWithPrefix(event.getSender());
                 return;
             }
-            String pricesLine = event.getSign().getLine(ChestShopSign.PRICE_LINE);
+            String pricesLine = ChestShopSign.getPrice(event.getSign());
 
             AccountQueryEvent queryEvent = new AccountQueryEvent(nameLine);
             ChestShop.callEvent(queryEvent);
@@ -54,7 +51,7 @@ public class ShopInfoListener implements Listener {
             String ownerName = queryEvent.getAccount().getName();
             ownerName = ownerName != null ? ownerName : nameLine;
 
-            ItemParseEvent parseEvent = new ItemParseEvent(event.getSign().getLine(ChestShopSign.ITEM_LINE));
+            ItemParseEvent parseEvent = new ItemParseEvent(ChestShopSign.getItem(event.getSign()));
             ItemStack item = ChestShop.callEvent(parseEvent).getItem();
             if (item == null || amount < 1) {
                 Messages.INVALID_SHOP_DETECTED.sendWithPrefix(event.getSender());

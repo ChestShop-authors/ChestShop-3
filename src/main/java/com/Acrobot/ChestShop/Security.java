@@ -98,7 +98,7 @@ public class Security {
                 continue;
             }
 
-            AccountQueryEvent accountQueryEvent = new AccountQueryEvent(sign.getLine(ChestShopSign.NAME_LINE));
+            AccountQueryEvent accountQueryEvent = new AccountQueryEvent(ChestShopSign.getOwner(sign));
             Bukkit.getPluginManager().callEvent(accountQueryEvent);
             Account account = accountQueryEvent.getAccount();
             if (account != null && !account.getUuid().equals(player.getUniqueId())) {

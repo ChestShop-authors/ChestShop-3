@@ -1,12 +1,12 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.PriceUtil;
-import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,9 +25,6 @@ import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_BELOW_MIN;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_ABOVE_MAX;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_BELOW_MIN;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
 /**
  * @author Acrobot
@@ -106,7 +103,7 @@ public class PriceRestrictionModule implements Listener {
 
     @EventHandler
     public void onPreShopCreation(PreShopCreationEvent event) {
-        ItemParseEvent parseEvent = new ItemParseEvent(event.getSignLine(ITEM_LINE));
+        ItemParseEvent parseEvent = new ItemParseEvent(ChestShopSign.getItem(event.getSignLines()));
         Bukkit.getPluginManager().callEvent(parseEvent);
         ItemStack material = parseEvent.getItem();
 
@@ -117,13 +114,14 @@ public class PriceRestrictionModule implements Listener {
         String itemType = material.getType().toString().toLowerCase(Locale.ROOT);
         int amount;
         try {
-            amount = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
+            amount = ChestShopSign.getQuantity(event.getSign());
         } catch (IllegalArgumentException e) {
             return;
         }
 
-        if (PriceUtil.hasBuyPrice(event.getSignLine(PRICE_LINE))) {
-            BigDecimal buyPrice = PriceUtil.getExactBuyPrice(event.getSignLine(PRICE_LINE));
+        String priceLine = ChestShopSign.getPrice(event.getSignLines());
+        if (PriceUtil.hasBuyPrice(priceLine)) {
+            BigDecimal buyPrice = PriceUtil.getExactBuyPrice(priceLine);
 
             BigDecimal minBuyPrice = BigDecimal.valueOf(configuration.getDouble("min.buy_price." + itemType) * amount);
             if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(minBuyPrice) < 0) {
@@ -138,8 +136,8 @@ public class PriceRestrictionModule implements Listener {
             }
         }
 
-        if (PriceUtil.hasSellPrice(event.getSignLine(PRICE_LINE))) {
-            BigDecimal sellPrice = PriceUtil.getExactSellPrice(event.getSignLine(PRICE_LINE));
+        if (PriceUtil.hasSellPrice(priceLine)) {
+            BigDecimal sellPrice = PriceUtil.getExactSellPrice(priceLine);
 
             BigDecimal minSellPrice = BigDecimal.valueOf(configuration.getDouble("min.sell_price." + itemType) * amount);
             if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(minSellPrice) < 0) {

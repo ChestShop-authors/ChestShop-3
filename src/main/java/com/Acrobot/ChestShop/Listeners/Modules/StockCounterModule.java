@@ -23,8 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.IllegalFormatException;
 
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.ITEM_LINE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
 
@@ -38,17 +36,17 @@ public class StockCounterModule implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         int quantity;
         try {
-            quantity = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
+            quantity = ChestShopSign.getQuantity(event.getSign());
         } catch (IllegalArgumentException invalidQuantity) {
             return;
         }
 
-        if (QuantityUtil.quantityLineContainsCounter(event.getSignLine(QUANTITY_LINE))) {
+        if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(event.getSignLines()))) {
             event.setSignLine(QUANTITY_LINE, Integer.toString(quantity));
         }
 
         if (!Properties.USE_STOCK_COUNTER
-                || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE)))) {
+                || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSignLines()))) {
             return;
         }
 
@@ -57,7 +55,7 @@ public class StockCounterModule implements Listener {
             return;
         }
 
-        ItemStack itemTradedByShop = determineItemTradedByShop(event.getSignLine(ITEM_LINE));
+        ItemStack itemTradedByShop = determineItemTradedByShop(ChestShopSign.getItem(event.getSignLines()));
         if (itemTradedByShop != null) {
             Container container = uBlock.findConnectedContainer(event.getSign());
             if (container != null) {
@@ -75,7 +73,7 @@ public class StockCounterModule implements Listener {
         for (Sign shopSign : uBlock.findConnectedShopSigns(getHolder(event.getInventory(), false))) {
             if (!Properties.USE_STOCK_COUNTER
                     || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(shopSign))) {
-                if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
+                if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(shopSign))) {
                     removeCounterFromQuantityLine(shopSign);
                 }
                 continue;
@@ -83,7 +81,7 @@ public class StockCounterModule implements Listener {
 
             if (Properties.MAX_SHOP_AMOUNT > 99999) {
                 ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-                if (QuantityUtil.quantityLineContainsCounter(shopSign.getLine(QUANTITY_LINE))) {
+                if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(shopSign))) {
                     removeCounterFromQuantityLine(shopSign);
                 }
                 return;
@@ -95,8 +93,9 @@ public class StockCounterModule implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public static void onTransaction(final TransactionEvent event) {
+        String quantityLine = ChestShopSign.getQuantityLine(event.getSign());
         if (!Properties.USE_STOCK_COUNTER) {
-            if (QuantityUtil.quantityLineContainsCounter(event.getSign().getLine(QUANTITY_LINE))) {
+            if (QuantityUtil.quantityLineContainsCounter(quantityLine)) {
                 removeCounterFromQuantityLine(event.getSign());
             }
             return;
@@ -104,7 +103,7 @@ public class StockCounterModule implements Listener {
 
         if (Properties.MAX_SHOP_AMOUNT > 99999) {
             ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-            if (QuantityUtil.quantityLineContainsCounter(event.getSign().getLine(QUANTITY_LINE))) {
+            if (QuantityUtil.quantityLineContainsCounter(quantityLine)) {
                 removeCounterFromQuantityLine(event.getSign());
             }
             return;
@@ -127,7 +126,7 @@ public class StockCounterModule implements Listener {
 
         int quantity;
         try {
-            quantity = QuantityUtil.parseQuantity(sign.getLine(QUANTITY_LINE));
+            quantity = ChestShopSign.getQuantity(sign);
         } catch (IllegalFormatException invalidQuantity) {
             return;
         }
@@ -141,7 +140,7 @@ public class StockCounterModule implements Listener {
     public static void removeCounterFromQuantityLine(Sign sign) {
         int quantity;
         try {
-            quantity = QuantityUtil.parseQuantity(sign.getLine(QUANTITY_LINE));
+            quantity = ChestShopSign.getQuantity(sign);
         } catch (IllegalFormatException invalidQuantity) {
             return;
         }
@@ -157,7 +156,7 @@ public class StockCounterModule implements Listener {
     }
 
     public static ItemStack determineItemTradedByShop(Sign sign) {
-        return determineItemTradedByShop(sign.getLine(ITEM_LINE));
+        return determineItemTradedByShop(ChestShopSign.getItem(sign));
     }
 
     public static ItemStack determineItemTradedByShop(String material) {

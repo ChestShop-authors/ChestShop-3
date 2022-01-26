@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.NO_CHEST;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.NO_PERMISSION_FOR_CHEST;
 import static com.Acrobot.ChestShop.Permission.ADMIN;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
@@ -23,7 +22,7 @@ public class ChestChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        String nameLine = event.getSignLine(NAME_LINE);
+        String nameLine = ChestShopSign.getOwner(event.getSignLines());
 
         Container connectedContainer = uBlock.findConnectedContainer(event.getSign().getBlock());
 

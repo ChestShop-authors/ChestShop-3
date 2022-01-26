@@ -28,11 +28,11 @@ public class PriceCheckerTest {
     public void testLegalBuyPrice() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("B 1"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactBuyPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(1));
+        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(1));
 
         event = new PreShopCreationEvent(null, null, getPriceString("B FREE"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactBuyPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), PriceUtil.FREE);
+        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), PriceUtil.FREE);
 
         assertFalse(event.isCancelled());
     }
@@ -41,11 +41,11 @@ public class PriceCheckerTest {
     public void testLegalSellPrice() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("S 1"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactSellPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(1));
+        assertEquals(PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(1));
 
         event = new PreShopCreationEvent(null, null, getPriceString("S FREE"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactSellPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), PriceUtil.FREE);
+        assertEquals(PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines())), PriceUtil.FREE);
 
         assertFalse(event.isCancelled());
     }
@@ -65,22 +65,22 @@ public class PriceCheckerTest {
     public void testLegalBuyAndSellPrices() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("B 2:S 1"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactSellPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(1));
-        assertEquals(PriceUtil.getExactBuyPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(2));
+        assertEquals(PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(1));
+        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(2));
         assertFalse(event.isCancelled());
 
         event = new PreShopCreationEvent(null, null, getPriceString("2 B:S 1"));
 
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactSellPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(1));
-        assertEquals(PriceUtil.getExactBuyPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(2));
+        assertEquals(PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(1));
+        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(2));
         assertFalse(event.isCancelled());
 
         event = new PreShopCreationEvent(null, null, getPriceString("2 B:1 S"));
 
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactSellPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(1));
-        assertEquals(PriceUtil.getExactBuyPrice(event.getSignLine(ChestShopSign.PRICE_LINE)), BigDecimal.valueOf(2));
+        assertEquals(PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(1));
+        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), BigDecimal.valueOf(2));
         assertFalse(event.isCancelled());
     }
 
@@ -113,18 +113,18 @@ public class PriceCheckerTest {
     public void testRemovingTrailingZeroes() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("S.7500000000"));
         onPreShopCreation(event);
-        assertEquals(event.getSignLine(ChestShopSign.PRICE_LINE), "S.75");
+        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S.75");
 
         event = new PreShopCreationEvent(null, null, getPriceString("S7500000000"));
         onPreShopCreation(event);
-        assertEquals(event.getSignLine(ChestShopSign.PRICE_LINE), "S7500000000");
+        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S7500000000");
 
         event = new PreShopCreationEvent(null, null, getPriceString("S.75000:B.75000"));
         onPreShopCreation(event);
-        assertEquals(event.getSignLine(ChestShopSign.PRICE_LINE), "S.75:B.75");
+        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S.75:B.75");
 
         event = new PreShopCreationEvent(null, null, getPriceString("S75000:B.75000"));
         onPreShopCreation(event);
-        assertEquals(event.getSignLine(ChestShopSign.PRICE_LINE), "S75000:B.75");
+        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S75000:B.75");
     }
 }

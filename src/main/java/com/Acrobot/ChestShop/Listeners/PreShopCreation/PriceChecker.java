@@ -3,6 +3,7 @@ package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,7 +21,7 @@ public class PriceChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        String line = event.getSignLine(PRICE_LINE).toUpperCase(Locale.ROOT);
+        String line = ChestShopSign.getPrice(event.getSignLines()).toUpperCase(Locale.ROOT);
         if (Properties.PRICE_PRECISION <= 0) {
             line = line.replaceAll("\\.\\d*", ""); //remove too many decimal places
         } else {

@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
@@ -9,6 +10,7 @@ import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -56,16 +58,23 @@ public class ChestShopSign {
     }
 
     public static boolean isAdminShop(Sign sign) {
-        return isAdminShop(sign.getLine(NAME_LINE));
+        return isAdminShop(sign.getLines());
+    }
+
+    public static boolean isAdminShop(String[] lines) {
+        return isAdminShop(getOwner(lines));
     }
 
     public static boolean isValid(Sign sign) {
         return isValid(sign.getLines());
     }
 
-    public static boolean isValid(String[] line) {
-        line = StringUtil.stripColourCodes(line);
-        return isValidPreparedSign(line) && (line[PRICE_LINE].toUpperCase(Locale.ROOT).contains("B") || line[PRICE_LINE].toUpperCase(Locale.ROOT).contains("S")) && !line[NAME_LINE].isEmpty();
+    public static boolean isValid(String[] lines) {
+        lines = StringUtil.stripColourCodes(lines);
+        return isValidPreparedSign(lines)
+                && (getPrice(lines).toUpperCase(Locale.ROOT).contains("B")
+                        || getPrice(lines).toUpperCase(Locale.ROOT).contains("S"))
+                && !getOwner(lines).isEmpty();
     }
 
     public static boolean isValid(Block sign) {
@@ -128,7 +137,7 @@ public class ChestShopSign {
         if (player == null) return false;
         if (sign == null) return true;
 
-        String name = sign.getLine(NAME_LINE);
+        String name = getOwner(sign);
         if (name == null || name.isEmpty()) return true;
 
         return NameManager.canUseName(player, base, name);
@@ -137,7 +146,7 @@ public class ChestShopSign {
     public static boolean isOwner(Player player, Sign sign) {
         if (player == null || sign == null) return false;
 
-        String name = sign.getLine(NAME_LINE);
+        String name = getOwner(sign);
         if (name == null || name.isEmpty()) return false;
 
         AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
@@ -150,8 +159,7 @@ public class ChestShopSign {
     }
 
     public static boolean isValidPreparedSign(String[] lines) {
-        // The first line is the name of the shop owner
-        String playername = lines[0];
+        String playername = ChestShopSign.getOwner(lines);
 
         // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
         if ((!isAdminShop(playername)) && (playername.length() > 0)) {
@@ -171,7 +179,7 @@ public class ChestShopSign {
             }
         }
 
-        // The first line is valid. Now validate the last 3 lines against the predefined regexp patterns.
+        // The playername on the first line is valid. Now validate the last 3 lines against the predefined regexp patterns.
         for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
@@ -186,6 +194,101 @@ public class ChestShopSign {
         }
 
         // All lines are looking good. If the price line contains only one ':', then this is a valid prepared sign.
-        return lines[PRICE_LINE].indexOf(':') == lines[PRICE_LINE].lastIndexOf(':');
+        String priceLine = getPrice(lines);
+        return priceLine.indexOf(':') == priceLine.lastIndexOf(':');
+    }
+
+    /**
+     * Get the owner string of a shop sign
+     * @param sign The sign
+     * @return The owner string
+     */
+    public static String getOwner(Sign sign) {
+        return getOwner(sign.getLines());
+    }
+
+    /**
+     * Get the owner string of a shop sign
+     * @param lines The sign lines
+     * @return The owner string
+     */
+    public static String getOwner(String[] lines) {
+        return StringUtil.stripColourCodes(StringUtils.strip(lines[NAME_LINE]));
+    }
+
+    /**
+     * Get the quantity and count line of the shop sign
+     * @param sign The sign
+     * @return The quantity line
+     * @throws IllegalArgumentException Thrown when an invalid quantity is present
+     */
+    public static String getQuantityLine(Sign sign) throws IllegalArgumentException {
+        return getQuantityLine(sign.getLines());
+    }
+
+    /**
+     * Get the quantity and count line of sign lines
+     * @param lines The sign lines
+     * @return The quantity line
+     * @throws IllegalArgumentException Thrown when an invalid quantity is present
+     */
+    public static String getQuantityLine(String[] lines) throws IllegalArgumentException {
+        return lines.length > QUANTITY_LINE ? StringUtils.strip(lines[QUANTITY_LINE]) : "";
+    }
+
+    /**
+     * Get the quantity of the shop sign
+     * @param sign The sign
+     * @return The quantity line
+     * @throws IllegalArgumentException Thrown when an invalid quantity is present
+     */
+    public static int getQuantity(Sign sign) throws IllegalArgumentException {
+        return getQuantity(sign.getLines());
+    }
+
+    /**
+     * Get the quantity of sign lines
+     * @param lines The sign lines
+     * @return The quantity
+     * @throws IllegalArgumentException Thrown when an invalid quantity is present
+     */
+    public static int getQuantity(String[] lines) throws IllegalArgumentException {
+        return QuantityUtil.parseQuantity(getQuantityLine(lines));
+    }
+
+    /**
+     * Get the price line of the shop sign
+     * @param sign The sign
+     * @return The price line
+     */
+    public static String getPrice(Sign sign) {
+        return StringUtils.strip(sign.getLine(PRICE_LINE));
+    }
+
+    /**
+     * Get the price line of sign lines
+     * @param lines The sign lines
+     * @return The price line
+     */
+    public static String getPrice(String[] lines) {
+        return lines.length > PRICE_LINE ? StringUtils.strip(lines[PRICE_LINE]) : "";
+    }
+
+    /**
+     * Get the item line of the shop sign
+     * @param sign The sign
+     * @return The item line
+     */
+    public static String getItem(Sign sign) {
+        return getItem(sign.getLines());
+    }
+
+    /**
+     * Get the item line of sign lines
+     * @param lines The sign lines
+     * @return The item line
+     */
+    public static String getItem(String[] lines) {
+        return lines.length > ITEM_LINE ? StringUtils.strip(lines[ITEM_LINE]) : "";
     }
 }

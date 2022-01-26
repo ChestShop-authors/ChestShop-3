@@ -4,6 +4,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,7 @@ public class NameChecker implements Listener {
     }
 
     private static void handleEvent(PreShopCreationEvent event) {
-        String name = event.getSignLine(NAME_LINE);
+        String name = ChestShopSign.getOwner(event.getSignLines());
         Player player = event.getPlayer();
 
         Account account = event.getOwnerAccount();

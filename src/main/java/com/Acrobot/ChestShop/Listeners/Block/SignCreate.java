@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
@@ -32,7 +31,7 @@ public class SignCreate implements Listener {
 
         Sign sign = (Sign) signBlock.getState();
 
-        if (ChestShopSign.isValid(sign) && !NameManager.canUseName(event.getPlayer(), OTHER_NAME_DESTROY, StringUtil.stripColourCodes(sign.getLine(NAME_LINE)))) {
+        if (ChestShopSign.isValid(sign) && !NameManager.canUseName(event.getPlayer(), OTHER_NAME_DESTROY, ChestShopSign.getOwner(sign))) {
             event.setCancelled(true);
             sign.update();
             return;

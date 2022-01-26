@@ -89,7 +89,7 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(sign.getLine(ITEM_LINE)).equals(AUTOFILL_CODE)) {
+        if (Properties.ALLOW_AUTO_ITEM_FILL && ChatColor.stripColor(ChestShopSign.getItem(sign)).equals(AUTOFILL_CODE)) {
             if (ChestShopSign.hasPermission(player, OTHER_NAME_CREATE, sign)) {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (!MaterialUtil.isEmpty(item)) {
@@ -174,10 +174,9 @@ public class PlayerInteract implements Listener {
     }
 
     private static PreTransactionEvent preparePreTransactionEvent(Sign sign, Player player, Action action) {
-        String name = sign.getLine(NAME_LINE);
-        String quantity = sign.getLine(QUANTITY_LINE);
-        String prices = sign.getLine(PRICE_LINE);
-        String material = sign.getLine(ITEM_LINE);
+        String name = ChestShopSign.getOwner(sign);
+        String prices = ChestShopSign.getPrice(sign);
+        String material = ChestShopSign.getItem(sign);
 
         AccountQueryEvent accountQueryEvent = new AccountQueryEvent(name);
         Bukkit.getPluginManager().callEvent(accountQueryEvent);
@@ -215,7 +214,7 @@ public class PlayerInteract implements Listener {
 
         int amount = -1;
         try {
-            amount = QuantityUtil.parseQuantity(quantity);
+            amount = ChestShopSign.getQuantity(sign);
         } catch (NumberFormatException notANumber) {}
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {

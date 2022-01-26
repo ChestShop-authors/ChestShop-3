@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Permission.NOFEE;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 
 /**
  * @author Acrobot
@@ -33,7 +32,7 @@ public class CreationFeeGetter implements Listener {
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSignLine(NAME_LINE))) {
+        if (ChestShopSign.isAdminShop(event.getSign())) {
             return;
         }
 

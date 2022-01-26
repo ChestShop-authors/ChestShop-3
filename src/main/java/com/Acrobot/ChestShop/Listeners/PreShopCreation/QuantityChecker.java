@@ -3,12 +3,12 @@ package com.Acrobot.ChestShop.Listeners.PreShopCreation;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.INVALID_QUANTITY;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
 
 /**
  * @author Acrobot
@@ -19,7 +19,7 @@ public class QuantityChecker implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         int amount = -1;
         try {
-            amount = QuantityUtil.parseQuantity(event.getSignLine(QUANTITY_LINE));
+            amount = ChestShopSign.getQuantity(event.getSignLines());
         } catch (NumberFormatException notANumber) {}
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
