@@ -43,7 +43,7 @@ public class ChestShopSign {
                 Pattern.compile("(?i)^(((\\d*([.e]\\d+)?)|free) *[BS]) *: *(((\\d*([.e]\\d+)?)|free) *[BS])$"),
                 Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?)|free)) *: *(((\\d*([.e]\\d+)?)|free) *[BS])$"),
             },
-            { Pattern.compile("^[\\w? #:\\-]+$") }
+            { Pattern.compile("^[\\p{L}? #:\\-]+$") }
     };
     public static final String AUTOFILL_CODE = "?";
 
