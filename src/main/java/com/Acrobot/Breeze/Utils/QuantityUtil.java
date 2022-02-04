@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
  * @author bricefrisco
  */
 public class QuantityUtil {
-    private static final Pattern QUANTITY_LINE_WITH_COUNTER_PATTERN = Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$");
+    public static final Pattern QUANTITY_LINE_WITH_COUNTER_PATTERN = Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{1,5}$");
 
     public static int parseQuantity(String quantityLine) throws IllegalArgumentException {
         if (quantityLineContainsCounter(quantityLine)) {

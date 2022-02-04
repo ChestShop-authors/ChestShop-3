@@ -37,7 +37,7 @@ public class ChestShopSign {
     public static final byte ITEM_LINE = 3;
 
     public static final Pattern[][] SHOP_SIGN_PATTERN = {
-            { Pattern.compile("^[1-9][0-9]{0,5}$"), Pattern.compile("^Q [1-9][0-9]{0,4} : C [0-9]{0,5}$") },
+            { Pattern.compile("^[1-9][0-9]{0,5}$"), QuantityUtil.QUANTITY_LINE_WITH_COUNTER_PATTERN },
             {
                 Pattern.compile("(?i)^((\\d*([.e]\\d+)?)|free)$"),
                 Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?)|free))( *: *([BS] *((\\d*([.e]\\d+)?)|free)))?$"),
