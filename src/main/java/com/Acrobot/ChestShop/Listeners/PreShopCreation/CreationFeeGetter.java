@@ -32,7 +32,7 @@ public class CreationFeeGetter implements Listener {
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSign())) {
+        if (ChestShopSign.isAdminShop(event.getSignLines())) {
             return;
         }
 

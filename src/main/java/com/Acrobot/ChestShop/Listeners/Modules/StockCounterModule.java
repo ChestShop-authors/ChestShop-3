@@ -36,7 +36,7 @@ public class StockCounterModule implements Listener {
     public static void onPreShopCreation(PreShopCreationEvent event) {
         int quantity;
         try {
-            quantity = ChestShopSign.getQuantity(event.getSign());
+            quantity = ChestShopSign.getQuantity(event.getSignLines());
         } catch (IllegalArgumentException invalidQuantity) {
             return;
         }
