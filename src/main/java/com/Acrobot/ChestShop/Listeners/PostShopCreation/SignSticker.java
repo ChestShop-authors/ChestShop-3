@@ -24,7 +24,7 @@ public class SignSticker implements Listener {
             return;
         }
 
-        if (ChestShopSign.isAdminShop(event.getSign())) {
+        if (ChestShopSign.isAdminShop(event.getSignLines())) {
             return;
         }
 

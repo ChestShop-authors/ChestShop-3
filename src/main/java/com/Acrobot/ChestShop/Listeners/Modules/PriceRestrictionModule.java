@@ -114,7 +114,7 @@ public class PriceRestrictionModule implements Listener {
         String itemType = material.getType().toString().toLowerCase(Locale.ROOT);
         int amount;
         try {
-            amount = ChestShopSign.getQuantity(event.getSign());
+            amount = ChestShopSign.getQuantity(event.getSignLines());
         } catch (IllegalArgumentException e) {
             return;
         }

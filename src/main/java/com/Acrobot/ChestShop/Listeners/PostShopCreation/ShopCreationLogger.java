@@ -21,8 +21,8 @@ public class ShopCreationLogger implements Listener {
             String shopOwner = ChestShopSign.getOwner(event.getSignLines());
             String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop" + (event.createdByOwner() ? "" : " for " + event.getOwnerAccount().getName());
 
-            String item = ChestShopSign.getQuantity(event.getSign()) + ' ' + ChestShopSign.getItem(event.getSign());
-            String prices = ChestShopSign.getPrice(event.getSign());
+            String item = ChestShopSign.getQuantity(event.getSignLines()) + ' ' + ChestShopSign.getItem(event.getSignLines());
+            String prices = ChestShopSign.getPrice(event.getSignLines());
             String location = LocationUtil.locationToString(event.getSign().getLocation());
 
             String message = String.format(CREATION_MESSAGE,

@@ -35,8 +35,8 @@ public class PermissionChecker implements Listener {
             return;
         }
 
-        String priceLine = ChestShopSign.getPrice(event.getSign());
-        String itemLine = ChestShopSign.getItem(event.getSign());
+        String priceLine = ChestShopSign.getPrice(event.getSignLines());
+        String itemLine = ChestShopSign.getItem(event.getSignLines());
 
         ItemParseEvent parseEvent = new ItemParseEvent(itemLine);
         Bukkit.getPluginManager().callEvent(parseEvent);
