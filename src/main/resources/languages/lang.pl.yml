@@ -51,7 +51,7 @@ INVALID_SHOP_DETECTED: "Sklep nie może być używany (być może brakuje skrzyn
 INVALID_SHOP_PRICE: "Zła cena!"
 INVALID_SHOP_QUANTITY: "Sklep ma podana niewlasciwa ilosc produktu!"
 CANNOT_ACCESS_THE_CHEST: "Nie masz uprawnień dostępu do tej skrzyni!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Cena sprzedaży jest wyższa od ceny zakupu!"
 SELL_PRICE_ABOVE_MAX: "Cena sprzedaży %price jest wyższa niż maksymalna %maxprice!"
 SELL_PRICE_BELOW_MIN: "Cena sprzedaży %price jest niższa niż minimalna %minprice!"
 BUY_PRICE_ABOVE_MAX: "Cena zakupu %price jest wyższa niż maksymalna %maxprice!"
