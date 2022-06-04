@@ -1,12 +1,12 @@
 ---
 prefix: "&a[Shop] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  &aButikk Informasjon:
+  &fEier: &7%owner
+  &fBeholdning: &7%stock
+  &fGjenstand: &7%item
+shopinfo_buy: "&fKjøp &7%amount &ffor &7%price"
+shopinfo_sell: "&fSelg &7%amount &ffor &7%price"
 iteminfo: "&aGjenstandsinformasjon: &r"
 iteminfo_fullname: "&fFullt navn: &7%item"
 iteminfo_shopname: "&fButikk-skilt: &7%item"
@@ -15,15 +15,15 @@ iteminfo_book: |-
   &fTittel: &7%title
   &fForfatter: &7%author
   &fSidetall: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_book_generation: "&fBokgenerering: &7%generation"
 iteminfo_lore: |-
-  &fLore:
+  &fBeskrivelse:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+  &a[Shop] &fStatistikk:
+  &fKontoer: &7%accounts
+  &fGjennomsnitt transaksjoner: &7%totalTransactions &f(kjøp: &7%buyTransactions &fsalg: &7%sellTransactions&f)
+  &fGjennomsnitt varer kjøpt: &7%totalItems &f(kjøpt: &7%boughtItems &fsolgt: &7%soldItems&f)
 ACCESS_DENIED: "Du har ikke tilgang til den butikkens lagerbeholdning!"
 TRADE_DENIED: "Du har ikke tilgang til å handle i den butikken!"
 TRADE_DENIED_ACCESS_PERMS: "Du kan ikke handle i butikker du har tilgang til!"
@@ -42,19 +42,20 @@ NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 butikken er full!](&f%seller&7 f
 NOT_ENOUGH_STOCK: "Denne butikken er utsolgt."
 NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[&7Det er tomt for %item til %price!](&f%buyer&7 forsøkte å kjøpe dette\n&7i verden: &f%world\n&7på koordinat: &f%x/%y/%z)"
 YOU_BOUGHT_FROM_SHOP: "Du kjøpte %item fra %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer kjøpte %item for %price.](&7I verden: &f%world\n&7På koordinat: &f%x/%y/%z)"
 YOU_SOLD_TO_SHOP: "Du solgte %item til %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller solgte %item for %price.](&7I verden: &f%world\n&7På koordinat: &f%x/%y/%z)"
 YOU_CANNOT_CREATE_SHOP: "Du kan ikke opprette denne typen butikk!"
 NO_CHEST_DETECTED: "Kunne ikke finne en kiste!"
 INVALID_SHOP_DETECTED: "Denne butikken kan ikke brukes!"
 INVALID_SHOP_PRICE: "Butikken har en ugyldig pris!"
 INVALID_SHOP_QUANTITY: "Butikken har et ugyldig antall!"
 CANNOT_ACCESS_THE_CHEST: "Du har ikke tilgang til denne kisten!"
-SELL_PRICE_ABOVE_MAX: "Salgspris er over maksimum!"
-SELL_PRICE_BELOW_MIN: "Salgspris er under minimum!"
-BUY_PRICE_ABOVE_MAX: "Kjøpspris er over maksimum!"
-BUY_PRICE_BELOW_MIN: "Kjøpspris er under minimum!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Salgsprisen er over kjøpsprisen!"
+SELL_PRICE_ABOVE_MAX: "Salgsprisen %price er over maksimumsbeløpet %maxprice!"
+SELL_PRICE_BELOW_MIN: "Salgsprisen %price er under minimumsbeløpet %minprice!"
+BUY_PRICE_ABOVE_MAX: "Kjøpsprisen %price er over maksimumsbeløpet %maxprice!"
+BUY_PRICE_BELOW_MIN: "Kjøpsprisen %price er under minimumsbeløpet %minprice!"
 CLICK_TO_AUTOFILL_ITEM: "Klikk på skiltet med gjenstanden denne butikken er for!"
 NO_ITEM_IN_HAND: "Du har ikke noe i hånden din som du kan fylle automatisk med!"
 PROTECTED_SHOP: "Suksessfullt beskyttet butikken med LWC!"
@@ -67,9 +68,9 @@ RESTRICTED_SIGN_CREATED: "Skilt suksessfullt plassert!"
 PLAYER_NOT_FOUND: "Spiller ikke funnet!"
 NO_PERMISSION: "Du har ikke tilgang til å gjøre dette!"
 INCORRECT_ITEM_ID: "Du har spesifisert en ugyldig item-ID!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "Brukernavnet ditt er ikke et gyldig Minecraft brukernavn!"
 NOT_ENOUGH_PROTECTIONS: "Kunne ikke opprette beskyttelse!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "Ingen butikk funnet."
 CANNOT_CREATE_SHOP_HERE: "Du kan ikke opprette en butikk her!"
 TOGGLE_MESSAGES_OFF: "Du vil ikke lenger motta meldinger fra butikken(e) din(e)."
 TOGGLE_MESSAGES_ON: "Du vil nå motta meldinger fra butikken(e) din(e)."

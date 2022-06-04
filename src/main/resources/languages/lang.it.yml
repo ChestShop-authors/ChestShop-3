@@ -1,77 +1,78 @@
 ---
 prefix: "&a[Shop] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
+  &aInformazioni sullo shop:
+  &fProprietario: &7%owner
   &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+  &fOggetto: &7%item
+shopinfo_buy: "&fCompra &7%amount &fper &7%price"
+shopinfo_sell: "&fVendi &7%amount &fper &7%price"
+iteminfo: "&aInformazioni Oggetto: &r"
+iteminfo_fullname: "&fNome completo: &7%item"
+iteminfo_shopname: "&fCartello shop: &7%item"
+iteminfo_repaircost: "&fCosto riparazione: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fTitolo del libro: &7%title
+  &fAutore del libro: &7%author
+  &fNumero pagine: &7%pages
+iteminfo_book_generation: "&fGenerazione libro: &7%generation"
 iteminfo_lore: |-
   &fLore:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+  &a[Shop] &Statistiche:
+  &fAccount: &7%accounts
+  &fTransazioni medie: &7%totalTransactions &f(acquisti: &7%buyTransactions &fvendite: &7%sellTransactions&f)
+  &fMedia oggetti scambiati: &7%totalItems &f(acquisti: &7%boughtItems &fvendite: &7%soldItems&f)
 ACCESS_DENIED: "Non hai il permesso per farlo!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+TRADE_DENIED: "Non hai il permesso per usare quello shop!"
+TRADE_DENIED_ACCESS_PERMS: "Non puoi usare shop a cui hai accesso!"
+TRADE_DENIED_CREATIVE_MODE: "Non puoi usare shop mentre sei in modalità creativa!"
 NOT_ENOUGH_MONEY: "Non hai abbastanza soldi!"
 NOT_ENOUGH_MONEY_SHOP: "Il proprietario del negozio non ha abbastanza soldi!"
 CLIENT_DEPOSIT_FAILED: "Accredito di denaro fallito"
 SHOP_DEPOSIT_FAILED: "Deposito di denaro al proprietario del negozio non riuscita!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_ECONOMY_ACCOUNT: "L'account Economy del proprietario dello shop non esiste!"
 NO_BUYING_HERE: "Non puoi comprare qui!"
 NO_SELLING_HERE: "Non puoi vendere qui!"
 NOT_ENOUGH_SPACE_IN_INVENTORY: "Non hai abbastanza spazio nell'inventario!"
 NOT_ENOUGH_SPACE_IN_CHEST: "Non c'e abbastanza spazio nella chest!"
 NOT_ENOUGH_ITEMS_TO_SELL: "Non hai abbastanza oggetti da vendere!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 è pieno!](&f%seller&7 ha provato a vendere\n&7Nel mondo: &f%world\n&7In posizione: &f%x/%y/%z)"
 NOT_ENOUGH_STOCK: "Gli oggetti di questo negozio sono esauriti."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 ha esaurito oggetti!](&f%buyer&7 ha provato a comprare\n&7Nel mondo: &f%world\n&7In posizione: &f%x/%y/%z)"
 YOU_BOUGHT_FROM_SHOP: "Hai comprato %amount %item da %owner per %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer ha comprato %item per %price.](&7Nel mondo: &f%world\n&7In posizione: &f%x/%y/%z)"
 YOU_SOLD_TO_SHOP: "Hai venduto %amount %item a %buyer per %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller ha venduto %item per %price.](&7Nel mondo: &f%world\n&7In posizione: &f%x/%y/%z)"
 YOU_CANNOT_CREATE_SHOP: "Non puoi creare negozi di questo tipo!"
 NO_CHEST_DETECTED: "Non e stata trovata alcuna chest!"
 INVALID_SHOP_DETECTED: "Il negozio non può essere utilizzato!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+INVALID_SHOP_PRICE: "Il prezzo inserito non è valido!"
+INVALID_SHOP_QUANTITY: "La quantità inserita non è valida!"
 CANNOT_ACCESS_THE_CHEST: "Non hai il permesso per accedere a questa chest!"
-SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
-SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
-BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
-BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_ABOVE_MAX: "Il prezzo di vendita %price è superiore al massimo %maxprice!"
+SELL_PRICE_BELOW_MIN: "Il prezzo di vendita %price è inferiore al minimo %minprice!"
+BUY_PRICE_ABOVE_MAX: "Il prezzo di acquisto %price è superiore al massimo %maxprice!"
+BUY_PRICE_BELOW_MIN: "Il prezzo di acquisto %price è inferiore al minimo %minprice!"
+CLICK_TO_AUTOFILL_ITEM: "Clicca il cartello con l'oggetto che vuoi commerciare nello shop!"
+NO_ITEM_IN_HAND: "Non hai un oggetto in mano per riempire automaticamente!"
 PROTECTED_SHOP: "Negozio protetto con successo!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "Cartello dello shop protetto con successo tramite LWC!"
 SHOP_CREATED: "Negozio creato con successo!"
 SHOP_FEE_PAID: "È è stato addebitato %amount"
 SHOP_REFUNDED: "Sei stato rimborsato %amount."
-ITEM_GIVEN: "Given %item to %player."
+ITEM_GIVEN: "Dato %item a %player."
 RESTRICTED_SIGN_CREATED: "Cartello creato con successo!"
-PLAYER_NOT_FOUND: "Player not found!"
+PLAYER_NOT_FOUND: "Giocatore non trovato!"
 NO_PERMISSION: "Non hai i permessi per farlo!"
 INCORRECT_ITEM_ID: "L'ID che hai specificato è inesistente!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "Il tuo username non è un nome utente di Minecraft valido!"
 NOT_ENOUGH_PROTECTIONS: "Impossibile creare una protezione!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "Nessuno shop trovato."
 CANNOT_CREATE_SHOP_HERE: "Non puoi creare uno shop qui!"
-TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
-TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+TOGGLE_MESSAGES_OFF: "Non riceverai più messaggi dai tuoi shop."
+TOGGLE_MESSAGES_ON: "Da ora riceverai messaggi dai tuoi shop."
+TOGGLE_ACCESS_ON: "Non puoi più usare shop a cui hai accesso"
+TOGGLE_ACCESS_OFF: "Da ora puoi usare gli shop a cui hai accesso"

@@ -1,77 +1,78 @@
 ---
 prefix: "&a[Shop] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+  &aDükkan Bilgisi:
+  &fSahip:&7 %owner 
+  &fStok: &7%stock 
+  &fEşya:&7 %item
+shopinfo_buy: "&7%price &fücret karşılığında &7%amount &fadet satın al"
+shopinfo_sell: "&7%price &fücret karşılığında &7%amount &fadet sat"
+iteminfo: "&aEşya Bilgisi: &r"
+iteminfo_fullname: "&fTam İsim: &7%item"
+iteminfo_shopname: "&fDükkan Tabelası: &7%item"
+iteminfo_repaircost: "&fTamir Ücreti:&7 %cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fKitap Başlığı:&7 %title
+  &fKitap Yazarı:&7 %author
+  &fKitap Sayfaları:&7 %pages
+iteminfo_book_generation: "&fKitap Jenerasyonu:&7 %generation"
 iteminfo_lore: |-
-  &fLore:
+  &fAçıklama:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
-ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
-NOT_ENOUGH_MONEY: "You don't have enough money!"
-NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
-CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
-SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
-NO_BUYING_HERE: "You can't buy here!"
-NO_SELLING_HERE: "You can't sell here!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
-NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
-NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "This shop is out of stock."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
-NO_CHEST_DETECTED: "Couldn't find a chest!"
-INVALID_SHOP_DETECTED: "The shop cannot be used!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
-CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
-SELL_PRICE_ABOVE_MAX: "Sell price is above maximum!"
-SELL_PRICE_BELOW_MIN: "Sell price is below minimum!"
-BUY_PRICE_ABOVE_MAX: "Buy price is above maximum!"
-BUY_PRICE_BELOW_MIN: "Buy price is below minimum!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
-PROTECTED_SHOP: "Successfully protected the shop with LWC!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
-SHOP_CREATED: "Shop successfully created!"
-SHOP_FEE_PAID: "You have been charged %amount"
-SHOP_REFUNDED: "You have been refunded %amount."
-ITEM_GIVEN: "Given %item to %player."
-RESTRICTED_SIGN_CREATED: "Sign successfully created!"
-PLAYER_NOT_FOUND: "Player not found!"
-NO_PERMISSION: "You don't have permissions to do that!"
-INCORRECT_ITEM_ID: "You have specified an invalid item id!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
-NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
-NO_SHOP_FOUND: "No shop found."
-CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
-TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
-TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+  &a[Market] &fÖlçütler:
+  &fHesaplar:&7 %accounts
+  &fİşlem ortalamaları:&7 %totalTransactions &f(alış:&7 %buyTransactions &fsatış:&7 %sellTransactions&f)
+  &fEşya ticareti ortalamaları:&7 %totalItems &f(alınan:&7 %boughtItems &fsatılan:&7 %soldItems&f)
+ACCESS_DENIED: "Bu dükkanın depo konteynerine erişim izniniz yok!"
+TRADE_DENIED: "Bu dükkanda ticaret yapma izniniz yok!"
+TRADE_DENIED_ACCESS_PERMS: "Erişiminiz olan dükkanlarla ticarete giremezsiniz!"
+TRADE_DENIED_CREATIVE_MODE: "Yaratıcı modda iken dükkanlarla ticarete giremezsiniz!"
+NOT_ENOUGH_MONEY: "Yeteri kadar paranız yok!"
+NOT_ENOUGH_MONEY_SHOP: "Dükkan sahibinin yeteri kadar parası yok!"
+CLIENT_DEPOSIT_FAILED: "Hesabınıza depozito işleminde bir sorun meydana geldi!"
+SHOP_DEPOSIT_FAILED: "Dükkan sahibine depozito işleminde bir sorun oluştu!"
+NO_ECONOMY_ACCOUNT: "Dükkan sahibine ait bir ekonomi hesabı bulunmuyor!"
+NO_BUYING_HERE: "Burada bir şeyler satın alamazsınız!"
+NO_SELLING_HERE: "Burada bir şeyler satamazsınız!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Envanterinizde yeterli boşluk yok!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Sandıkta yeterli boşluk yok!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Satacak kadar yeterli eşyanız yok!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 dükkan dolul!](&f%seller&7 satış yapmaya çalıştı\n&7Dünya: &f%world\n&7Lokasyon: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "Bu dükkanın stokları tükenmiş."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 dükkanın stokları dükenmiş!](&f%buyer&7 satın almaya çalıştı\n&7Dünya: &f%world\n&7Lokasyon: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "%owner isimli kişiden %price para karşılığında %item satın aldın."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer %price karşılığında %item satın aldı.](&7Dünya: &f%world\n&7Lokasyon: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "%buyer isimli kişiye %price karşılığında %item sattınız."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller %price karşılığında %item sattı.](&7Dünya: &f%world\n&7Lokasyon: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "Bu tür bir dükkan oluşturamazsınız!"
+NO_CHEST_DETECTED: "Herhangi bir sandık bulunamadı!"
+INVALID_SHOP_DETECTED: "Dükkan kullanılamaz!"
+INVALID_SHOP_PRICE: "Dükkan ücreti geçersiz!"
+INVALID_SHOP_QUANTITY: "Dükkan ürün miktarı geçersiz!"
+CANNOT_ACCESS_THE_CHEST: "Bu sandığa erişebilme yetkiniz yok!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_ABOVE_MAX: "%price satış ücreti, %maxprice olan maksimum ücretten yüksek!"
+SELL_PRICE_BELOW_MIN: "%price satış ücreti, %minprice olan minimum ücretten düşük!"
+BUY_PRICE_ABOVE_MAX: "%price satın alma ücreti, %maxprice olan maksimum ücretten yüksek!"
+BUY_PRICE_BELOW_MIN: "%price satın alma ücreti, %minprice olan minimum ücretten düşük!"
+CLICK_TO_AUTOFILL_ITEM: "Bu dükkan için bulunan öğenin bulunduğu tabelaya tıklayın!"
+NO_ITEM_IN_HAND: "Otomatik doldurmak için elinde bir eşyan yok!"
+PROTECTED_SHOP: "Dükkan başarıyla LWC ile korundu!"
+PROTECTED_SHOP_SIGN: "Dükkan tabelası başarıyla LWC ile korundu!"
+SHOP_CREATED: "Dükkan başarıyla oluşturuldu!"
+SHOP_FEE_PAID: "%amount ödedin."
+SHOP_REFUNDED: "%amount iade aldın."
+ITEM_GIVEN: "%player isimli kişiye %item verildi."
+RESTRICTED_SIGN_CREATED: "Tabela başarıyla oluşturuldu!"
+PLAYER_NOT_FOUND: "Oyuncu bulunamadı!"
+NO_PERMISSION: "Bunu yapma yetkin yok!"
+INCORRECT_ITEM_ID: "Geçersiz bir eşya kodu girdin!"
+INVALID_CLIENT_NAME: "Kullanıcı adın geçerli bir Minecraft kullanıcı adı değil!"
+NOT_ENOUGH_PROTECTIONS: "Koruma oluşturulamadı!"
+NO_SHOP_FOUND: "Dükkan bulunamadı."
+CANNOT_CREATE_SHOP_HERE: "Burada dükkan oluşturamazsın!"
+TOGGLE_MESSAGES_OFF: "Artık dükkan(lar)ından bildirimler almayacaksın."
+TOGGLE_MESSAGES_ON: "Artık dükkan(lar)ından bildirimler alacaksın."
+TOGGLE_ACCESS_ON: "Artık erişimin olan dükkanlarda ticaret yapamayacaksın."
+TOGGLE_ACCESS_OFF: "Artık erişimin olan dükkanlarda ticaret yapabileceksin."
