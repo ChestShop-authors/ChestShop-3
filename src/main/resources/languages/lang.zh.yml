@@ -20,7 +20,7 @@ iteminfo_lore: |-
   &f知识:
   &r%lore
 METRICS: |-
-  &a[Shop] &f指标：
+  &a[商店] &f指标：
   &f账户：&7%accounts
   &f平均交易次数：&7%totalTransactions &f（buy：&7%buyTransactions &fsell：&7%sellTransactions&f）
   &f平均交易物品：&7%totalItems &f（bought：&7%boughtItems &fsold：&7%soldItems&f）
