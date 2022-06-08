@@ -1,20 +1,20 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "&a[Магазин] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+  &aІнформація про магазин:
+  &fВласник: &7%owner
+  &fЗалишок: &7%stock
+  &fПредмет: &7%i
+shopinfo_buy: "&fПридбати &7%amount &fза &7%price"
+shopinfo_sell: "&fПродати &7%amount &fза &7%price"
+iteminfo: "&aІнформація про предмет: &r"
+iteminfo_fullname: "&fПовна назва: &7%item"
+iteminfo_shopname: "&fНазва магазину: &7%item"
+iteminfo_repaircost: "&fВартість ремонту: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
+  &fЗаголовок книги: &7%title
+  &fАвтор книги: &7%author
+  &fСторінок книги: &7%pages
 iteminfo_book_generation: "&fBook Generation: &7%generation"
 iteminfo_lore: |-
   &fLore:
