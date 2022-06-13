@@ -12,10 +12,10 @@ import com.Acrobot.ChestShop.Events.AccountAccessEvent;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.google.common.base.Preconditions;
 import com.j256.ormlite.dao.Dao;
 
 import com.j256.ormlite.stmt.SelectArg;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -63,8 +63,8 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException when an invalid player object was passed
      */
     public static Account getOrCreateAccount(OfflinePlayer player) {
-        Validate.notNull(player.getName(), "Name of player " + player.getUniqueId() + " is null?");
-        Validate.isTrue(!(player instanceof Player) || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
+        Preconditions.checkNotNull(player.getName(), "Name of player " + player.getUniqueId() + " is null?");
+        Preconditions.checkArgument(!(player instanceof Player) || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
                 "Invalid OfflinePlayer! " + player.getUniqueId() + " has version " + player.getUniqueId().version() + " and not server version " + uuidVersion + ". " +
                         "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
         return getOrCreateAccount(player.getUniqueId(), player.getName());
@@ -79,8 +79,8 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException when id or name are null
      */
     public static Account getOrCreateAccount(UUID id, String name) {
-        Validate.notNull(id, "UUID of player is null?");
-        Validate.notNull(name, "Name of player " + id + " is null?");
+        Preconditions.checkNotNull(id, "UUID of player is null?");
+        Preconditions.checkNotNull(name, "Name of player " + id + " is null?");
 
         Account account = getAccount(id);
         if (account == null) {
@@ -124,7 +124,8 @@ public class NameManager implements Listener {
      * @throws IllegalArgumentException if the username is empty or null
      */
     public static Account getAccount(String fullName) {
-        Validate.notEmpty(fullName, "fullName cannot be null or empty!");
+        Preconditions.checkNotNull(fullName, "fullName cannot be null!");
+        Preconditions.checkArgument(!fullName.isEmpty(), "fullName cannot be empty!");
         try {
             return usernameToAccount.get(fullName, () -> {
                 try {
@@ -161,7 +162,8 @@ public class NameManager implements Listener {
      */
     @Deprecated
     public static Account getAccountFromShortName(String shortName) {
-        Validate.notEmpty(shortName, "shortName cannot be null or empty!");
+        Preconditions.checkNotNull(shortName, "shortName cannot be null!");
+        Preconditions.checkArgument(!shortName.isEmpty(), "shortName cannot be empty!");
         Account account = null;
 
         try {

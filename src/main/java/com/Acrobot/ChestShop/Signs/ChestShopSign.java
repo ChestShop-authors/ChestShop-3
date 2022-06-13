@@ -10,7 +10,6 @@ import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -183,7 +182,7 @@ public class ChestShopSign {
         for (int i = 0; i < 3; i++) {
             boolean matches = false;
             for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
-                if (pattern.matcher(StringUtils.strip(StringUtil.stripColourCodes(lines[i+1]))).matches()) {
+                if (pattern.matcher(StringUtil.strip(StringUtil.stripColourCodes(lines[i+1]))).matches()) {
                     matches = true;
                     break;
                 }
@@ -213,7 +212,7 @@ public class ChestShopSign {
      * @return The owner string
      */
     public static String getOwner(String[] lines) {
-        return StringUtil.stripColourCodes(StringUtils.strip(StringUtil.stripColourCodes(lines[NAME_LINE])));
+        return StringUtil.stripColourCodes(StringUtil.strip(StringUtil.stripColourCodes(lines[NAME_LINE])));
     }
 
     /**
@@ -233,7 +232,7 @@ public class ChestShopSign {
      * @throws IllegalArgumentException Thrown when an invalid quantity is present
      */
     public static String getQuantityLine(String[] lines) throws IllegalArgumentException {
-        return lines.length > QUANTITY_LINE ? StringUtils.strip(StringUtil.stripColourCodes(lines[QUANTITY_LINE])) : "";
+        return lines.length > QUANTITY_LINE ? StringUtil.strip(StringUtil.stripColourCodes(lines[QUANTITY_LINE])) : "";
     }
 
     /**
@@ -262,7 +261,7 @@ public class ChestShopSign {
      * @return The price line
      */
     public static String getPrice(Sign sign) {
-        return StringUtils.strip(StringUtil.stripColourCodes(sign.getLine(PRICE_LINE)));
+        return StringUtil.strip(StringUtil.stripColourCodes(sign.getLine(PRICE_LINE)));
     }
 
     /**
@@ -271,7 +270,7 @@ public class ChestShopSign {
      * @return The price line
      */
     public static String getPrice(String[] lines) {
-        return lines.length > PRICE_LINE ? StringUtils.strip(StringUtil.stripColourCodes(lines[PRICE_LINE])) : "";
+        return lines.length > PRICE_LINE ? StringUtil.strip(StringUtil.stripColourCodes(lines[PRICE_LINE])) : "";
     }
 
     /**
@@ -289,6 +288,6 @@ public class ChestShopSign {
      * @return The item line
      */
     public static String getItem(String[] lines) {
-        return lines.length > ITEM_LINE ? StringUtils.strip(StringUtil.stripColourCodes(lines[ITEM_LINE])) : "";
+        return lines.length > ITEM_LINE ? StringUtil.strip(StringUtil.stripColourCodes(lines[ITEM_LINE])) : "";
     }
 }

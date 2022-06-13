@@ -1,7 +1,7 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.ChestShop.Configuration.Messages;
-import org.apache.commons.lang.Validate;
+import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -61,7 +61,7 @@ public class Toggle implements CommandExecutor {
     }
 
     public static boolean setIgnoring(Player player, boolean ignoring) {
-        Validate.notNull(player); // Make sure the player instance is not null, in case there are any errors in the code
+        Preconditions.checkNotNull(player); // Make sure the player instance is not null, in case there are any errors in the code
 
         if (ignoring) {
             toggledPlayers.add(player.getUniqueId());

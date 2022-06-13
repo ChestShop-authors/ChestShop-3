@@ -1,10 +1,11 @@
 package com.Acrobot.Breeze.Utils;
 
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * @author Acrobot
@@ -22,9 +23,13 @@ public class StringUtil {
         if (string == null || string.isEmpty()) {
             return string;
         }
-        char[] separators = new char[]{separator};
 
-        return WordUtils.capitalize(string.toLowerCase(Locale.ROOT), separators).replace(String.valueOf(separator), " ");
+        // Split into words
+        String[] words = string.toLowerCase(Locale.ROOT).split(String.valueOf(separator));
+        // Capitalize every word and return joined string
+        return Arrays.stream(words)
+                .map(word -> word.substring(0, 1).toUpperCase(Locale.ROOT) + word.substring(1))
+                .collect(Collectors.joining(" "));
     }
 
     /**
@@ -115,5 +120,38 @@ public class StringUtil {
             width += getMinecraftCharWidth(c);
         }
         return width;
+    }
+
+    /**
+     * Strip whitespace from the front and back
+     * @param string The string to strip
+     * @return The string with all whitespace from front and back stripped; returns null if input is null
+     */
+    public static String strip(String string) {
+        if (string == null)
+            return null;
+        // The result stripped string
+        StringBuilder stripped = new StringBuilder();
+        // The current white space which only gets added once we find a non-whitespace character
+        StringBuilder cachedWhitespace = new StringBuilder();
+        // Check each code point (not characters to support UTF16 properly)
+        for (int codePoint : string.codePoints().toArray()) {
+            // Check if it's a whitespace, so we know if we should add it
+            if (!Character.isWhitespace(codePoint)) {
+                // Check if we have cached whitespace, if so append it first and reset the cache
+                if (cachedWhitespace.length() > 0) {
+                    stripped.append(cachedWhitespace);
+                    cachedWhitespace = new StringBuilder();
+                }
+                // Append current code point
+                stripped.appendCodePoint(codePoint);
+            } else if (stripped.length() > 0) {
+                // If we already have some non-whitespace content in the final stripped
+                // then cache the current whitespace as it wasn't at the start
+                cachedWhitespace.appendCodePoint(codePoint);
+            } // Otherwise, this was the start, and we don't need the cached whitespace
+        }
+        // Return the stripped string, without any whitespace from the end left
+        return stripped.toString();
     }
 }
