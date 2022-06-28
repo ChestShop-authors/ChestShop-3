@@ -4,7 +4,7 @@ shopinfo: |-
   &aІнформація про магазин:
   &fВласник: &7%owner
   &fЗалишок: &7%stock
-  &fПредмет: &7%i
+  &fПредмет: &7%item
 shopinfo_buy: "&fПридбати &7%amount &fза &7%price"
 shopinfo_sell: "&fПродати &7%amount &fза &7%price"
 iteminfo: "&aІнформація про предмет: &r"
