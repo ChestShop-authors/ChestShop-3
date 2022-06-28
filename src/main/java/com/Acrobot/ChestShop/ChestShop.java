@@ -66,6 +66,12 @@ import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedBarChart;
+import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.MultiLineChart;
+import org.bstats.charts.SimpleBarChart;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -433,7 +439,7 @@ public class ChestShop extends JavaPlugin {
         Metrics bStats = new Metrics(this, 1109);
         try {
             String dist = new JarFile(this.getFile()).getManifest().getMainAttributes().getValue("Distribution-Type");
-            bStats.addCustomChart(new Metrics.SimplePie("distributionType", () -> dist));
+            bStats.addCustomChart(new SimplePie("distributionType", () -> dist));
         } catch (IOException ignored) {}
 
         String serverVersion = getServer().getBukkitVersion().split("-")[0];
@@ -447,22 +453,22 @@ public class ChestShop extends JavaPlugin {
         bStats.addCustomChart(createStaticDrilldownStat("versionJavaMc", javaVersion, serverVersion));
         bStats.addCustomChart(createStaticDrilldownStat("versionMcJava", serverVersion, javaVersion));
 
-        bStats.addCustomChart(new Metrics.SingleLineChart("shopAccounts", NameManager::getAccountCount));
-        bStats.addCustomChart(new Metrics.MultiLineChart("transactionCount", () -> ImmutableMap.of(
+        bStats.addCustomChart(new SingleLineChart("shopAccounts", NameManager::getAccountCount));
+        bStats.addCustomChart(new MultiLineChart("transactionCount", () -> ImmutableMap.of(
                 "total", MetricsModule.getTotalTransactions(),
                 "buy", MetricsModule.getBuyTransactions(),
                 "sell", MetricsModule.getSellTransactions()
         )));
-        bStats.addCustomChart(new Metrics.MultiLineChart("itemCount", () -> ImmutableMap.of(
+        bStats.addCustomChart(new MultiLineChart("itemCount", () -> ImmutableMap.of(
                 "total", MetricsModule.getTotalItemsCount(),
                 "buy", MetricsModule.getSoldItemsCount(),
                 "sell", MetricsModule.getBoughtItemsCount()
         )));
 
-        bStats.addCustomChart(new Metrics.SimplePie("includeSettingsInMetrics", () -> Properties.INCLUDE_SETTINGS_IN_METRICS ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("includeSettingsInMetrics", () -> Properties.INCLUDE_SETTINGS_IN_METRICS ? "enabled" : "disabled"));
         if (!Properties.INCLUDE_SETTINGS_IN_METRICS) return;
 
-        bStats.addCustomChart(new Metrics.AdvancedBarChart("pluginProperties", () -> {
+        bStats.addCustomChart(new AdvancedBarChart("pluginProperties", () -> {
             Map<String, int[]> map = new LinkedHashMap<>();
             map.put("ensure-correct-playerid", getChartArray(Properties.ENSURE_CORRECT_PLAYERID));
             map.put("reverse-buttons", getChartArray(Properties.REVERSE_BUTTONS));
@@ -481,13 +487,13 @@ public class ChestShop extends JavaPlugin {
             map.put("log-to-file", getChartArray(Properties.LOG_TO_FILE));
             return map;
         }));
-        bStats.addCustomChart(new Metrics.SimpleBarChart("shopContainers",
+        bStats.addCustomChart(new SimpleBarChart("shopContainers",
                 () -> Properties.SHOP_CONTAINERS.stream().map(Material::name).collect(Collectors.toMap(k -> k, k -> 1))));
     }
 
-    private Metrics.DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
+    private DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
         final Map<String, Map<String, Integer>> map = ImmutableMap.of(value1, ImmutableMap.of(value2, 1));
-        return new Metrics.DrilldownPie(statId, () -> map);
+        return new DrilldownPie(statId, () -> map);
     }
 
     private int[] getChartArray(boolean value) {

@@ -113,7 +113,7 @@ public class Migrations {
                 }
                 try {
                     results.close();
-                } catch (IOException e1) {
+                } catch (Exception e1) {
                     ChestShop.getBukkitLogger().log(Level.WARNING, "Error while closing results! " + e.getMessage());
                 }
                 ChestShop.getBukkitLogger().log(Level.INFO, success + " accounts successfully migrated. " + error + " accounts failed to migrate!");
