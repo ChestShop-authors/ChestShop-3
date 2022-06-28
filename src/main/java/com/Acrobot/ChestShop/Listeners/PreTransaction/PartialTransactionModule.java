@@ -59,7 +59,13 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(new BigDecimal(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
+            BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                event.setCancelled(CLIENT_DOES_NOT_HAVE_ENOUGH_MONEY);
+                return;
+            }
+
+            event.setExactPrice(pricePerItemScaled);
             event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
         }
 
@@ -72,7 +78,13 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
+            BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                event.setCancelled(NOT_ENOUGH_STOCK_IN_CHEST);
+                return;
+            }
+
+            event.setExactPrice(pricePerItemScaled);
             event.setStock(itemsHad);
         }
 
@@ -84,8 +96,14 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
+            BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                event.setCancelled(NOT_ENOUGH_SPACE_IN_INVENTORY);
+                return;
+            }
+
+            event.setExactPrice(pricePerItemScaled);
             event.setStock(itemsFit);
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
         }
 
         UUID seller = event.getOwnerAccount().getUuid();
@@ -126,7 +144,13 @@ public class PartialTransactionModule implements Listener {
                     return;
                 }
 
-                event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
+                BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(amountAffordable)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                    event.setCancelled(SHOP_DOES_NOT_HAVE_ENOUGH_MONEY);
+                    return;
+                }
+
+                event.setExactPrice(pricePerItemScaled);
                 event.setStock(getCountedItemStack(event.getStock(), amountAffordable));
             }
         }
@@ -140,7 +164,13 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
+            BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                event.setCancelled(NOT_ENOUGH_STOCK_IN_INVENTORY);
+                return;
+            }
+
+            event.setExactPrice(pricePerItemScaled);
             event.setStock(itemsHad);
         }
 
@@ -152,8 +182,14 @@ public class PartialTransactionModule implements Listener {
                 return;
             }
 
+            BigDecimal pricePerItemScaled = pricePerItem.multiply(new BigDecimal(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            if (pricePerItem.compareTo(BigDecimal.ZERO) > 0 && pricePerItemScaled.compareTo(BigDecimal.ZERO) == 0) {
+                event.setCancelled(NOT_ENOUGH_SPACE_IN_CHEST);
+                return;
+            }
+
+            event.setExactPrice(pricePerItemScaled);
             event.setStock(itemsFit);
-            event.setExactPrice(pricePerItem.multiply(BigDecimal.valueOf(possessedItemCount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP));
         }
 
         CurrencyHoldEvent currencyHoldEvent = new CurrencyHoldEvent(event.getExactPrice(), client);
