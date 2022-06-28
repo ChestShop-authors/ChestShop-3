@@ -2,25 +2,25 @@
 prefix: "&a[Shop] &r"
 shopinfo: |-
   &aDükkan Bilgisi:
-  &fSahip:&7 %owner 
+  &fSahip: &7%owner 
   &fStok: &7%stock 
-  &fEşya:&7 %item
+  &fEşya: &7%item
 shopinfo_buy: "&7%price &fücret karşılığında &7%amount &fadet satın al"
 shopinfo_sell: "&7%price &fücret karşılığında &7%amount &fadet sat"
 iteminfo: "&aEşya Bilgisi: &r"
 iteminfo_fullname: "&fTam İsim: &7%item"
 iteminfo_shopname: "&fDükkan Tabelası: &7%item"
-iteminfo_repaircost: "&fTamir Ücreti:&7 %cost"
+iteminfo_repaircost: "&fTamir Ücreti: &7%cost"
 iteminfo_book: |-
-  &fKitap Başlığı:&7 %title
-  &fKitap Yazarı:&7 %author
-  &fKitap Sayfaları:&7 %pages
-iteminfo_book_generation: "&fKitap Jenerasyonu:&7 %generation"
+  &fKitap Başlığı: &7%title
+  &fKitap Yazarı: &7%author
+  &fKitap Sayfaları: &7%pages
+iteminfo_book_generation: "&fKitap Jenerasyonu: &7%generation"
 iteminfo_lore: |-
   &fAçıklama:
   &r%lore
 METRICS: |-
-  &a[Market] &fÖlçütler:
+  &a[Shop] &fÖlçütler:
   &fHesaplar:&7 %accounts
   &fİşlem ortalamaları:&7 %totalTransactions &f(alış:&7 %buyTransactions &fsatış:&7 %sellTransactions&f)
   &fEşya ticareti ortalamaları:&7 %totalItems &f(alınan:&7 %boughtItems &fsatılan:&7 %soldItems&f)

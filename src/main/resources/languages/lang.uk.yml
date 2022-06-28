@@ -1,78 +1,78 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "&a[Магазин] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+  &aІнформація про магазин:
+  &fВласник: &7%owner
+  &fЗалишок: &7%stock
+  &fПредмет: &7%item
+shopinfo_buy: "&fПридбати &7%amount &fза &7%price"
+shopinfo_sell: "&fПродати &7%amount &fза &7%price"
+iteminfo: "&aІнформація про предмет: &r"
+iteminfo_fullname: "&fПовна назва: &7%item"
+iteminfo_shopname: "&fНазва магазину: &7%item"
+iteminfo_repaircost: "&fВартість ремонту: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fЗаголовок книги: &7%title
+  &fАвтор книги: &7%author
+  &fСторінок книги: &7%pages
+iteminfo_book_generation: "&fВерсія книги: &7%generation"
 iteminfo_lore: |-
-  &fLore:
+  &fОпис:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
-ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
-NOT_ENOUGH_MONEY: "You don't have enough money!"
-NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
-CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
-SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
-NO_BUYING_HERE: "You can't buy here!"
-NO_SELLING_HERE: "You can't sell here!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
-NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
-NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "This shop is out of stock."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
-NO_CHEST_DETECTED: "Couldn't find a chest!"
-INVALID_SHOP_DETECTED: "The shop cannot be used!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
-CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
-SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
-SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
-BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
-BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
-PROTECTED_SHOP: "Successfully protected the shop with LWC!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
-SHOP_CREATED: "Shop successfully created!"
-SHOP_FEE_PAID: "You have been charged %amount"
-SHOP_REFUNDED: "You have been refunded %amount."
-ITEM_GIVEN: "Given %item to %player."
-RESTRICTED_SIGN_CREATED: "Sign successfully created!"
-PLAYER_NOT_FOUND: "Player not found!"
-NO_PERMISSION: "You don't have permissions to do that!"
-INCORRECT_ITEM_ID: "You have specified an invalid item id!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
-NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
-NO_SHOP_FOUND: "No shop found."
-CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
-TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
-TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+  &a[Магазин] &fСтатистика:
+  &fГравців: &7%accounts
+  &fСередня кількість трансакцій: &7%totalTransactions &f(Купівля: &7%buyTransactions &fПродаж: &7%sellTransactions&f)
+  &fСередня кількість проданих предметів: &7%totalItems &f(Придбано: &7%boughtItems &fПродано: &7%soldItems&f)
+ACCESS_DENIED: "Ви не маєте дозволу на те, щоб відкривати сховище цього магазину!"
+TRADE_DENIED: "Ви не маєте дозволу на торгівлю в цьому магазині!"
+TRADE_DENIED_ACCESS_PERMS: "Ви не можете торгувати в магазинах, до яких у вас є доступ!"
+TRADE_DENIED_CREATIVE_MODE: "Ви не можете торгувати доки ви в режимі творчости!"
+NOT_ENOUGH_MONEY: "Вам не вистачає грошей!"
+NOT_ENOUGH_MONEY_SHOP: "Власник магазину не має достатньо грошей!"
+CLIENT_DEPOSIT_FAILED: "Не вдалось покласти гроші на ваш рахунок!"
+SHOP_DEPOSIT_FAILED: "Не вдалось покласти гроші на рахунок власника магазину!"
+NO_ECONOMY_ACCOUNT: "Рахунок власника магазину не існує!"
+NO_BUYING_HERE: "Ви не можете тут нічого придбати!"
+NO_SELLING_HERE: "Ви не можете тут нічого продавати!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "У вас недостатньо місця в інвентарі!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Недостатньо місця в скрині!"
+NOT_ENOUGH_ITEMS_TO_SELL: "У вас недостатньо речей, для продажу!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[Магазин з %item&7 за %price заповнений!](&f%seller&7 намагався здійснити продаж.\n&7У світі: &f%world\n&7На координатах: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "Товар в магазині закінчився."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[Магазин з %item&7 за %price більше не має товару!](&f%buyer&7 намагався здійснити купівлю.\n&7У світі: &f%world\n&7На координатах: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "Ви придбали %item від %owner за %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer придбав %item за %price](&7У світі: &f%world\n&7На координатах: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "Ви продали %item гравцю %buyer за %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller продав %item за %price](&7У світі: &f%world\n&7На координатах: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "Ви не можете створити магазин цього типу!"
+NO_CHEST_DETECTED: "Скриню не знайдено!"
+INVALID_SHOP_DETECTED: "Цей магазин не можна використовувати!"
+INVALID_SHOP_PRICE: "Цей магазин має невірну ціну!"
+INVALID_SHOP_QUANTITY: "Цей магазин має невірну кількість!"
+CANNOT_ACCESS_THE_CHEST: "Ви не маєте доступу до цієї скрині!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Ціна продажу більша за ціну купівлі!"
+SELL_PRICE_ABOVE_MAX: "Ціна продажу %price більша за максимальну %maxprice!"
+SELL_PRICE_BELOW_MIN: "Ціна продажу %price менша за мінімальну %minprice!"
+BUY_PRICE_ABOVE_MAX: "Ціна купівлі %price більша за максимальну %maxprice!"
+BUY_PRICE_BELOW_MIN: "Ціна купівлі %price менша за мінімальну %minprice!"
+CLICK_TO_AUTOFILL_ITEM: "Натисніть на табличку з предметом для якої призначений цей магазин!"
+NO_ITEM_IN_HAND: "Ви не маєте предмета в вашій руці для автозаповнення!"
+PROTECTED_SHOP: "Магазин успішно захищений з LWC!"
+PROTECTED_SHOP_SIGN: "Успішно захищено табличку магазину з LWC!"
+SHOP_CREATED: "Магазин успішно створений!"
+SHOP_FEE_PAID: "З вас стягнуто %amount"
+SHOP_REFUNDED: "Вам повернено %amount."
+ITEM_GIVEN: "Видано %item гравцеві %player."
+RESTRICTED_SIGN_CREATED: "Табличка успішно створена!"
+PLAYER_NOT_FOUND: "Гравця не знайдено!"
+NO_PERMISSION: "У вас немає дозволу для цього!"
+INCORRECT_ITEM_ID: "Ви вказали неправильний ID предмета!"
+INVALID_CLIENT_NAME: "Ваш нікнейм не є допустимим Minecraft нікнеймом!"
+NOT_ENOUGH_PROTECTIONS: "Не вдалося створити захист!"
+NO_SHOP_FOUND: "Магазин не знайдено."
+CANNOT_CREATE_SHOP_HERE: "Ви не можете створити магазин тут!"
+TOGGLE_MESSAGES_OFF: "Ви тепер не отримуватимете повідомлення від ваших магазинів."
+TOGGLE_MESSAGES_ON: "Ви тепер отримуватимете повідомлення від ваших магазинів."
+TOGGLE_ACCESS_ON: "Ви більше не можете торгувати в магазинах до яких у вас є доступ"
+TOGGLE_ACCESS_OFF: "Ви тепер можете торгувати з магазинами до яких у вас є доступ"
