@@ -34,6 +34,7 @@ public class SignCreate implements Listener {
         if (ChestShopSign.isValid(event.getLines()) && !NameManager.canUseName(event.getPlayer(), OTHER_NAME_DESTROY, ChestShopSign.getOwner(event.getLines()))) {
             event.setCancelled(true);
             sign.update();
+            ChestShop.logDebug("Shop sign creation at " + sign.getLocation() + " by " + event.getPlayer().getName() + " was cancelled as they weren't able to create a shop for the account '" + ChestShopSign.getOwner(event.getLines()) + "'");
             return;
         }
 
@@ -49,6 +50,7 @@ public class SignCreate implements Listener {
         if (preEvent.getOutcome().shouldBreakSign()) {
             event.setCancelled(true);
             signBlock.breakNaturally();
+            ChestShop.logDebug("Shop sign creation at " + sign.getLocation() + " by " + event.getPlayer().getName() + " was cancelled (creation outcome: " + preEvent.getOutcome() + ") and the sign broken");
             return;
         }
 
@@ -57,6 +59,7 @@ public class SignCreate implements Listener {
         }
 
         if (preEvent.isCancelled()) {
+            ChestShop.logDebug("Shop sign creation at " + sign.getLocation() + " by " + event.getPlayer().getName() + " was cancelled (creation outcome: " + preEvent.getOutcome() + ") and sign lines were set to " + String.join(", ", preEvent.getSignLines()));
             return;
         }
 

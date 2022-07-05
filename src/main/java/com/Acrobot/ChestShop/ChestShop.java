@@ -535,6 +535,12 @@ public class ChestShop extends JavaPlugin {
         return logger;
     }
 
+    public static void logDebug(String message) {
+        if (Properties.DEBUG) {
+            getBukkitLogger().info("[DEBUG] " + message);
+        }
+    }
+
     public static Server getBukkitServer() {
         return server;
     }

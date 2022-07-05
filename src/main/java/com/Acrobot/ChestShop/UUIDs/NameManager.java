@@ -271,7 +271,12 @@ public class NameManager implements Listener {
 
     public static boolean canUseName(Player player, Permission base, String name) {
         if (ChestShopSign.isAdminShop(name)) {
-            return Permission.has(player, Permission.ADMIN_SHOP);
+            if (Permission.has(player, Permission.ADMIN_SHOP)) {
+                return true;
+            } else {
+                ChestShop.logDebug(player.getName() + " cannot use the name " + name + " as it's an admin shop and they don't have the permission " + Permission.ADMIN_SHOP);
+                return false;
+            }
         }
 
         if (Permission.otherName(player, base, name)) {
@@ -282,6 +287,7 @@ public class NameManager implements Listener {
         ChestShop.callEvent(queryEvent);
         Account account = queryEvent.getAccount();
         if (account == null) {
+            ChestShop.logDebug(player.getName() + " cannot use the name " + name + " for a shop as no account with that name exists");
             return false;
         }
         if (!account.getName().equalsIgnoreCase(name) && Permission.otherName(player, base, account.getName())) {
@@ -296,6 +302,11 @@ public class NameManager implements Listener {
     public static void onAccountAccessCheck(AccountAccessEvent event) {
         if (!event.canAccess()) {
             event.setAccess(event.getPlayer().getUniqueId().equals(event.getAccount().getUuid()));
+            if (!event.canAccess()) {
+                ChestShop.logDebug(event.getPlayer().getName() + "/" + event.getPlayer().getUniqueId()
+                        + " cannot access the account " + event.getAccount().getName() + "/" + event.getAccount().getUuid()
+                        + " as their UUID doesn't match!");
+            }
         }
     }
 
