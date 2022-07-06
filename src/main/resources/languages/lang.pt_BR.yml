@@ -16,6 +16,22 @@ iteminfo_book: |-
   &fAutor do Livro: &7%author
   &fPáginas do Livro: &7%pages
 iteminfo_book_generation: "&fGeração do livro: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fDescrição:
 METRICS: |-
