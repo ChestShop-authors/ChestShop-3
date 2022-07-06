@@ -287,6 +287,11 @@ public class NameManager implements Listener {
         ChestShop.callEvent(queryEvent);
         Account account = queryEvent.getAccount();
         if (account == null) {
+            // There is no account by the provided name, but it matches the player name
+            // Return true as they specified their own name and a new account should get created
+            if (player.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
             ChestShop.logDebug(player.getName() + " cannot use the name " + name + " for a shop as no account with that name exists");
             return false;
         }
