@@ -48,17 +48,7 @@ public class ItemInfo implements CommandExecutor {
         }
 
         iteminfo.send(sender);
-        try {
-            Map<String, String> replacementMap = ImmutableMap.of("item", ItemUtil.getName(item));
-            if (!Properties.SHOWITEM_MESSAGE || !(sender instanceof Player)
-                    || !MaterialUtil.Show.sendMessage((Player) sender, sender.getName(), Messages.iteminfo_fullname, false, new ItemStack[]{item}, replacementMap)) {
-                Messages.iteminfo_fullname.send(sender, replacementMap);
-            }
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
-            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
-            return true;
-        }
+        if (!sendItemName(sender, item, Messages.iteminfo_fullname)) return true;
 
         try {
             iteminfo_shopname.send(sender, "item", ItemUtil.getSignName(item));
@@ -71,6 +61,21 @@ public class ItemInfo implements CommandExecutor {
         ItemInfoEvent event = new ItemInfoEvent(sender, item);
         ChestShop.callEvent(event);
 
+        return true;
+    }
+
+    public static boolean sendItemName(CommandSender sender, ItemStack item, Messages.Message message) {
+        try {
+            Map<String, String> replacementMap = ImmutableMap.of("item", ItemUtil.getName(item));
+            if (!Properties.SHOWITEM_MESSAGE || !(sender instanceof Player)
+                    || !MaterialUtil.Show.sendMessage((Player) sender, sender.getName(), message, false, new ItemStack[]{item}, replacementMap)) {
+                message.send(sender, replacementMap);
+            }
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(ChatColor.RED + "Error while generating full name. Please contact an admin or take a look at the console/log!");
+            ChestShop.getPlugin().getLogger().log(Level.SEVERE, "Error while generating full item name", e);
+            return false;
+        }
         return true;
     }
 }

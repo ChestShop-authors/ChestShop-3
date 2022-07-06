@@ -34,6 +34,15 @@ public class Messages {
     public static Message iteminfo_repaircost;
     public static Message iteminfo_book;
     public static Message iteminfo_book_generation;
+    public static Message iteminfo_leather_color;
+    public static Message iteminfo_bundle_items;
+    public static Message iteminfo_axolotl_variant;
+    public static Message iteminfo_recipes;
+    public static Message iteminfo_map_view;
+    public static Message iteminfo_map_location;
+    public static Message iteminfo_tropical_fish;
+    public static Message iteminfo_crossbow_projectiles;
+    public static Message iteminfo_crossbow_projectile;
     public static Message iteminfo_lore;
 
     public static Message METRICS;
