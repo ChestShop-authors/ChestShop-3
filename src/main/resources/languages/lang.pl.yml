@@ -16,20 +16,20 @@ iteminfo_book: |-
   &fAutor książki: &7%author
   &fStrony książki: &7%pages
 iteminfo_book_generation: "&fGenerowanie Książki: &7%generation"
-iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
-iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
-iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
-iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_leather_color: "&fKolor skóry: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPakiet przedmiotów: &7%itemcount"
+iteminfo_axolotl_variant: "&fWariant Aksolotla: &7%variant"
+iteminfo_recipes: "&fPrzepis:"
 iteminfo_map_view: |-
-  &fMap ID: &7%id
-  &fMap World: &7%world
-  &fMap Center: &7%x/%z
-  &fMap Locked: &7locked
-iteminfo_map_location: "&fMap Location: &7%location"
+  &fID mapy: &7%id
+  &fŚwiat mapy: &7%world
+  &fCentrum mapy: &7%x/%z
+  &fZablokowane mapy: &7zablokowane
+iteminfo_map_location: "&fLokalizacja mapy: &7%location"
 iteminfo_tropical_fish: |-
-  &fFish Pattern: &7%pattern
-  &fFish Pattern Color: &7%patterncolor
-  &fFish Body Color: &7%bodycolor
+  &fWzór ryby: &7%pattern
+  &fKolor wzoru ryby: &7%patterncolor
+  &fKolor ciała ryby: &7%bodycolor
 iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
