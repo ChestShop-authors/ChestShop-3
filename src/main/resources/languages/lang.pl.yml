@@ -30,7 +30,7 @@ iteminfo_tropical_fish: |-
   &fWzór ryby: &7%pattern
   &fKolor wzoru ryby: &7%patterncolor
   &fKolor ciała ryby: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectiles: "&fNaładowany pocisk kuszy:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fOpis:
