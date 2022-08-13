@@ -25,11 +25,11 @@ iteminfo_map_view: |-
   &fMap World: &7%world
   &fMap Center: &7%x/%z
   &fMap Locked: &7locked
-iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_map_location: "&fМесто карты: &7%location"
 iteminfo_tropical_fish: |-
-  &fFish Pattern: &7%pattern
-  &fFish Pattern Color: &7%patterncolor
-  &fFish Body Color: &7%bodycolor
+  &fУзор рыбы: &7%pattern
+  &fЦвет рыбного узора: &7%patterncolor
+  &fЦвет тела рыбы: &7%bodycolor
 iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
