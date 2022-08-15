@@ -23,7 +23,7 @@ iteminfo_recipes: "&fConhecimento de Receita:"
 iteminfo_map_view: |-
   &fMapa ID: &7%id
   &fMapa Mundo: &7%world
-  &fMapa centralizado: &7%x/%z
+  &fMapa localização: &7%x/%z
   &fMapa bloqueado: &7locked
 iteminfo_map_location: "&fMapa localização: &7%location"
 iteminfo_tropical_fish: |-
