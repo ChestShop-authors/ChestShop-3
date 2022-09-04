@@ -16,7 +16,7 @@ iteminfo_book: |-
   &fАвтор книги: &7%author
   &fСторінок книги: &7%pages
 iteminfo_book_generation: "&fВерсія книги: &7%generation"
-iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_leather_color: "&fКолір шкіри: &7Червониий: %colorred, Зелений: %colorgreen колір, синій: %colorblue,  (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
 iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
 iteminfo_recipes: "&fRecipe Knowledge:"
