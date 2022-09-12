@@ -16,6 +16,22 @@ iteminfo_book: |-
   &fAuthor: &7%author
   &fSeitenanzahl: &7%pages
 iteminfo_book_generation: "&fBuch Ausgabe: &7%generation"
+iteminfo_leather_color: "&fLederfarbe: &7Rot: %colorred, Grün: %colorgreen, Blau: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBündelgegenstände: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variante: &7%variant"
+iteminfo_recipes: "&fRezeptwissen:"
+iteminfo_map_view: |-
+  &fNummer der Karte: &7%id
+  &fWelt der Karte: &7%world
+  &fMitte der Karte: &7%x/%z
+  &fIst Karte gesperrt: &7locked
+iteminfo_map_location: "&fOrt der Karte: &7%location"
+iteminfo_tropical_fish: |-
+  &fFischmuster: &7%pattern
+  &fFarbe des Fischmusters: &7%patterncolor
+  &fFarbe des Fischkörpers: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fAufgeladenes Armbrustprojektil:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fBeschreibung:
   &r%lore
