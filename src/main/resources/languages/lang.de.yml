@@ -19,18 +19,18 @@ iteminfo_book_generation: "&fBuch Ausgabe: &7%generation"
 iteminfo_leather_color: "&fLederfarbe: &7Rot: %colorred, Grün: %colorgreen, Blau: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fBündelgegenstände: &7%itemcount"
 iteminfo_axolotl_variant: "&fAxolotl Variante: &7%variant"
-iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_recipes: "&fRezeptwissen:"
 iteminfo_map_view: |-
-  &fMap ID: &7%id
-  &fMap World: &7%world
-  &fMap Center: &7%x/%z
-  &fMap Locked: &7locked
-iteminfo_map_location: "&fMap Location: &7%location"
+  &fNummer der Karte: &7%id
+  &fWelt der Karte: &7%world
+  &fMitte der Karte: &7%x/%z
+  &fIst Karte gesperrt: &7locked
+iteminfo_map_location: "&fOrt der Karte: &7%location"
 iteminfo_tropical_fish: |-
-  &fFish Pattern: &7%pattern
-  &fFish Pattern Color: &7%patterncolor
-  &fFish Body Color: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+  &fFischmuster: &7%pattern
+  &fFarbe des Fischmusters: &7%patterncolor
+  &fFarbe des Fischkörpers: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fAufgeladenes Armbrustprojektil:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fBeschreibung:
