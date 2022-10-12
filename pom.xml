@@ -444,6 +444,7 @@
         <build.number>${buildNumber}</build.number>
         <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
+        <bukkit.dependency.version>1.19-R0.1-SNAPSHOT</bukkit.dependency.version>
     </properties>
 
     <profiles>
@@ -464,7 +465,7 @@
                 <dependency>
                     <groupId>io.papermc.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.19-R0.1-SNAPSHOT</version>
+                    <version>${bukkit.dependency.version}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -488,7 +489,7 @@
                 <dependency>
                     <groupId>org.spigotmc</groupId>
                     <artifactId>spigot-api</artifactId>
-                    <version>1.13.2-R0.1-SNAPSHOT</version>
+                    <version>${bukkit.dependency.version}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
