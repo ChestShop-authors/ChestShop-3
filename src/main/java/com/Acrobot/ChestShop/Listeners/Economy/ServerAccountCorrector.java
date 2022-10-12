@@ -80,7 +80,8 @@ public class ServerAccountCorrector implements Listener {
                 event.getAmountReceived(),
                 event.getInitiator(),
                 partner,
-                event.getDirection()
+                event.getDirection(),
+                event.getTransactionEvent()
         );
         ChestShop.callEvent(currencyTransferEvent);
         event.setHandled(currencyTransferEvent.wasHandled());
