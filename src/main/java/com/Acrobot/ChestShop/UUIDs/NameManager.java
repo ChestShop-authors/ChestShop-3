@@ -64,7 +64,7 @@ public class NameManager implements Listener {
      */
     public static Account getOrCreateAccount(OfflinePlayer player) {
         Preconditions.checkNotNull(player.getName(), "Name of player " + player.getUniqueId() + " is null?");
-        Preconditions.checkArgument(!(player instanceof Player) || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
+        Preconditions.checkArgument(player instanceof Player || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
                 "Invalid OfflinePlayer! " + player.getUniqueId() + " has version " + player.getUniqueId().version() + " and not server version " + uuidVersion + ". " +
                         "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
         return getOrCreateAccount(player.getUniqueId(), player.getName());
