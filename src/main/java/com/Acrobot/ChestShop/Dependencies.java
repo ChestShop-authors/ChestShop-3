@@ -174,6 +174,9 @@ public class Dependencies implements Listener {
 
                 listener = heroes;
                 break;
+            case ItemBridge:
+                listener = new ItemBridge();
+                break;
             case ShowItem:
                 MaterialUtil.Show.initialize(plugin);
                 break;
@@ -201,6 +204,8 @@ public class Dependencies implements Listener {
         RedProtect,
 
         Heroes,
+
+        ItemBridge,
 
         ShowItem
     }

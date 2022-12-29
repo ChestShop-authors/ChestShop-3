@@ -245,6 +245,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jojodmo</groupId>
+            <artifactId>ItemBridge</artifactId>
+            <version>b0054538c1</version>
+        </dependency>
+
+        <dependency>
             <groupId>br.net.fabiozumbi12.RedProtect</groupId>
             <artifactId>RedProtect-Spigot</artifactId>
             <version>7.6.2</version>
