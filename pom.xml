@@ -18,8 +18,8 @@
 
     <repositories>
         <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.sk89q.com/repo/</url>
+            <id>enginehub-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
             <id>codemc-repo</id>
@@ -40,10 +40,6 @@
         <repository>
             <id>local_repo</id>
             <url>file://${project.basedir}/repo/</url>
-        </repository>
-        <repository>
-            <id>redprotect-repo</id>
-            <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
