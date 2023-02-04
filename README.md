@@ -34,5 +34,6 @@ Links
 * [Forum Thread](http://forums.bukkit.org/threads/4150/)
 * [BukkitDev site](http://dev.bukkit.org/projects/chestshop/)
 * [SpigotMC site](https://www.spigotmc.org/resources/chestshop.51856/)
-* [Bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+)
+* [Bounties via IssueHunt](https://issuehunt.io/r/ChestShop-authors/ChestShop-3?tab=idle)
 * [Localization](https://crowdin.com/project/chestshop-3)
+* [Old bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+) (please use GitHub issues!)
