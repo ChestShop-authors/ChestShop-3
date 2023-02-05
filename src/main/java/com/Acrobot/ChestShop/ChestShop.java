@@ -468,6 +468,17 @@ public class ChestShop extends JavaPlugin {
         bStats.addCustomChart(new SimplePie("includeSettingsInMetrics", () -> Properties.INCLUDE_SETTINGS_IN_METRICS ? "enabled" : "disabled"));
         if (!Properties.INCLUDE_SETTINGS_IN_METRICS) return;
 
+        bStats.addCustomChart(new SimplePie("ensure-correct-playerid", () -> Properties.ENSURE_CORRECT_PLAYERID ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-sign-chest-open", () -> Properties.ALLOW_SIGN_CHEST_OPEN ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("uses-server-economy-account", () -> !Properties.SERVER_ECONOMY_ACCOUNT.isEmpty() ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("uses-server-economy-account-uuid", () -> !Properties.SERVER_ECONOMY_ACCOUNT_UUID.equals(new UUID(0, 0)) ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-partial-transactions", () -> Properties.ALLOW_PARTIAL_TRANSACTIONS ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("bungeecord-messages", () -> Properties.BUNGEECORD_MESSAGES ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-multiple-shops-at-one-block", () -> Properties.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-partial-transactions", () -> Properties.ALLOW_PARTIAL_TRANSACTIONS ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("log-to-console", () -> Properties.LOG_TO_CONSOLE ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("log-to-file", () -> Properties.LOG_TO_FILE ? "enabled" : "disabled"));
+
         bStats.addCustomChart(new AdvancedBarChart("pluginProperties", () -> {
             Map<String, int[]> map = new LinkedHashMap<>();
             map.put("ensure-correct-playerid", getChartArray(Properties.ENSURE_CORRECT_PLAYERID));
