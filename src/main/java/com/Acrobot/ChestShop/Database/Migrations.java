@@ -28,8 +28,6 @@ public class Migrations {
     public static int migrate(int currentVersion) {
         if (currentVersion != CURRENT_DATABASE_VERSION) {
             ChestShop.getBukkitLogger().info("Updating database...");
-        } else {
-            return CURRENT_DATABASE_VERSION;
         }
 
         switch (currentVersion) {
@@ -67,7 +65,7 @@ public class Migrations {
             accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN lastSeenName VARCHAR");
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v2", e);
             return false;
         }
     }
@@ -122,7 +120,7 @@ public class Migrations {
 
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v3", e);
             return false;
         }
     }
@@ -145,7 +143,7 @@ public class Migrations {
 
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v4", e);
             return false;
         }
     }

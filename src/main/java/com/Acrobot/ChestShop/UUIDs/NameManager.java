@@ -355,7 +355,7 @@ public class NameManager implements Listener {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while trying to setup accounts", e);
         }
     }
 
