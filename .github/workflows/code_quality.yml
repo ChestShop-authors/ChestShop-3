@@ -17,3 +17,5 @@ jobs:
       uses: JetBrains/qodana-action@v2022.3.4
       env:
         QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+      with:
+        args: --baseline,.github/workflows/qodana/qodana.sarif.json
