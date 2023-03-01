@@ -48,7 +48,7 @@ public class AdminInventory implements Inventory {
 
     @Override
     public ItemStack getItem(int i) {
-        if (content.length < i) {
+        if (content.length > i) {
             return content[i];
         }
         return null;
@@ -156,10 +156,12 @@ public class AdminInventory implements Inventory {
     public HashMap<Integer, ? extends ItemStack> all(ItemStack itemStack) {
         HashMap<Integer, ItemStack> items = new HashMap<Integer, ItemStack>();
 
-        ItemStack clone = itemStack.clone();
-        clone.setAmount(Integer.MAX_VALUE);
+        if (itemStack != null) {
+            ItemStack clone = itemStack.clone();
+            clone.setAmount(Integer.MAX_VALUE);
 
-        items.put(1, clone);
+            items.put(1, clone);
+        }
 
         return items;
     }
