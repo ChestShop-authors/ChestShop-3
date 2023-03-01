@@ -70,8 +70,10 @@ public class ItemDatabase {
     private int getCurrentMetadataVersion() {
         ItemStack item = new ItemStack(Material.STONE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("GetCurrentMetadataVersion");
-        item.setItemMeta(meta);
+        if (meta != null) {
+            meta.setDisplayName("GetCurrentMetadataVersion");
+            item.setItemMeta(meta);
+        }
         Map<String, Object> serialized = item.serialize();
         return (int) serialized.getOrDefault("v", -1);
     }
@@ -117,7 +119,7 @@ public class ItemDatabase {
                 return true;
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to update metadata version of all items from " + previousVersion + " to " + newVersion, e);
             return false;
         } finally {
             it.closeQuietly();
@@ -153,10 +155,8 @@ public class ItemDatabase {
                 itemDao.create(itemEntity);
             }
             return Base62.encode(itemEntity.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to get code of item " + item, e);
         }
 
         return null;
@@ -196,7 +196,7 @@ public class ItemDatabase {
         return null;
     }
 
-    private class YamlBukkitConstructor extends YamlConstructor {
+    private static class YamlBukkitConstructor extends YamlConstructor {
         public YamlBukkitConstructor() {
             this.yamlConstructors.put(new Tag(Tag.PREFIX + "org.bukkit.inventory.ItemStack"), yamlConstructors.get(Tag.MAP));
         }

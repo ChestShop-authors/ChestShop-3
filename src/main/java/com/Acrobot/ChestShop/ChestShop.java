@@ -179,9 +179,11 @@ public class ChestShop extends JavaPlugin {
 
     private void registerCommand(String name, CommandExecutor executor, Permission permission) {
         PluginCommand command = getCommand(name);
-        command.setExecutor(executor);
-        command.setPermission(permission.toString());
-        commands.add(command);
+        if (command != null) {
+            command.setExecutor(executor);
+            command.setPermission(permission.toString());
+            commands.add(command);
+        }
     }
 
     public void loadConfig() {
@@ -244,7 +246,7 @@ public class ChestShop extends JavaPlugin {
             try {
                 previousVersion.save(versionFile);
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().log(java.util.logging.Level.SEVERE, "Unable to save new database version " + Migrations.CURRENT_DATABASE_VERSION, e);
             }
         }
 
@@ -261,7 +263,7 @@ public class ChestShop extends JavaPlugin {
             try {
                 previousVersion.save(versionFile);
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().log(java.util.logging.Level.SEVERE, "Unable to save new database version " + newVersion, e);
             }
         }
         return true;
@@ -282,7 +284,7 @@ public class ChestShop extends JavaPlugin {
 
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                getBukkitLogger().log(java.util.logging.Level.SEVERE, "Unable to load file " + file.getName(), e);
             }
         }
 
@@ -295,7 +297,7 @@ public class ChestShop extends JavaPlugin {
         try {
             handler = new FileHandler(path, true);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            getBukkitLogger().log(java.util.logging.Level.SEVERE, "Unable to load handler " + path, ex);
         }
 
         return handler;
@@ -437,8 +439,8 @@ public class ChestShop extends JavaPlugin {
 
     private void startStatistics() {
         Metrics bStats = new Metrics(this, 1109);
-        try {
-            String dist = new JarFile(this.getFile()).getManifest().getMainAttributes().getValue("Distribution-Type");
+        try (JarFile jarFile = new JarFile(this.getFile())) {
+            String dist = jarFile.getManifest().getMainAttributes().getValue("Distribution-Type");
             bStats.addCustomChart(new SimplePie("distributionType", () -> dist));
         } catch (IOException ignored) {}
 
