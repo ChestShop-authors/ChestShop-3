@@ -52,7 +52,9 @@ public class EmptyShopDeleter implements Listener {
         sign.getBlock().setType(Material.AIR);
 
         if (Properties.REMOVE_EMPTY_CHESTS && !ChestShopSign.isAdminShop(ownerInventory) && InventoryUtil.isEmpty(ownerInventory)) {
-            connectedContainer.getBlock().setType(Material.AIR);
+            if (connectedContainer != null) {
+                connectedContainer.getBlock().setType(Material.AIR);
+            }
         } else {
             if (!signType.isItem()) {
                 try {

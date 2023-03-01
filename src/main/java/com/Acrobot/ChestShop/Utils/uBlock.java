@@ -221,7 +221,7 @@ public class uBlock {
             Sign sign = (Sign) faceBlock.getState();
 
             Container signContainer = findConnectedContainer(sign);
-            if (!chestBlock.equals(signContainer.getBlock())) {
+            if (signContainer == null || !chestBlock.equals(signContainer.getBlock())) {
                 continue;
             }
 
