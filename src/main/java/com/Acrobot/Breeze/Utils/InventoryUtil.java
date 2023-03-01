@@ -351,7 +351,7 @@ public class InventoryUtil {
             itemList.add(item.clone());
         }
 
-        return itemList.toArray(new ItemStack[itemList.size()]);
+        return itemList.toArray(new ItemStack[0]);
     }
 
     /**
@@ -413,7 +413,7 @@ public class InventoryUtil {
                 stackedItems.add(item.clone());
                 continue;
             }
-            for (int i = 0; i < Math.floor(item.getAmount() / maxStackSize); i++) {
+            for (int i = 0; i < Math.floor((double) item.getAmount() / maxStackSize); i++) {
                 ItemStack itemClone = item.clone();
                 itemClone.setAmount(maxStackSize);
                 stackedItems.add(itemClone);
@@ -424,6 +424,6 @@ public class InventoryUtil {
                 stackedItems.add(rest);
             }
         }
-        return stackedItems.toArray(new ItemStack[stackedItems.size()]);
+        return stackedItems.toArray(new ItemStack[0]);
     }
 }
