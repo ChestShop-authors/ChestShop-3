@@ -393,22 +393,27 @@ public final class Updater {
                         if (this.pluginFile(dFile.getName())) {
                             final File oFile = new File(this.plugin.getDataFolder().getParent(), dFile.getName()); // Get current dir
                             final File[] contents = oFile.listFiles(); // List of existing files in the current dir
-                            for (final File cFile : dFile.listFiles()) // Loop through all the files in the new dir
-                            {
-                                boolean found = false;
-                                for (final File xFile : contents) // Loop through contents to see if it exists
+                            final File[] newFiles = dFile.listFiles();
+                            if (newFiles != null) {
+                                for (final File cFile : newFiles) // Loop through all the files in the new dir
                                 {
-                                    if (xFile.getName().equals(cFile.getName())) {
-                                        found = true;
-                                        break;
+                                    boolean found = false;
+                                    if (contents != null) {
+                                        for (final File xFile : contents) // Loop through contents to see if it exists
+                                        {
+                                            if (xFile.getName().equals(cFile.getName())) {
+                                                found = true;
+                                                break;
+                                            }
+                                        }
                                     }
-                                }
-                                if (!found) {
-                                    // Move the new file into the current dir
-                                    cFile.renameTo(new File(oFile.getCanonicalFile() + File.separator + cFile.getName()));
-                                } else {
-                                    // This file already exists, so we don't need it anymore.
-                                    cFile.delete();
+                                    if (!found) {
+                                        // Move the new file into the current dir
+                                        cFile.renameTo(new File(oFile.getCanonicalFile() + File.separator + cFile.getName()));
+                                    } else {
+                                        // This file already exists, so we don't need it anymore.
+                                        cFile.delete();
+                                    }
                                 }
                             }
                         }
