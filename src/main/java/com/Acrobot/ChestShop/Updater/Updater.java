@@ -39,7 +39,7 @@ import java.util.zip.ZipFile;
  * @version 2.1
  */
 
-public class Updater {
+public final class Updater {
 
     private Plugin plugin;
     private UpdateType type;
@@ -204,7 +204,7 @@ public class Updater {
         }
 
         String key = this.config.getString("api-key");
-        if (key.equalsIgnoreCase("PUT_API_KEY_HERE") || key.equals("")) {
+        if (key != null && (key.equalsIgnoreCase("PUT_API_KEY_HERE") || key.equals(""))) {
             key = null;
         }
 
@@ -305,57 +305,49 @@ public class Updater {
         if (!folder.exists()) {
             folder.mkdir();
         }
-        BufferedInputStream in = null;
-        FileOutputStream fout = null;
         try {
             // Download the file
             final URL url = new URL(link);
             final int fileLength = url.openConnection().getContentLength();
-            in = new BufferedInputStream(url.openStream());
-            fout = new FileOutputStream(folder.getAbsolutePath() + File.separator + file);
+            try (BufferedInputStream in = new BufferedInputStream(url.openStream());
+                FileOutputStream fout = new FileOutputStream(folder.getAbsolutePath() + File.separator + file)) {
 
-            final byte[] data = new byte[Updater.BYTE_SIZE];
-            int count;
-            if (this.announce) {
-                this.plugin.getLogger().info("About to download a new update: " + this.versionName);
-            }
-            long downloaded = 0;
-            while ((count = in.read(data, 0, Updater.BYTE_SIZE)) != -1) {
-                downloaded += count;
-                fout.write(data, 0, count);
-                final int percent = (int) ((downloaded * 100) / fileLength);
-                if (this.announce && ((percent % 10) == 0)) {
-                    this.plugin.getLogger().info("Downloading update: " + percent + "% of " + fileLength + " bytes.");
+                final byte[] data = new byte[Updater.BYTE_SIZE];
+                int count;
+                if (this.announce) {
+                    this.plugin.getLogger().info("About to download a new update: " + this.versionName);
                 }
-            }
-            //Just a quick check to make sure we didn't leave any files from last time...
-            for (final File xFile : new File(this.plugin.getDataFolder().getParent(), this.updateFolder).listFiles()) {
-                if (xFile.getName().endsWith(".zip")) {
-                    xFile.delete();
+                long downloaded = 0;
+                while ((count = in.read(data, 0, Updater.BYTE_SIZE)) != -1) {
+                    downloaded += count;
+                    fout.write(data, 0, count);
+                    final int percent = (int) ((downloaded * 100) / fileLength);
+                    if (this.announce && ((percent % 10) == 0)) {
+                        this.plugin.getLogger().info("Downloading update: " + percent + "% of " + fileLength + " bytes.");
+                    }
                 }
-            }
-            // Check to see if it's a zip file, if it is, unzip it.
-            final File dFile = new File(folder.getAbsolutePath() + File.separator + file);
-            if (dFile.getName().endsWith(".zip")) {
-                // Unzip
-                this.unzip(dFile.getCanonicalPath());
-            }
-            if (this.announce) {
-                this.plugin.getLogger().info("Finished updating.");
+                //Just a quick check to make sure we didn't leave any files from last time...
+                File[] files = new File(this.plugin.getDataFolder().getParent(), this.updateFolder).listFiles();
+                if (files != null) {
+                    for (final File xFile : files) {
+                        if (xFile.getName().endsWith(".zip")) {
+                            xFile.delete();
+                        }
+                    }
+                }
+                // Check to see if it's a zip file, if it is, unzip it.
+                final File dFile = new File(folder.getAbsolutePath() + File.separator + file);
+                if (dFile.getName().endsWith(".zip")) {
+                    // Unzip
+                    this.unzip(dFile.getCanonicalPath());
+                }
+                if (this.announce) {
+                    this.plugin.getLogger().info("Finished updating.");
+                }
             }
         } catch (final Exception ex) {
             this.plugin.getLogger().warning("The auto-updater tried to download a new update, but was unsuccessful.");
             this.result = Updater.UpdateResult.FAIL_DOWNLOAD;
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-                if (fout != null) {
-                    fout.close();
-                }
-            } catch (final Exception ex) {
-            }
         }
     }
 
@@ -365,21 +357,18 @@ public class Updater {
      * @param file the location of the file to extract.
      */
     private void unzip(String file) {
-        try {
-            final File fSourceZip = new File(file);
-            final String zipPath = file.substring(0, file.length() - 4);
-            ZipFile zipFile = new ZipFile(fSourceZip);
+        final File fSourceZip = new File(file);
+        final String zipPath = file.substring(0, file.length() - 4);
+        try (ZipFile zipFile = new ZipFile(fSourceZip)) {
             Enumeration<? extends ZipEntry> e = zipFile.entries();
             while (e.hasMoreElements()) {
                 ZipEntry entry = e.nextElement();
                 File destinationFilePath = new File(zipPath, entry.getName());
                 destinationFilePath.getParentFile().mkdirs();
-                if (entry.isDirectory()) {
-                    continue;
-                } else {
+                if (!entry.isDirectory()) {
                     final BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
                     int b;
-                    final byte buffer[] = new byte[Updater.BYTE_SIZE];
+                    final byte[] buffer = new byte[Updater.BYTE_SIZE];
                     final FileOutputStream fos = new FileOutputStream(destinationFilePath);
                     final BufferedOutputStream bos = new BufferedOutputStream(fos, Updater.BYTE_SIZE);
                     while ((b = bis.read(buffer, 0, Updater.BYTE_SIZE)) != -1) {
@@ -393,40 +382,39 @@ public class Updater {
                         destinationFilePath.renameTo(new File(this.plugin.getDataFolder().getParent(), this.updateFolder + File.separator + name));
                     }
                 }
-                entry = null;
-                destinationFilePath = null;
             }
-            e = null;
             zipFile.close();
-            zipFile = null;
 
             // Move any plugin data folders that were included to the right place, Bukkit won't do this for us.
-            for (final File dFile : new File(zipPath).listFiles()) {
-                if (dFile.isDirectory()) {
-                    if (this.pluginFile(dFile.getName())) {
-                        final File oFile = new File(this.plugin.getDataFolder().getParent(), dFile.getName()); // Get current dir
-                        final File[] contents = oFile.listFiles(); // List of existing files in the current dir
-                        for (final File cFile : dFile.listFiles()) // Loop through all the files in the new dir
-                        {
-                            boolean found = false;
-                            for (final File xFile : contents) // Loop through contents to see if it exists
+            File[] files = new File(zipPath).listFiles();
+            if (files != null) {
+                for (final File dFile : files) {
+                    if (dFile.isDirectory()) {
+                        if (this.pluginFile(dFile.getName())) {
+                            final File oFile = new File(this.plugin.getDataFolder().getParent(), dFile.getName()); // Get current dir
+                            final File[] contents = oFile.listFiles(); // List of existing files in the current dir
+                            for (final File cFile : dFile.listFiles()) // Loop through all the files in the new dir
                             {
-                                if (xFile.getName().equals(cFile.getName())) {
-                                    found = true;
-                                    break;
+                                boolean found = false;
+                                for (final File xFile : contents) // Loop through contents to see if it exists
+                                {
+                                    if (xFile.getName().equals(cFile.getName())) {
+                                        found = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (!found) {
-                                // Move the new file into the current dir
-                                cFile.renameTo(new File(oFile.getCanonicalFile() + File.separator + cFile.getName()));
-                            } else {
-                                // This file already exists, so we don't need it anymore.
-                                cFile.delete();
+                                if (!found) {
+                                    // Move the new file into the current dir
+                                    cFile.renameTo(new File(oFile.getCanonicalFile() + File.separator + cFile.getName()));
+                                } else {
+                                    // This file already exists, so we don't need it anymore.
+                                    cFile.delete();
+                                }
                             }
                         }
                     }
+                    dFile.delete();
                 }
-                dFile.delete();
             }
             new File(zipPath).delete();
             fSourceZip.delete();
@@ -444,9 +432,12 @@ public class Updater {
      * @return true if a file inside the plugins folder is named this.
      */
     private boolean pluginFile(String name) {
-        for (final File file : new File("plugins").listFiles()) {
-            if (file.getName().equals(name)) {
-                return true;
+        File[] files = new File("plugins").listFiles();
+        if (files != null) {
+            for (final File file : files) {
+                if (file.getName().equals(name)) {
+                    return true;
+                }
             }
         }
         return false;
