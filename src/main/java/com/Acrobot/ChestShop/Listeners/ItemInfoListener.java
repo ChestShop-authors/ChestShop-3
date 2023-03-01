@@ -216,7 +216,7 @@ public class ItemInfoListener implements Listener {
 
         message.append(ChatColor.GRAY);
 
-        message.append(capitalizeFirstLetter(item.getType().name(), '_') + " of ");
+        message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
         message.append(capitalizeFirstLetter(potionMeta.getBasePotionData().getType().name(), '_')).append(' ');
         if (potionMeta.getBasePotionData().isUpgraded()) {
             message.append("II");
