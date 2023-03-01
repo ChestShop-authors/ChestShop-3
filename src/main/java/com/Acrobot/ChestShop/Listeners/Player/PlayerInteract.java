@@ -36,6 +36,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -108,7 +109,8 @@ public class PlayerInteract implements Listener {
                     com.Acrobot.ChestShop.ChestShop.callEvent(changeEvent);
                     if (!changeEvent.isCancelled()) {
                         for (byte i = 0; i < changeEvent.getLines().length; ++i) {
-                            sign.setLine(i, changeEvent.getLine(i));
+                            String line = changeEvent.getLine(i);
+                            sign.setLine(i, line != null ? line : "");
                         }
                         sign.update();
                     } else {
@@ -215,30 +217,31 @@ public class PlayerInteract implements Listener {
         int amount = -1;
         try {
             amount = ChestShopSign.getQuantity(sign);
-        } catch (NumberFormatException notANumber) {}
+        } catch (NumberFormatException ignored) {} // There is no quantity number on the sign
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
             Messages.INVALID_SHOP_PRICE.sendWithPrefix(player);
             return null;
         }
 
+        BigDecimal pricePerItem = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128);
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
             int newAmount = adminShop ? InventoryUtil.getMaxStackSize(item) : getStackAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
-                price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                 amount = newAmount;
             }
         } else if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
             if (action != buy) {
                 int newAmount = InventoryUtil.getAmount(item, player.getInventory());
                 if (newAmount > 0) {
-                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                     amount = newAmount;
                 }
             } else if (!adminShop && ownerInventory != null) {
                 int newAmount = InventoryUtil.getAmount(item, ownerInventory);
                 if (newAmount > 0) {
-                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                     amount = newAmount;
                 }
             }
