@@ -36,4 +36,5 @@ Links
 * [SpigotMC site](https://www.spigotmc.org/resources/chestshop.51856/)
 * [Bounties via IssueHunt](https://issuehunt.io/r/ChestShop-authors/ChestShop-3?tab=idle)
 * [Localization](https://crowdin.com/project/chestshop-3)
+* [Qodana code quality](https://qodana.cloud/projects/zxDG5/)
 * [Old bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+) (please use GitHub issues!)
