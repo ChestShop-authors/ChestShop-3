@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
@@ -44,7 +45,7 @@ public class DiscountModule implements Listener {
         try {
             config.save(ChestShop.loadFile("discounts.yml"));
         } catch (IOException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while loading discounts config", e);
         }
 
         groupList = config.getKeys(false);

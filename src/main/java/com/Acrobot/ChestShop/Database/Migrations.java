@@ -137,7 +137,7 @@ public class Migrations {
             try {
                 items.executeRawNoArgs("INSERT INTO `items` (id, code) SELECT id, code uuid FROM `items-old`");
             } catch (SQLException e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while inserting items into new database while migrating to v4", e);
             }
             ChestShop.getBukkitLogger().log(Level.INFO, "Migration of items table finished in " + (System.currentTimeMillis() - start) / 1000.0 + "s!");
 

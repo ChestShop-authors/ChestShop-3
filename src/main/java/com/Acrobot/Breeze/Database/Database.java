@@ -1,8 +1,12 @@
 package com.Acrobot.Breeze.Database;
 
+import com.Acrobot.ChestShop.ChestShop;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.Entity;
 
@@ -60,7 +64,7 @@ public class Database {
         try {
             table.create(fields);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger("Database").log(Level.SEVERE, "Error while creating database from " + clazz.getName() + " (" + fields + ")", e);
             return false;
         }
 

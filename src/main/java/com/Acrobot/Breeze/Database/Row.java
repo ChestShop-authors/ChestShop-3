@@ -1,6 +1,8 @@
 package com.Acrobot.Breeze.Database;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class representing a Row in SQL query
@@ -85,21 +87,16 @@ public class Row {
 
         try {
             object = clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (InstantiationException | IllegalAccessException e) {
+            Logger.getLogger("Row").log(Level.SEVERE, "Error while creating new instance of class " + clazz.getName() + " for row", e);
             return null;
         }
 
         for (Map.Entry<String, String> value : values.entrySet()) {
             try {
                 clazz.getDeclaredField(value.getKey()).set(object, value.getValue());
-            } catch (NoSuchFieldException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
+            } catch (NoSuchFieldException | IllegalAccessException ex) {
+                Logger.getLogger("Row").log(Level.SEVERE, "Error while setting field " + value.getKey() + " to " + value.getValue() + " of class " + clazz.getName(), ex);
             }
         }
 

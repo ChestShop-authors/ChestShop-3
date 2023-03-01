@@ -1,9 +1,10 @@
 package com.Acrobot.Breeze.Configuration;
 
 import com.Acrobot.Breeze.Configuration.Annotations.ConfigurationComment;
-import com.Acrobot.Breeze.Configuration.Annotations.Parser;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Acrobot
@@ -29,7 +30,7 @@ public class FieldParser {
         try {
             builder.append(field.getName()).append(": ").append(parser.parseToYAML(field.get(null)));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Logger.getLogger("FieldParser").log(Level.SEVERE, "Error while parsing field", e);
             return "";
         }
 

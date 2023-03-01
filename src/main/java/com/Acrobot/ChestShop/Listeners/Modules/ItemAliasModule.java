@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
 
@@ -51,7 +52,7 @@ public class ItemAliasModule implements Listener {
                 configuration.options().copyDefaults(true);
                 configuration.save(ChestShop.loadFile("itemAliases.yml"));
             } catch (IOException e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while saving item aliases config", e);
             }
         }
 

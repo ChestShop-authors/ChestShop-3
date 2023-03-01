@@ -43,7 +43,7 @@ public class ItemDatabase {
             itemDao = DaoCreator.getDaoAndCreateTable(Item.class);
             handleMetadataUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while loading items database", e);
         }
     }
 
@@ -59,7 +59,7 @@ public class ItemDatabase {
                 try {
                     versionConfig.save(configFile);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while updating metadata-version from " + previousVersion + " to " + newVersion, e);
                 }
             } else {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating Item Metadata database! While the plugin will still run it will work less efficiently.");
