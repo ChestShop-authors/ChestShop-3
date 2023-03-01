@@ -211,10 +211,10 @@ public class PartialTransactionModule implements Listener {
             int amount = InventoryUtil.getAmount(item, inventory);
 
             Collections.addAll(toReturn, getCountedItemStack(new ItemStack[]{item},
-                    amount > item.getAmount() ? item.getAmount() : amount));
+                    Math.min(amount, item.getAmount())));
         }
 
-        return toReturn.toArray(new ItemStack[toReturn.size()]);
+        return toReturn.toArray(new ItemStack[0]);
     }
 
     private static ItemStack[] getCountedItemStack(ItemStack[] stock, int numberOfItems) {
@@ -263,7 +263,7 @@ public class PartialTransactionModule implements Listener {
             }
         }
 
-        return stacks.toArray(new ItemStack[stacks.size()]);
+        return stacks.toArray(new ItemStack[0]);
     }
 
     /**
@@ -283,7 +283,9 @@ public class PartialTransactionModule implements Listener {
             int free = 0;
             for (ItemStack itemInInventory : inventory.getContents()) {
                 if (MaterialUtil.equals(item, itemInInventory)) {
-                    free += (maxStackSize - itemInInventory.getAmount()) % maxStackSize;
+                    if (itemInInventory != null) {
+                        free += (maxStackSize - itemInInventory.getAmount()) % maxStackSize;
+                    }
                 }
             }
 
@@ -307,6 +309,6 @@ public class PartialTransactionModule implements Listener {
             Collections.addAll(resultStock, InventoryUtil.getItemsStacked(item));
         }
 
-        return resultStock.toArray(new ItemStack[resultStock.size()]);
+        return resultStock.toArray(new ItemStack[0]);
     }
 }
