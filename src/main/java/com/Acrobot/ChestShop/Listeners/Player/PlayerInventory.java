@@ -46,8 +46,14 @@ public class PlayerInventory implements Listener {
         List<Block> containers = new ArrayList<>();
 
         if (holder instanceof DoubleChest) {
-            containers.add(((BlockState) ((DoubleChest) holder).getLeftSide()).getBlock());
-            containers.add(((BlockState) ((DoubleChest) holder).getRightSide()).getBlock());
+            InventoryHolder leftSide = ((DoubleChest) holder).getLeftSide();
+            if (leftSide instanceof BlockState) {
+                containers.add(((BlockState) leftSide).getBlock());
+            }
+            InventoryHolder rightSide = ((DoubleChest) holder).getRightSide();
+            if (rightSide instanceof BlockState) {
+                containers.add(((BlockState) rightSide).getBlock());
+            }
         } else {
             containers.add(((BlockState) holder).getBlock());
         }
