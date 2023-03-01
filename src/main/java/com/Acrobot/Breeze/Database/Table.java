@@ -132,7 +132,7 @@ public class Table {
         String statement;
 
         if (condition == null || condition.isEmpty()) {
-            String format = '\'' + row.getValues().stream().collect(Collectors.joining("', ")) + '\'';
+            String format = '\'' + String.join("', ", row.getValues()) + '\'';
             statement = String.format(INSERT_VALUES, format);
         } else {
             String format = row.getKeysAndValues().entrySet().stream()
