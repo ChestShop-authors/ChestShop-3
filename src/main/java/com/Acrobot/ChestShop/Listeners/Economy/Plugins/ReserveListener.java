@@ -26,7 +26,7 @@ public class ReserveListener extends EconomyAdapter {
 
     private static @Nullable EconomyAPI economyAPI;
 
-    public ReserveListener(EconomyAPI api) {
+    public ReserveListener(@Nullable EconomyAPI api) {
         ReserveListener.economyAPI = api;
     }
 
@@ -127,7 +127,7 @@ public class ReserveListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount() == null || event.wasHandled() || !transactionCanFail() || event.canHold()) {
+        if (!provided() || event.getAccount() == null || event.wasHandled() || !transactionCanFail() || event.canHold()) {
             return;
         }
 
