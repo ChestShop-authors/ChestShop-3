@@ -58,7 +58,7 @@ public class PriceRestrictionModule implements Listener {
                 configuration.options().copyDefaults(true);
                 configuration.save(ChestShop.loadFile("priceLimits.yml"));
             } catch (IOException e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while loading priceLimits.yml", e);
             }
         } else if (!configuration.getBoolean("uses_materials")) {
             Material testMat = Material.matchMaterial("1");
@@ -73,7 +73,7 @@ public class PriceRestrictionModule implements Listener {
                     configuration.save(file);
                     ChestShop.getBukkitLogger().log(Level.INFO, "Conversion finished!");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while converting priceLimits.yml", e);
                 }
             } else {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Could not convert numeric IDs in priceLimits.yml to Material names!");
