@@ -349,7 +349,10 @@ public class ChestShop extends JavaPlugin {
 
         Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");
         if (authMe != null && authMe.isEnabled()) {
-            registerEvent(new AuthMeChestShopListener());
+            try {
+                registerEvent(new AuthMeChestShopListener());
+            catch (ClassNotFoundException e) {
+            }
         }
 
         registerEvent(new RestrictedSign());
