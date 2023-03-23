@@ -36,6 +36,8 @@ import java.util.logging.Level;
  */
 @SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
 public class NameManager implements Listener {
+    private static final Object accountsLock = new Object();
+
     private static Dao<Account, String> accounts;
 
     private static SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
@@ -97,20 +99,22 @@ public class NameManager implements Listener {
      */
     public static Account getAccount(UUID uuid) {
         try {
-            return uuidToAccount.get(uuid, () -> {
-                try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", new SelectArg(uuid)).queryForFirst();
-                    if (account != null) {
-                        account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        shortToAccount.put(account.getShortName(), account);
-                        usernameToAccount.put(account.getName(), account);
-                        return account;
+            synchronized (accountsLock) {
+                return uuidToAccount.get(uuid, () -> {
+                    try {
+                        Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", new SelectArg(uuid)).queryForFirst();
+                        if (account != null) {
+                            account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            shortToAccount.put(account.getShortName(), account);
+                            usernameToAccount.put(account.getName(), account);
+                            return account;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + uuid + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + uuid + ":", e);
-                }
-                throw new Exception("Could not find account for " + uuid);
-            });
+                    throw new Exception("Could not find account for " + uuid);
+                });
+            }
         } catch (ExecutionException ignored) {
             return null;
         }
@@ -127,19 +131,21 @@ public class NameManager implements Listener {
         Preconditions.checkNotNull(fullName, "fullName cannot be null!");
         Preconditions.checkArgument(!fullName.isEmpty(), "fullName cannot be empty!");
         try {
-            return usernameToAccount.get(fullName, () -> {
-                try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", new SelectArg(fullName)).queryForFirst();
-                    if (account != null) {
-                        account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        shortToAccount.put(account.getShortName(), account);
-                        return account;
+            synchronized (accountsLock) {
+                return usernameToAccount.get(fullName, () -> {
+                    try {
+                        Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", new SelectArg(fullName)).queryForFirst();
+                        if (account != null) {
+                            account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            shortToAccount.put(account.getShortName(), account);
+                            return account;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + fullName + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + fullName + ":", e);
-                }
-                throw new Exception("Could not find account for " + fullName);
-            });
+                    throw new Exception("Could not find account for " + fullName);
+                });
+            }
         } catch (ExecutionException ignored) {
             return null;
         }
@@ -167,18 +173,20 @@ public class NameManager implements Listener {
         Account account = null;
 
         try {
-            account = shortToAccount.get(shortName, () -> {
-                try {
-                    Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
-                    if (a != null) {
-                        a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        return a;
+            synchronized (accountsLock) {
+                account = shortToAccount.get(shortName, () -> {
+                    try {
+                        Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
+                        if (a != null) {
+                            a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            return a;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
-                }
-                throw new Exception("Could not find account for " + shortName);
-            });
+                    throw new Exception("Could not find account for " + shortName);
+                });
+            }
         } catch (ExecutionException ignored) {}
         return account;
     }
@@ -222,27 +230,29 @@ public class NameManager implements Listener {
         final UUID uuid = player.getUniqueId();
 
         Account latestAccount = null;
-        try {
-            latestAccount = accounts.queryBuilder().where().eq("uuid", new SelectArg(uuid)).and().eq("name", new SelectArg(player.getName())).queryForFirst();
-        } catch (SQLException e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
-        }
+        synchronized (accountsLock) {
+            try {
+                latestAccount = accounts.queryBuilder().where().eq("uuid", new SelectArg(uuid)).and().eq("name", new SelectArg(player.getName())).queryForFirst();
+            } catch (SQLException e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
+            }
 
-        if (latestAccount == null) {
-            latestAccount = new Account(player.getName(), getNewShortenedName(player), player.getUniqueId());
-        }
+            if (latestAccount == null) {
+                latestAccount = new Account(player.getName(), getNewShortenedName(player), player.getUniqueId());
+            }
 
-        latestAccount.setLastSeen(new Date());
-        try {
-            accounts.createOrUpdate(latestAccount);
-        } catch (SQLException e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
-            return null;
-        }
+            latestAccount.setLastSeen(new Date());
+            try {
+                accounts.createOrUpdate(latestAccount);
+            } catch (SQLException e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
+                return null;
+            }
 
-        usernameToAccount.put(latestAccount.getName(), latestAccount);
-        uuidToAccount.put(uuid, latestAccount);
-        shortToAccount.put(latestAccount.getShortName(), latestAccount);
+            usernameToAccount.put(latestAccount.getName(), latestAccount);
+            uuidToAccount.put(uuid, latestAccount);
+            shortToAccount.put(latestAccount.getShortName(), latestAccount);
+        }
 
         return latestAccount;
     }
