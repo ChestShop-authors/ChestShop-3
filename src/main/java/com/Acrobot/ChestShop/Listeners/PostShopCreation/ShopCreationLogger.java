@@ -16,7 +16,7 @@ public class ShopCreationLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopCreation(final ShopCreatedEvent event) {
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+        ChestShop.runInAsyncThread(() -> {
             String creator = event.getPlayer().getName();
             String shopOwner = ChestShopSign.getOwner(event.getSignLines());
             String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "an Admin Shop" : "a shop" + (event.createdByOwner() ? "" : " for " + event.getOwnerAccount().getName());

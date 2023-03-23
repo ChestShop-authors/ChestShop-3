@@ -21,7 +21,7 @@ public class ShopRemovalLogger implements Listener {
             return;
         }
 
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+        ChestShop.runInAsyncThread(() -> {
             String shopOwner = ChestShopSign.getOwner(event.getSign());
             String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "An Admin Shop" : "A shop belonging to " + shopOwner;
 

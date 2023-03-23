@@ -91,6 +91,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -105,6 +108,7 @@ public class ChestShop extends JavaPlugin {
     private static ChestShop plugin;
     private static Server server;
     private static PluginDescriptionFile description;
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     private static BukkitAudiences audiences;
 
@@ -304,7 +308,9 @@ public class ChestShop extends JavaPlugin {
     }
 
     public void onDisable() {
-        getServer().getScheduler().cancelTasks(this);
+        try {
+            executorService.awaitTermination(15, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {}
 
         Toggle.clearToggledPlayers();
 
@@ -612,5 +618,9 @@ public class ChestShop extends JavaPlugin {
 
             Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         }
+    }
+
+    public static void runInAsyncThread(Runnable runnable) {
+        executorService.submit(runnable);
     }
 }

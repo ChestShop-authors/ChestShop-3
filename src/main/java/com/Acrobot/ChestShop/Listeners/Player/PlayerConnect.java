@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,7 +22,7 @@ public class PlayerConnect implements Listener {
 
         final PlayerDTO playerDTO = new PlayerDTO(event.getPlayer());
 
-        Bukkit.getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+        ChestShop.runInAsyncThread(() -> {
             if (NameManager.getAccount(playerDTO.getUniqueId()) != null) {
                 NameManager.storeUsername(playerDTO);
             }

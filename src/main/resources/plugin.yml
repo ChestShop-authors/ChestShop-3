@@ -6,6 +6,7 @@ authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
 softdepend: [Vault, Reserve, LWC, Lockette, LockettePro, Deadbolt, BlockLocker, OddItem, WorldGuard, GriefPrevention, RedProtect, Heroes, SimpleChestLock, Residence, ShowItem, ItemBridge]
 api-version: '1.13'
+folia-supported: true
 
 commands:
   iteminfo:
