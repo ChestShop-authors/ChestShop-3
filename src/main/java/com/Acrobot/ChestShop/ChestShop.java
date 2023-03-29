@@ -308,6 +308,7 @@ public class ChestShop extends JavaPlugin {
     }
 
     public void onDisable() {
+        executorService.shutdown();
         try {
             executorService.awaitTermination(15, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {}
