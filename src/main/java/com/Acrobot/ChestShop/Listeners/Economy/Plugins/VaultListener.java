@@ -5,11 +5,13 @@ import java.util.logging.Level;
 
 import javax.annotation.Nullable;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -172,7 +174,7 @@ public class VaultListener extends EconomyAdapter {
         }
 
         String formatted = provider.format(event.getAmount().doubleValue());
-        event.setFormattedAmount(formatted);
+        event.setFormattedAmount(Properties.STRIP_PRICE_COLORS ? ChatColor.stripColor(formatted) : formatted);
         event.setHandled(true);
     }
 
