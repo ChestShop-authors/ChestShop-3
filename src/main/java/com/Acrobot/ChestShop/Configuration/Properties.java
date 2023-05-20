@@ -120,6 +120,9 @@ public class Properties {
     @ConfigurationComment("Should the plugin try to use a language file that matches the client's locale setting?")
     public static boolean USE_CLIENT_LOCALE = true;
 
+    @ConfigurationComment("Should the plugin strip the colors from formatted price?")
+    public static boolean STRIP_PRICE_COLORS = false;
+
     @PrecededBySpace
     @ConfigurationComment("What containers are allowed to hold a shop? (Only blocks with inventories work!)")
     @Parser("MaterialSet")
