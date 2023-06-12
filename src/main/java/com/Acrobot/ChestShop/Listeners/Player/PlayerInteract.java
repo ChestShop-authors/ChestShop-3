@@ -82,7 +82,7 @@ public class PlayerInteract implements Listener {
             }
         }
 
-        if (!isSign(block) || player.getInventory().getItemInMainHand().getType().name().contains("SIGN")) // Blocking accidental sign edition
+        if (!isSign(block))
             return;
 
         Sign sign = (Sign) getState(block, false);
@@ -94,6 +94,7 @@ public class PlayerInteract implements Listener {
             if (ChestShopSign.hasPermission(player, OTHER_NAME_CREATE, sign)) {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (!MaterialUtil.isEmpty(item)) {
+                    event.setCancelled(true);
                     String itemCode;
                     try {
                         itemCode = ItemUtil.getSignName(item);
@@ -113,8 +114,6 @@ public class PlayerInteract implements Listener {
                             sign.setLine(i, line != null ? line : "");
                         }
                         sign.update();
-                    } else {
-                        event.setCancelled(true);
                     }
                 } else {
                     Messages.NO_ITEM_IN_HAND.sendWithPrefix(player);
@@ -127,7 +126,10 @@ public class PlayerInteract implements Listener {
 
         if (!AccessToggle.isIgnoring(player) && ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
             if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
-                if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
+                if (player.getInventory().getItemInMainHand().getType().name().contains("SIGN") && action == RIGHT_CLICK_BLOCK) {
+                    // Allow editing of sign (if supported)
+                    return;
+                } else if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
                         || player.getInventory().getItemInMainHand().getType().name().endsWith("INK_SAC"))
                         && action == RIGHT_CLICK_BLOCK) {
                     if (Properties.SIGN_DYING) {
@@ -147,6 +149,10 @@ public class PlayerInteract implements Listener {
                 }
                 // don't allow owners or people with access to buy/sell at this shop
                 Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
+                if (action == RIGHT_CLICK_BLOCK) {
+                    // don't allow editing
+                    event.setCancelled(true);
+                }
                 return;
             }
         }
