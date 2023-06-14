@@ -106,7 +106,7 @@ public class Properties {
     @ConfigurationComment("Do you want to turn off the automatic notifications for new development builds?")
     public static boolean TURN_OFF_DEV_UPDATE_NOTIFIER = false;
 
-    @ConfigurationComment("Do you want to include some values of this config in the metrics? (This will not leak sensitive data but help in the development process)")
+    @ConfigurationComment("Do you want to include some values of this config in the metrics? (This will not submit any sensitive data and helps in the development process)")
     public static boolean INCLUDE_SETTINGS_IN_METRICS = true;
 
     @PrecededBySpace
