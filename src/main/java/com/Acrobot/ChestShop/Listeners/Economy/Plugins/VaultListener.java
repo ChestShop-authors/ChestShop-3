@@ -17,6 +17,7 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.event.server.ServiceUnregisterEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.Acrobot.ChestShop.ChestShop;
@@ -37,6 +38,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 public class VaultListener extends EconomyAdapter {
     private RegisteredServiceProvider<Economy> rsp;
     private static Economy provider;
+    private Plugin providingPlugin;
 
     private VaultListener() {
         updateEconomyProvider();
@@ -47,6 +49,7 @@ public class VaultListener extends EconomyAdapter {
 
         if (rsp != null) {
             provider = rsp.getProvider();
+            providingPlugin = rsp.getPlugin();
             ChestShop.getBukkitLogger().log(Level.INFO, "Using " + provider.getName() + " as the Economy provider now.");
         }
     }
@@ -58,6 +61,11 @@ public class VaultListener extends EconomyAdapter {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ProviderInfo getProviderInfo() {
+        return new ProviderInfo(provider.getName(), providingPlugin.getDescription().getVersion());
     }
 
     public static Economy getProvider() { return provider; }

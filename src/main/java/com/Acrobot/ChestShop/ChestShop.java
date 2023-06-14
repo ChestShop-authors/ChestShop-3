@@ -110,6 +110,8 @@ public class ChestShop extends JavaPlugin {
     private static PluginDescriptionFile description;
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
+    private static Metrics bStats;
+
     private static BukkitAudiences audiences;
 
     private static File dataFolder;
@@ -135,6 +137,7 @@ public class ChestShop extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        bStats = new Metrics(this, 1109);
         audiences = BukkitAudiences.create(this);
         turnOffDatabaseLogging();
         if (!handleMigrations()) {
@@ -445,7 +448,6 @@ public class ChestShop extends JavaPlugin {
     }
 
     private void startStatistics() {
-        Metrics bStats = new Metrics(this, 1109);
         try (JarFile jarFile = new JarFile(this.getFile())) {
             String dist = jarFile.getManifest().getMainAttributes().getValue("Distribution-Type");
             bStats.addCustomChart(new SimplePie("distributionType", () -> dist));
@@ -511,7 +513,7 @@ public class ChestShop extends JavaPlugin {
                 () -> Properties.SHOP_CONTAINERS.stream().map(Material::name).collect(Collectors.toMap(k -> k, k -> 1))));
     }
 
-    private DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
+    public static DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
         final Map<String, Map<String, Integer>> map = ImmutableMap.of(value1, ImmutableMap.of(value2, 1));
         return new DrilldownPie(statId, () -> map);
     }
@@ -579,6 +581,10 @@ public class ChestShop extends JavaPlugin {
 
     public static ChestShop getPlugin() {
         return plugin;
+    }
+
+    public static Metrics getMetrics() {
+        return bStats;
     }
 
     public static BukkitAudiences getAudiences() {

@@ -2,9 +2,12 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
+import com.google.common.collect.ImmutableMap;
+import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,10 +17,17 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * @author Acrobot
  */
 public class Dependencies implements Listener {
+
+    private static final Map<String, String> versions = new HashMap<>();
 
     public static void initializePlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -62,13 +72,23 @@ public class Dependencies implements Listener {
             }
         }
 
-        return loadEconomy();
+        if (loadEconomy()) {
+            Map<String, Map<String, Integer>> map = versions.entrySet().stream()
+                    .map(e -> new AbstractMap.SimpleEntry<String, Map<String, Integer>>(e.getKey(), ImmutableMap.of(e.getValue(), 1)))
+                    .collect(Collectors.toMap(
+                            AbstractMap.SimpleEntry::getKey,
+                            AbstractMap.SimpleEntry::getValue
+                    ));
+            ChestShop.getMetrics().addCustomChart(new DrilldownPie("dependencies", () -> map));
+            return true;
+        }
+        return false;
     }
 
     private static boolean loadEconomy() {
         String plugin = "none";
 
-        Listener economy = null;
+        EconomyAdapter economy = null;
 
         if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
             plugin = "Reserve";
@@ -84,6 +104,10 @@ public class Dependencies implements Listener {
             ChestShop.getBukkitLogger().severe("No Economy adapter found! You need to install either Vault or Reserve!");
             return false;
         }
+
+        versions.put(plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion());
+
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy.getProviderInfo().getName(), economy.getProviderInfo().getVersion()));
 
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded!");
@@ -187,6 +211,7 @@ public class Dependencies implements Listener {
         }
 
         PluginDescriptionFile description = plugin.getDescription();
+        versions.put(description.getName(), description.getVersion());
         ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " loaded.");
     }
 
