@@ -25,7 +25,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +52,30 @@ public class MaterialUtil {
     public static final short MAXIMUM_SIGN_LETTERS = 15;
     // 15 dashes fit on one sign line with the default resource pack:
     public static final int MAXIMUM_SIGN_WIDTH = (short) getMinecraftStringWidth("---------------");
+
+    private static final Map<String, String> ABBREVIATIONS = StringUtil.map(
+            "Egg", "Eg",
+            "Spawn", "Spaw",
+            "Ender", "End",
+            "Tropical", "Tropic",
+            "Terracotta", "Terracot",
+            "Stained", "Stain",
+            "Sandstone", "Sandston",
+            "Sandston", "Sandsto",
+            "Sandsto", "Sandst",
+            "Block", "Bloc",
+            "Brewing", "Brew",
+            "Dolphin", "Dolph",
+            "Chicken", "Chick",
+            "Pottery", "Pot",
+            "Heartbreak", "Heartbr",
+            "Sherd", "Sher",
+            "Template", "Templ"
+    );
+
+    private static final Map<String, String> UNIDIRECTIONAL_ABBREVIATIONS = StringUtil.map(
+            "Endermite", "Endmite"
+    );
 
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
@@ -146,6 +169,11 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
+        // revert unidirectional abbreviations
+        for (Map.Entry<String, String> entry : UNIDIRECTIONAL_ABBREVIATIONS.entrySet()) {
+            name = name.replaceAll(entry.getValue() + "([A-Z1-9].+)?$", entry.getKey() + "$1");
+        }
+
         String formatted = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
 
         Material material = MATERIAL_CACHE.get(formatted);
@@ -264,7 +292,7 @@ public class MaterialUtil {
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
-        itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
+        itemName = StringUtil.capitalizeFirstLetter(itemName, '_');
         int width = getMinecraftStringWidth(itemName);
         if (width <= maxWidth) {
             return itemName;
@@ -275,6 +303,25 @@ public class MaterialUtil {
         if (width <= maxWidth) {
             return itemName;
         }
+
+        // Abbreviate some terms manually
+        for (Map.Entry<String, String> entry : ABBREVIATIONS.entrySet()) {
+            itemName = itemName.replaceAll(entry.getKey() + "([A-Z1-9].+)?$", entry.getValue() + "$1");
+            width = getMinecraftStringWidth(itemName);
+            if (width <= maxWidth) {
+                return itemName;
+            }
+        }
+
+        // Apply unidirectional abbreviations if it still doesn't work
+        for (Map.Entry<String, String> entry : UNIDIRECTIONAL_ABBREVIATIONS.entrySet()) {
+            itemName = itemName.replaceAll(entry.getKey() + "([A-Z1-9].+)?$", entry.getValue() + "$1");
+            width = getMinecraftStringWidth(itemName);
+            if (width <= maxWidth) {
+                return itemName;
+            }
+        }
+
         int exceeding = width - maxWidth;
         int shortestIndex = 0;
         int longestIndex = 0;
@@ -408,6 +455,7 @@ public class MaterialUtil {
                 E currentEnum = null;
                 String[] typeParts = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).split("[ _]");
                 int length = Short.MAX_VALUE;
+                name = name.toUpperCase(Locale.ROOT);
                 for (E e : values) {
                     String enumName = e.name();
                     if (enumName.length() < length && enumName.startsWith(name)) {

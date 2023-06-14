@@ -1,6 +1,7 @@
 package com.Acrobot.Breeze.Tests;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
+import com.Acrobot.Breeze.Utils.StringUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
@@ -33,7 +34,19 @@ public class MaterialTest {
                 continue;
             }
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_WIDTH);
-            assertSame(material, MaterialUtil.getMaterial(shortenedName));
+            assertSame(shortenedName + " did not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
+        }
+    }
+
+    @Test
+    public void testCodesWithMeta() {
+        int maxWidth = MaterialUtil.MAXIMUM_SIGN_WIDTH - StringUtil.getMinecraftStringWidth("#AAA");
+        for (Material material : Material.values()) {
+            if (material.isLegacy()) {
+                continue;
+            }
+            String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
+            assertSame(shortenedName + " did not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
         }
     }
 }

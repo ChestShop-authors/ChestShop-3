@@ -83,14 +83,22 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.2.0</version>
+            <version>4.3.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- Should be kept in sync with Paper -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.14.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.12.0</version>
+            <version>4.13.0</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -111,7 +119,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -212,6 +220,12 @@
             <artifactId>worldedit-core</artifactId>
             <version>7.0.0-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -446,7 +460,7 @@
         <build.number>${buildNumber}</build.number>
         <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
-        <bukkit.dependency.version>1.19-R0.1-SNAPSHOT</bukkit.dependency.version>
+        <bukkit.dependency.version>1.20.1-R0.1-SNAPSHOT</bukkit.dependency.version>
     </properties>
 
     <profiles>
