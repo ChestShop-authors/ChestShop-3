@@ -83,22 +83,14 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.0</version>
+            <version>4.3.1-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-
-        <!-- Should be kept in sync with Paper -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-api</artifactId>
-            <version>4.14.0</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.13.0</version>
+            <version>4.14.0</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
