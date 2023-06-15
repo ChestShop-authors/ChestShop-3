@@ -105,8 +105,7 @@ public class Dependencies implements Listener {
             return false;
         }
 
-        versions.put(plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion());
-
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy.getProviderInfo().getName(), economy.getProviderInfo().getVersion()));
 
         ChestShop.registerListener(economy);
