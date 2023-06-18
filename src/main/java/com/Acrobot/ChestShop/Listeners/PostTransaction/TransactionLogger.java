@@ -36,6 +36,6 @@ public class TransactionLogger implements Listener {
                 event.getOwnerAccount().getName(),
                 LocationUtil.locationToString(event.getSign().getLocation()));
 
-        ChestShop.getBukkitLogger().info(message);
+        ChestShop.getShopLogger().info(message);
     }
 }

@@ -255,10 +255,10 @@ public class Properties {
     @ConfigurationComment("If true, plugin will log transactions in its own file")
     public static boolean LOG_TO_FILE = false;
 
-    @ConfigurationComment("Do you want ChestShop's messages to show up in console?")
+    @ConfigurationComment("Do you want ChestShop's transaction messages to show up in console?")
     public static boolean LOG_TO_CONSOLE = true;
 
-    @ConfigurationComment("Should all shop removals be logged to the console?")
+    @ConfigurationComment("Should all shop removals be logged?")
     public static boolean LOG_ALL_SHOP_REMOVALS = true;
 
     @PrecededBySpace

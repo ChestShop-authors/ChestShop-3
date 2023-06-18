@@ -32,7 +32,7 @@ public class ShopCreationLogger implements Listener {
                     prices,
                     location);
 
-            ChestShop.getBukkitLogger().info(message);
+            ChestShop.getShopLogger().info(message);
         });
     }
 }

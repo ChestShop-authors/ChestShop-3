@@ -118,6 +118,7 @@ public class ChestShop extends JavaPlugin {
     private static ItemDatabase itemDatabase;
 
     private static Logger logger;
+    private static Logger shopLogger;
     private FileHandler handler;
 
     private List<PluginCommand> commands = new ArrayList<>();
@@ -125,6 +126,8 @@ public class ChestShop extends JavaPlugin {
     public ChestShop() {
         dataFolder = getDataFolder();
         logger = getLogger();
+        shopLogger = Logger.getLogger("ChestShop Shops");
+        shopLogger.setParent(logger);
         description = getDescription();
         server = getServer();
         plugin = this;
@@ -165,20 +168,6 @@ public class ChestShop extends JavaPlugin {
 
         registerPluginMessagingChannels();
 
-        if (Properties.LOG_TO_FILE) {
-            File log = loadFile("ChestShop.log");
-
-            FileHandler handler = loadHandler(log.getAbsolutePath());
-            handler.setFormatter(new FileFormatter());
-
-            this.handler = handler;
-            logger.addHandler(handler);
-        }
-
-        if (!Properties.LOG_TO_CONSOLE) {
-            logger.setUseParentHandlers(false);
-        }
-
         startStatistics();
         startBuildNotificatier();
         startUpdater();
@@ -201,6 +190,22 @@ public class ChestShop extends JavaPlugin {
         NameManager.load();
 
         commands.forEach(c -> c.setPermissionMessage(Messages.ACCESS_DENIED.getTextWithPrefix(null)));
+
+        if (handler != null) {
+            shopLogger.removeHandler(handler);
+        }
+
+        if (Properties.LOG_TO_FILE) {
+            if (handler == null) {
+                File log = loadFile("ChestShop.log");
+
+                handler = loadHandler(log.getAbsolutePath());
+                handler.setFormatter(new FileFormatter());
+            }
+            shopLogger.addHandler(handler);
+        }
+
+        shopLogger.setUseParentHandlers(Properties.LOG_TO_CONSOLE);
     }
 
     private void turnOffDatabaseLogging() {
@@ -557,6 +562,10 @@ public class ChestShop extends JavaPlugin {
 
     public static File getFolder() {
         return dataFolder;
+    }
+
+    public static Logger getShopLogger() {
+        return shopLogger;
     }
 
     public static Logger getBukkitLogger() {

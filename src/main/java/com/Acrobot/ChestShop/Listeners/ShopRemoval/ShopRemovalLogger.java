@@ -17,7 +17,7 @@ public class ShopRemovalLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopRemoval(final ShopDestroyedEvent event) {
-        if (Properties.LOG_ALL_SHOP_REMOVALS || event.getDestroyer() != null) {
+        if (!Properties.LOG_ALL_SHOP_REMOVALS && event.getDestroyer() != null) {
             return;
         }
 
@@ -36,7 +36,7 @@ public class ShopRemovalLogger implements Listener {
                     prices,
                     location);
 
-            ChestShop.getBukkitLogger().info(message);
+            ChestShop.getShopLogger().info(message);
         });
     }
 }
