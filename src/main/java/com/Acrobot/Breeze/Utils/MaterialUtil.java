@@ -292,6 +292,8 @@ public class MaterialUtil {
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
+        // Restore spaces in string that might be already be shortened
+        itemName = itemName.replaceAll("([a-z])([A-Z1-9])", "$1 $2");
         itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
         int width = getMinecraftStringWidth(itemName);
         if (width <= maxWidth) {
