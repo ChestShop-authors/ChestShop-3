@@ -74,7 +74,12 @@ public class MaterialUtil {
     );
 
     private static final Map<String, String> UNIDIRECTIONAL_ABBREVIATIONS = StringUtil.map(
-            "Endermite", "Endmite"
+            "Endermite", "Endmite",
+            "Endmite", "Endmit",
+            "Wayfinder", "Wayfndr",
+            "Wayfndr", "Wf",
+            "Heartbr", "Hrtbr",
+            "Hrtbr", "Hrtb"
     );
 
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
@@ -169,9 +174,12 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
+        String replacedName = name;
         // revert unidirectional abbreviations
-        for (Map.Entry<String, String> entry : UNIDIRECTIONAL_ABBREVIATIONS.entrySet()) {
-            name = name.replaceAll(entry.getValue() + "([A-Z1-9].+)?$", entry.getKey() + "$1");
+        List<Map.Entry<String, String>> abbreviations = new ArrayList<>(UNIDIRECTIONAL_ABBREVIATIONS.entrySet());
+        for (int i = abbreviations.size() - 1; i >= 0; i--) {
+            Map.Entry<String, String> entry = abbreviations.get(i);
+            replacedName = replacedName.replaceAll(entry.getValue() + "(_|$)?", entry.getKey() + "$1");
         }
 
         String formatted = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
@@ -188,7 +196,7 @@ public class MaterialUtil {
             return material;
         }
 
-        material = new EnumParser<Material>().parse(name, Material.values());
+        material = new EnumParser<Material>().parse(replacedName, Material.values());
         if (material != null) {
             MATERIAL_CACHE.put(formatted, material);
         }
@@ -293,34 +301,38 @@ public class MaterialUtil {
      */
     public static String getShortenedName(String itemName, int maxWidth) {
         // Restore spaces in string that might be already be shortened
-        itemName = itemName.replaceAll("([a-z])([A-Z1-9])", "$1 $2");
-        itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
-        int width = getMinecraftStringWidth(itemName);
+        String name = itemName.replaceAll("([a-z])([A-Z1-9])", "$1 $2");
+        name = StringUtil.capitalizeFirstLetter(name.replace('_', ' '), ' ');
+        int width = getMinecraftStringWidth(name);
         if (width <= maxWidth) {
-            return itemName;
+            return name;
         }
-        String[] itemParts = itemName.split("[ \\-]");
-        itemName = String.join("", itemParts);
-        width = getMinecraftStringWidth(itemName);
+        String[] itemParts = name.split("[ \\-]");
+        String noSpaceName = String.join("", itemParts);
+        width = getMinecraftStringWidth(noSpaceName);
         if (width <= maxWidth) {
-            return itemName;
+            return noSpaceName;
         }
 
         // Abbreviate some terms manually
         for (Map.Entry<String, String> entry : ABBREVIATIONS.entrySet()) {
-            itemName = itemName.replaceAll(entry.getKey() + "([A-Z1-9].+)?$", entry.getValue() + "$1");
-            width = getMinecraftStringWidth(itemName);
+            name = name.replaceAll(entry.getKey() + "( |$)", entry.getValue() + "$1");
+            itemParts = name.split("[ \\-]");
+            noSpaceName = String.join("", itemParts);
+            width = getMinecraftStringWidth(noSpaceName);
             if (width <= maxWidth) {
-                return itemName;
+                return noSpaceName;
             }
         }
 
         // Apply unidirectional abbreviations if it still doesn't work
         for (Map.Entry<String, String> entry : UNIDIRECTIONAL_ABBREVIATIONS.entrySet()) {
-            itemName = itemName.replaceAll(entry.getKey() + "([A-Z1-9].+)?$", entry.getValue() + "$1");
-            width = getMinecraftStringWidth(itemName);
+            name = name.replaceAll(entry.getKey() + "( |$)", entry.getValue() + "$1");
+            itemParts = name.split("[ \\-]");
+            noSpaceName = String.join("", itemParts);
+            width = getMinecraftStringWidth(noSpaceName);
             if (width <= maxWidth) {
-                return itemName;
+                return noSpaceName;
             }
         }
 
