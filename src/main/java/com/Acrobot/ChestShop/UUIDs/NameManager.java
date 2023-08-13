@@ -351,6 +351,7 @@ public class NameManager implements Listener {
                 // This happens when the server was ratelimited by Mojang. Unfortunately there is no nice way to check that.
                 // We fall back to the method used by CraftBukkit to generate an OfflinePlayer's UUID
                 adminAccount = new Account(Properties.ADMIN_SHOP_NAME, UUID.nameUUIDFromBytes(("OfflinePlayer:" + Properties.ADMIN_SHOP_NAME).getBytes(Charsets.UTF_8)));
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Your server appears to be ratelimited by Mojang and can't query UUID data from their API. If you run into issues with admin shops please report them!");
             }
             accounts.createOrUpdate(adminAccount);
 
