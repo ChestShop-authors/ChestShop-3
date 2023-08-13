@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Events.AccountAccessEvent;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.j256.ormlite.dao.Dao;
 
@@ -344,7 +345,13 @@ public class NameManager implements Listener {
         try {
             accounts = DaoCreator.getDaoAndCreateTable(Account.class);
 
-            adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            try {
+                adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            } catch (NullPointerException ratelimitedException) {
+                // This happens when the server was ratelimited by Mojang. Unfortunately there is no nice way to check that.
+                // We fall back to the method used by CraftBukkit to generate an OfflinePlayer's UUID
+                adminAccount = new Account(Properties.ADMIN_SHOP_NAME, UUID.nameUUIDFromBytes(("OfflinePlayer:" + Properties.ADMIN_SHOP_NAME).getBytes(Charsets.UTF_8)));
+            }
             accounts.createOrUpdate(adminAccount);
 
             if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
