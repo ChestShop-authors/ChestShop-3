@@ -103,11 +103,11 @@ public class ItemDatabase {
                                 item.setBase64ItemCode(Base64.encodeObject(yaml.dump(itemStack)));
                                 itemDao.update(item);
                                 updated.getAndIncrement();
-                            } catch (YAMLException e) {
+                            } catch (YAMLException | ClassCastException e) {
                                 ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
                             }
                         }
-                    } catch (IOException | ClassNotFoundException | SQLException | ClassCastException e) {
+                    } catch (IOException | ClassNotFoundException | SQLException e) {
                         ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to convert item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ")", e);
                     } catch (StackOverflowError e) {
                         ChestShop.getBukkitLogger().log(Level.SEVERE, "Item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted. Sorry :(");
