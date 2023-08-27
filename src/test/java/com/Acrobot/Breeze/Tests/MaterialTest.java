@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -48,5 +49,13 @@ public class MaterialTest {
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
             assertSame(shortenedName + " did not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
         }
+    }
+
+    @Test
+    public void testCodesWithAndWithoutSpace() {
+        assertNotNull(MaterialUtil.getMaterial("DiamonPicka"));
+        assertNotNull(MaterialUtil.getMaterial("Diamon Picka"));
+        assertNotNull(MaterialUtil.getMaterial("ExpBottle"));
+        assertNotNull(MaterialUtil.getMaterial("Exp Bottle"));
     }
 }
