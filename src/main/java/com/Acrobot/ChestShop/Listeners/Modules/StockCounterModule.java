@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.IllegalFormatException;
@@ -66,11 +67,16 @@ public class StockCounterModule implements Listener {
 
     @EventHandler
     public static void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null || !uBlock.couldBeShopContainer(event.getInventory().getLocation().getBlock())) {
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null) {
             return;
         }
 
-        for (Sign shopSign : uBlock.findConnectedShopSigns(getHolder(event.getInventory(), false))) {
+        InventoryHolder holder = getHolder(event.getInventory(), false);
+        if (!uBlock.couldBeShopContainer(holder)) {
+            return;
+        }
+
+        for (Sign shopSign : uBlock.findConnectedShopSigns(holder)) {
             if (!Properties.USE_STOCK_COUNTER
                     || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(shopSign))) {
                 if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(shopSign))) {
