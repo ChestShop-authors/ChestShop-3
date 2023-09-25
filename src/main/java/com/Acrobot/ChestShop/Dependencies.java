@@ -20,6 +20,7 @@ import org.bukkit.plugin.PluginManager;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +69,11 @@ public class Dependencies implements Listener {
             Plugin plugin = pluginManager.getPlugin(dependency);
 
             if (plugin != null && plugin.isEnabled()) {
-                loadPlugin(dependency, plugin);
+                try {
+                    loadPlugin(dependency, plugin);
+                } catch (Exception e) {
+                    plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
+                }
             }
         }
 
