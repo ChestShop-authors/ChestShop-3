@@ -99,6 +99,13 @@ public class CurrencyAddEvent extends EconomicEvent {
         return target;
     }
 
+    /**
+     * @param target Account from which the currency is subtracted
+     */
+    public void setTarget(UUID target) {
+        this.target = target;
+    }
+
     public HandlerList getHandlers() {
         return handlers;
     }

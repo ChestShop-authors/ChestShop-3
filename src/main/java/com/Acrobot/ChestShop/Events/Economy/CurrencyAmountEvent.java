@@ -76,6 +76,13 @@ public class CurrencyAmountEvent extends EconomicEvent {
         return account;
     }
 
+    /**
+     * @param account Account that is checked
+     */
+    public void setAccount(UUID account) {
+        this.account = account;
+    }
+
     public HandlerList getHandlers() {
         return handlers;
     }

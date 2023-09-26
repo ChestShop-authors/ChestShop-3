@@ -3,7 +3,6 @@ package com.Acrobot.ChestShop.Events.Economy;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -180,6 +179,15 @@ public class CurrencyTransferEvent extends EconomicEvent {
      */
     public UUID getPartner() {
         return partner;
+    }
+
+    /**
+     * Set the partner of the transaction
+     *
+     * @param partner the new partner of this transaction
+     */
+    public void setPartner(UUID partner) {
+        this.partner = partner;
     }
 
     /**

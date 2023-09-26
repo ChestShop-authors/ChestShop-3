@@ -1,6 +1,5 @@
 package com.Acrobot.ChestShop.Listeners.Economy;
 
-import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.Economy.*;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -27,15 +26,12 @@ public class ServerAccountCorrector implements Listener {
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
 
-        event.setHandled(true);
         if (target == null) {
+            event.setHandled(true);
             return;
         }
 
-        CurrencyAddEvent currencyAddEvent = new CurrencyAddEvent(event.getAmount(), target, event.getWorld());
-        ChestShop.callEvent(currencyAddEvent);
-
-        event.setHandled(currencyAddEvent.wasHandled());
+        event.setTarget(target);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -49,15 +45,12 @@ public class ServerAccountCorrector implements Listener {
         Account account = NameManager.getServerEconomyAccount();
         target = account != null ? account.getUuid() : null;
 
-        event.setHandled(true);
         if (target == null) {
+            event.setHandled(true);
             return;
         }
 
-        CurrencySubtractEvent currencySubtractEvent = new CurrencySubtractEvent(event.getAmount(), target, event.getWorld());
-        ChestShop.callEvent(currencySubtractEvent);
-
-        event.setHandled(currencySubtractEvent.wasHandled());
+        event.setTarget(target);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -75,16 +68,7 @@ public class ServerAccountCorrector implements Listener {
             return;
         }
 
-        CurrencyTransferEvent currencyTransferEvent = new CurrencyTransferEvent(
-                event.getAmountSent(),
-                event.getAmountReceived(),
-                event.getInitiator(),
-                partner,
-                event.getDirection(),
-                event.getTransactionEvent()
-        );
-        ChestShop.callEvent(currencyTransferEvent);
-        event.setHandled(currencyTransferEvent.wasHandled());
+        event.setPartner(partner);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -103,10 +87,7 @@ public class ServerAccountCorrector implements Listener {
             return;
         }
 
-        CurrencyCheckEvent currencyCheckEvent = new CurrencyCheckEvent(event.getAmount(), target, event.getWorld());
-        ChestShop.callEvent(currencyCheckEvent);
-
-        event.hasEnough(currencyCheckEvent.hasEnough());
+        event.setAccount(target);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -117,8 +98,15 @@ public class ServerAccountCorrector implements Listener {
             return;
         }
 
-        event.canHold(true);
-        event.setAccount(null);
+        Account account = NameManager.getServerEconomyAccount();
+        target = account != null ? account.getUuid() : null;
+
+        if (target == null) {
+            event.canHold(true);
+            return;
+        }
+
+        event.setAccount(target);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -137,9 +125,6 @@ public class ServerAccountCorrector implements Listener {
             return;
         }
 
-        CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(target, event.getWorld());
-        ChestShop.callEvent(currencyAmountEvent);
-
-        event.setAmount(currencyAmountEvent.getAmount());
+        event.setAccount(target);
     }
 }
