@@ -317,6 +317,7 @@ public class uBlock {
     }
 
     public static boolean couldBeShopContainer(InventoryHolder holder) {
-        return holder instanceof Container && couldBeShopContainer(((Container) holder).getBlock());
+        return (holder instanceof Container && couldBeShopContainer(((Container) holder).getBlock()))
+                    || (holder instanceof DoubleChest && couldBeShopContainer(((DoubleChest) holder).getLeftSide()));
     }
 }
