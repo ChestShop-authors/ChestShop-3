@@ -57,20 +57,20 @@ public class TaxModule implements Listener {
                             NameManager.getServerEconomyAccount().getUuid(),
                             event.getWorld()));
                 }
-                ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, tax, taxedAmount));
+                ChestShop.getShopLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, tax, taxedAmount));
             }
         } else if (event.getDirection() == CurrencyTransferEvent.Direction.PARTNER && Permission.has(event.getInitiator(), Permission.NO_BUY_TAX)) {
             // Reduce paid amount as the buyer has permission to not pay taxes
             BigDecimal taxSent = getTaxAmount(event.getAmountSent(), taxAmount);
             BigDecimal taxedSentAmount = event.getAmountSent().subtract(taxSent);
             event.setAmountSent(taxedSentAmount);
-            ChestShop.getBukkitLogger().info(String.format(TAX_SENT_MESSAGE, taxAmount, taxSent, taxedSentAmount));
+            ChestShop.getShopLogger().info(String.format(TAX_SENT_MESSAGE, taxAmount, taxSent, taxedSentAmount));
 
             // Reduce the amount that the seller receives anyways even though tax wasn't paid as that shouldn't make a difference for the seller
             BigDecimal taxReceived = getTaxAmount(event.getAmountReceived(), taxAmount);
             BigDecimal taxedReceivedAmount = event.getAmountReceived().subtract(taxReceived);
             event.setAmountReceived(taxedReceivedAmount);
-            ChestShop.getBukkitLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, taxReceived, taxedReceivedAmount));
+            ChestShop.getShopLogger().info(String.format(TAX_RECEIVED_MESSAGE, taxAmount, taxReceived, taxedReceivedAmount));
         }
     }
 }
