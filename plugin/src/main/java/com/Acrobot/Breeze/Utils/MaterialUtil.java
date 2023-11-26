@@ -128,10 +128,18 @@ public class MaterialUtil {
         if (oneMeta == twoMeta || oneMeta == null || twoMeta == null) {
             return oneMeta == twoMeta;
         }
+
         Map<String, Object> oneSerMeta = new HashMap<>(oneMeta.serialize());
         Map<String, Object> twoSerMeta = new HashMap<>(twoMeta.serialize());
-        oneSerMeta.remove("repair-cost");
-        twoSerMeta.remove("repair-cost");
+        System.out.println("IGNORE LIST: ");
+        System.out.println(Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY);
+        if (!Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY.isEmpty()) {
+            for (String ignoreKey : Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY) {
+                oneSerMeta.remove(ignoreKey);
+                twoSerMeta.remove(ignoreKey);
+            }
+        }
+
         if (oneSerMeta.equals(twoSerMeta)) {
             return true;
         }

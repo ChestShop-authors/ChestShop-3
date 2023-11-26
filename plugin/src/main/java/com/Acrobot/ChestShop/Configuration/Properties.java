@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.Collections;
 
 /**
  * @author Acrobot
@@ -340,4 +341,10 @@ public class Properties {
     @PrecededBySpace
     @ConfigurationComment("Add stock counter to quantity line?")
     public static boolean USE_STOCK_COUNTER = false;
+
+    @PrecededBySpace
+    @ConfigurationComment("Ignore enchantment attribute for similarity")
+    @Parser("StringSet")
+    public static Set<String> IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY = new LinkedHashSet<>();
+
 }
