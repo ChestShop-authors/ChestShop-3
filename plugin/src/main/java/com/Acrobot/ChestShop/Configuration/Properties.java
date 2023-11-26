@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.Collections;
 
 /**
  * @author Acrobot
