@@ -131,8 +131,6 @@ public class MaterialUtil {
 
         Map<String, Object> oneSerMeta = new HashMap<>(oneMeta.serialize());
         Map<String, Object> twoSerMeta = new HashMap<>(twoMeta.serialize());
-        System.out.println("IGNORE LIST: ");
-        System.out.println(Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY);
         if (!Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY.isEmpty()) {
             for (String ignoreKey : Properties.IGNORE_ENCHANT_ATTRIBUTE_FOR_SIMILARITY) {
                 oneSerMeta.remove(ignoreKey);
