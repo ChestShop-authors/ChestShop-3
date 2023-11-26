@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftCharWidth;
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
@@ -127,8 +128,10 @@ public class MaterialUtil {
         if (oneMeta == twoMeta || oneMeta == null || twoMeta == null) {
             return oneMeta == twoMeta;
         }
-        Map<String, Object> oneSerMeta = oneMeta.serialize();
-        Map<String, Object> twoSerMeta = twoMeta.serialize();
+        Map<String, Object> oneSerMeta = new HashMap<>(oneMeta.serialize());
+        Map<String, Object> twoSerMeta = new HashMap<>(twoMeta.serialize());
+        oneSerMeta.remove("repair-cost");
+        twoSerMeta.remove("repair-cost");
         if (oneSerMeta.equals(twoSerMeta)) {
             return true;
         }
