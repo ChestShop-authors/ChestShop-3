@@ -500,6 +500,9 @@ public class ChestShop extends JavaPlugin {
         bStats.addCustomChart(new SimplePie("allow-partial-transactions", () -> Properties.ALLOW_PARTIAL_TRANSACTIONS ? "enabled" : "disabled"));
         bStats.addCustomChart(new SimplePie("log-to-console", () -> Properties.LOG_TO_CONSOLE ? "enabled" : "disabled"));
         bStats.addCustomChart(new SimplePie("log-to-file", () -> Properties.LOG_TO_FILE ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("auto-update", () -> !Properties.TURN_OFF_UPDATES ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("release-notifications", () -> !Properties.TURN_OFF_UPDATE_NOTIFIER ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("dev-build-notifications", () -> !Properties.TURN_OFF_DEV_UPDATE_NOTIFIER ? "enabled" : "disabled"));
 
         bStats.addCustomChart(new AdvancedBarChart("pluginProperties", () -> {
             Map<String, int[]> map = new LinkedHashMap<>();
@@ -518,6 +521,9 @@ public class ChestShop extends JavaPlugin {
             map.put("bungeecord-messages", getChartArray(Properties.BUNGEECORD_MESSAGES));
             map.put("log-to-console", getChartArray(Properties.LOG_TO_CONSOLE));
             map.put("log-to-file", getChartArray(Properties.LOG_TO_FILE));
+            map.put("auto-update", getChartArray(!Properties.TURN_OFF_UPDATES));
+            map.put("release-notifications", getChartArray(!Properties.TURN_OFF_UPDATE_NOTIFIER));
+            map.put("dev-build-notifications", getChartArray(!Properties.TURN_OFF_DEV_UPDATE_NOTIFIER));
             return map;
         }));
         bStats.addCustomChart(new SimpleBarChart("shopContainers",
@@ -538,6 +544,14 @@ public class ChestShop extends JavaPlugin {
     private void startUpdater() {
         if (Properties.TURN_OFF_UPDATES) {
             getLogger().info("Auto-updater is disabled. If you want the plugin to automatically download new releases then set 'TURN_OFF_UPDATES' to 'false' in your config.yml!");
+            if (!Properties.TURN_OFF_UPDATE_NOTIFIER) {
+                final Updater updater = new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+                getServer().getScheduler().runTaskAsynchronously(this, () -> {
+                    if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                        getLogger().info("There is a new version available: " + updater.getLatestName() + ". You can download it from https://dev.bukkit.org/projects/" + PROJECT_BUKKITDEV_ID);
+                    }
+                });
+            }
             return;
         }
 

@@ -103,6 +103,9 @@ public class Properties {
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = true;
 
+    @ConfigurationComment("Do you want to turn off the automatic notifications for releases?")
+    public static boolean TURN_OFF_UPDATE_NOTIFIER = false;
+
     @ConfigurationComment("Do you want to turn off the automatic notifications for new development builds?")
     public static boolean TURN_OFF_DEV_UPDATE_NOTIFIER = false;
 
