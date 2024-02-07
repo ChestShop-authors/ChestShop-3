@@ -9,7 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 /**
- * @author Acrobot
+ * Support RedProtect region checks.
+ *
+ * @author Phoenix616
  */
 public class RedProtectBuilding implements Listener {
     private RedProtect redProtect;

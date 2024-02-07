@@ -12,7 +12,10 @@ import org.bukkit.inventory.ItemStack;
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
 
 /**
- * @author Acrobot
+ * Support for the <a href="https://www.spigotmc.org/resources/77080/">ItemBridge plugin</a> to use their strings for
+ * custom items directly on ChestShop signs.
+ *
+ * @author Phoenix616
  */
 public class ItemBridge implements Listener {
 
