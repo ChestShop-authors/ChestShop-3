@@ -89,6 +89,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -545,17 +546,17 @@ public class ChestShop extends JavaPlugin {
         if (Properties.TURN_OFF_UPDATES) {
             getLogger().info("Auto-updater is disabled. If you want the plugin to automatically download new releases then set 'TURN_OFF_UPDATES' to 'false' in your config.yml!");
             if (!Properties.TURN_OFF_UPDATE_NOTIFIER) {
-                final Updater updater = new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+                final Updater updater = new Updater(this, getPluginName().toLowerCase(Locale.ROOT), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
                 getServer().getScheduler().runTaskAsynchronously(this, () -> {
                     if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
-                        getLogger().info("There is a new version available: " + updater.getLatestName() + ". You can download it from https://dev.bukkit.org/projects/" + PROJECT_BUKKITDEV_ID);
+                        getLogger().info("There is a new version available: " + updater.getLatestName() + ". You can download it from https://modrinth.com/plugin/" + getPluginName().toLowerCase(Locale.ROOT));
                     }
                 });
             }
             return;
         }
 
-        new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
+        new Updater(this, getPluginName().toLowerCase(Locale.ROOT), this.getFile(), Updater.UpdateType.DEFAULT, true);
     }
 
     private static final String PROJECT_JENKINS_JOB_URL = "https://ci.minebench.de/job/ChestShop-3/";
