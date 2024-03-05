@@ -11,7 +11,7 @@ public class ItemStringListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public static void calculateItemString(ItemStringQueryEvent event) {
         if (event.getItemString() == null) {
-            event.setItemString(MaterialUtil.getName(event.getItem(), event.getMaxWidth()));
+            event.setItemString(MaterialUtil.getName(event.getItem()));
         }
     }
 
