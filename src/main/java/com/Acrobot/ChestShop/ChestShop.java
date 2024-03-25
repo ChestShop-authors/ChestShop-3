@@ -547,7 +547,7 @@ public class ChestShop extends JavaPlugin {
             getLogger().info("Auto-updater is disabled. If you want the plugin to automatically download new releases then set 'TURN_OFF_UPDATES' to 'false' in your config.yml!");
             if (!Properties.TURN_OFF_UPDATE_NOTIFIER) {
                 final Updater updater = new Updater(this, getPluginName().toLowerCase(Locale.ROOT), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
-                getServer().getScheduler().runTaskAsynchronously(this, () -> {
+                runInAsyncThread(() -> {
                     if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
                         getLogger().info("There is a new version available: " + updater.getLatestName() + ". You can download it from https://modrinth.com/plugin/" + getPluginName().toLowerCase(Locale.ROOT));
                     }
