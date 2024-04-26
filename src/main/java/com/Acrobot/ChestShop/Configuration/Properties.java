@@ -190,10 +190,10 @@ public class Properties {
     public static UUID SERVER_ECONOMY_ACCOUNT_UUID = new UUID(0, 0);
 
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
-    public static int TAX_AMOUNT = 0;
+    public static double TAX_AMOUNT = 0;
 
     @ConfigurationComment("Percent of the price that should go to the server's account when buying from an Admin Shop.")
-    public static int SERVER_TAX_AMOUNT = 0;
+    public static double SERVER_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Amount of money player must pay to create a shop")
     public static BigDecimal SHOP_CREATION_PRICE = BigDecimal.valueOf(0);

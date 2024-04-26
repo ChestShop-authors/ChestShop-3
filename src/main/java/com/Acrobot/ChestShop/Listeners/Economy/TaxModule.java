@@ -20,8 +20,8 @@ public class TaxModule implements Listener {
     private static final String TAX_RECEIVED_MESSAGE = "Applied a tax of %1$f percent (%2$.2f) to the received amount for a resulting price of %3$.2f";
     private static final String TAX_SENT_MESSAGE = "Reduced buy price by tax of %1$f percent (%2$.2f) for a resulting price of %3$.2f as the buyer has the buy tax bypass permission";
 
-    private static float getTax(UUID partner) {
-        float taxAmount = NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)
+    private static double getTax(UUID partner) {
+        double taxAmount = NameManager.isAdminShop(partner) || NameManager.isServerEconomyAccount(partner)
                 ? Properties.SERVER_TAX_AMOUNT : Properties.TAX_AMOUNT;
 
         if (taxAmount == 0) {
@@ -31,7 +31,7 @@ public class TaxModule implements Listener {
         return taxAmount;
     }
 
-    private static BigDecimal getTaxAmount(BigDecimal price, float taxAmount) {
+    private static BigDecimal getTaxAmount(BigDecimal price, double taxAmount) {
         return price.multiply(BigDecimal.valueOf(taxAmount)).divide(BigDecimal.valueOf(100), Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 
@@ -41,7 +41,7 @@ public class TaxModule implements Listener {
             return;
         }
 
-        float taxAmount = getTax(event.getPartner());
+        double taxAmount = getTax(event.getPartner());
         if (taxAmount == 0) {
             return;
         }
