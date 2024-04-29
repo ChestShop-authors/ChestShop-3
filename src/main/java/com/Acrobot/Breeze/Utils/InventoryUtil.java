@@ -41,10 +41,6 @@ public class InventoryUtil {
             return 0;
         }
 
-        if (inventory.getType() == null) {
-            return Integer.MAX_VALUE;
-        }
-
         HashMap<Integer, ? extends ItemStack> items = inventory.all(item.getType());
         int itemAmount = 0;
 

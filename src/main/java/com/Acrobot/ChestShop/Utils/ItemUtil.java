@@ -96,4 +96,12 @@ public class ItemUtil {
     public static String getSignName(ItemStack itemStack) {
         return getName(itemStack, MAXIMUM_SIGN_WIDTH);
     }
+
+    public static ItemStack[] deepClone(ItemStack[] toClone) {
+        ItemStack[] cloned = toClone.clone();
+        for (int i = 0; i < toClone.length; i++) {
+            cloned[i] = toClone[i].clone();
+        }
+        return cloned;
+    }
 }

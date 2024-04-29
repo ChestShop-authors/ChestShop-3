@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,23 +110,33 @@ public class ChestShopSign {
             return false;
         }
 
-        if (holder instanceof DoubleChest) {
-            return isShopChest(((DoubleChest) holder).getLocation().getBlock());
-        } else if (holder instanceof Chest) {
-            return isShopChest(((Chest) holder).getBlock());
+        if (holder instanceof DoubleChest dChest) {
+            return isShopChest(dChest.getLocation().getBlock());
+        } else if (holder instanceof Chest chest) {
+            return isShopChest(chest.getBlock());
         } else {
             return false;
         }
     }
 
     public static boolean isShopBlock(InventoryHolder holder) {
-        if (holder instanceof DoubleChest) {
-            return isShopBlock(((DoubleChest) holder).getLeftSide())
-                    || isShopBlock(((DoubleChest) holder).getRightSide());
-        } else if (holder instanceof BlockState) {
-            return isShopBlock(((BlockState) holder).getBlock());
+        if (holder instanceof DoubleChest dChest) {
+            return isShopBlock(dChest.getLeftSide())
+                    || isShopBlock(dChest.getRightSide());
+        } else if (holder instanceof BlockState blockState) {
+            return isShopBlock(blockState.getBlock());
         }
         return false;
+    }
+
+    public static Block getShopBlock(InventoryHolder holder) {
+        if (holder instanceof DoubleChest dChest) {
+            return Optional.ofNullable(getShopBlock(dChest.getLeftSide()))
+                    .orElse(getShopBlock(dChest.getRightSide()));
+        } else if (holder instanceof BlockState state) {
+            return state.getBlock();
+        }
+        return null;
     }
 
     public static boolean canAccess(Player player, Sign sign) {
