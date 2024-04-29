@@ -53,6 +53,10 @@
             <id>redprotect-repo</id>
             <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
         </repository>
+        <repository>
+            <id>adventure-repo</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -456,7 +460,7 @@
         <build.number>${buildNumber}</build.number>
         <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
-        <bukkit.dependency.version>1.20.1-R0.1-SNAPSHOT</bukkit.dependency.version>
+        <bukkit.dependency.version>1.20.5-R0.1-SNAPSHOT</bukkit.dependency.version>
     </properties>
 
     <profiles>
