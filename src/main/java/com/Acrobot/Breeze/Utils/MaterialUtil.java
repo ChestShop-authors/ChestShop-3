@@ -56,21 +56,9 @@ public class MaterialUtil {
     private static final Map<String, String> ABBREVIATIONS = StringUtil.map(
             "Egg", "Eg",
             "Spawn", "Spaw",
-            "Ender", "End",
-            "Tropical", "Tropic",
-            "Terracotta", "Terracot",
-            "Stained", "Stain",
-            "Sandstone", "Sandston",
-            "Sandston", "Sandsto",
-            "Sandsto", "Sandst",
-            "Block", "Bloc",
-            "Brewing", "Brew",
-            "Dolphin", "Dolph",
-            "Chicken", "Chick",
             "Pottery", "Pot",
             "Heartbreak", "Heartbr",
-            "Sherd", "Sher",
-            "Template", "Templ"
+            "Sherd", "Sher"
     );
 
     private static final Map<String, String> UNIDIRECTIONAL_ABBREVIATIONS = StringUtil.map(
@@ -463,18 +451,18 @@ public class MaterialUtil {
 
     private static class EnumParser<E extends Enum<E>> {
         private E parse(String name, E[] values) {
+            String formatted = name.replaceAll("(?<!^)(?>\\s?)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).replace(' ', '_');
             try {
-                return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase(Locale.ROOT));
+                return E.valueOf(values[0].getDeclaringClass(), formatted);
             } catch (IllegalArgumentException exception) {
-                E currentEnum = null;
-                String[] typeParts = name.replaceAll("(?<!^)(?>\\s?)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).split("[ _]");
+                List<E> possibleEnums = new ArrayList<>();
+                String[] typeParts = formatted.split("_");
                 int length = Short.MAX_VALUE;
-                name = name.toUpperCase(Locale.ROOT);
                 for (E e : values) {
                     String enumName = e.name();
-                    if (enumName.length() < length && enumName.startsWith(name)) {
-                        length = (short) enumName.length();
-                        currentEnum = e;
+                    if (enumName.length() < length && enumName.startsWith(formatted)) {
+                        length = enumName.length();
+                        possibleEnums.add(e);
                     } else if (typeParts.length > 1) {
                         String[] nameParts = enumName.split("_");
                         if (typeParts.length == nameParts.length) {
@@ -486,13 +474,28 @@ public class MaterialUtil {
                                 }
                             }
                             if (matched) {
-                                currentEnum = e;
-                                break;
+                                possibleEnums.add(e);
                             }
                         }
                     }
                 }
-                return currentEnum;
+
+                if (possibleEnums.size() == 1) {
+                    return possibleEnums.get(0);
+                } else if (possibleEnums.size() > 1) {
+                    int formattedLength = formatted.length();
+                    int closestDeviation = Short.MAX_VALUE;
+                    E closestEnum = null;
+                    for (E possibleEnum : possibleEnums) {
+                        int deviation = possibleEnum.name().length() - formattedLength;
+                        if (deviation < closestDeviation) {
+                            closestDeviation = deviation;
+                            closestEnum = possibleEnum;
+                        }
+                    }
+                    return closestEnum;
+                }
+                return null;
             }
         }
     }
