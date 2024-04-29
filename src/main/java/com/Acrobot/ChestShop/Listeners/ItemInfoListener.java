@@ -212,24 +212,22 @@ public class ItemInfoListener implements Listener {
 
         PotionMeta potionMeta = (PotionMeta) meta;
 
-        StringBuilder message = new StringBuilder(50);
-
-        message.append(ChatColor.GRAY);
-
-        message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
-        message.append(capitalizeFirstLetter(potionMeta.getBasePotionData().getType().name(), '_')).append(' ');
-        if (potionMeta.getBasePotionData().isUpgraded()) {
-            message.append("II");
-        } else if (potionMeta.getBasePotionData().isExtended()) {
-            message.append("+");
-        }
-
         CommandSender sender = event.getSender();
 
-        sender.sendMessage(message.toString());
+        if (potionMeta.getBasePotionType() != null) {
+            StringBuilder message = new StringBuilder(50);
+
+            message.append(ChatColor.GRAY);
+
+            message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
+            message.append(capitalizeFirstLetter(potionMeta.getBasePotionType().getKey().getKey(), '_')).append(' ');
+
+            sender.sendMessage(message.toString());
+        }
 
         for (PotionEffect effect : potionMeta.getCustomEffects()) {
-            sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
+            sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getKey().getKey(), '_')
+                    + ' ' + (effect.getAmplifier() + 1) + ' ' + toTime(effect.getDuration() / 20));
         }
     }
 
