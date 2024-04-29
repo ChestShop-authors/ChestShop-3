@@ -123,6 +123,22 @@ permissions:
     description: Gives you the power to do access shops for all names.
   ChestShop.othername.access.(some name):
     description: Gives you the power to do access shops for (some name), for example your town.
+  ChestShop.nolimit.buy.min:
+    description: Allows user to bypass the minimal buy price for all items
+  ChestShop.nolimit.buy.min.(itemType):
+    description: Allows user to bypass the minimal buy price for itemType
+  ChestShop.nolimit.buy.max:
+    description: Allows user to bypass the maximal buy price for all items
+  ChestShop.nolimit.buy.max.(itemType):
+    description: Allows user to bypass the maximal buy price for itemType
+  ChestShop.nolimit.sell.min:
+    description: Allows user to bypass the minimal sell price for all items
+  ChestShop.nolimit.sell.min.(itemType):
+    description: Allows user to bypass the minimal sell price for itemType
+  ChestShop.nolimit.sell.max:
+    description: Allows user to bypass the maximal sell price for all items
+  ChestShop.nolimit.sell.max.(itemType):
+    description: Allows user to bypass the maximal sell price for itemType
   ChestShop.shop.create.food:
     description: Allows to create a shop that sells food
     children:
