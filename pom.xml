@@ -370,6 +370,7 @@
                             <Distribution-Type>${buildType}</Distribution-Type>
                             <Built-At>${maven.build.timestamp}</Built-At>
                             <Build-Jdk>${java.runtime.version}</Build-Jdk>
+                            <paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
                         </manifestEntries>
                     </archive>
                 </configuration>
