@@ -6,11 +6,13 @@ import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.ChestShopReloadEvent;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -21,10 +23,8 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_ABOVE_MAX;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.BUY_PRICE_BELOW_MIN;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_ABOVE_MAX;
-import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.SELL_PRICE_BELOW_MIN;
+import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.*;
+import static com.Acrobot.ChestShop.Permission.*;
 
 /**
  * @author Acrobot
@@ -106,6 +106,7 @@ public class PriceRestrictionModule implements Listener {
         ItemParseEvent parseEvent = new ItemParseEvent(ChestShopSign.getItem(event.getSignLines()));
         Bukkit.getPluginManager().callEvent(parseEvent);
         ItemStack material = parseEvent.getItem();
+        Player player = event.getPlayer();
 
         if (material == null) {
             return;
@@ -124,15 +125,17 @@ public class PriceRestrictionModule implements Listener {
             BigDecimal buyPrice = PriceUtil.getExactBuyPrice(priceLine);
 
             BigDecimal minBuyPrice = BigDecimal.valueOf(configuration.getDouble("min.buy_price." + itemType) * amount);
-            if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(minBuyPrice) < 0) {
+            if (isValid("min.buy_price." + itemType) && buyPrice.compareTo(minBuyPrice) < 0
+                    && !Permission.has(player, NOLIMIT_MIN_BUY) && !Permission.has(player, NOLIMIT_MIN_BUY_ID + itemType)) {
                 event.setOutcome(BUY_PRICE_BELOW_MIN);
-                Messages.BUY_PRICE_BELOW_MIN.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(), "minprice", minBuyPrice.toPlainString());
+                Messages.BUY_PRICE_BELOW_MIN.sendWithPrefix(player, "price", buyPrice.toPlainString(), "minprice", minBuyPrice.toPlainString());
             }
 
             BigDecimal maxBuyPrice = BigDecimal.valueOf(configuration.getDouble("max.buy_price." + itemType) * amount);
-            if (isValid("max.buy_price." + itemType) && buyPrice.compareTo(maxBuyPrice) > 0) {
+            if (isValid("max.buy_price." + itemType) && buyPrice.compareTo(maxBuyPrice) > 0
+                    && !Permission.has(player, NOLIMIT_MAX_BUY) && !Permission.has(player, NOLIMIT_MAX_BUY_ID + itemType)) {
                 event.setOutcome(BUY_PRICE_ABOVE_MAX);
-                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", buyPrice.toPlainString(),  "maxprice", maxBuyPrice.toPlainString());
+                Messages.BUY_PRICE_ABOVE_MAX.sendWithPrefix(player, "price", buyPrice.toPlainString(),  "maxprice", maxBuyPrice.toPlainString());
             }
         }
 
@@ -140,15 +143,17 @@ public class PriceRestrictionModule implements Listener {
             BigDecimal sellPrice = PriceUtil.getExactSellPrice(priceLine);
 
             BigDecimal minSellPrice = BigDecimal.valueOf(configuration.getDouble("min.sell_price." + itemType) * amount);
-            if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(minSellPrice) < 0) {
+            if (isValid("min.sell_price." + itemType) && sellPrice.compareTo(minSellPrice) < 0
+                    && !Permission.has(player, NOLIMIT_MIN_SELL) && !Permission.has(player, NOLIMIT_MIN_SELL_ID + itemType)) {
                 event.setOutcome(SELL_PRICE_BELOW_MIN);
-                Messages.SELL_PRICE_BELOW_MIN.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "minprice", minSellPrice.toPlainString());
+                Messages.SELL_PRICE_BELOW_MIN.sendWithPrefix(player, "price", sellPrice.toPlainString(),  "minprice", minSellPrice.toPlainString());
             }
 
             BigDecimal maxSellPrice = BigDecimal.valueOf(configuration.getDouble("max.sell_price." + itemType) * amount);
-            if (isValid("max.sell_price." + itemType) && sellPrice.compareTo(maxSellPrice) > 0) {
+            if (isValid("max.sell_price." + itemType) && sellPrice.compareTo(maxSellPrice) > 0
+                    && !Permission.has(player, NOLIMIT_MAX_SELL) && !Permission.has(player, NOLIMIT_MAX_SELL_ID + itemType)) {
                 event.setOutcome(SELL_PRICE_ABOVE_MAX);
-                Messages.SELL_PRICE_ABOVE_MAX.sendWithPrefix(event.getPlayer(), "price", sellPrice.toPlainString(),  "maxprice", maxSellPrice.toPlainString());
+                Messages.SELL_PRICE_ABOVE_MAX.sendWithPrefix(player, "price", sellPrice.toPlainString(),  "maxprice", maxSellPrice.toPlainString());
             }
         }
     }
