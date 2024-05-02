@@ -11,11 +11,7 @@ import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -110,31 +106,31 @@ public class ChestShopSign {
             return false;
         }
 
-        if (holder instanceof DoubleChest dChest) {
-            return isShopChest(dChest.getLocation().getBlock());
-        } else if (holder instanceof Chest chest) {
-            return isShopChest(chest.getBlock());
+        if (holder instanceof DoubleChest) {
+            return isShopChest(((DoubleChest) holder).getLocation().getBlock());
+        } else if (holder instanceof Chest) {
+            return isShopChest(((Chest) holder).getBlock());
         } else {
             return false;
         }
     }
 
     public static boolean isShopBlock(InventoryHolder holder) {
-        if (holder instanceof DoubleChest dChest) {
-            return isShopBlock(dChest.getLeftSide())
-                    || isShopBlock(dChest.getRightSide());
-        } else if (holder instanceof BlockState blockState) {
-            return isShopBlock(blockState.getBlock());
+        if (holder instanceof DoubleChest) {
+            return isShopBlock(((DoubleChest) holder).getLeftSide())
+                    || isShopBlock(((DoubleChest) holder).getRightSide());
+        } else if (holder instanceof BlockState) {
+            return isShopBlock(((BlockState) holder).getBlock());
         }
         return false;
     }
 
     public static Block getShopBlock(InventoryHolder holder) {
-        if (holder instanceof DoubleChest dChest) {
-            return Optional.ofNullable(getShopBlock(dChest.getLeftSide()))
-                    .orElse(getShopBlock(dChest.getRightSide()));
-        } else if (holder instanceof BlockState state) {
-            return state.getBlock();
+        if (holder instanceof DoubleChest) {
+            return Optional.ofNullable(getShopBlock(((DoubleChest) holder).getLeftSide()))
+                    .orElse(getShopBlock(((DoubleChest) holder).getRightSide()));
+        } else if (holder instanceof BlockState) {
+            return ((BlockState) holder).getBlock();
         }
         return null;
     }

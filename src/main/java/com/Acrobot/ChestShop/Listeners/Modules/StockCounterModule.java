@@ -8,8 +8,10 @@ import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.Acrobot.ChestShop.Utils.ItemUtil;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -141,6 +143,20 @@ public class StockCounterModule implements Listener {
 
         sign.setLine(QUANTITY_LINE, String.format(PRICE_LINE_WITH_COUNT, quantity, numTradedItemsInChest));
         sign.update(true);
+    }
+
+    public static void updateCounterOnItemMoveEvent(ItemStack toAdd, InventoryHolder destinationHolder) {
+        Block shopBlock = ChestShopSign.getShopBlock(destinationHolder);
+        Sign connectedSign = uBlock.getConnectedSign(shopBlock);
+
+        Inventory tempInv = Bukkit.createInventory(null, destinationHolder.getInventory().getSize() + 9);
+        tempInv.setContents(ItemUtil.deepClone(destinationHolder.getInventory().getContents()));
+        tempInv.addItem(toAdd.clone());
+
+        updateCounterOnQuantityLine(connectedSign, tempInv);
+
+        tempInv.clear();
+        tempInv.close();
     }
 
     public static void removeCounterFromQuantityLine(Sign sign) {

@@ -1,14 +1,10 @@
 package com.Acrobot.Breeze.Utils;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.Acrobot.ChestShop.Configuration.Properties;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 /**
  * @author Acrobot
@@ -39,6 +35,10 @@ public class InventoryUtil {
     public static int getAmount(ItemStack item, Inventory inventory) {
         if (!inventory.contains(item.getType())) {
             return 0;
+        }
+
+        if (inventory.getType() == null) {
+            return Integer.MAX_VALUE;
         }
 
         HashMap<Integer, ? extends ItemStack> items = inventory.all(item.getType());
