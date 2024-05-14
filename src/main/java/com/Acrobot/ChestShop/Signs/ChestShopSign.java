@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,6 +127,16 @@ public class ChestShopSign {
             return isShopBlock(((BlockState) holder).getBlock());
         }
         return false;
+    }
+
+    public static Block getShopBlock(InventoryHolder holder) {
+        if (holder instanceof DoubleChest) {
+            return Optional.ofNullable(getShopBlock(((DoubleChest) holder).getLeftSide()))
+                    .orElse(getShopBlock(((DoubleChest) holder).getRightSide()));
+        } else if (holder instanceof BlockState) {
+            return ((BlockState) holder).getBlock();
+        }
+        return null;
     }
 
     public static boolean canAccess(Player player, Sign sign) {

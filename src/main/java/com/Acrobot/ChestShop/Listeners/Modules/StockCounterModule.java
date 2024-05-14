@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
+import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -10,6 +11,7 @@ import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -124,7 +126,13 @@ public class StockCounterModule implements Listener {
         }
     }
 
-    public static void updateCounterOnQuantityLine(Sign sign, Inventory chestShopInventory) {
+    /**
+     * Update the stock counter on the sign's quantity line
+     * @param sign               The sign to update
+     * @param chestShopInventory The inventory to search in
+     * @param extraItems         The extra items to add in the search
+     */
+    public static void updateCounterOnQuantityLine(Sign sign, Inventory chestShopInventory, ItemStack... extraItems) {
         ItemStack itemTradedByShop = determineItemTradedByShop(sign);
         if (itemTradedByShop == null) {
             return;
@@ -139,8 +147,23 @@ public class StockCounterModule implements Listener {
 
         int numTradedItemsInChest = InventoryUtil.getAmount(itemTradedByShop, chestShopInventory);
 
+        for (ItemStack extraStack : extraItems) {
+            if (!MaterialUtil.equals(extraStack, itemTradedByShop)) {
+                continue;
+            }
+
+            numTradedItemsInChest += extraStack.getAmount();
+        }
+
         sign.setLine(QUANTITY_LINE, String.format(PRICE_LINE_WITH_COUNT, quantity, numTradedItemsInChest));
         sign.update(true);
+    }
+
+    public static void updateCounterOnItemMoveEvent(ItemStack toAdd, InventoryHolder destinationHolder) {
+        Block shopBlock = ChestShopSign.getShopBlock(destinationHolder);
+        Sign connectedSign = uBlock.getConnectedSign(shopBlock);
+
+        updateCounterOnQuantityLine(connectedSign, destinationHolder.getInventory(), toAdd);
     }
 
     public static void removeCounterFromQuantityLine(Sign sign) {
