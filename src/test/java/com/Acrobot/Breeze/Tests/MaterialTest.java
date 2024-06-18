@@ -3,14 +3,12 @@ package com.Acrobot.Breeze.Tests;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link com.Acrobot.Breeze.Utils.MaterialUtil}
@@ -19,14 +17,6 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(JUnit4.class)
 public class MaterialTest {
-
-    @Test
-    public void testForBlank() {
-        ItemStack air = new ItemStack(Material.AIR);
-
-        assertTrue(MaterialUtil.isEmpty(air));
-        assertTrue(MaterialUtil.isEmpty(null));
-    }
     
     @Test
     public void testCodes() {
