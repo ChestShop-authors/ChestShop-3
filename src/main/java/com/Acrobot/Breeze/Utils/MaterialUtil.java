@@ -259,8 +259,12 @@ public class MaterialUtil {
         String itemName = itemStack.getType().toString();
 
         String durability = "";
-        if (itemStack.getDurability() != 0) {
-            durability = ":" + itemStack.getDurability();
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta instanceof Damageable) {
+            Damageable damageable = (Damageable) meta;
+            if (damageable.hasDamage()) {
+                durability = ":" + damageable.getDamage();
+            }
         }
 
         String metaData = "";
@@ -386,8 +390,8 @@ public class MaterialUtil {
             split[i] = split[i].trim();
         }
 
-        short durability = getDurability(itemName);
-        MaterialParseEvent parseEvent = new MaterialParseEvent(split[0], durability);
+        int durability = getDurability(itemName);
+        MaterialParseEvent parseEvent = new MaterialParseEvent(split[0], (short) durability);
         Bukkit.getPluginManager().callEvent(parseEvent);
         Material material = parseEvent.getMaterial();
         if (material == null) {
@@ -414,7 +418,7 @@ public class MaterialUtil {
      * @param itemName Item name
      * @return Durability found
      */
-    public static short getDurability(String itemName) {
+    public static int getDurability(String itemName) {
         Matcher m = DURABILITY.matcher(itemName);
 
         if (!m.find()) {
@@ -429,7 +433,11 @@ public class MaterialUtil {
 
         data = data.substring(1);
 
-        return NumberUtil.isShort(data) ? Short.valueOf(data) : 0;
+        try {
+            return Integer.parseInt(data);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /**

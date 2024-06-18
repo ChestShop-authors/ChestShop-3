@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -140,7 +141,14 @@ public class ItemDatabase {
         try {
             ItemStack clone = new ItemStack(item);
             clone.setAmount(1);
-            clone.setDurability((short) 0);
+
+            ItemMeta meta = clone.getItemMeta();
+            if (meta instanceof Damageable) {
+                Damageable damageable = (Damageable) clone.getItemMeta();
+                if (damageable.hasDamage()) {
+                    damageable.setDamage(0);
+                }
+            }
 
             String dumped = yaml.dump(clone);
             ItemStack loadedItem = yaml.loadAs(dumped, ItemStack.class);
