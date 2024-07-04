@@ -105,7 +105,7 @@ public class ItemDatabase {
                                 itemDao.update(item);
                                 updated.getAndIncrement();
                             } catch (RuntimeException e) {
-                                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
+                                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized + "\n" + e.getMessage());
                             }
                         }
                     } catch (IOException | ClassNotFoundException | SQLException e) {
