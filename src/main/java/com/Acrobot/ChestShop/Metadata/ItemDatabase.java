@@ -104,7 +104,7 @@ public class ItemDatabase {
                                 item.setBase64ItemCode(Base64.encodeObject(yaml.dump(itemStack)));
                                 itemDao.update(item);
                                 updated.getAndIncrement();
-                            } catch (YAMLException | ClassCastException e) {
+                            } catch (RuntimeException e) {
                                 ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
                             }
                         }
