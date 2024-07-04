@@ -268,7 +268,7 @@ public class MaterialUtil {
         }
 
         String metaData = "";
-        if (itemStack.hasItemMeta()) {
+        if (hasCustomData(itemStack)) {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
 
@@ -282,6 +282,29 @@ public class MaterialUtil {
         }
 
         return code + durability + metaData;
+    }
+
+    /**
+     * Check whether the provided ItemStack has custom data (in the past called "ItemMeta"). This will ignore
+     * the durability of an item.
+     *
+     * @param itemStack The ItemStack to check
+     * @return Whether the item has custom data
+     */
+    private static boolean hasCustomData(ItemStack itemStack) {
+        if (!itemStack.hasItemMeta()) {
+            return false;
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta instanceof Damageable) {
+            if (!((Damageable) itemMeta).hasDamage()) {
+                return true;
+            }
+        }
+        Map<String, Object> data = itemMeta.serialize();
+        // if the data map contains more than the metadata type and the damage
+        // then the item does indeed have custom data set
+        return data.size() > 2;
     }
 
     /**
