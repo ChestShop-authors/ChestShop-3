@@ -1,7 +1,8 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.ChestShop.Configuration.Messages;
-import com.google.common.base.Preconditions;
+import com.Acrobot.ChestShop.Database.Account;
+import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -9,15 +10,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 /**
  * @author KingFaris10
  */
 public class Toggle implements CommandExecutor {
-    private static final Set<UUID> toggledPlayers = new HashSet<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -31,7 +29,10 @@ public class Toggle implements CommandExecutor {
             return false;
         }
 
-        if (setIgnoring(player, !isIgnoring(player))) {
+        Account account = NameManager.getOrCreateAccount(player);
+        account.setIgnoreMessages(!account.isIgnoringMessages());
+
+        if (account.isIgnoringMessages()) {
             Messages.TOGGLE_MESSAGES_OFF.sendWithPrefix(player);
         } else {
             Messages.TOGGLE_MESSAGES_ON.sendWithPrefix(player);
@@ -40,16 +41,13 @@ public class Toggle implements CommandExecutor {
         return true;
     }
 
-    public static void clearToggledPlayers() {
-        toggledPlayers.clear();
-    }
-
     public static boolean isIgnoring(OfflinePlayer player) {
-        return player != null && isIgnoring(player.getUniqueId());
+        return player != null && NameManager.getOrCreateAccount(player).isIgnoringMessages();
     }
 
     public static boolean isIgnoring(UUID playerId) {
-        return toggledPlayers.contains(playerId);
+        Account account = NameManager.getAccount(playerId);
+        return account != null && account.isIgnoringMessages();
     }
 
     /**
@@ -58,18 +56,6 @@ public class Toggle implements CommandExecutor {
     @Deprecated
     public static boolean isIgnoring(String playerName) {
         return isIgnoring(Bukkit.getOfflinePlayer(playerName));
-    }
-
-    public static boolean setIgnoring(Player player, boolean ignoring) {
-        Preconditions.checkNotNull(player); // Make sure the player instance is not null, in case there are any errors in the code
-
-        if (ignoring) {
-            toggledPlayers.add(player.getUniqueId());
-        } else {
-            toggledPlayers.remove(player.getUniqueId());
-        }
-
-        return ignoring;
     }
 
 }
