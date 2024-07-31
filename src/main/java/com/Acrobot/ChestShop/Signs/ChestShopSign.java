@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Signs;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.ImplementationAdapter;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
@@ -121,8 +122,8 @@ public class ChestShopSign {
 
     public static boolean isShopBlock(InventoryHolder holder) {
         if (holder instanceof DoubleChest) {
-            return isShopBlock(((DoubleChest) holder).getLeftSide())
-                    || isShopBlock(((DoubleChest) holder).getRightSide());
+            return isShopBlock(ImplementationAdapter.getLeftSide((DoubleChest) holder, false))
+                    || isShopBlock(ImplementationAdapter.getRightSide((DoubleChest) holder, false));
         } else if (holder instanceof BlockState) {
             return isShopBlock(((BlockState) holder).getBlock());
         }
@@ -131,8 +132,8 @@ public class ChestShopSign {
 
     public static Block getShopBlock(InventoryHolder holder) {
         if (holder instanceof DoubleChest) {
-            return Optional.ofNullable(getShopBlock(((DoubleChest) holder).getLeftSide()))
-                    .orElse(getShopBlock(((DoubleChest) holder).getRightSide()));
+            return Optional.ofNullable(getShopBlock(ImplementationAdapter.getLeftSide((DoubleChest) holder, false)))
+                    .orElse(getShopBlock(ImplementationAdapter.getRightSide((DoubleChest) holder, false)));
         } else if (holder instanceof BlockState) {
             return ((BlockState) holder).getBlock();
         }
