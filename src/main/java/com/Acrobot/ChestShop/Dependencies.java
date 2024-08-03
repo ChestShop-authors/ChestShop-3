@@ -65,12 +65,12 @@ public class Dependencies implements Listener {
     public static boolean loadPlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        for (String dependency : ChestShop.getDependencies()) {
-            Plugin plugin = pluginManager.getPlugin(dependency);
+        for (Dependency dependency : Dependency.values()) {
+            Plugin plugin = pluginManager.getPlugin(dependency.name());
 
             if (plugin != null && plugin.isEnabled()) {
                 try {
-                    loadPlugin(dependency, plugin);
+                    loadPlugin(dependency.name(), plugin);
                 } catch (Exception e) {
                     plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
                 }
@@ -118,13 +118,19 @@ public class Dependencies implements Listener {
         return true;
     }
 
-    private static void loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+    private static boolean loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
         Dependency dependency;
 
         try {
             dependency = Dependency.valueOf(name);
+
+            if (dependency.author != null && !plugin.getDescription().getAuthors().contains(dependency.author)) {
+                ChestShop.getBukkitLogger().info("You are not using the supported variant of " + name + " by " + dependency.author + "."
+                        + " This variant of " + name + " seems to be made by " + plugin.getDescription().getAuthors().get(0) + " which isn't supported!");
+                return false;
+            }
         } catch (IllegalArgumentException exception) {
-            return;
+            return false;
         }
 
         Listener listener = null;
@@ -165,7 +171,7 @@ public class Dependencies implements Listener {
                 boolean inUse = Properties.WORLDGUARD_USE_PROTECTION || Properties.WORLDGUARD_INTEGRATION;
 
                 if (!inUse) {
-                    return;
+                    return false;
                 }
 
                 if (Properties.WORLDGUARD_USE_PROTECTION) {
@@ -180,14 +186,14 @@ public class Dependencies implements Listener {
 
             case GriefPrevention:
                 if (!Properties.GRIEFPREVENTION_INTEGRATION) {
-                    return;
+                    return false;
                 }
                 listener = new GriefPrevenentionBuilding(plugin);
                 break;
 
             case RedProtect:
                 if (!Properties.REDPROTECT_INTEGRATION) {
-                    return;
+                    return false;
                 }
                 listener = new RedProtectBuilding(plugin);
                 break;
@@ -197,7 +203,7 @@ public class Dependencies implements Listener {
                 Heroes heroes = Heroes.getHeroes(plugin);
 
                 if (heroes == null) {
-                    return;
+                    return false;
                 }
 
                 listener = heroes;
@@ -216,12 +222,14 @@ public class Dependencies implements Listener {
 
         PluginDescriptionFile description = plugin.getDescription();
         versions.put(description.getName(), description.getVersion());
-        ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " loaded.");
+        ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " hooked.");
+
+        return true;
     }
 
-    private static enum Dependency {
+    private enum Dependency {
         LWC,
-        Lockette,
+        Lockette("Acru"),
         LockettePro,
         Deadbolt,
         SimpleChestLock,
@@ -236,14 +244,32 @@ public class Dependencies implements Listener {
 
         ItemBridge,
 
-        ShowItem
+        ShowItem;
+
+        private final String author;
+
+        Dependency() {
+            this.author = null;
+        }
+
+        Dependency(String author) {
+            this.author = author;
+        }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
-        if (ChestShop.getDependencies().contains(plugin.getName())) {
-            loadPlugin(plugin.getName(), plugin);
+        try {
+            if (!loadPlugin(plugin.getName(), plugin)) {
+                for (String pluginAlias : plugin.getDescription().getProvides()) {
+                    if (loadPlugin(pluginAlias, plugin)) {
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
         }
     }
 }
