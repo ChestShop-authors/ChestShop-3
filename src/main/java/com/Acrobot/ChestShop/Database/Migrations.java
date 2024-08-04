@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
@@ -17,7 +16,7 @@ import java.util.logging.Level;
  * @author Andrzej Pomirski
  */
 public class Migrations {
-    public static final int CURRENT_DATABASE_VERSION = 4;
+    public static final int CURRENT_DATABASE_VERSION = 5;
 
     /**
      * Migrates a database from the given version
@@ -50,6 +49,12 @@ public class Migrations {
                     return -1;
                 }
             case 4:
+                if (migrateTo5()) {
+                    currentVersion++;
+                } else {
+                    return -1;
+                }
+            case 5:
             default:
                 break;
                 //do nothing
@@ -144,6 +149,17 @@ public class Migrations {
             return true;
         } catch (SQLException e) {
             ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v4", e);
+            return false;
+        }
+    }
+
+    private static boolean migrateTo5() {
+        try {
+            Dao<Account, String> accounts = DaoCreator.getDao(Account.class);
+            accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN ignoreMessages BOOLEAN");
+            return true;
+        } catch (SQLException e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v5", e);
             return false;
         }
     }
