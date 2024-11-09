@@ -73,4 +73,5 @@ public class Account {
     public void setLastSeen(Date lastSeen) {
         this.lastSeen = lastSeen;
     }
+
 }
