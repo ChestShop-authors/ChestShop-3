@@ -2,8 +2,8 @@
 package com.Acrobot.ChestShop.Commands;
 
 import com.Acrobot.ChestShop.Configuration.Messages;
+import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Database.DaoCreator;
-import com.Acrobot.ChestShop.Database.ToggleState;
 import com.google.common.base.Preconditions;
 import com.j256.ormlite.dao.Dao;
 import org.bukkit.OfflinePlayer;
@@ -19,12 +19,12 @@ import java.util.UUID;
  * Command executor class for toggling the ignoring state of players.
  */
 public class Toggle implements CommandExecutor {
-    private static Dao<ToggleState, UUID> toggleStateDao;
+    private static Dao<Account, UUID> accountDao;
 
-    // Static block to initialize the DAO for ToggleState
+    // Static block to initialize the DAO for Account
     static {
         try {
-            toggleStateDao = DaoCreator.getDaoAndCreateTable(ToggleState.class);
+            accountDao = DaoCreator.getDaoAndCreateTable(Account.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,8 +84,8 @@ public class Toggle implements CommandExecutor {
      * @throws SQLException if a database access error occurs.
      */
     public static boolean isIgnoring(UUID playerId) throws SQLException {
-        ToggleState state = toggleStateDao.queryForId(playerId);
-        return state != null && state.isToggled();
+        Account account = accountDao.queryForId(playerId);
+        return account != null && account.isToggled();
     }
 
     /**
@@ -100,14 +100,15 @@ public class Toggle implements CommandExecutor {
         Preconditions.checkNotNull(player);
 
         UUID playerId = player.getUniqueId();
-        ToggleState state = toggleStateDao.queryForId(playerId);
+        Account account = accountDao.queryForId(playerId);
 
-        if (state == null) {
-            state = new ToggleState(playerId, ignoring);
-            toggleStateDao.create(state);
+        if (account == null) {
+            account = new Account(player.getName(), playerId);
+            account.setToggled(ignoring);
+            accountDao.create(account);
         } else {
-            state.setToggled(ignoring);
-            toggleStateDao.update(state);
+            account.setToggled(ignoring);
+            accountDao.update(account);
         }
 
         return ignoring;

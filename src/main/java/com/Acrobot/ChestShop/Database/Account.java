@@ -1,3 +1,4 @@
+// Account.java
 package com.Acrobot.ChestShop.Database;
 
 import com.Acrobot.Breeze.Utils.NameUtil;
@@ -10,7 +11,6 @@ import java.util.UUID;
 
 /**
  * A mapping for an account
- * @author Andrzej Pomirski (Acrobot)
  */
 @DatabaseTable(tableName = "accounts")
 @DatabaseFileName("users.db")
@@ -28,6 +28,9 @@ public class Account {
     @DatabaseField(canBeNull = false, dataType = DataType.DATE_LONG, defaultValue = "0")
     private Date lastSeen;
 
+    @DatabaseField(canBeNull = false, dataType = DataType.BOOLEAN, defaultValue = "false")
+    private boolean toggled;
+
     public Account() {
         //empty constructor, needed for ORMLite
     }
@@ -40,6 +43,7 @@ public class Account {
         this.name = name;
         this.shortName = shortName;
         this.uuid = uuid;
+        this.toggled = false;
     }
 
     public String getName() {
@@ -74,4 +78,11 @@ public class Account {
         this.lastSeen = lastSeen;
     }
 
+    public boolean isToggled() {
+        return toggled;
+    }
+
+    public void setToggled(boolean toggled) {
+        this.toggled = toggled;
+    }
 }
