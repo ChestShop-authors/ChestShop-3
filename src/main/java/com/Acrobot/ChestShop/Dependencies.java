@@ -17,7 +17,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-import java.security.Provider;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
