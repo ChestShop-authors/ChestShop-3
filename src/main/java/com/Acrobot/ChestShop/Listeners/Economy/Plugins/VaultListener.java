@@ -90,7 +90,9 @@ public class VaultListener extends EconomyAdapter {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             return null;
         }
-        return new VaultListener();
+        VaultListener listener = new VaultListener();
+        listener.checkSetup();
+        return listener;
     }
 
     @EventHandler

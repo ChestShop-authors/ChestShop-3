@@ -110,6 +110,9 @@ public class Dependencies implements Listener {
             return false;
         }
 
+        if (!ChestShop.getPlugin().isEnabled()) { // If ChestShop is disabled, we can't register the listener
+            return false;
+        }
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy.getProviderInfo().getName(), economy.getProviderInfo().getVersion()));
 
@@ -256,7 +259,7 @@ public class Dependencies implements Listener {
             this.author = author;
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
