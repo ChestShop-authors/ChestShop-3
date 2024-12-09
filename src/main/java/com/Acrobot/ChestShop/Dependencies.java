@@ -17,6 +17,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import java.security.Provider;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,11 +111,8 @@ public class Dependencies implements Listener {
             return false;
         }
 
-        if (!ChestShop.getPlugin().isEnabled()) { // If ChestShop is disabled, we can't register the listener
-            return false;
-        }
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
-        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy.getProviderInfo().getName(), economy.getProviderInfo().getVersion()));
+        economy.registerProviderChangeListener((EconomyAdapter.ProviderInfo provider) -> ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", provider.getName(), provider.getVersion())));
 
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded!");

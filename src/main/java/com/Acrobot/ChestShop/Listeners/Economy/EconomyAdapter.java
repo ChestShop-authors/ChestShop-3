@@ -13,10 +13,20 @@ import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.Listener;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public abstract class EconomyAdapter implements Listener {
 
-    public abstract ProviderInfo getProviderInfo();
+    protected static final ArrayList<Consumer<ProviderInfo>> providerChangeListeners = new ArrayList<>();
+
+    protected static void notifyProviderChangeListeners(ProviderInfo providerInfo) {
+        providerChangeListeners.forEach(listener -> listener.accept(providerInfo));
+    }
+
+    public void registerProviderChangeListener(Consumer<ProviderInfo> listener) {
+        providerChangeListeners.add(listener);
+    }
 
     public abstract void onAmountCheck(CurrencyAmountEvent event);
 
