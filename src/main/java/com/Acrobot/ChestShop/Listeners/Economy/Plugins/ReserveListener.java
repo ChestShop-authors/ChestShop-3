@@ -30,9 +30,14 @@ public class ReserveListener extends EconomyAdapter {
 
     public ReserveListener(@Nullable EconomyAPI api) {
         ReserveListener.economyAPI = api;
-        if (api != null) {
-            notifyProviderChangeListeners(new ProviderInfo(economyAPI.name(), economyAPI.version()));
+    }
+
+    @Override
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (economyAPI == null) {
+            return null;
         }
+        return new ProviderInfo(economyAPI.name(), economyAPI.version());
     }
 
     public static EconomyAPI getProvider() {

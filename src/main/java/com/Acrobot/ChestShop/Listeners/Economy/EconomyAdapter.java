@@ -11,22 +11,14 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public abstract class EconomyAdapter implements Listener {
 
-    protected static final ArrayList<Consumer<ProviderInfo>> providerChangeListeners = new ArrayList<>();
-
-    protected static void notifyProviderChangeListeners(ProviderInfo providerInfo) {
-        providerChangeListeners.forEach(listener -> listener.accept(providerInfo));
-    }
-
-    public void registerProviderChangeListener(Consumer<ProviderInfo> listener) {
-        providerChangeListeners.add(listener);
-    }
+    @Nullable
+    public abstract ProviderInfo getProviderInfo();
 
     public abstract void onAmountCheck(CurrencyAmountEvent event);
 

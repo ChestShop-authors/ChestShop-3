@@ -52,7 +52,6 @@ public class VaultListener extends EconomyAdapter {
             provider = rsp.getProvider();
             providingPlugin = rsp.getPlugin();
             ChestShop.getBukkitLogger().log(Level.INFO, "Using " + provider.getName() + " as the Economy provider now.");
-            notifyProviderChangeListeners(new ProviderInfo(provider.getName(), providingPlugin.getDescription().getVersion()));
         }
     }
 
@@ -63,6 +62,14 @@ public class VaultListener extends EconomyAdapter {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (provider == null) {
+            return null;
+        }
+        return new ProviderInfo(provider.getName(), providingPlugin.getDescription().getVersion());
     }
 
     public static Economy getProvider() { return provider; }

@@ -14,6 +14,7 @@ import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
@@ -51,6 +52,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import jdk.internal.joptsimple.util.KeyValuePair;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -92,6 +94,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -335,7 +338,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
 
         registerEvent(new Dependencies());
-        
+
         registerEvent(new NameManager());
 
         registerPreShopCreationEvents();
@@ -534,6 +537,13 @@ public class ChestShop extends JavaPlugin {
     public static DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
         final Map<String, Map<String, Integer>> map = ImmutableMap.of(value1, ImmutableMap.of(value2, 1));
         return new DrilldownPie(statId, () -> map);
+    }
+
+    public static DrilldownPie createStaticDrilldownStat(String statId, Callable<EconomyAdapter.ProviderInfo> callableProviderInfo) {
+        return new DrilldownPie(statId, () -> {
+            EconomyAdapter.ProviderInfo providerInfo = callableProviderInfo.call();
+            return ImmutableMap.of(providerInfo.getName(), ImmutableMap.of(providerInfo.getVersion(), 1));
+        });
     }
 
     private int[] getChartArray(boolean value) {

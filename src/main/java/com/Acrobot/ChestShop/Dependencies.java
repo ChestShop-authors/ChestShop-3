@@ -7,6 +7,7 @@ import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
 import com.google.common.collect.ImmutableMap;
+import jdk.internal.joptsimple.util.KeyValuePair;
 import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -111,7 +112,7 @@ public class Dependencies implements Listener {
         }
 
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
-        economy.registerProviderChangeListener((EconomyAdapter.ProviderInfo provider) -> ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", provider.getName(), provider.getVersion())));
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy::getProviderInfo));
 
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded!");
