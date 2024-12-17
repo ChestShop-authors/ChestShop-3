@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -43,7 +44,7 @@ public class ErrorMessageSender implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public static void onMessage(PreTransactionEvent event) {
+    public static void onMessage(PreTransactionEvent event) throws SQLException {
         if (!event.isCancelled()) {
             return;
         }

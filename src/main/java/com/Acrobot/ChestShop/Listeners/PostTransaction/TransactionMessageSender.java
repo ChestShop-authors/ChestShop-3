@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class TransactionMessageSender implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public static void onCurrencyTransfer(CurrencyTransferEvent event) {
+    public static void onCurrencyTransfer(CurrencyTransferEvent event) throws SQLException {
         if (event.getTransactionEvent() == null) {
             return;
         }
@@ -36,7 +37,7 @@ public class TransactionMessageSender implements Listener {
         }
     }
 
-    protected static void sendBuyMessage(CurrencyTransferEvent event) {
+    protected static void sendBuyMessage(CurrencyTransferEvent event) throws SQLException {
         TransactionEvent transactionEvent = event.getTransactionEvent();
         Player player = transactionEvent.getClient();
 
@@ -50,7 +51,7 @@ public class TransactionMessageSender implements Listener {
         }
     }
 
-    protected static void sendSellMessage(CurrencyTransferEvent event) {
+    protected static void sendSellMessage(CurrencyTransferEvent event) throws SQLException {
         TransactionEvent transactionEvent = event.getTransactionEvent();
         Player player = transactionEvent.getClient();
 
