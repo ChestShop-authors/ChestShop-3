@@ -111,7 +111,7 @@ public class Dependencies implements Listener {
         }
 
         ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
-        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy.getProviderInfo().getName(), economy.getProviderInfo().getVersion()));
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy::getProviderInfo));
 
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded!");
@@ -256,7 +256,7 @@ public class Dependencies implements Listener {
             this.author = author;
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();

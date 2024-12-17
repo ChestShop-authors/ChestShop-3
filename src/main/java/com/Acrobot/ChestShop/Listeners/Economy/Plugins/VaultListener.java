@@ -15,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.Plugin;
@@ -64,7 +65,10 @@ public class VaultListener extends EconomyAdapter {
     }
 
     @Override
-    public ProviderInfo getProviderInfo() {
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (provider == null) {
+            return null;
+        }
         return new ProviderInfo(provider.getName(), providingPlugin.getDescription().getVersion());
     }
 
@@ -104,6 +108,17 @@ public class VaultListener extends EconomyAdapter {
     public void onServiceUnregister(ServiceUnregisterEvent event) {
         if (event.getProvider().getProvider() instanceof Economy) {
             updateEconomyProvider();
+        }
+    }
+
+    @EventHandler
+    public void onServerLoad(ServerLoadEvent event) {
+        if (event.getType() == ServerLoadEvent.LoadType.STARTUP) {
+            // Server and plugins are loaded, so we can check for the economy provider now
+            if (provider == null) {
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "No Vault compatible Economy plugin found!");
+                ChestShop.getBukkitServer().getPluginManager().disablePlugin(ChestShop.getPlugin());
+            }
         }
     }
 

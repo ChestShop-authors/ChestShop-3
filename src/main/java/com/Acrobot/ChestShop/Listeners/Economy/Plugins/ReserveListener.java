@@ -33,7 +33,10 @@ public class ReserveListener extends EconomyAdapter {
     }
 
     @Override
-    public ProviderInfo getProviderInfo() {
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (economyAPI == null) {
+            return null;
+        }
         return new ProviderInfo(economyAPI.name(), economyAPI.version());
     }
 

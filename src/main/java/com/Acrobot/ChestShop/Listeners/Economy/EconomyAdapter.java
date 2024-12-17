@@ -11,11 +11,13 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencySubtractEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
 public abstract class EconomyAdapter implements Listener {
 
+    @Nullable
     public abstract ProviderInfo getProviderInfo();
 
     public abstract void onAmountCheck(CurrencyAmountEvent event);
