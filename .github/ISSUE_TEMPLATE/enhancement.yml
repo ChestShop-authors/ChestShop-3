@@ -34,7 +34,7 @@ body:
       options:
         - label: I have checked if there are already similar issues open.
           required: true
-        - label: I have checked that the latest build doesn't already implement the feature.
+        - label: I have checked that the [latest build](https://ci.minebench.de/job/ChestShop-3/) doesn't already implement the feature.
           required: true
 
   - type: textarea
