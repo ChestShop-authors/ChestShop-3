@@ -28,6 +28,9 @@ public class Account {
     @DatabaseField(canBeNull = false, dataType = DataType.DATE_LONG, defaultValue = "0")
     private Date lastSeen;
 
+    @DatabaseField(canBeNull = false, dataType = DataType.BOOLEAN, defaultValue = "0")
+    private boolean ignoreMessages;
+
     public Account() {
         //empty constructor, needed for ORMLite
     }
@@ -72,5 +75,13 @@ public class Account {
 
     public void setLastSeen(Date lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    public boolean isIgnoringMessages() {
+        return ignoreMessages;
+    }
+
+    public void setIgnoreMessages(boolean ignoreMessages) {
+        this.ignoreMessages = ignoreMessages;
     }
 }

@@ -324,8 +324,6 @@ public class ChestShop extends JavaPlugin {
             executorService.awaitTermination(15, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {}
 
-        Toggle.clearToggledPlayers();
-
         if (handler != null) {
             handler.close();
             getLogger().removeHandler(handler);
@@ -356,7 +354,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
-        registerEvent(new PlayerLeave());
         registerEvent(new PlayerTeleport());
 
         registerEvent(new SignParseListener());
