@@ -24,9 +24,9 @@ import java.util.Map;
  * @author Acrobot
  */
 public class TransactionMessageSender implements Listener {
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public static void onCurrencyTransfer(CurrencyTransferEvent event) {
-        if (event.getTransactionEvent() == null) {
+        if (event.getTransactionEvent() == null || !event.wasHandled() || event.getTransactionEvent().isCancelled()) {
             return;
         }
         if (event.getTransactionEvent().getTransactionType() == TransactionEvent.TransactionType.BUY) {

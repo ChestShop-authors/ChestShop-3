@@ -42,7 +42,7 @@ public abstract class EconomyAdapter implements Listener {
      * @param event The CurrencyTransferEvent to process
      */
     protected void processTransfer(CurrencyTransferEvent event) {
-        if (event.wasHandled()) {
+        if (event.wasHandled() || event.getTransactionEvent() == null || event.getTransactionEvent().isCancelled()) {
             return;
         }
 
