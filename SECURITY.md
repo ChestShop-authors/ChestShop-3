@@ -18,10 +18,10 @@ only the latest version will get releases on the main project pages.
 ## Reporting a Vulnerability
 
 If you want to report an issue which might pose a security risk then
-you can do this in private at the following locations:
+you can do this in private:
 
-- [Start a conversation](https://www.spigotmc.org/conversations/add?to=Phoenix616&title=ChestShop%20Vulnerability) with Phoenix616 on SpigotMC.org
-- Message phoenix616 on the [SpigotMC IRC network](https://irc.spi.gt/) (irc.spi.gt)
-- Message phoenix616 on the [Esper.net IRC network](https://esper.net)
+- Open a report [directly on GitHub](https://github.com/ChestShop-authors/ChestShop-3/security/advisories/new)
+- [Start a private conversation](https://www.spigotmc.org/conversations/add?to=Phoenix616&title=ChestShop%20Vulnerability) with Phoenix616 on SpigotMC.org 
+- Message `phoenix616` on the [Esper.net IRC network](https://esper.net)
 
 For issues that do not have security implications please [open an issue](https://github.com/ChestShop-authors/ChestShop-3/issues/new/choose).
