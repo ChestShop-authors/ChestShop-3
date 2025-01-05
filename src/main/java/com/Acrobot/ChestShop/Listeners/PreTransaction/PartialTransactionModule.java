@@ -39,9 +39,14 @@ public class PartialTransactionModule implements Listener {
             return;
         }
 
+        int itemCount = InventoryUtil.countItems(event.getStock());
+        if (itemCount <= 0) {
+            return;
+        }
+
         Player client = event.getClient();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), MathContext.DECIMAL128);
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(itemCount), MathContext.DECIMAL128);
 
         CurrencyAmountEvent currencyAmountEvent = new CurrencyAmountEvent(client);
         ChestShop.callEvent(currencyAmountEvent);
@@ -122,10 +127,15 @@ public class PartialTransactionModule implements Listener {
             return;
         }
 
+        int itemCount = InventoryUtil.countItems(event.getStock());
+        if (itemCount <= 0) {
+            return;
+        }
+
         Player client = event.getClient();
         UUID owner = event.getOwnerAccount().getUuid();
 
-        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(InventoryUtil.countItems(event.getStock())), MathContext.DECIMAL128);
+        BigDecimal pricePerItem = event.getExactPrice().divide(BigDecimal.valueOf(itemCount), MathContext.DECIMAL128);
 
 
         if (Economy.isOwnerEconomicallyActive(event.getOwnerInventory())) {
