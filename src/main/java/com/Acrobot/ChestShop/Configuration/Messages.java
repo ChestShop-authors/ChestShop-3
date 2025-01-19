@@ -37,6 +37,7 @@ public class Messages {
     public static Message iteminfo_leather_color;
     public static Message iteminfo_bundle_items;
     public static Message iteminfo_axolotl_variant;
+    public static Message iteminfo_armor_trim;
     public static Message iteminfo_recipes;
     public static Message iteminfo_map_view;
     public static Message iteminfo_map_location;
