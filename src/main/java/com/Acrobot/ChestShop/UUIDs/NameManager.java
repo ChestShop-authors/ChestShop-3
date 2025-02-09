@@ -244,7 +244,7 @@ public class NameManager implements Listener {
 
             latestAccount.setLastSeen(new Date());
             try {
-                accounts.createOrUpdate(latestAccount);
+                storeAccount(latestAccount);
             } catch (SQLException e) {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
                 return null;
@@ -256,6 +256,16 @@ public class NameManager implements Listener {
         }
 
         return latestAccount;
+    }
+
+    /**
+     * Store an account into the database
+     *
+     * @param account The account to store
+     * @throws SQLException if there was an error updating the account
+     */
+    public static void storeAccount(Account account) throws SQLException {
+        accounts.createOrUpdate(account);
     }
 
     /**

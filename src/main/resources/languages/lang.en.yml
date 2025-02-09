@@ -115,3 +115,5 @@ TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
 TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

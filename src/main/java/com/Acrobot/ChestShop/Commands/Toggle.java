@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Commands;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -11,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * @author KingFaris10
@@ -36,6 +38,13 @@ public class Toggle implements CommandExecutor {
             Messages.TOGGLE_MESSAGES_OFF.sendWithPrefix(player);
         } else {
             Messages.TOGGLE_MESSAGES_ON.sendWithPrefix(player);
+        }
+
+        try {
+            NameManager.storeAccount(account);
+        } catch (Exception e) {
+            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + account + ":", e);
+            Messages.ERROR_OCCURRED.sendWithPrefix(player, "error", "Unable to store account data.");
         }
 
         return true;
