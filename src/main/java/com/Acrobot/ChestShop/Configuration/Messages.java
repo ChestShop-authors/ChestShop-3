@@ -118,6 +118,8 @@ public class Messages {
     public static Message TOGGLE_ACCESS_ON;
     public static Message TOGGLE_ACCESS_OFF;
 
+    public static Message ERROR_OCCURRED;
+
     @Deprecated
     public static String prefix(String message) {
         return Configuration.getColoured(prefix.getLang(null) + message);
