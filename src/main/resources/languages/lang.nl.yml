@@ -17,22 +17,6 @@ iteminfo_book: |-
   &fPagina's: &7%pages
 iteminfo_book_generation: "&fNummer van druk: &7%generation"
 iteminfo_leather_color: "&fLeren Kleur: &7Rood: %colorred, Groen: %colorgreen, Blauw: %colorblue (Hex: #%colorhex)"
-iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
-iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
-iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
-iteminfo_recipes: "&fRecipe Knowledge:"
-iteminfo_map_view: |-
-  &fMap ID: &7%id
-  &fMap World: &7%world
-  &fMap Center: &7%x/%z
-  &fMap Locked: &7locked
-iteminfo_map_location: "&fMap Location: &7%location"
-iteminfo_tropical_fish: |-
-  &fFish Pattern: &7%pattern
-  &fFish Pattern Color: &7%patterncolor
-  &fFish Body Color: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
-iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -68,7 +52,6 @@ INVALID_SHOP_DETECTED: "Deze winkel kan niet gebruikt worden!"
 INVALID_SHOP_PRICE: "De winkel heeft een ongeldige prijs!"
 INVALID_SHOP_QUANTITY: "De winkel heeft een ongeldige hoeveelheid!"
 CANNOT_ACCESS_THE_CHEST: "Je bent niet bevoegd om deze kist te openen!"
-CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Verkoopprijs is hoger dan de koopprijs!"
 SELL_PRICE_ABOVE_MAX: "Verkoopprijs %price is boven de maximumprijs van %maxprice!"
 SELL_PRICE_BELOW_MIN: "Verkoopprijs %price is onder de minimumprijs van %min!"
@@ -94,4 +77,3 @@ TOGGLE_MESSAGES_OFF: "Je ontvangt geen berichten meer van je winkel(s)."
 TOGGLE_MESSAGES_ON: "Je ontvangt nu berichten van je winkel(s)."
 TOGGLE_ACCESS_ON: "Je kunt niet meer handelen in winkels waar je toegang tot hebt"
 TOGGLE_ACCESS_OFF: "Je kunt nu handelen in winkels waar je toegang tot hebt"
-ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
