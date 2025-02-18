@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fAutor książki: &7%author
   &fStrony książki: &7%pages
 iteminfo_book_generation: "&fGenerowanie Książki: &7%generation"
+iteminfo_leather_color: "&fKolor skóry: &7Czerwony: %colorred, zielony: %colorgreen, niebieski: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPakiet przedmiotów: &7%itemcount"
+iteminfo_axolotl_variant: "&fWariant Aksolotla: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fPrzepis:"
+iteminfo_map_view: |-
+  &fID mapy: &7%id
+  &fŚwiat mapy: &7%world
+  &fCentrum mapy: &7%x/%z
+  &fZablokowane mapy: &7zablokowane
+iteminfo_map_location: "&fLokalizacja mapy: &7%location"
+iteminfo_tropical_fish: |-
+  &fWzór ryby: &7%pattern
+  &fKolor wzoru ryby: &7%patterncolor
+  &fKolor ciała ryby: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fNaładowany pocisk kuszy:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fOpis:
   &r%lore
@@ -51,6 +68,7 @@ INVALID_SHOP_DETECTED: "Sklep nie może być używany (być może brakuje skrzyn
 INVALID_SHOP_PRICE: "Zła cena!"
 INVALID_SHOP_QUANTITY: "Sklep ma podana niewlasciwa ilosc produktu!"
 CANNOT_ACCESS_THE_CHEST: "Nie masz uprawnień dostępu do tej skrzyni!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Nie możesz zmienić tylnej strony znaku sklepu!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Cena sprzedaży jest wyższa od ceny zakupu!"
 SELL_PRICE_ABOVE_MAX: "Cena sprzedaży %price jest wyższa niż maksymalna %maxprice!"
 SELL_PRICE_BELOW_MIN: "Cena sprzedaży %price jest niższa niż minimalna %minprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Nie będziesz już otrzymywać wiadomości ze swoich sklep
 TOGGLE_MESSAGES_ON: "Od teraz będziesz otrzymywał wiadomości ze swoich sklepów."
 TOGGLE_ACCESS_ON: "Nie możesz już handlować w sklepach, do których masz dostęp"
 TOGGLE_ACCESS_OFF: "Możesz teraz handlować w sklepach, do których masz dostęp"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
