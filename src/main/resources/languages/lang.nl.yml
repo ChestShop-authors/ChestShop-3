@@ -16,6 +16,7 @@ iteminfo_book: |-
   &fAuteur: &7%author
   &fPagina's: &7%pages
 iteminfo_book_generation: "&fNummer van druk: &7%generation"
+iteminfo_leather_color: "&fLeren Kleur: &7Rood: %colorred, Groen: %colorgreen, Blauw: %colorblue (Hex: #%colorhex)"
 iteminfo_lore: |-
   &fLore:
   &r%lore
