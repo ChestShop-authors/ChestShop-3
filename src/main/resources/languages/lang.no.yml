@@ -16,6 +16,22 @@ iteminfo_book: |-
   &fForfatter: &7%author
   &fSidetall: &7%pages
 iteminfo_book_generation: "&fBokgenerering: &7%generation"
+iteminfo_leather_color: "&fLærfarge: &7Rød: %colorred, Grønn: %colorgreen, Blå: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPakkeitems: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_recipes: "&fOppskriftskunnskap:"
+iteminfo_map_view: |-
+  &fKart ID: &7%id
+  &fKart Verden: &7%world
+  &fKartsenter: &7%x/%z
+  &fKart låst: &7locked
+iteminfo_map_location: "&Kartplassering: &7%location"
+iteminfo_tropical_fish: |-
+  &fFiskemønster: &7%pattern
+  &fFiskemønster farge: &7%patterncolor
+  &fFiskekropp farge: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fLadet armbrøstprosjektil:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fBeskrivelse:
   &r%lore
@@ -51,6 +67,7 @@ INVALID_SHOP_DETECTED: "Denne butikken kan ikke brukes!"
 INVALID_SHOP_PRICE: "Butikken har en ugyldig pris!"
 INVALID_SHOP_QUANTITY: "Butikken har et ugyldig antall!"
 CANNOT_ACCESS_THE_CHEST: "Du har ikke tilgang til denne kisten!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Du kan ikke endre baksiden av et butikkskilt!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Salgsprisen er over kjøpsprisen!"
 SELL_PRICE_ABOVE_MAX: "Salgsprisen %price er over maksimumsbeløpet %maxprice!"
 SELL_PRICE_BELOW_MIN: "Salgsprisen %price er under minimumsbeløpet %minprice!"
