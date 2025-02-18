@@ -19,7 +19,6 @@ iteminfo_book_generation: "&fGeração do livro: &7%generation"
 iteminfo_leather_color: "&fCor do Couro: &7Vermelho: %colorred, Verde: %colorgreen, Azul: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fPacote de Itens: &7%itemcount"
 iteminfo_axolotl_variant: "&fVariante do Axolote: &7%variant"
-iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
 iteminfo_recipes: "&fConhecimento de Receita:"
 iteminfo_map_view: |-
   &fMapa ID: &7%id
@@ -94,4 +93,3 @@ TOGGLE_MESSAGES_OFF: "Você não irá receber mais mensagens de sua(s) loja(s)."
 TOGGLE_MESSAGES_ON: "Você agora irá receber mensagens de sua(s) loja(s)."
 TOGGLE_ACCESS_ON: "Você não pode mais trocar em lojas às quais você tem acesso"
 TOGGLE_ACCESS_OFF: "Agora você pode trocar em lojas às quais você tem acesso"
-ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
