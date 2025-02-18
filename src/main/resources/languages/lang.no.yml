@@ -19,6 +19,7 @@ iteminfo_book_generation: "&fBokgenerering: &7%generation"
 iteminfo_leather_color: "&fLærfarge: &7Rød: %colorred, Grønn: %colorgreen, Blå: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fPakkeitems: &7%itemcount"
 iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
 iteminfo_recipes: "&fOppskriftskunnskap:"
 iteminfo_map_view: |-
   &fKart ID: &7%id
@@ -93,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Du vil ikke lenger motta meldinger fra butikken(e) din(e).
 TOGGLE_MESSAGES_ON: "Du vil nå motta meldinger fra butikken(e) din(e)."
 TOGGLE_ACCESS_ON: "Du kan ikke lenger handle i butikker du har tilgang til"
 TOGGLE_ACCESS_OFF: "Du kan nå handle i butikker du har tilgang til"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
