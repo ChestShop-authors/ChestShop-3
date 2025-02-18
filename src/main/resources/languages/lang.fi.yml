@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fKirjan tekijä: &7%author
   &fKirjan sivumäärä: &7%pages
 iteminfo_book_generation: "&fKirjan sukupolvi: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fInfoteksti:
   &r%lore
@@ -51,6 +68,12 @@ INVALID_SHOP_DETECTED: "Kauppaa ei voi käyttää!"
 INVALID_SHOP_PRICE: "Kaupassa on virheellinen hinta!"
 INVALID_SHOP_QUANTITY: "Kaupassa on virheellinen tavaramäärä!"
 CANNOT_ACCESS_THE_CHEST: "Sinulla ei ole oikeuksia käyttää tätä arkkua!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
+SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
+BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
+BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
 CLICK_TO_AUTOFILL_ITEM: "Napsauta kylttiä tuotteen kanssa, jota tämä kauppa ostaa/myy!"
 NO_ITEM_IN_HAND: "Sinulla ei ole kohdetta kädessäsi automaattista täyttämistä varten!"
 PROTECTED_SHOP: "Suojattu kauppa onnistuneesti LWC:llä!"
@@ -71,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Et enää saa viestejä kaupoistasi."
 TOGGLE_MESSAGES_ON: "Saat nyt viestejä kaupoistasi."
 TOGGLE_ACCESS_ON: "Et voi enää tehdä vaihtokauppaa kauppojen kanssa, joihin sinulla on pääsy"
 TOGGLE_ACCESS_OFF: "Voit nyt tehdä vaihtokauppaa kauppojen kanssa, joihin sinulla on pääsy"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
