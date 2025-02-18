@@ -17,6 +17,22 @@ iteminfo_book: |-
   &fNombre del autor: &7%author
   &fNumero de paginas: &7%pages
 iteminfo_book_generation: "&fGeneración de libros: &7%generation"
+iteminfo_leather_color: "&fColor de cuero: &7Red: %colorred, Verde: %colorgreen, Azul: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBulto de items: &7%itemcount"
+iteminfo_axolotl_variant: "&fVariante de Axolote: &7%variant"
+iteminfo_recipes: "&fConocimiento de la receta:"
+iteminfo_map_view: |-
+  &fID del Mapa: &7%id
+  &fMundo del Mapa: &7%world
+  &fCentro del Mapa: &7%x/%z
+  &fMapa bloqueado: &7locked
+iteminfo_map_location: "&fUbicación del Mapa: &7%location"
+iteminfo_tropical_fish: |-
+  &fPatrón de Pesca: &7%pattern
+  &fColor del Patrón de Pesca: &7%patterncolor
+  &fColor Del Cuerpo Del Pescado: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fProyectil de Ballesta Cargado:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
 METRICS: |-
