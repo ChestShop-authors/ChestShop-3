@@ -1,7 +1,10 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "#chestshop IRC channel on irc.spi.gt"
-    url: "https://kiwiirc.com/client/irc.spi.gt/#chestshop"
+  - name: "#chestshop IRC channel on ircesper.net"
+    url: "https://kiwiirc.com/client/irc.esper.net/#chestshop"
+    about: Live chat with the devs and other members of the community
+  - name: "ChestShop channel on Phoenix616's Discord"
+    url: "https://discord.gg/FuTujm6Egd"
     about: Live chat with the devs and other members of the community
   - name: SpigotMC discussion thread
     url: https://www.spigotmc.org/threads/chestshop.295890/

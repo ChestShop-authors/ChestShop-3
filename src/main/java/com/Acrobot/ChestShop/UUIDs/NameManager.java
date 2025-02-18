@@ -12,6 +12,7 @@ import com.Acrobot.ChestShop.Events.AccountAccessEvent;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.j256.ormlite.dao.Dao;
 
@@ -36,6 +37,8 @@ import java.util.logging.Level;
  */
 @SuppressWarnings("UnusedAssignment") // I deliberately set the variables to null while initializing
 public class NameManager implements Listener {
+    private static final Object accountsLock = new Object();
+
     private static Dao<Account, String> accounts;
 
     private static SimpleCache<String, Account> usernameToAccount = new SimpleCache<>(Properties.CACHE_SIZE);
@@ -64,7 +67,7 @@ public class NameManager implements Listener {
      */
     public static Account getOrCreateAccount(OfflinePlayer player) {
         Preconditions.checkNotNull(player.getName(), "Name of player " + player.getUniqueId() + " is null?");
-        Preconditions.checkArgument(!(player instanceof Player) || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
+        Preconditions.checkArgument(player instanceof Player || !Properties.ENSURE_CORRECT_PLAYERID || uuidVersion < 0 || player.getUniqueId().version() == uuidVersion,
                 "Invalid OfflinePlayer! " + player.getUniqueId() + " has version " + player.getUniqueId().version() + " and not server version " + uuidVersion + ". " +
                         "If you believe that is an error and your setup allows such UUIDs then set the ENSURE_CORRECT_PLAYERID config option to false.");
         return getOrCreateAccount(player.getUniqueId(), player.getName());
@@ -97,20 +100,22 @@ public class NameManager implements Listener {
      */
     public static Account getAccount(UUID uuid) {
         try {
-            return uuidToAccount.get(uuid, () -> {
-                try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", new SelectArg(uuid)).queryForFirst();
-                    if (account != null) {
-                        account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        shortToAccount.put(account.getShortName(), account);
-                        usernameToAccount.put(account.getName(), account);
-                        return account;
+            synchronized (accountsLock) {
+                return uuidToAccount.get(uuid, () -> {
+                    try {
+                        Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("uuid", new SelectArg(uuid)).queryForFirst();
+                        if (account != null) {
+                            account.setUuid(uuid); // HOW IS IT EVEN POSSIBLE THAT UUID IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            shortToAccount.put(account.getShortName(), account);
+                            usernameToAccount.put(account.getName(), account);
+                            return account;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + uuid + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + uuid + ":", e);
-                }
-                throw new Exception("Could not find account for " + uuid);
-            });
+                    throw new Exception("Could not find account for " + uuid);
+                });
+            }
         } catch (ExecutionException ignored) {
             return null;
         }
@@ -127,19 +132,21 @@ public class NameManager implements Listener {
         Preconditions.checkNotNull(fullName, "fullName cannot be null!");
         Preconditions.checkArgument(!fullName.isEmpty(), "fullName cannot be empty!");
         try {
-            return usernameToAccount.get(fullName, () -> {
-                try {
-                    Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", new SelectArg(fullName)).queryForFirst();
-                    if (account != null) {
-                        account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        shortToAccount.put(account.getShortName(), account);
-                        return account;
+            synchronized (accountsLock) {
+                return usernameToAccount.get(fullName, () -> {
+                    try {
+                        Account account = accounts.queryBuilder().orderBy("lastSeen", false).where().eq("name", new SelectArg(fullName)).queryForFirst();
+                        if (account != null) {
+                            account.setName(fullName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            shortToAccount.put(account.getShortName(), account);
+                            return account;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + fullName + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + fullName + ":", e);
-                }
-                throw new Exception("Could not find account for " + fullName);
-            });
+                    throw new Exception("Could not find account for " + fullName);
+                });
+            }
         } catch (ExecutionException ignored) {
             return null;
         }
@@ -167,18 +174,20 @@ public class NameManager implements Listener {
         Account account = null;
 
         try {
-            account = shortToAccount.get(shortName, () -> {
-                try {
-                    Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
-                    if (a != null) {
-                        a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
-                        return a;
+            synchronized (accountsLock) {
+                account = shortToAccount.get(shortName, () -> {
+                    try {
+                        Account a = accounts.queryBuilder().where().eq("shortName", new SelectArg(shortName)).queryForFirst();
+                        if (a != null) {
+                            a.setShortName(shortName); // HOW IS IT EVEN POSSIBLE THAT THE NAME IS NOT SET EVEN IF WE HAVE FOUND THE PLAYER?!
+                            return a;
+                        }
+                    } catch (SQLException e) {
+                        ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
                     }
-                } catch (SQLException e) {
-                    ChestShop.getBukkitLogger().log(Level.WARNING, "Error while getting account for " + shortName + ":", e);
-                }
-                throw new Exception("Could not find account for " + shortName);
-            });
+                    throw new Exception("Could not find account for " + shortName);
+                });
+            }
         } catch (ExecutionException ignored) {}
         return account;
     }
@@ -222,29 +231,41 @@ public class NameManager implements Listener {
         final UUID uuid = player.getUniqueId();
 
         Account latestAccount = null;
-        try {
-            latestAccount = accounts.queryBuilder().where().eq("uuid", new SelectArg(uuid)).and().eq("name", new SelectArg(player.getName())).queryForFirst();
-        } catch (SQLException e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
-        }
+        synchronized (accountsLock) {
+            try {
+                latestAccount = accounts.queryBuilder().where().eq("uuid", new SelectArg(uuid)).and().eq("name", new SelectArg(player.getName())).queryForFirst();
+            } catch (SQLException e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while searching for latest account of " + player.getName() + "/" + uuid + ":", e);
+            }
 
-        if (latestAccount == null) {
-            latestAccount = new Account(player.getName(), getNewShortenedName(player), player.getUniqueId());
-        }
+            if (latestAccount == null) {
+                latestAccount = new Account(player.getName(), getNewShortenedName(player), player.getUniqueId());
+            }
 
-        latestAccount.setLastSeen(new Date());
-        try {
-            accounts.createOrUpdate(latestAccount);
-        } catch (SQLException e) {
-            ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
-            return null;
-        }
+            latestAccount.setLastSeen(new Date());
+            try {
+                storeAccount(latestAccount);
+            } catch (SQLException e) {
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating account " + latestAccount + ":", e);
+                return null;
+            }
 
-        usernameToAccount.put(latestAccount.getName(), latestAccount);
-        uuidToAccount.put(uuid, latestAccount);
-        shortToAccount.put(latestAccount.getShortName(), latestAccount);
+            usernameToAccount.put(latestAccount.getName(), latestAccount);
+            uuidToAccount.put(uuid, latestAccount);
+            shortToAccount.put(latestAccount.getShortName(), latestAccount);
+        }
 
         return latestAccount;
+    }
+
+    /**
+     * Store an account into the database
+     *
+     * @param account The account to store
+     * @throws SQLException if there was an error updating the account
+     */
+    public static void storeAccount(Account account) throws SQLException {
+        accounts.createOrUpdate(account);
     }
 
     /**
@@ -334,7 +355,14 @@ public class NameManager implements Listener {
         try {
             accounts = DaoCreator.getDaoAndCreateTable(Account.class);
 
-            adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            try {
+                adminAccount = new Account(Properties.ADMIN_SHOP_NAME, Bukkit.getOfflinePlayer(Properties.ADMIN_SHOP_NAME).getUniqueId());
+            } catch (NullPointerException ratelimitedException) {
+                // This happens when the server was ratelimited by Mojang. Unfortunately there is no nice way to check that.
+                // We fall back to the method used by CraftBukkit to generate an OfflinePlayer's UUID
+                adminAccount = new Account(Properties.ADMIN_SHOP_NAME, UUID.nameUUIDFromBytes(("OfflinePlayer:" + Properties.ADMIN_SHOP_NAME).getBytes(Charsets.UTF_8)));
+                ChestShop.getBukkitLogger().log(Level.WARNING, "Your server appears to be ratelimited by Mojang and can't query UUID data from their API. If you run into issues with admin shops please report them!");
+            }
             accounts.createOrUpdate(adminAccount);
 
             if (!Properties.SERVER_ECONOMY_ACCOUNT.isEmpty()) {
@@ -355,7 +383,7 @@ public class NameManager implements Listener {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while trying to setup accounts", e);
         }
     }
 

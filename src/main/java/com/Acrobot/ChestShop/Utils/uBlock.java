@@ -18,6 +18,8 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getLeftSide;
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getRightSide;
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
 
 /**
@@ -178,15 +180,15 @@ public class uBlock {
         List<Sign> result = new ArrayList<>();
 
         if (chestShopInventoryHolder instanceof DoubleChest) {
-            BlockState leftChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getLeftSide();
-            BlockState rightChestSide = (BlockState) ((DoubleChest) chestShopInventoryHolder).getRightSide();
+            InventoryHolder leftChestSide = getLeftSide((DoubleChest) chestShopInventoryHolder, false);
+            InventoryHolder rightChestSide = getRightSide((DoubleChest) chestShopInventoryHolder, false);
 
-            if (leftChestSide == null || rightChestSide == null) {
+            if (!(leftChestSide instanceof BlockState) || !(rightChestSide instanceof BlockState)) {
                 return result;
             }
 
-            Block leftChest = leftChestSide.getBlock();
-            Block rightChest = rightChestSide.getBlock();
+            Block leftChest = ((BlockState) leftChestSide).getBlock();
+            Block rightChest = ((BlockState) rightChestSide).getBlock();
 
             if (ChestShopSign.isShopBlock(leftChest)) {
                 result.addAll(uBlock.findConnectedShopSigns(leftChest));
@@ -221,7 +223,7 @@ public class uBlock {
             Sign sign = (Sign) faceBlock.getState();
 
             Container signContainer = findConnectedContainer(sign);
-            if (!chestBlock.equals(signContainer.getBlock())) {
+            if (signContainer == null || !chestBlock.equals(signContainer.getBlock())) {
                 continue;
             }
 
@@ -317,6 +319,7 @@ public class uBlock {
     }
 
     public static boolean couldBeShopContainer(InventoryHolder holder) {
-        return holder instanceof Container && couldBeShopContainer(((Container) holder).getBlock());
+        return (holder instanceof Container && couldBeShopContainer(((Container) holder).getBlock()))
+                    || (holder instanceof DoubleChest && couldBeShopContainer(getLeftSide((DoubleChest) holder, false)));
     }
 }

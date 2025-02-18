@@ -1,6 +1,6 @@
 name: Bug report
 description: Report an error that happens in the plugin.
-labels: []
+labels: ["unconfirmed bug"]
 body:
   - type: markdown
     attributes:
@@ -28,6 +28,14 @@ body:
       description: The full plugin version that you are running from `/version ChestShop`
     validations:
       required: true
+  - type: checkboxes
+    attributes:
+      label: Version Check
+      description: Please make sure your specified version meets the following. If it doesn't then your issue can most likely be resolved by updating.
+      options:
+        - label: It is the latest development version available from https://ci.minebench.de/job/ChestShop-3/.
+        - label: The version [has support](https://github.com/ChestShop-authors/ChestShop-3/security/policy#supported-versions) for this type of issue.
+          required: true
   - type: textarea
     attributes:
       label: Plugin Config
@@ -37,7 +45,7 @@ body:
           <summary>Config</summary>
 
          ```yaml
-         [Put the config here]
+         PUT THE CONFIG HERE, DO NOT REPLACE THE WHOLE TEXT!
          ```
 
         </details>
@@ -59,7 +67,7 @@ body:
           <summary>Log</summary>
 
           ```
-          [Your log here]
+         PUT YOUR LOG HERE, DO NOT REPLACE THE WHOLE TEXT!
           ```
 
         </details>
@@ -78,9 +86,7 @@ body:
       description: Please agree to the following.
       options:
         - label: I have checked if there are already similar issues open.
-        - label: I am running the latest development version available from https://ci.minebench.de/job/ChestShop-3/.
-        - label: The version [has support](https://github.com/ChestShop-authors/ChestShop-3/security/policy#supported-versions) for this type of issue.
-        - label: I have provided all requested information and agree to the terms of the [project's license](https://github.com/ChestShop-authors/ChestShop-3/blob/master/LICENSE)
+        - label: I have provided all requested information and agree to the terms of the [project's license](https://github.com/ChestShop-authors/ChestShop-3/blob/master/LICENSE), especially the part about no warranty.
           required: true
 
   - type: textarea

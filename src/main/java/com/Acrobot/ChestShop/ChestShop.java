@@ -14,6 +14,7 @@ import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
 import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
@@ -89,8 +90,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -105,6 +111,9 @@ public class ChestShop extends JavaPlugin {
     private static ChestShop plugin;
     private static Server server;
     private static PluginDescriptionFile description;
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    private static Metrics bStats;
 
     private static BukkitAudiences audiences;
 
@@ -112,6 +121,7 @@ public class ChestShop extends JavaPlugin {
     private static ItemDatabase itemDatabase;
 
     private static Logger logger;
+    private static Logger shopLogger;
     private FileHandler handler;
 
     private List<PluginCommand> commands = new ArrayList<>();
@@ -119,6 +129,8 @@ public class ChestShop extends JavaPlugin {
     public ChestShop() {
         dataFolder = getDataFolder();
         logger = getLogger();
+        shopLogger = Logger.getLogger("ChestShop Shops");
+        shopLogger.setParent(logger);
         description = getDescription();
         server = getServer();
         plugin = this;
@@ -131,6 +143,7 @@ public class ChestShop extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        bStats = new Metrics(this, 1109);
         audiences = BukkitAudiences.create(this);
         turnOffDatabaseLogging();
         if (!handleMigrations()) {
@@ -158,20 +171,6 @@ public class ChestShop extends JavaPlugin {
 
         registerPluginMessagingChannels();
 
-        if (Properties.LOG_TO_FILE) {
-            File log = loadFile("ChestShop.log");
-
-            FileHandler handler = loadHandler(log.getAbsolutePath());
-            handler.setFormatter(new FileFormatter());
-
-            this.handler = handler;
-            logger.addHandler(handler);
-        }
-
-        if (!Properties.LOG_TO_CONSOLE) {
-            logger.setUseParentHandlers(false);
-        }
-
         startStatistics();
         startBuildNotificatier();
         startUpdater();
@@ -179,9 +178,11 @@ public class ChestShop extends JavaPlugin {
 
     private void registerCommand(String name, CommandExecutor executor, Permission permission) {
         PluginCommand command = getCommand(name);
-        command.setExecutor(executor);
-        command.setPermission(permission.toString());
-        commands.add(command);
+        if (command != null) {
+            command.setExecutor(executor);
+            command.setPermission(permission.toString());
+            commands.add(command);
+        }
     }
 
     public void loadConfig() {
@@ -192,6 +193,22 @@ public class ChestShop extends JavaPlugin {
         NameManager.load();
 
         commands.forEach(c -> c.setPermissionMessage(Messages.ACCESS_DENIED.getTextWithPrefix(null)));
+
+        if (handler != null) {
+            shopLogger.removeHandler(handler);
+        }
+
+        if (Properties.LOG_TO_FILE) {
+            if (handler == null) {
+                File log = loadFile("ChestShop.log");
+
+                handler = loadHandler(log.getAbsolutePath());
+                handler.setFormatter(new FileFormatter());
+            }
+            shopLogger.addHandler(handler);
+        }
+
+        shopLogger.setUseParentHandlers(Properties.LOG_TO_CONSOLE);
     }
 
     private void turnOffDatabaseLogging() {
@@ -244,7 +261,7 @@ public class ChestShop extends JavaPlugin {
             try {
                 previousVersion.save(versionFile);
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().log(java.util.logging.Level.SEVERE, "Unable to save new database version " + Migrations.CURRENT_DATABASE_VERSION, e);
             }
         }
 
@@ -261,7 +278,7 @@ public class ChestShop extends JavaPlugin {
             try {
                 previousVersion.save(versionFile);
             } catch (IOException e) {
-                e.printStackTrace();
+                getLogger().log(java.util.logging.Level.SEVERE, "Unable to save new database version " + newVersion, e);
             }
         }
         return true;
@@ -282,7 +299,7 @@ public class ChestShop extends JavaPlugin {
 
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                getBukkitLogger().log(java.util.logging.Level.SEVERE, "Unable to load file " + file.getName(), e);
             }
         }
 
@@ -295,16 +312,17 @@ public class ChestShop extends JavaPlugin {
         try {
             handler = new FileHandler(path, true);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            getBukkitLogger().log(java.util.logging.Level.SEVERE, "Unable to load handler " + path, ex);
         }
 
         return handler;
     }
 
     public void onDisable() {
-        getServer().getScheduler().cancelTasks(this);
-
-        Toggle.clearToggledPlayers();
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(15, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {}
 
         if (handler != null) {
             handler.close();
@@ -317,7 +335,7 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new com.Acrobot.ChestShop.Plugins.ChestShop()); //Chest protection
 
         registerEvent(new Dependencies());
-        
+
         registerEvent(new NameManager());
 
         registerPreShopCreationEvents();
@@ -336,7 +354,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new PlayerConnect());
         registerEvent(new PlayerInteract());
         registerEvent(new PlayerInventory());
-        registerEvent(new PlayerLeave());
         registerEvent(new PlayerTeleport());
 
         registerEvent(new SignParseListener());
@@ -436,15 +453,20 @@ public class ChestShop extends JavaPlugin {
     }
 
     private void startStatistics() {
-        Metrics bStats = new Metrics(this, 1109);
-        try {
-            String dist = new JarFile(this.getFile()).getManifest().getMainAttributes().getValue("Distribution-Type");
+        try (JarFile jarFile = new JarFile(this.getFile())) {
+            String dist = jarFile.getManifest().getMainAttributes().getValue("Distribution-Type");
             bStats.addCustomChart(new SimplePie("distributionType", () -> dist));
         } catch (IOException ignored) {}
 
         String serverVersion = getServer().getBukkitVersion().split("-")[0];
         bStats.addCustomChart(createStaticDrilldownStat("versionMcSelf", serverVersion, getDescription().getVersion()));
         bStats.addCustomChart(createStaticDrilldownStat("versionSelfMc", getDescription().getVersion(), serverVersion));
+
+        bStats.addCustomChart(createStaticDrilldownStat("serverTypeVersionSelf", getServer().getName(), getDescription().getVersion()));
+        bStats.addCustomChart(createStaticDrilldownStat("versionSelfServerType", getDescription().getVersion(), getServer().getName()));
+
+        bStats.addCustomChart(createStaticDrilldownStat("versionMcServerType", serverVersion, getServer().getName()));
+        bStats.addCustomChart(createStaticDrilldownStat("serverTypeVersionMc", getServer().getName(), serverVersion));
 
         String javaVersion = System.getProperty("java.version");
         bStats.addCustomChart(createStaticDrilldownStat("versionJavaSelf", javaVersion, getDescription().getVersion()));
@@ -468,6 +490,20 @@ public class ChestShop extends JavaPlugin {
         bStats.addCustomChart(new SimplePie("includeSettingsInMetrics", () -> Properties.INCLUDE_SETTINGS_IN_METRICS ? "enabled" : "disabled"));
         if (!Properties.INCLUDE_SETTINGS_IN_METRICS) return;
 
+        bStats.addCustomChart(new SimplePie("ensure-correct-playerid", () -> Properties.ENSURE_CORRECT_PLAYERID ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-sign-chest-open", () -> Properties.ALLOW_SIGN_CHEST_OPEN ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("uses-server-economy-account", () -> !Properties.SERVER_ECONOMY_ACCOUNT.isEmpty() ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("uses-server-economy-account-uuid", () -> !Properties.SERVER_ECONOMY_ACCOUNT_UUID.equals(new UUID(0, 0)) ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-partial-transactions", () -> Properties.ALLOW_PARTIAL_TRANSACTIONS ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("bungeecord-messages", () -> Properties.BUNGEECORD_MESSAGES ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-multiple-shops-at-one-block", () -> Properties.ALLOW_MULTIPLE_SHOPS_AT_ONE_BLOCK ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("allow-partial-transactions", () -> Properties.ALLOW_PARTIAL_TRANSACTIONS ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("log-to-console", () -> Properties.LOG_TO_CONSOLE ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("log-to-file", () -> Properties.LOG_TO_FILE ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("auto-update", () -> !Properties.TURN_OFF_UPDATES ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("release-notifications", () -> !Properties.TURN_OFF_UPDATE_NOTIFIER ? "enabled" : "disabled"));
+        bStats.addCustomChart(new SimplePie("dev-build-notifications", () -> !Properties.TURN_OFF_DEV_UPDATE_NOTIFIER ? "enabled" : "disabled"));
+
         bStats.addCustomChart(new AdvancedBarChart("pluginProperties", () -> {
             Map<String, int[]> map = new LinkedHashMap<>();
             map.put("ensure-correct-playerid", getChartArray(Properties.ENSURE_CORRECT_PLAYERID));
@@ -485,15 +521,28 @@ public class ChestShop extends JavaPlugin {
             map.put("bungeecord-messages", getChartArray(Properties.BUNGEECORD_MESSAGES));
             map.put("log-to-console", getChartArray(Properties.LOG_TO_CONSOLE));
             map.put("log-to-file", getChartArray(Properties.LOG_TO_FILE));
+            map.put("auto-update", getChartArray(!Properties.TURN_OFF_UPDATES));
+            map.put("release-notifications", getChartArray(!Properties.TURN_OFF_UPDATE_NOTIFIER));
+            map.put("dev-build-notifications", getChartArray(!Properties.TURN_OFF_DEV_UPDATE_NOTIFIER));
             return map;
         }));
         bStats.addCustomChart(new SimpleBarChart("shopContainers",
                 () -> Properties.SHOP_CONTAINERS.stream().map(Material::name).collect(Collectors.toMap(k -> k, k -> 1))));
     }
 
-    private DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
+    public static DrilldownPie createStaticDrilldownStat(String statId, String value1, String value2) {
         final Map<String, Map<String, Integer>> map = ImmutableMap.of(value1, ImmutableMap.of(value2, 1));
         return new DrilldownPie(statId, () -> map);
+    }
+
+    public static DrilldownPie createStaticDrilldownStat(String statId, Callable<EconomyAdapter.ProviderInfo> callableProviderInfo) {
+        return new DrilldownPie(statId, () -> {
+            EconomyAdapter.ProviderInfo providerInfo = callableProviderInfo.call();
+            if (providerInfo == null) {
+                return ImmutableMap.of();
+            }
+            return ImmutableMap.of(providerInfo.getName(), ImmutableMap.of(providerInfo.getVersion(), 1));
+        });
     }
 
     private int[] getChartArray(boolean value) {
@@ -505,10 +554,18 @@ public class ChestShop extends JavaPlugin {
     private void startUpdater() {
         if (Properties.TURN_OFF_UPDATES) {
             getLogger().info("Auto-updater is disabled. If you want the plugin to automatically download new releases then set 'TURN_OFF_UPDATES' to 'false' in your config.yml!");
+            if (!Properties.TURN_OFF_UPDATE_NOTIFIER) {
+                final Updater updater = new Updater(this, getPluginName().toLowerCase(Locale.ROOT), this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+                runInAsyncThread(() -> {
+                    if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                        getLogger().info("There is a new version available: " + updater.getLatestName() + ". You can download it from https://modrinth.com/plugin/" + getPluginName().toLowerCase(Locale.ROOT));
+                    }
+                });
+            }
             return;
         }
 
-        new Updater(this, PROJECT_BUKKITDEV_ID, this.getFile(), Updater.UpdateType.DEFAULT, true);
+        new Updater(this, getPluginName().toLowerCase(Locale.ROOT), this.getFile(), Updater.UpdateType.DEFAULT, true);
     }
 
     private static final String PROJECT_JENKINS_JOB_URL = "https://ci.minebench.de/job/ChestShop-3/";
@@ -529,6 +586,10 @@ public class ChestShop extends JavaPlugin {
 
     public static File getFolder() {
         return dataFolder;
+    }
+
+    public static Logger getShopLogger() {
+        return shopLogger;
     }
 
     public static Logger getBukkitLogger() {
@@ -559,6 +620,10 @@ public class ChestShop extends JavaPlugin {
 
     public static ChestShop getPlugin() {
         return plugin;
+    }
+
+    public static Metrics getMetrics() {
+        return bStats;
     }
 
     public static BukkitAudiences getAudiences() {
@@ -599,5 +664,9 @@ public class ChestShop extends JavaPlugin {
 
             Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         }
+    }
+
+    public static void runInAsyncThread(Runnable runnable) {
+        executorService.submit(runnable);
     }
 }

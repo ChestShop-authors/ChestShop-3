@@ -21,6 +21,7 @@ iteminfo_book_generation: "&fBook Generation: &7%generation"
 iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
 iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
 iteminfo_recipes: "&fRecipe Knowledge:"
 iteminfo_map_view: |-
   &fMap ID: &7%id
@@ -81,6 +82,7 @@ INVALID_SHOP_DETECTED: "The shop cannot be used!"
 INVALID_SHOP_PRICE: "The shop has an invalid price!"
 INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
 CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
 SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
@@ -114,3 +116,5 @@ TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
 TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

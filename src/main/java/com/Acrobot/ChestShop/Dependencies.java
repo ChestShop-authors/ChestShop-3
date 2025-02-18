@@ -2,9 +2,12 @@ package com.Acrobot.ChestShop;
 
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
+import com.google.common.collect.ImmutableMap;
+import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,10 +17,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+
 /**
  * @author Acrobot
  */
 public class Dependencies implements Listener {
+
+    private static final Map<String, String> versions = new HashMap<>();
 
     public static void initializePlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -54,21 +65,35 @@ public class Dependencies implements Listener {
     public static boolean loadPlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        for (String dependency : ChestShop.getDependencies()) {
-            Plugin plugin = pluginManager.getPlugin(dependency);
+        for (Dependency dependency : Dependency.values()) {
+            Plugin plugin = pluginManager.getPlugin(dependency.name());
 
             if (plugin != null && plugin.isEnabled()) {
-                loadPlugin(dependency, plugin);
+                try {
+                    loadPlugin(dependency.name(), plugin);
+                } catch (Exception e) {
+                    plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
+                }
             }
         }
 
-        return loadEconomy();
+        if (loadEconomy()) {
+            Map<String, Map<String, Integer>> map = versions.entrySet().stream()
+                    .map(e -> new AbstractMap.SimpleEntry<String, Map<String, Integer>>(e.getKey(), ImmutableMap.of(e.getValue(), 1)))
+                    .collect(Collectors.toMap(
+                            AbstractMap.SimpleEntry::getKey,
+                            AbstractMap.SimpleEntry::getValue
+                    ));
+            ChestShop.getMetrics().addCustomChart(new DrilldownPie("dependencies", () -> map));
+            return true;
+        }
+        return false;
     }
 
     private static boolean loadEconomy() {
         String plugin = "none";
 
-        Listener economy = null;
+        EconomyAdapter economy = null;
 
         if(Bukkit.getPluginManager().getPlugin("Reserve") != null) {
             plugin = "Reserve";
@@ -85,18 +110,27 @@ public class Dependencies implements Listener {
             return false;
         }
 
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyAdapter", plugin, Bukkit.getPluginManager().getPlugin(plugin).getDescription().getVersion()));
+        ChestShop.getMetrics().addCustomChart(ChestShop.createStaticDrilldownStat("economyPlugin", economy::getProviderInfo));
+
         ChestShop.registerListener(economy);
         ChestShop.getBukkitLogger().info(plugin + " loaded!");
         return true;
     }
 
-    private static void loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+    private static boolean loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
         Dependency dependency;
 
         try {
             dependency = Dependency.valueOf(name);
+
+            if (dependency.author != null && !plugin.getDescription().getAuthors().contains(dependency.author)) {
+                ChestShop.getBukkitLogger().info("You are not using the supported variant of " + name + " by " + dependency.author + "."
+                        + " This variant of " + name + " seems to be made by " + plugin.getDescription().getAuthors().get(0) + " which isn't supported!");
+                return false;
+            }
         } catch (IllegalArgumentException exception) {
-            return;
+            return false;
         }
 
         Listener listener = null;
@@ -137,7 +171,7 @@ public class Dependencies implements Listener {
                 boolean inUse = Properties.WORLDGUARD_USE_PROTECTION || Properties.WORLDGUARD_INTEGRATION;
 
                 if (!inUse) {
-                    return;
+                    return false;
                 }
 
                 if (Properties.WORLDGUARD_USE_PROTECTION) {
@@ -152,14 +186,14 @@ public class Dependencies implements Listener {
 
             case GriefPrevention:
                 if (!Properties.GRIEFPREVENTION_INTEGRATION) {
-                    return;
+                    return false;
                 }
                 listener = new GriefPrevenentionBuilding(plugin);
                 break;
 
             case RedProtect:
                 if (!Properties.REDPROTECT_INTEGRATION) {
-                    return;
+                    return false;
                 }
                 listener = new RedProtectBuilding(plugin);
                 break;
@@ -169,10 +203,13 @@ public class Dependencies implements Listener {
                 Heroes heroes = Heroes.getHeroes(plugin);
 
                 if (heroes == null) {
-                    return;
+                    return false;
                 }
 
                 listener = heroes;
+                break;
+            case ItemBridge:
+                listener = new ItemBridge();
                 break;
             case ShowItem:
                 MaterialUtil.Show.initialize(plugin);
@@ -184,12 +221,15 @@ public class Dependencies implements Listener {
         }
 
         PluginDescriptionFile description = plugin.getDescription();
-        ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " loaded.");
+        versions.put(description.getName(), description.getVersion());
+        ChestShop.getBukkitLogger().info(description.getName() + " version " + description.getVersion() + " hooked.");
+
+        return true;
     }
 
-    private static enum Dependency {
+    private enum Dependency {
         LWC,
-        Lockette,
+        Lockette("Acru"),
         LockettePro,
         Deadbolt,
         SimpleChestLock,
@@ -202,14 +242,34 @@ public class Dependencies implements Listener {
 
         Heroes,
 
-        ShowItem
+        ItemBridge,
+
+        ShowItem;
+
+        private final String author;
+
+        Dependency() {
+            this.author = null;
+        }
+
+        Dependency(String author) {
+            this.author = author;
+        }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
-        if (ChestShop.getDependencies().contains(plugin.getName())) {
-            loadPlugin(plugin.getName(), plugin);
+        try {
+            if (!loadPlugin(plugin.getName(), plugin)) {
+                for (String pluginAlias : plugin.getDescription().getProvides()) {
+                    if (loadPlugin(pluginAlias, plugin)) {
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
         }
     }
 }

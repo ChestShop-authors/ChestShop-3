@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -43,7 +44,7 @@ public class ItemDatabase {
             itemDao = DaoCreator.getDaoAndCreateTable(Item.class);
             handleMetadataUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while loading items database", e);
         }
     }
 
@@ -59,7 +60,7 @@ public class ItemDatabase {
                 try {
                     versionConfig.save(configFile);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while updating metadata-version from " + previousVersion + " to " + newVersion, e);
                 }
             } else {
                 ChestShop.getBukkitLogger().log(Level.WARNING, "Error while updating Item Metadata database! While the plugin will still run it will work less efficiently.");
@@ -70,8 +71,10 @@ public class ItemDatabase {
     private int getCurrentMetadataVersion() {
         ItemStack item = new ItemStack(Material.STONE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("GetCurrentMetadataVersion");
-        item.setItemMeta(meta);
+        if (meta != null) {
+            meta.setDisplayName("GetCurrentMetadataVersion");
+            item.setItemMeta(meta);
+        }
         Map<String, Object> serialized = item.serialize();
         return (int) serialized.getOrDefault("v", -1);
     }
@@ -101,8 +104,8 @@ public class ItemDatabase {
                                 item.setBase64ItemCode(Base64.encodeObject(yaml.dump(itemStack)));
                                 itemDao.update(item);
                                 updated.getAndIncrement();
-                            } catch (YAMLException e) {
-                                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized);
+                            } catch (RuntimeException e) {
+                                ChestShop.getBukkitLogger().log(Level.SEVERE, "YAML of the item with ID " + Base62.encode(item.getId()) + " (" + item.getId() + ") is corrupted: \n" + serialized + "\n" + e.getMessage());
                             }
                         }
                     } catch (IOException | ClassNotFoundException | SQLException e) {
@@ -117,7 +120,7 @@ public class ItemDatabase {
                 return true;
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to update metadata version of all items from " + previousVersion + " to " + newVersion, e);
             return false;
         } finally {
             it.closeQuietly();
@@ -138,7 +141,14 @@ public class ItemDatabase {
         try {
             ItemStack clone = new ItemStack(item);
             clone.setAmount(1);
-            clone.setDurability((short) 0);
+
+            ItemMeta meta = clone.getItemMeta();
+            if (meta instanceof Damageable) {
+                Damageable damageable = (Damageable) clone.getItemMeta();
+                if (damageable.hasDamage()) {
+                    damageable.setDamage(0);
+                }
+            }
 
             String dumped = yaml.dump(clone);
             ItemStack loadedItem = yaml.loadAs(dumped, ItemStack.class);
@@ -153,10 +163,8 @@ public class ItemDatabase {
                 itemDao.create(itemEntity);
             }
             return Base62.encode(itemEntity.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Unable to get code of item " + item, e);
         }
 
         return null;
@@ -196,7 +204,7 @@ public class ItemDatabase {
         return null;
     }
 
-    private class YamlBukkitConstructor extends YamlConstructor {
+    private static class YamlBukkitConstructor extends YamlConstructor {
         public YamlBukkitConstructor() {
             this.yamlConstructors.put(new Tag(Tag.PREFIX + "org.bukkit.inventory.ItemStack"), yamlConstructors.get(Tag.MAP));
         }

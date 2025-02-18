@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
@@ -17,7 +16,7 @@ import java.util.logging.Level;
  * @author Andrzej Pomirski
  */
 public class Migrations {
-    public static final int CURRENT_DATABASE_VERSION = 4;
+    public static final int CURRENT_DATABASE_VERSION = 5;
 
     /**
      * Migrates a database from the given version
@@ -28,8 +27,6 @@ public class Migrations {
     public static int migrate(int currentVersion) {
         if (currentVersion != CURRENT_DATABASE_VERSION) {
             ChestShop.getBukkitLogger().info("Updating database...");
-        } else {
-            return CURRENT_DATABASE_VERSION;
         }
 
         switch (currentVersion) {
@@ -52,6 +49,12 @@ public class Migrations {
                     return -1;
                 }
             case 4:
+                if (migrateTo5()) {
+                    currentVersion++;
+                } else {
+                    return -1;
+                }
+            case 5:
             default:
                 break;
                 //do nothing
@@ -67,7 +70,7 @@ public class Migrations {
             accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN lastSeenName VARCHAR");
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v2", e);
             return false;
         }
     }
@@ -122,7 +125,7 @@ public class Migrations {
 
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v3", e);
             return false;
         }
     }
@@ -139,13 +142,24 @@ public class Migrations {
             try {
                 items.executeRawNoArgs("INSERT INTO `items` (id, code) SELECT id, code uuid FROM `items-old`");
             } catch (SQLException e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while inserting items into new database while migrating to v4", e);
             }
             ChestShop.getBukkitLogger().log(Level.INFO, "Migration of items table finished in " + (System.currentTimeMillis() - start) / 1000.0 + "s!");
 
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v4", e);
+            return false;
+        }
+    }
+
+    private static boolean migrateTo5() {
+        try {
+            Dao<Account, String> accounts = DaoCreator.getDao(Account.class);
+            accounts.executeRaw("ALTER TABLE `accounts` ADD COLUMN ignoreMessages BOOLEAN");
+            return true;
+        } catch (SQLException e) {
+            ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while migrating database to v5", e);
             return false;
         }
     }

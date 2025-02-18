@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getLeftSide;
+import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getRightSide;
 
 /**
  * @author Acrobot
@@ -46,8 +48,14 @@ public class PlayerInventory implements Listener {
         List<Block> containers = new ArrayList<>();
 
         if (holder instanceof DoubleChest) {
-            containers.add(((BlockState) ((DoubleChest) holder).getLeftSide()).getBlock());
-            containers.add(((BlockState) ((DoubleChest) holder).getRightSide()).getBlock());
+            InventoryHolder leftSide = getLeftSide((DoubleChest) holder, false);
+            if (leftSide instanceof BlockState) {
+                containers.add(((BlockState) leftSide).getBlock());
+            }
+            InventoryHolder rightSide = getRightSide((DoubleChest) holder, false);
+            if (rightSide instanceof BlockState) {
+                containers.add(((BlockState) rightSide).getBlock());
+            }
         } else {
             containers.add(((BlockState) holder).getBlock());
         }

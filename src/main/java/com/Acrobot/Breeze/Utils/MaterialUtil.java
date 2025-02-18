@@ -25,7 +25,6 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +52,23 @@ public class MaterialUtil {
     public static final short MAXIMUM_SIGN_LETTERS = 15;
     // 15 dashes fit on one sign line with the default resource pack:
     public static final int MAXIMUM_SIGN_WIDTH = (short) getMinecraftStringWidth("---------------");
+
+    private static final Map<String, String> ABBREVIATIONS = StringUtil.map(
+            "Egg", "Eg",
+            "Spawn", "Spaw",
+            "Pottery", "Pot",
+            "Heartbreak", "Heartbr",
+            "Sherd", "Sher"
+    );
+
+    private static final Map<String, String> UNIDIRECTIONAL_ABBREVIATIONS = StringUtil.map(
+            "Endermite", "Endmite",
+            "Endmite", "Endmit",
+            "Wayfinder", "Wayfndr",
+            "Wayfndr", "Wf",
+            "Heartbr", "Hrtbr",
+            "Hrtbr", "Hrtb"
+    );
 
     private static final SimpleCache<String, Material> MATERIAL_CACHE = new SimpleCache<>(Properties.CACHE_SIZE);
 
@@ -146,7 +162,15 @@ public class MaterialUtil {
      * @return Material found
      */
     public static Material getMaterial(String name) {
-        String formatted = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
+        String replacedName = name;
+        // revert unidirectional abbreviations
+        List<Map.Entry<String, String>> abbreviations = new ArrayList<>(UNIDIRECTIONAL_ABBREVIATIONS.entrySet());
+        for (int i = abbreviations.size() - 1; i >= 0; i--) {
+            Map.Entry<String, String> entry = abbreviations.get(i);
+            replacedName = replacedName.replaceAll(entry.getValue() + "(_|$)?", entry.getKey() + "$1");
+        }
+
+        String formatted = name.replaceAll("(?<!^)(?>\\s?)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
 
         Material material = MATERIAL_CACHE.get(formatted);
         if (material != null) {
@@ -160,7 +184,7 @@ public class MaterialUtil {
             return material;
         }
 
-        material = new EnumParser<Material>().parse(name, Material.values());
+        material = new EnumParser<Material>().parse(replacedName, Material.values());
         if (material != null) {
             MATERIAL_CACHE.put(formatted, material);
         }
@@ -235,12 +259,16 @@ public class MaterialUtil {
         String itemName = itemStack.getType().toString();
 
         String durability = "";
-        if (itemStack.getDurability() != 0) {
-            durability = ":" + itemStack.getDurability();
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta instanceof Damageable) {
+            Damageable damageable = (Damageable) meta;
+            if (damageable.hasDamage()) {
+                durability = ":" + damageable.getDamage();
+            }
         }
 
         String metaData = "";
-        if (itemStack.hasItemMeta()) {
+        if (hasCustomData(itemStack)) {
             metaData = "#" + Metadata.getItemCode(itemStack);
         }
 
@@ -257,6 +285,29 @@ public class MaterialUtil {
     }
 
     /**
+     * Check whether the provided ItemStack has custom data (in the past called "ItemMeta"). This will ignore
+     * the durability of an item.
+     *
+     * @param itemStack The ItemStack to check
+     * @return Whether the item has custom data
+     */
+    private static boolean hasCustomData(ItemStack itemStack) {
+        if (!itemStack.hasItemMeta()) {
+            return false;
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta instanceof Damageable) {
+            if (!((Damageable) itemMeta).hasDamage()) {
+                return true;
+            }
+        }
+        Map<String, Object> data = itemMeta.serialize();
+        // if the data map contains more than the metadata type and the damage
+        // then the item does indeed have custom data set
+        return data.size() > 2;
+    }
+
+    /**
      * Get an item name shortened to a max length that is still reversable by {@link #getMaterial(String)}
      *
      * @param itemName  The name of the item
@@ -264,17 +315,42 @@ public class MaterialUtil {
      * @return The name shortened to the max length
      */
     public static String getShortenedName(String itemName, int maxWidth) {
-        itemName = StringUtil.capitalizeFirstLetter(itemName.replace('_', ' '), ' ');
-        int width = getMinecraftStringWidth(itemName);
+        // Restore spaces in string that might be already be shortened
+        String name = itemName.replaceAll("([a-z])([A-Z1-9])", "$1 $2");
+        name = StringUtil.capitalizeFirstLetter(name.replace('_', ' '), ' ');
+        int width = getMinecraftStringWidth(name);
         if (width <= maxWidth) {
-            return itemName;
+            return name;
         }
-        String[] itemParts = itemName.split("[ \\-]");
-        itemName = String.join("", itemParts);
-        width = getMinecraftStringWidth(itemName);
+        String[] itemParts = name.split("[ \\-]");
+        String noSpaceName = String.join("", itemParts);
+        width = getMinecraftStringWidth(noSpaceName);
         if (width <= maxWidth) {
-            return itemName;
+            return noSpaceName;
         }
+
+        // Abbreviate some terms manually
+        for (Map.Entry<String, String> entry : ABBREVIATIONS.entrySet()) {
+            name = name.replaceAll(entry.getKey() + "( |$)", entry.getValue() + "$1");
+            itemParts = name.split("[ \\-]");
+            noSpaceName = String.join("", itemParts);
+            width = getMinecraftStringWidth(noSpaceName);
+            if (width <= maxWidth) {
+                return noSpaceName;
+            }
+        }
+
+        // Apply unidirectional abbreviations if it still doesn't work
+        for (Map.Entry<String, String> entry : UNIDIRECTIONAL_ABBREVIATIONS.entrySet()) {
+            name = name.replaceAll(entry.getKey() + "( |$)", entry.getValue() + "$1");
+            itemParts = name.split("[ \\-]");
+            noSpaceName = String.join("", itemParts);
+            width = getMinecraftStringWidth(noSpaceName);
+            if (width <= maxWidth) {
+                return noSpaceName;
+            }
+        }
+
         int exceeding = width - maxWidth;
         int shortestIndex = 0;
         int longestIndex = 0;
@@ -337,8 +413,8 @@ public class MaterialUtil {
             split[i] = split[i].trim();
         }
 
-        short durability = getDurability(itemName);
-        MaterialParseEvent parseEvent = new MaterialParseEvent(split[0], durability);
+        Integer durability = getDurability(itemName);
+        MaterialParseEvent parseEvent = new MaterialParseEvent(split[0], durability != null ? durability.shortValue() : 0);
         Bukkit.getPluginManager().callEvent(parseEvent);
         Material material = parseEvent.getMaterial();
         if (material == null) {
@@ -349,10 +425,16 @@ public class MaterialUtil {
 
         ItemMeta meta = getMetadata(itemName);
 
-        if (meta != null) {
+        if (durability != null) {
+            if (meta == null) {
+                meta = itemStack.getItemMeta();
+            }
             if (meta instanceof Damageable) {
                 ((Damageable) meta).setDamage(durability);
             }
+        }
+
+        if (meta != null) {
             itemStack.setItemMeta(meta);
         }
 
@@ -365,22 +447,26 @@ public class MaterialUtil {
      * @param itemName Item name
      * @return Durability found
      */
-    public static short getDurability(String itemName) {
+    public static Integer getDurability(String itemName) {
         Matcher m = DURABILITY.matcher(itemName);
 
         if (!m.find()) {
-            return 0;
+            return null;
         }
 
         String data = m.group();
 
         if (data == null || data.isEmpty()) {
-            return 0;
+            return null;
         }
 
         data = data.substring(1);
 
-        return NumberUtil.isShort(data) ? Short.valueOf(data) : 0;
+        try {
+            return Integer.parseInt(data);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     /**
@@ -402,17 +488,18 @@ public class MaterialUtil {
 
     private static class EnumParser<E extends Enum<E>> {
         private E parse(String name, E[] values) {
+            String formatted = name.replaceAll("(?<!^)(?>\\s?)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).replace(' ', '_');
             try {
-                return E.valueOf(values[0].getDeclaringClass(), name.toUpperCase(Locale.ROOT));
+                return E.valueOf(values[0].getDeclaringClass(), formatted);
             } catch (IllegalArgumentException exception) {
-                E currentEnum = null;
-                String[] typeParts = name.replaceAll("(?<!^)([A-Z1-9])", "_$1").toUpperCase(Locale.ROOT).split("[ _]");
+                List<E> possibleEnums = new ArrayList<>();
+                String[] typeParts = formatted.split("_");
                 int length = Short.MAX_VALUE;
                 for (E e : values) {
                     String enumName = e.name();
-                    if (enumName.length() < length && enumName.startsWith(name)) {
-                        length = (short) enumName.length();
-                        currentEnum = e;
+                    if (enumName.length() < length && enumName.startsWith(formatted)) {
+                        length = enumName.length();
+                        possibleEnums.add(e);
                     } else if (typeParts.length > 1) {
                         String[] nameParts = enumName.split("_");
                         if (typeParts.length == nameParts.length) {
@@ -424,13 +511,28 @@ public class MaterialUtil {
                                 }
                             }
                             if (matched) {
-                                currentEnum = e;
-                                break;
+                                possibleEnums.add(e);
                             }
                         }
                     }
                 }
-                return currentEnum;
+
+                if (possibleEnums.size() == 1) {
+                    return possibleEnums.get(0);
+                } else if (possibleEnums.size() > 1) {
+                    int formattedLength = formatted.length();
+                    int closestDeviation = Short.MAX_VALUE;
+                    E closestEnum = null;
+                    for (E possibleEnum : possibleEnums) {
+                        int deviation = possibleEnum.name().length() - formattedLength;
+                        if (deviation < closestDeviation) {
+                            closestDeviation = deviation;
+                            closestEnum = possibleEnum;
+                        }
+                    }
+                    return closestEnum;
+                }
+                return null;
             }
         }
     }

@@ -37,6 +37,7 @@ public class Messages {
     public static Message iteminfo_leather_color;
     public static Message iteminfo_bundle_items;
     public static Message iteminfo_axolotl_variant;
+    public static Message iteminfo_armor_trim;
     public static Message iteminfo_recipes;
     public static Message iteminfo_map_view;
     public static Message iteminfo_map_location;
@@ -82,6 +83,7 @@ public class Messages {
     public static Message INVALID_SHOP_PRICE;
     public static Message INVALID_SHOP_QUANTITY;
     public static Message CANNOT_ACCESS_THE_CHEST;
+    public static Message CANNOT_CHANGE_SIGN_BACKSIDE;
 
     public static Message SELL_PRICE_HIGHER_THAN_BUY_PRICE;
     public static Message SELL_PRICE_ABOVE_MAX;
@@ -115,6 +117,8 @@ public class Messages {
 
     public static Message TOGGLE_ACCESS_ON;
     public static Message TOGGLE_ACCESS_OFF;
+
+    public static Message ERROR_OCCURRED;
 
     @Deprecated
     public static String prefix(String message) {

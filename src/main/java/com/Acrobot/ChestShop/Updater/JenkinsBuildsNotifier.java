@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Updater;
 
+import com.Acrobot.ChestShop.ChestShop;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -55,7 +56,7 @@ public class JenkinsBuildsNotifier implements Runnable {
 
         try {
             apiUrl = new URL(jenkinsJobUrl + "api/json");
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, this);
+            ChestShop.runInAsyncThread(this);
         } catch (MalformedURLException e) {
             plugin.getLogger().log(Level.WARNING, "Can not check for new dev builds as " + jenkinsJobUrl + "api/json is not a valid url!", e);
         }

@@ -103,9 +103,7 @@ public class CurrencyCheckEvent extends EconomicEvent {
      * Sets the account name
      *
      * @param account Account name
-     * @deprecated The account should not be changed!
      */
-    @Deprecated
     public void setAccount(UUID account) {
         this.account = account;
     }

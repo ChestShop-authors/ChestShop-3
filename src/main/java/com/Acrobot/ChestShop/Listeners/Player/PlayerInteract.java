@@ -36,6 +36,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -81,7 +82,7 @@ public class PlayerInteract implements Listener {
             }
         }
 
-        if (!isSign(block) || player.getInventory().getItemInMainHand().getType().name().contains("SIGN")) // Blocking accidental sign edition
+        if (!isSign(block))
             return;
 
         Sign sign = (Sign) getState(block, false);
@@ -93,6 +94,7 @@ public class PlayerInteract implements Listener {
             if (ChestShopSign.hasPermission(player, OTHER_NAME_CREATE, sign)) {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (!MaterialUtil.isEmpty(item)) {
+                    event.setCancelled(true);
                     String itemCode;
                     try {
                         itemCode = ItemUtil.getSignName(item);
@@ -108,11 +110,10 @@ public class PlayerInteract implements Listener {
                     com.Acrobot.ChestShop.ChestShop.callEvent(changeEvent);
                     if (!changeEvent.isCancelled()) {
                         for (byte i = 0; i < changeEvent.getLines().length; ++i) {
-                            sign.setLine(i, changeEvent.getLine(i));
+                            String line = changeEvent.getLine(i);
+                            sign.setLine(i, line != null ? line : "");
                         }
                         sign.update();
-                    } else {
-                        event.setCancelled(true);
                     }
                 } else {
                     Messages.NO_ITEM_IN_HAND.sendWithPrefix(player);
@@ -125,7 +126,10 @@ public class PlayerInteract implements Listener {
 
         if (!AccessToggle.isIgnoring(player) && ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
             if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
-                if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
+                if (player.getInventory().getItemInMainHand().getType().name().contains("SIGN") && action == RIGHT_CLICK_BLOCK) {
+                    // Allow editing of sign (if supported)
+                    return;
+                } else if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
                         || player.getInventory().getItemInMainHand().getType().name().endsWith("INK_SAC"))
                         && action == RIGHT_CLICK_BLOCK) {
                     if (Properties.SIGN_DYING) {
@@ -145,6 +149,10 @@ public class PlayerInteract implements Listener {
                 }
                 // don't allow owners or people with access to buy/sell at this shop
                 Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
+                if (action == RIGHT_CLICK_BLOCK) {
+                    // don't allow editing
+                    event.setCancelled(true);
+                }
                 return;
             }
         }
@@ -215,30 +223,31 @@ public class PlayerInteract implements Listener {
         int amount = -1;
         try {
             amount = ChestShopSign.getQuantity(sign);
-        } catch (NumberFormatException notANumber) {}
+        } catch (NumberFormatException ignored) {} // There is no quantity number on the sign
 
         if (amount < 1 || amount > Properties.MAX_SHOP_AMOUNT) {
             Messages.INVALID_SHOP_PRICE.sendWithPrefix(player);
             return null;
         }
 
+        BigDecimal pricePerItem = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128);
         if (Properties.SHIFT_SELLS_IN_STACKS && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
             int newAmount = adminShop ? InventoryUtil.getMaxStackSize(item) : getStackAmount(item, ownerInventory, player, action);
             if (newAmount > 0) {
-                price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                 amount = newAmount;
             }
         } else if (Properties.SHIFT_SELLS_EVERYTHING && player.isSneaking() && !price.equals(PriceUtil.NO_PRICE) && isAllowedForShift(action == buy)) {
             if (action != buy) {
                 int newAmount = InventoryUtil.getAmount(item, player.getInventory());
                 if (newAmount > 0) {
-                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                     amount = newAmount;
                 }
             } else if (!adminShop && ownerInventory != null) {
                 int newAmount = InventoryUtil.getAmount(item, ownerInventory);
                 if (newAmount > 0) {
-                    price = price.divide(BigDecimal.valueOf(amount), MathContext.DECIMAL128).multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, BigDecimal.ROUND_HALF_UP);
+                    price = pricePerItem.multiply(BigDecimal.valueOf(newAmount)).setScale(Properties.PRICE_PRECISION, RoundingMode.HALF_UP);
                     amount = newAmount;
                 }
             }

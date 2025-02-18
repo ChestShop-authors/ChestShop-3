@@ -53,7 +53,7 @@ public class ItemUtil {
      * @return ItemStack's name
      */
     public static String getName(ItemStack itemStack, int maxWidth) {
-        String code = ChestShop.callEvent(new ItemStringQueryEvent(itemStack)).getItemString();
+        String code = ChestShop.callEvent(new ItemStringQueryEvent(itemStack, maxWidth)).getItemString();
         if (code != null) {
             if (maxWidth > 0) {
                 int codeWidth = getMinecraftStringWidth(code);

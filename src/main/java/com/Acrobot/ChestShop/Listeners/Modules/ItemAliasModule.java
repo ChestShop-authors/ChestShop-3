@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+
+import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
 
 /**
  * @author Acrobot
@@ -49,7 +52,7 @@ public class ItemAliasModule implements Listener {
                 configuration.options().copyDefaults(true);
                 configuration.save(ChestShop.loadFile("itemAliases.yml"));
             } catch (IOException e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while saving item aliases config", e);
             }
         }
 
@@ -118,6 +121,13 @@ public class ItemAliasModule implements Listener {
             }
 
             if (newCode != null) {
+                if (event.getMaxWidth() > 0) {
+                    int width = getMinecraftStringWidth(newCode);
+                    if (width > event.getMaxWidth()) {
+                        ChestShop.getBukkitLogger().warning("Can't use configured alias " + newCode + " as it's width (" + width + ") was wider than the allowed max width of " + event.getMaxWidth());
+                        return;
+                    }
+                }
                 event.setItemString(newCode);
             }
         }

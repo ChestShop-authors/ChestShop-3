@@ -16,15 +16,17 @@ public class GarbageTextListener implements Listener {
     public static void filterGarbage(SignChangeEvent event) {
         for (int i = 0; i < 4; ++i) {
             String line = event.getLine(i);
-            StringBuilder output = new StringBuilder(line.length());
+            if (line != null) {
+                StringBuilder output = new StringBuilder(line.length());
 
-            for (char character : line.toCharArray()) {
-                if (character < 0xF700 || character > 0xF747) {
-                    output.append(character);
+                for (char character : line.toCharArray()) {
+                    if (character < 0xF700 || character > 0xF747) {
+                        output.append(character);
+                    }
                 }
-            }
 
-            event.setLine(i, output.toString());
+                event.setLine(i, output.toString());
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -44,9 +45,9 @@ public class SignBreak implements Listener {
     public SignBreak() {
         try {
             Class.forName("com.destroystokyo.paper.event.block.BlockDestroyEvent");
-            ChestShop.getPlugin().registerEvent((Listener) Class.forName("com.Acrobot.ChestShop.Listeners.Block.Break.Attached.PaperBlockDestroy").newInstance());
+            ChestShop.getPlugin().registerEvent((Listener) Class.forName("com.Acrobot.ChestShop.Listeners.Block.Break.Attached.PaperBlockDestroy").getDeclaredConstructor().newInstance());
             ChestShop.getBukkitLogger().info("Using Paper's BlockDestroyEvent instead of the BlockPhysicsEvent!");
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             ChestShop.getPlugin().registerEvent(new PhysicsBreak());
         }
     }

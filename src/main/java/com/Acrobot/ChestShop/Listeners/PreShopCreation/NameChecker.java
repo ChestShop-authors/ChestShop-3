@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.logging.Level;
+
 import static com.Acrobot.ChestShop.Permission.OTHER_NAME_CREATE;
 import static com.Acrobot.ChestShop.Signs.ChestShopSign.NAME_LINE;
 import static com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome.UNKNOWN_PLAYER;
@@ -58,7 +60,7 @@ public class NameChecker implements Listener {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "Error while trying to check account for name " + name + " with player " + player.getName(), e);
             }
         }
         event.setOwnerAccount(account);

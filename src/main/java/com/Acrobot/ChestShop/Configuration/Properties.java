@@ -103,10 +103,13 @@ public class Properties {
     @ConfigurationComment("Do you want to turn off the automatic updates of ChestShop?")
     public static boolean TURN_OFF_UPDATES = true;
 
+    @ConfigurationComment("Do you want to turn off the automatic notifications for releases?")
+    public static boolean TURN_OFF_UPDATE_NOTIFIER = false;
+
     @ConfigurationComment("Do you want to turn off the automatic notifications for new development builds?")
     public static boolean TURN_OFF_DEV_UPDATE_NOTIFIER = false;
 
-    @ConfigurationComment("Do you want to include some values of this config in the metrics? (This will not leak sensitive data but help in the development process)")
+    @ConfigurationComment("Do you want to include some values of this config in the metrics? (This will not submit any sensitive data and helps in the development process)")
     public static boolean INCLUDE_SETTINGS_IN_METRICS = true;
 
     @PrecededBySpace
@@ -119,6 +122,9 @@ public class Properties {
 
     @ConfigurationComment("Should the plugin try to use a language file that matches the client's locale setting?")
     public static boolean USE_CLIENT_LOCALE = true;
+
+    @ConfigurationComment("Should the plugin strip the colors from formatted price?")
+    public static boolean STRIP_PRICE_COLORS = false;
 
     @PrecededBySpace
     @ConfigurationComment("What containers are allowed to hold a shop? (Only blocks with inventories work!)")
@@ -184,10 +190,10 @@ public class Properties {
     public static UUID SERVER_ECONOMY_ACCOUNT_UUID = new UUID(0, 0);
 
     @ConfigurationComment("Percent of the price that should go to the server's account. (100 = 100 percent)")
-    public static int TAX_AMOUNT = 0;
+    public static double TAX_AMOUNT = 0;
 
     @ConfigurationComment("Percent of the price that should go to the server's account when buying from an Admin Shop.")
-    public static int SERVER_TAX_AMOUNT = 0;
+    public static double SERVER_TAX_AMOUNT = 0;
 
     @ConfigurationComment("Amount of money player must pay to create a shop")
     public static BigDecimal SHOP_CREATION_PRICE = BigDecimal.valueOf(0);
@@ -202,8 +208,8 @@ public class Properties {
     public static boolean ENSURE_CORRECT_PLAYERID = true;
 
     @ConfigurationComment("This regexp validates the name of the player. If the name doesn't match, the player will neither be able to create a valid shop sign, nor buy/sell from a shop.\n" +
-            "Note for Bedrock support: If you have Floodgate on your server, you should set this regexp to ^\\\\*?\\\\w+$ and ENSURE_CORRECT_PLAYERID to false\n" +
-            "If your Floodgate prefix is not *, change the first * in the regexp (the one before the question mark) to whatever your prefix is.")
+            "Note for Bedrock support: If you have Floodgate on your server, you should set this regexp to ^\\\\.?\\\\w+$ and ENSURE_CORRECT_PLAYERID to false\n" +
+            "If your Floodgate prefix is not a dot, then change the first . in the regexp (the one before the question mark) to whatever your prefix is.")
     public static String VALID_PLAYERNAME_REGEXP = "^\\w+$";
 
     @PrecededBySpace
@@ -252,10 +258,10 @@ public class Properties {
     @ConfigurationComment("If true, plugin will log transactions in its own file")
     public static boolean LOG_TO_FILE = false;
 
-    @ConfigurationComment("Do you want ChestShop's messages to show up in console?")
+    @ConfigurationComment("Do you want ChestShop's transaction messages to show up in console?")
     public static boolean LOG_TO_CONSOLE = true;
 
-    @ConfigurationComment("Should all shop removals be logged to the console?")
+    @ConfigurationComment("Should all shop removals be logged?")
     public static boolean LOG_ALL_SHOP_REMOVALS = true;
 
     @PrecededBySpace

@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * @author Acrobot
@@ -43,7 +42,19 @@ public enum Permission {
     NOTIFY_TOGGLE("ChestShop.toggle"),
     ACCESS_TOGGLE("ChestShop.accesstoggle"),
     ITEMINFO("ChestShop.iteminfo"),
-    SHOPINFO("ChestShop.shopinfo");
+    SHOPINFO("ChestShop.shopinfo"),
+
+    NOLIMIT_MIN_BUY("ChestShop.nolimit.buy.min"),
+    NOLIMIT_MIN_BUY_ID("ChestShop.nolimit.buy.min."),
+
+    NOLIMIT_MAX_BUY("ChestShop.nolimit.buy.max"),
+    NOLIMIT_MAX_BUY_ID("ChestShop.nolimit.buy.max."),
+
+    NOLIMIT_MIN_SELL("ChestShop.nolimit.sell.min"),
+    NOLIMIT_MIN_SELL_ID("ChestShop.nolimit.sell.min."),
+
+    NOLIMIT_MAX_SELL("ChestShop.nolimit.sell.max"),
+    NOLIMIT_MAX_SELL_ID("ChestShop.nolimit.sell.max.");
 
     private final String permission;
 

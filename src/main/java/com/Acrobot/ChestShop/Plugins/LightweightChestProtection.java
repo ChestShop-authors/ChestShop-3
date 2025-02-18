@@ -162,8 +162,11 @@ public class LightweightChestProtection implements Listener {
             return;
         }
 
-        Protection.Type type = Protection.Type.PRIVATE;
+        Protection.Type type;
         switch (event.getType()) {
+            case PRIVATE:
+                type = Protection.Type.PRIVATE;
+                break;
             case PUBLIC:
                 type = Protection.Type.PUBLIC;
                 break;
@@ -173,8 +176,14 @@ public class LightweightChestProtection implements Listener {
             case DISPLAY:
                 try {
                     type = Protection.Type.valueOf("DISPLAY");
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException e) {
+                    // Not supported
+                    return;
+                }
                 break;
+            default:
+                // Not supported
+                return;
         }
 
         Protection protection = null;

@@ -66,10 +66,6 @@ public class BlockPlace implements Listener {
     public static void onHopperDropperPlace(BlockPlaceEvent event) {
         Block placed = event.getBlockPlaced();
 
-        if (placed.getType() != Material.HOPPER && placed.getType() != Material.DROPPER) {
-            return;
-        }
-
         List<BlockFace> searchDirections = new ArrayList<>();
         switch (placed.getType()) {
             case HOPPER:
@@ -79,6 +75,8 @@ public class BlockPlace implements Listener {
             case DROPPER:
                 searchDirections.add(((Directional) placed.getBlockData()).getFacing());
                 break;
+            default:
+                return;
         }
 
         for (BlockFace face : searchDirections) {

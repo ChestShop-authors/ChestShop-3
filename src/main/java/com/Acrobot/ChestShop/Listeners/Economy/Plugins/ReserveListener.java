@@ -1,5 +1,6 @@
 package com.Acrobot.ChestShop.Listeners.Economy.Plugins;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.Economy.AccountCheckEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAddEvent;
 import com.Acrobot.ChestShop.Events.Economy.CurrencyAmountEvent;
@@ -12,6 +13,7 @@ import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 
 import javax.annotation.Nullable;
@@ -26,8 +28,16 @@ public class ReserveListener extends EconomyAdapter {
 
     private static @Nullable EconomyAPI economyAPI;
 
-    public ReserveListener(EconomyAPI api) {
+    public ReserveListener(@Nullable EconomyAPI api) {
         ReserveListener.economyAPI = api;
+    }
+
+    @Override
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (economyAPI == null) {
+            return null;
+        }
+        return new ProviderInfo(economyAPI.name(), economyAPI.version());
     }
 
     public static EconomyAPI getProvider() {
@@ -99,7 +109,8 @@ public class ReserveListener extends EconomyAdapter {
         }
 
         if (provided()) {
-            event.setFormattedAmount(economyAPI.format(event.getAmount()));
+            String formatted = economyAPI.format(event.getAmount());
+            event.setFormattedAmount(Properties.STRIP_PRICE_COLORS ? ChatColor.stripColor(formatted) : formatted);
             event.setHandled(true);
         }
     }
@@ -127,7 +138,7 @@ public class ReserveListener extends EconomyAdapter {
 
     @EventHandler
     public void onCurrencyHoldCheck(CurrencyHoldEvent event) {
-        if (event.getAccount() == null || event.wasHandled() || !transactionCanFail() || event.canHold()) {
+        if (!provided() || event.getAccount() == null || event.wasHandled() || !transactionCanFail() || event.canHold()) {
             return;
         }
 

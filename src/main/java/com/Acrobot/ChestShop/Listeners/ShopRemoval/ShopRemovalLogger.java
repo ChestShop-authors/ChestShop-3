@@ -17,11 +17,11 @@ public class ShopRemovalLogger implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public static void onShopRemoval(final ShopDestroyedEvent event) {
-        if (Properties.LOG_ALL_SHOP_REMOVALS || event.getDestroyer() != null) {
+        if (!Properties.LOG_ALL_SHOP_REMOVALS && event.getDestroyer() != null) {
             return;
         }
 
-        ChestShop.getBukkitServer().getScheduler().runTaskAsynchronously(ChestShop.getPlugin(), () -> {
+        ChestShop.runInAsyncThread(() -> {
             String shopOwner = ChestShopSign.getOwner(event.getSign());
             String typeOfShop = ChestShopSign.isAdminShop(shopOwner) ? "An Admin Shop" : "A shop belonging to " + shopOwner;
 
@@ -36,7 +36,7 @@ public class ShopRemovalLogger implements Listener {
                     prices,
                     location);
 
-            ChestShop.getBukkitLogger().info(message);
+            ChestShop.getShopLogger().info(message);
         });
     }
 }

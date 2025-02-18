@@ -18,8 +18,8 @@
 
     <repositories>
         <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.sk89q.com/repo/</url>
+            <id>enginehub-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
             <id>codemc-repo</id>
@@ -42,16 +42,20 @@
             <url>file://${project.basedir}/repo/</url>
         </repository>
         <repository>
-            <id>redprotect-repo</id>
-            <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
         <repository>
             <id>NyaaCat</id>
             <url>https://ci.nyaacat.com/maven/</url>
+        </repository>
+        <repository>
+            <id>redprotect-repo</id>
+            <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
+        </repository>
+        <repository>
+            <id>adventure-repo</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
@@ -80,21 +84,21 @@
         <dependency>
             <groupId>de.themoep</groupId>
             <artifactId>minedown-adventure</artifactId>
-            <version>1.7.1-SNAPSHOT</version>
+            <version>1.7.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.1.1</version>
+            <version>4.3.2</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.11.0</version>
+            <version>4.14.0</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -115,7 +119,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -153,7 +157,7 @@
         <dependency>
             <groupId>fr.xephi</groupId>
             <artifactId>authme</artifactId>
-            <version>5.5.0-SNAPSHOT</version>
+            <version>5.6.0-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -216,6 +220,12 @@
             <artifactId>worldedit-core</artifactId>
             <version>7.0.0-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -245,15 +255,21 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jojodmo</groupId>
+            <artifactId>ItemBridge</artifactId>
+            <version>b0054538c1</version>
+        </dependency>
+
+        <dependency>
             <groupId>br.net.fabiozumbi12.RedProtect</groupId>
             <artifactId>RedProtect-Spigot</artifactId>
-            <version>7.6.2</version>
+            <version>7.7.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>br.net.fabiozumbi12.RedProtect</groupId>
             <artifactId>RedProtect-Core</artifactId>
-            <version>7.6.2</version>
+            <version>7.7.3</version>
             <scope>provided</scope>
         </dependency>
 
@@ -354,6 +370,7 @@
                             <Distribution-Type>${buildType}</Distribution-Type>
                             <Built-At>${maven.build.timestamp}</Built-At>
                             <Build-Jdk>${java.runtime.version}</Build-Jdk>
+                            <paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -444,6 +461,7 @@
         <build.number>${buildNumber}</build.number>
         <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
+        <bukkit.dependency.version>1.21.4-R0.1-SNAPSHOT</bukkit.dependency.version>
     </properties>
 
     <profiles>
@@ -464,7 +482,7 @@
                 <dependency>
                     <groupId>io.papermc.paper</groupId>
                     <artifactId>paper-api</artifactId>
-                    <version>1.19-R0.1-SNAPSHOT</version>
+                    <version>${bukkit.dependency.version}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -488,7 +506,7 @@
                 <dependency>
                     <groupId>org.spigotmc</groupId>
                     <artifactId>spigot-api</artifactId>
-                    <version>1.13.2-R0.1-SNAPSHOT</version>
+                    <version>${bukkit.dependency.version}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>

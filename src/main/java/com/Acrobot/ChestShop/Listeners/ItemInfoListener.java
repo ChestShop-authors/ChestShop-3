@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.BundleMeta;
@@ -32,6 +33,7 @@ import java.util.Map;
 import static com.Acrobot.Breeze.Utils.NumberUtil.toRoman;
 import static com.Acrobot.Breeze.Utils.NumberUtil.toTime;
 import static com.Acrobot.Breeze.Utils.StringUtil.capitalizeFirstLetter;
+import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_armor_trim;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_axolotl_variant;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book;
 import static com.Acrobot.ChestShop.Configuration.Messages.iteminfo_book_generation;
@@ -54,6 +56,22 @@ public class ItemInfoListener implements Listener {
     // Register version dependent listeners
     static {
         try {
+            Class.forName("org.bukkit.inventory.meta.ArmorMeta");
+            ChestShop.registerListener(new Listener() {
+                @EventHandler
+                public void addArmorInfo(ItemInfoEvent event) {
+                    if (event.getItem().hasItemMeta()) {
+                        ItemMeta meta = event.getItem().getItemMeta();
+                        if (meta instanceof ArmorMeta && ((ArmorMeta) meta).hasTrim()) {
+                            iteminfo_armor_trim.send(event.getSender(),
+                                    "pattern", capitalizeFirstLetter(((ArmorMeta) meta).getTrim().getPattern().getTranslationKey(), '_'),
+                                    "material", capitalizeFirstLetter(((ArmorMeta) meta).getTrim().getMaterial().getTranslationKey(), '_'));
+                        }
+                    }
+                }
+            });
+        } catch (ClassNotFoundException | NoClassDefFoundError ignored) {}
+        try {
             Class.forName("org.bukkit.inventory.meta.AxolotlBucketMeta");
             ChestShop.registerListener(new Listener() {
                 @EventHandler
@@ -71,7 +89,7 @@ public class ItemInfoListener implements Listener {
             Class.forName("org.bukkit.inventory.meta.BundleMeta");
             ChestShop.registerListener(new Listener() {
                 @EventHandler
-                public void addAxolotlInfo(ItemInfoEvent event) {
+                public void addBundleInfo(ItemInfoEvent event) {
                     if (event.getItem().hasItemMeta()) {
                         ItemMeta meta = event.getItem().getItemMeta();
                         if (meta instanceof BundleMeta) {
@@ -212,24 +230,22 @@ public class ItemInfoListener implements Listener {
 
         PotionMeta potionMeta = (PotionMeta) meta;
 
-        StringBuilder message = new StringBuilder(50);
-
-        message.append(ChatColor.GRAY);
-
-        message.append(capitalizeFirstLetter(item.getType().name(), '_') + " of ");
-        message.append(capitalizeFirstLetter(potionMeta.getBasePotionData().getType().name(), '_')).append(' ');
-        if (potionMeta.getBasePotionData().isUpgraded()) {
-            message.append("II");
-        } else if (potionMeta.getBasePotionData().isExtended()) {
-            message.append("+");
-        }
-
         CommandSender sender = event.getSender();
 
-        sender.sendMessage(message.toString());
+        if (potionMeta.getBasePotionType() != null) {
+            StringBuilder message = new StringBuilder(50);
+
+            message.append(ChatColor.GRAY);
+
+            message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
+            message.append(capitalizeFirstLetter(potionMeta.getBasePotionType().getKey().getKey(), '_')).append(' ');
+
+            sender.sendMessage(message.toString());
+        }
 
         for (PotionEffect effect : potionMeta.getCustomEffects()) {
-            sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
+            sender.sendMessage(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getKey().getKey(), '_')
+                    + ' ' + (effect.getAmplifier() + 1) + ' ' + toTime(effect.getDuration() / 20));
         }
     }
 

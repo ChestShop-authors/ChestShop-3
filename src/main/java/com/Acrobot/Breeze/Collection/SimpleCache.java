@@ -1,20 +1,21 @@
 package com.Acrobot.Breeze.Collection;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 public class SimpleCache<K, V> {
-    private final LinkedHashMap<K, V> map;
+    private final Map<K, V> map;
 
     public SimpleCache(int cacheSize) {
-        map = new LinkedHashMap<K, V>(cacheSize * 10/9, 0.7f, true) {
+        map = Collections.synchronizedMap(new LinkedHashMap<K, V>(cacheSize * 10/9, 0.7f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > cacheSize;
             }
-        };
+        });
     }
 
     public V put(K key, V value) {

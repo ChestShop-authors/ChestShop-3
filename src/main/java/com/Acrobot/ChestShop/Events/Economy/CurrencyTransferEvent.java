@@ -1,8 +1,8 @@
 package com.Acrobot.ChestShop.Events.Economy;
 
+import com.Acrobot.ChestShop.Events.TransactionEvent;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
@@ -25,26 +25,32 @@ public class CurrencyTransferEvent extends EconomicEvent {
 
     private Direction direction;
 
+    private final TransactionEvent transactionEvent;
+
     public CurrencyTransferEvent(BigDecimal amount, Player initiator, UUID partner, Direction direction) {
         this(amount, amount, initiator, partner, direction);
     }
 
     public CurrencyTransferEvent(BigDecimal amountSent, BigDecimal amountReceived, Player initiator, UUID partner, Direction direction) {
+        this(amountSent, amountReceived, initiator, partner, direction, null);
+    }
+
+
+    public CurrencyTransferEvent(BigDecimal amount, Player initiator, UUID partner, Direction direction, TransactionEvent transactionEvent) {
+        this(amount, amount, initiator, partner, direction, transactionEvent);
+    }
+
+    public CurrencyTransferEvent(BigDecimal amountSent, BigDecimal amountReceived, Player initiator, UUID partner, Direction direction, TransactionEvent transactionEvent) {
         this.amountSent = amountSent;
         this.amountReceived = amountReceived;
         this.initiator = initiator;
 
         this.partner = partner;
         this.direction = direction;
+
+        this.transactionEvent = transactionEvent;
     }
 
-    /**
-     * @deprecated Use {{@link #CurrencyTransferEvent(BigDecimal, Player, UUID, Direction)}
-     */
-    @Deprecated
-    public CurrencyTransferEvent(double amount, Player initiator, UUID partner, Direction direction) {
-        this(BigDecimal.valueOf(amount), initiator, partner, direction);
-    }
 
     /**
      * @return Amount of currency sent
@@ -151,6 +157,15 @@ public class CurrencyTransferEvent extends EconomicEvent {
     }
 
     /**
+     * Gets the {@link TransactionEvent} associated with this currency transfer event.
+     *
+     * @return the transaction event.
+     */
+    public TransactionEvent getTransactionEvent() {
+        return transactionEvent;
+    }
+
+    /**
      * Get the player who initiated this transaction
      *
      * @return The player who initiated this transaction
@@ -164,6 +179,15 @@ public class CurrencyTransferEvent extends EconomicEvent {
      */
     public UUID getPartner() {
         return partner;
+    }
+
+    /**
+     * Set the partner of the transaction
+     *
+     * @param partner the new partner of this transaction
+     */
+    public void setPartner(UUID partner) {
+        this.partner = partner;
     }
 
     /**

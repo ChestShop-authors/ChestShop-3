@@ -11,7 +11,7 @@ public class MaterialParseEvent extends Event {
     private final short data;
     private Material material = null;
 
-    public MaterialParseEvent(String materialString, short data) {
+    public MaterialParseEvent(String materialString, @Deprecated short data) {
         this.materialString = materialString;
         this.data = data;
     }
@@ -35,7 +35,9 @@ public class MaterialParseEvent extends Event {
     /**
      * Get the data of legacy materials that might result in different flattening materials
      * @return The data
+     * @deprecated Modern materials don't use data values anymore
      */
+    @Deprecated
     public short getData() {
         return data;
     }

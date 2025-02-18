@@ -5,16 +5,20 @@ import java.util.logging.Level;
 
 import javax.annotation.Nullable;
 
+import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.event.server.ServiceRegisterEvent;
 import org.bukkit.event.server.ServiceUnregisterEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.Acrobot.ChestShop.ChestShop;
@@ -35,6 +39,7 @@ import com.Acrobot.ChestShop.Events.Economy.CurrencyTransferEvent;
 public class VaultListener extends EconomyAdapter {
     private RegisteredServiceProvider<Economy> rsp;
     private static Economy provider;
+    private Plugin providingPlugin;
 
     private VaultListener() {
         updateEconomyProvider();
@@ -45,6 +50,7 @@ public class VaultListener extends EconomyAdapter {
 
         if (rsp != null) {
             provider = rsp.getProvider();
+            providingPlugin = rsp.getPlugin();
             ChestShop.getBukkitLogger().log(Level.INFO, "Using " + provider.getName() + " as the Economy provider now.");
         }
     }
@@ -56,6 +62,14 @@ public class VaultListener extends EconomyAdapter {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public @Nullable ProviderInfo getProviderInfo() {
+        if (provider == null) {
+            return null;
+        }
+        return new ProviderInfo(provider.getName(), providingPlugin.getDescription().getVersion());
     }
 
     public static Economy getProvider() { return provider; }
@@ -94,6 +108,17 @@ public class VaultListener extends EconomyAdapter {
     public void onServiceUnregister(ServiceUnregisterEvent event) {
         if (event.getProvider().getProvider() instanceof Economy) {
             updateEconomyProvider();
+        }
+    }
+
+    @EventHandler
+    public void onServerLoad(ServerLoadEvent event) {
+        if (event.getType() == ServerLoadEvent.LoadType.STARTUP) {
+            // Server and plugins are loaded, so we can check for the economy provider now
+            if (provider == null) {
+                ChestShop.getBukkitLogger().log(Level.SEVERE, "No Vault compatible Economy plugin found!");
+                ChestShop.getBukkitServer().getPluginManager().disablePlugin(ChestShop.getPlugin());
+            }
         }
     }
 
@@ -172,7 +197,7 @@ public class VaultListener extends EconomyAdapter {
         }
 
         String formatted = provider.format(event.getAmount().doubleValue());
-        event.setFormattedAmount(formatted);
+        event.setFormattedAmount(Properties.STRIP_PRICE_COLORS ? ChatColor.stripColor(formatted) : formatted);
         event.setHandled(true);
     }
 

@@ -36,7 +36,7 @@ public class EntityParser {
             fields.add(convertToSQL(field));
         }
 
-        return fields.stream().collect(Collectors.joining(","));
+        return String.join(",", fields);
     }
 
     /**

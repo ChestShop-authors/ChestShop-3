@@ -4,7 +4,9 @@ import org.bukkit.ChatColor;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -153,5 +155,20 @@ public class StringUtil {
         }
         // Return the stripped string, without any whitespace from the end left
         return stripped.toString();
+    }
+
+    /**
+     * Create a map from strings
+     * @param values The values to add
+     * @return The map
+     */
+    public static Map<String, String> map(String... values) {
+        Map<String, String> map = new LinkedHashMap<>();
+
+        for (int i = 0; i + 1 < values.length; i+=2) {
+            map.put(values[i], values[i + 1]);
+        }
+
+        return map;
     }
 }

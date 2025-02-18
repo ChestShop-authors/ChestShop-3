@@ -126,7 +126,7 @@ public class Configuration {
 
             return lastLine.isEmpty();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Logger.getLogger("Configuration").log(Level.SEVERE, "Error while checking if file " + file.getName() + " ends with space", e);
             return false;
         }
     }
