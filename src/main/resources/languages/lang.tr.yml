@@ -17,7 +17,9 @@ iteminfo_book: |-
   &fKitap Sayfaları: &7%pages
 iteminfo_book_generation: "&fKitap Jenerasyonu: &7%generation"
 iteminfo_leather_color: "&fDeri Rengi: &7Kırmızı: %colorred, Yeşil: %colorgreen, Mavi: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
 iteminfo_axolotl_variant: "&fAksolotl Türü: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
 iteminfo_recipes: "&fTarif Bilgisi:"
 iteminfo_map_view: |-
   &fHarita ID'si: &7%id
@@ -92,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Artık dükkan(lar)ından bildirimler almayacaksın."
 TOGGLE_MESSAGES_ON: "Artık dükkan(lar)ından bildirimler alacaksın."
 TOGGLE_ACCESS_ON: "Artık erişimin olan dükkanlarda ticaret yapamayacaksın."
 TOGGLE_ACCESS_OFF: "Artık erişimin olan dükkanlarda ticaret yapabileceksin."
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
