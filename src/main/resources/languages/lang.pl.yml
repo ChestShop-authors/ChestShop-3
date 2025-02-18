@@ -19,6 +19,7 @@ iteminfo_book_generation: "&fGenerowanie Książki: &7%generation"
 iteminfo_leather_color: "&fKolor skóry: &7Czerwony: %colorred, zielony: %colorgreen, niebieski: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fPakiet przedmiotów: &7%itemcount"
 iteminfo_axolotl_variant: "&fWariant Aksolotla: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
 iteminfo_recipes: "&fPrzepis:"
 iteminfo_map_view: |-
   &fID mapy: &7%id
@@ -93,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Nie będziesz już otrzymywać wiadomości ze swoich sklep
 TOGGLE_MESSAGES_ON: "Od teraz będziesz otrzymywał wiadomości ze swoich sklepów."
 TOGGLE_ACCESS_ON: "Nie możesz już handlować w sklepach, do których masz dostęp"
 TOGGLE_ACCESS_OFF: "Możesz teraz handlować w sklepach, do których masz dostęp"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
