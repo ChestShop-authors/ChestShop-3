@@ -16,6 +16,7 @@ iteminfo_book: |-
   &fАвтор книги: &7%author
   &fСторінок книги: &7%pages
 iteminfo_book_generation: "&fВерсія книги: &7%generation"
+iteminfo_leather_color: "&fКолір шкіри: &7Червониий: %colorred, Зелений: %colorgreen, синій: %colorblue (Hex: #%colorhex)"
 iteminfo_lore: |-
   &fОпис:
   &r%lore
