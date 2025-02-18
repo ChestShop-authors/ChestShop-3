@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fBook Author: &7%author
   &fBook Pages: &7%pages
 iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -40,17 +57,18 @@ NOT_ENOUGH_SPACE_IN_CHEST: "창고에 공간이 충분하지 않습니다!"
 NOT_ENOUGH_ITEMS_TO_SELL: "당신은 판매할 아이템을 충분히 가지고 있지 않습니다!"
 NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 NOT_ENOUGH_STOCK: "이 상점은 재고가 바닥났습니다!"
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "당신의 %material 상점은 재고가 바닥났습니다!"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 YOU_BOUGHT_FROM_SHOP: "당신은 %owner님으로부터 %price에 %item을/를 구매했습니다."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "%buyer님은 %item을/를 %price에 구매했습니다."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 YOU_SOLD_TO_SHOP: "당신은 %price에 %item을/를 %buyer님에게 팔았습니다"
-SOMEBODY_SOLD_TO_YOUR_SHOP: "%seller님은 %item을/를 %price에 팔았습니다."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
 YOU_CANNOT_CREATE_SHOP: "당신은 이 종류의 상점을 만들 수 없습니다!"
 NO_CHEST_DETECTED: "창고를 찾을 수 없습니다!"
 INVALID_SHOP_DETECTED: "그 상점은 사용할 수 없습니다!"
 INVALID_SHOP_PRICE: "The shop has an invalid price!"
 INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
 CANNOT_ACCESS_THE_CHEST: "당신은 이 상자에 접근할 권한이 없습니다!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
 SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
 SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
 TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
 TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
