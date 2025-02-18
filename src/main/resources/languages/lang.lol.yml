@@ -1,0 +1,70 @@
+---
+prefix: "&a[shOP] &r"
+shopinfo: |-
+  &ashop enfORMatiON
+  &fownr: &7%owner
+  &fSTOk: &7%stock
+  &fiTEm: &7%item
+shopinfo_buy: "&fbUY &7%amount &ffR &7%price"
+shopinfo_sell: "&fsel &7%amount &ffR &7%price"
+iteminfo: "&aitem enformashUN: &r"
+iteminfo_fullname: "&fful neme: &7%item"
+iteminfo_shopname: "&fsop sign: &7%item"
+iteminfo_repaircost: "&frepaIR Costed: &7%cost"
+iteminfo_book: |-
+  &fBOK Titl: &7%title
+  &fbok AuTHR: &7%author
+  &fbOk PaGZ: &7%pages
+iteminfo_book_generation: "&fBok generashun: &7%generation"
+iteminfo_leather_color: "&fleethr colr: &7Rd: %colorred, Grin: %colorgreen, Bluer: %colorblue (Heks: #%colorhex)"
+iteminfo_bundle_items: "&fbundl itemz: &7%itemcount"
+iteminfo_axolotl_variant: "&faXolotl variant: &7%variant"
+iteminfo_recipes: "&frRCipe knWLedge;"
+iteminfo_map_view: |-
+  &fmAp ID: &7%id
+  &fMap World: &7%world
+  &fmaP Centr: &7%x/%z
+  &fMaP lokd: &7lokd
+iteminfo_map_location: "&fmap locashun: &7%location"
+iteminfo_tropical_fish: |-
+  &ffish paTtern: &7%pattern
+  &ffish pattern colR: &7%patterncolor
+  &fFISh body colr: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fchargd crosbow projectile:"
+iteminfo_crossbow_projectile: "&f%item"
+iteminfo_lore: |-
+  &fLoar:
+  &r%lore
+METRICS: |-
+  &a[shOP] &fmetrICZ:
+  &faCCOuntz: &7%accounts
+  &faverage transactiOnz: &7%totalTransactions &f(bUy: &7%buyTransactions &fsel: &7%selltransactionz&f)
+  &faverAGE Itemz tradd: &7%totalItems &f(buYed: &7%boughtItems &fselled: &7%soldItems&f)
+ACCESS_DENIED: "oh hi u dont haz pERMIshun to Accez that shopz storage containeR"
+TRADE_DENIED: "u dont haz PERMIshun to traDE wif that sop"
+TRADE_DENIED_ACCESS_PERMS: "oh hI U cannot trade wiF Shopz that U HAZ acceZ TO!??"
+TRADE_DENIED_CREATIVE_MODE: "oh HI U CAnnot TrADE wif Shopz wil u iz in CReetif mode!??"
+NOT_ENOUGH_MONEY: "u dont haz INoo moneYS!"
+NOT_ENOUGH_MONEY_SHOP: "shOp ownr doesnt haz inoo moneys!?!"
+CLIENT_DEPOSIT_FAILED: "moneys deeposit to ur account failed!?"
+SHOP_DEPOSIT_FAILED: "moneys deeposit TO shop ownr failed!??"
+NO_ECONOMY_ACCOUNT: "EConomy account frum ShOP ownr doesnt EXIST!??"
+NO_BUYING_HERE: "u cANT buy here!?"
+NO_SELLING_HERE: "oh hi u cant seL HEre!?"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "u havent geted inoo spas IN enventory!?"
+NOT_ENOUGH_SPACE_IN_CHEST: "ther isnt inoO SPAS in chest!?"
+NOT_ENOUGH_ITEMS_TO_SELL: "u DOnt haz iNOO ITemZ TO sEL!?"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop R ful!](&f%seller&7 trid to sel\n&7in world: &f%world\n&7aT posishun: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "thiz shop r owt for stok!"
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shOP r owt for stok!](&f%buyer&7 trid To Buy\n&7in world &f%world\n&7et poSIShun: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "u Buyed %item frum %owner fr %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer buyed %item fr %price.](&7iN wOrld: &f%world\n&7At posishun: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "u Selled %item to %buyer fr %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller selled %item fr %price.](&7IN woRld: &f%world\n&7aAt posishUn: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "u cant creete thiz type FOR Shop!"
+NO_CHEST_DETECTED: "couldnt fin Chest!"
+INVALID_SHOP_DETECTED: "teh shop cannot be used!"
+INVALID_SHOP_PRICE: "teh shop haz an envalid prIce!"
+INVALID_SHOP_QUANTITY: "teh shop haz an envaliD kwanTIty!"
+CANNOT_ACCESS_THE_CHEST: "u dont haz permisionz tO accez thiz cheST!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "sel PRIS r above teh buy prIce!"
