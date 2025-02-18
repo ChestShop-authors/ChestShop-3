@@ -17,6 +17,22 @@ iteminfo_book: |-
   &fСторінок книги: &7%pages
 iteminfo_book_generation: "&fВерсія книги: &7%generation"
 iteminfo_leather_color: "&fКолір шкіри: &7Червониий: %colorred, Зелений: %colorgreen, синій: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fОпис:
   &r%lore
@@ -52,6 +68,7 @@ INVALID_SHOP_DETECTED: "Цей магазин не можна використо
 INVALID_SHOP_PRICE: "Цей магазин має невірну ціну!"
 INVALID_SHOP_QUANTITY: "Цей магазин має невірну кількість!"
 CANNOT_ACCESS_THE_CHEST: "Ви не маєте доступу до цієї скрині!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Ціна продажу більша за ціну купівлі!"
 SELL_PRICE_ABOVE_MAX: "Ціна продажу %price більша за максимальну %maxprice!"
 SELL_PRICE_BELOW_MIN: "Ціна продажу %price менша за мінімальну %minprice!"
@@ -77,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Ви тепер не отримуватимете пові
 TOGGLE_MESSAGES_ON: "Ви тепер отримуватимете повідомлення від ваших магазинів."
 TOGGLE_ACCESS_ON: "Ви більше не можете торгувати в магазинах до яких у вас є доступ"
 TOGGLE_ACCESS_OFF: "Ви тепер можете торгувати з магазинами до яких у вас є доступ"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
