@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fKönyv Szerző: &7%author
   &fKönyvoldalak: &7%pages
 iteminfo_book_generation: "&fKönyv Generáció: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -51,6 +68,8 @@ INVALID_SHOP_DETECTED: "A bolt nem használható!"
 INVALID_SHOP_PRICE: "A bolt ára érvénytelen!"
 INVALID_SHOP_QUANTITY: "A bolt mennyisége érvénytelen!"
 CANNOT_ACCESS_THE_CHEST: "Nincs engedélyed hozzáférni ehhez a ládához!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
 SELL_PRICE_ABOVE_MAX: "A(z) %price eladási ár meghaladja a maximális %maxprice-t!"
 SELL_PRICE_BELOW_MIN: "A(z) %price eladási ár a minimum %minprice alatt van!"
 BUY_PRICE_ABOVE_MAX: "A(z) %price vételár meghaladja a maximális %maxprice-t!"
@@ -75,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Nem fogsz több üzeneteket kapni a boltodról, vagy boltj
 TOGGLE_MESSAGES_ON: "Mostantól üzeneteket fogsz kapni a boltodról, vagy boltjaidról."
 TOGGLE_ACCESS_ON: "Már nem kereskedhetsz olyan boltokban, amelyekhez hozzáférsz"
 TOGGLE_ACCESS_OFF: "Most kereskedhetsz olyan boltokban, amelyekhez hozzáférsz"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
