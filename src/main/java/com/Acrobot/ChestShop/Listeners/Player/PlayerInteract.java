@@ -109,7 +109,7 @@ public class PlayerInteract implements Listener {
                     SignChangeEvent changeEvent = new SignChangeEvent(block, player, lines);
                     com.Acrobot.ChestShop.ChestShop.callEvent(changeEvent);
                     if (!changeEvent.isCancelled()) {
-                        for (byte i = 0; i < changeEvent.getLines().length; ++i) {
+                        for (byte i = 0; i < changeEvent.getLines().length; i++) {
                             String line = changeEvent.getLine(i);
                             sign.setLine(i, line != null ? line : "");
                         }
