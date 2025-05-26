@@ -131,8 +131,14 @@ public class MaterialUtil {
         }
 
         // Try to use same parsing as the YAML dumper in the ItemDatabase when generating the code as the last resort
-        ItemStack oneDumped = YAML.loadAs(YAML.dump(one), ItemStack.class);
-        if (oneDumped.isSimilar(two)) {
+        ItemStack oneCloned = one.clone();
+        oneCloned.setAmount(1);
+
+        ItemStack twoCloned = two.clone();
+        twoCloned.setAmount(1);
+
+        ItemStack oneDumped = YAML.loadAs(YAML.dump(oneCloned), ItemStack.class);
+        if (oneDumped.isSimilar(twoCloned)) {
             return true;
         }
 
@@ -141,7 +147,7 @@ public class MaterialUtil {
             return true;
         }
 
-        ItemStack twoDumped = YAML.loadAs(YAML.dump(two), ItemStack.class);
+        ItemStack twoDumped = YAML.loadAs(YAML.dump(twoCloned), ItemStack.class);
         if (oneDumped.isSimilar(twoDumped)) {
             return true;
         }
