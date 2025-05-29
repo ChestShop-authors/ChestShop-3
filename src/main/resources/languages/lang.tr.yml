@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fKitap Yazarı: &7%author
   &fKitap Sayfaları: &7%pages
 iteminfo_book_generation: "&fKitap Jenerasyonu: &7%generation"
+iteminfo_leather_color: "&fDeri Rengi: &7Kırmızı: %colorred, Yeşil: %colorgreen, Mavi: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAksolotl Türü: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fTarif Bilgisi:"
+iteminfo_map_view: |-
+  &fHarita ID'si: &7%id
+  &fHarita Dünyası: &7%world
+  &fHarita Merkezi: &7%x/%z
+  &fHarita Kilitli mi: &7locked
+iteminfo_map_location: "&fHarita Konumu: &7%location"
+iteminfo_tropical_fish: |-
+  &fBalık Deseni: &7%pattern
+  &fBalık Deseni Rengi: &7%patterncolor
+  &fBalığın Rengi: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fYüklü Arbalet Mermisi:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fAçıklama:
   &r%lore
@@ -51,7 +68,8 @@ INVALID_SHOP_DETECTED: "Dükkan kullanılamaz!"
 INVALID_SHOP_PRICE: "Dükkan ücreti geçersiz!"
 INVALID_SHOP_QUANTITY: "Dükkan ürün miktarı geçersiz!"
 CANNOT_ACCESS_THE_CHEST: "Bu sandığa erişebilme yetkiniz yok!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Market tabelasının arka tarafını değiştiremezsin!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Satış fiyatı, alış fiyatından fazla!"
 SELL_PRICE_ABOVE_MAX: "%price satış ücreti, %maxprice olan maksimum ücretten yüksek!"
 SELL_PRICE_BELOW_MIN: "%price satış ücreti, %minprice olan minimum ücretten düşük!"
 BUY_PRICE_ABOVE_MAX: "%price satın alma ücreti, %maxprice olan maksimum ücretten yüksek!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Artık dükkan(lar)ından bildirimler almayacaksın."
 TOGGLE_MESSAGES_ON: "Artık dükkan(lar)ından bildirimler alacaksın."
 TOGGLE_ACCESS_ON: "Artık erişimin olan dükkanlarda ticaret yapamayacaksın."
 TOGGLE_ACCESS_OFF: "Artık erişimin olan dükkanlarda ticaret yapabileceksin."
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
