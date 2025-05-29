@@ -8,7 +8,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import static com.Acrobot.Breeze.Utils.InventoryUtil.mergeSimilarStacks;
+import java.util.Map;
+
+import static com.Acrobot.Breeze.Utils.InventoryUtil.getItemCounts;
 import static com.Acrobot.ChestShop.Utils.ItemUtil.getName;
 import static com.Acrobot.ChestShop.Events.TransactionEvent.TransactionType.BUY;
 
@@ -25,8 +27,8 @@ public class TransactionLogger implements Listener {
 
         StringBuilder items = new StringBuilder(50);
 
-        for (ItemStack item : mergeSimilarStacks(event.getStock())) {
-            items.append(item.getAmount()).append(' ').append(getName(item));
+        for (Map.Entry<ItemStack, Integer> entry : getItemCounts(event.getStock()).entrySet()) {
+            items.append(entry.getValue()).append(' ').append(getName(entry.getKey()));
         }
 
         String message = String.format(template,

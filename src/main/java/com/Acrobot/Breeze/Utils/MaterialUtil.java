@@ -207,12 +207,12 @@ public class MaterialUtil {
      */
     @Deprecated
     public static String getItemList(ItemStack[] items) {
-        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
+        Map<ItemStack, Integer> itemCounts = InventoryUtil.getItemCounts(items);
 
         List<String> itemText = new ArrayList<>();
 
-        for (ItemStack item : mergedItems) {
-            itemText.add(item.getAmount() + " " + getName(item));
+        for (Map.Entry<ItemStack, Integer> entry : itemCounts.entrySet()) {
+            itemText.add(entry.getValue() + " " + getName(entry.getKey()));
         }
 
         return String.join(", ", itemText);
@@ -621,8 +621,15 @@ public class MaterialUtil {
             }
 
             TextComponent.Builder itemComponent = Component.text();
-            for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
+            for (Map.Entry<ItemStack, Integer> entry : InventoryUtil.getItemCounts(stock).entrySet()) {
                 try {
+                    ItemStack item = entry.getKey();
+                    if (item == null || item.getType() == Material.AIR || entry.getValue() <= 0) {
+                        continue;
+                    }
+                    if (entry.getValue() < item.getMaxStackSize()) {
+                        item.setAmount(entry.getValue());
+                    }
                     itemComponent.append(GsonComponentSerializer.gson().deserialize(showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player)));
                 } catch (Exception e) {
                     ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());

@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.Acrobot.Breeze.Utils.MaterialUtil.MAXIMUM_SIGN_WIDTH;
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
@@ -23,12 +24,12 @@ public class ItemUtil {
      * @return The list, including the amount and names of the items
      */
     public static String getItemList(ItemStack[] items) {
-        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
+        Map<ItemStack, Integer> itemCounts = InventoryUtil.getItemCounts(items);
 
         List<String> itemText = new ArrayList<>();
 
-        for (ItemStack item : mergedItems) {
-            itemText.add(item.getAmount() + " " + getName(item));
+        for (Map.Entry<ItemStack, Integer> entry : itemCounts.entrySet()) {
+            itemText.add(entry.getValue() + " " + getName(entry.getKey()));
         }
 
         return String.join(", ", itemText);

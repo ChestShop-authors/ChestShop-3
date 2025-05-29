@@ -1,12 +1,16 @@
 package com.Acrobot.Breeze.Utils;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.Acrobot.ChestShop.Configuration.Properties;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -100,9 +104,9 @@ public class InventoryUtil {
      * @return Does the inventory contain stock of this type?
      */
     public static boolean hasItems(ItemStack[] items, Inventory inventory) {
-        ItemStack[] mergedItems = mergeSimilarStacks(items);
-        for (ItemStack item : mergedItems) {
-            if (getAmount(item, inventory) < item.getAmount()) {
+        Map<ItemStack, Integer> itemCounts = getItemCounts(items);
+        for (Map.Entry<ItemStack, Integer> entry : itemCounts.entrySet()) {
+            if (getAmount(entry.getKey(), inventory) < entry.getValue()) {
                 return false;
             }
         }
@@ -118,9 +122,9 @@ public class InventoryUtil {
      * @return Do the items fit inside the inventory?
      */
     public static boolean fits(ItemStack[] items, Inventory inventory) {
-        ItemStack[] mergedItems = InventoryUtil.mergeSimilarStacks(items);
-        for (ItemStack item : mergedItems) {
-            if (!InventoryUtil.fits(item, inventory)) {
+        Map<ItemStack, Integer> itemCounts = InventoryUtil.getItemCounts(items);
+        for (Map.Entry<ItemStack, Integer> entry : itemCounts.entrySet()) {
+            if (!InventoryUtil.fits(entry.getKey(), entry.getValue(), inventory)) {
                 return false;
             }
         }
@@ -136,8 +140,19 @@ public class InventoryUtil {
      * @return Does item fit inside inventory?
      */
     public static boolean fits(ItemStack item, Inventory inventory) {
-        int left = item.getAmount();
+        return fits(item, item.getAmount(), inventory);
+    }
 
+    /**
+     * Checks if the item fits the inventory
+     *
+     * @param item      Item to check
+     * @param amount    Amount of the item to check
+     * @param inventory inventory
+     * @return Does item fit inside inventory?
+     */
+    public static boolean fits(ItemStack item, int amount,Inventory inventory) {
+        int left = amount;
         if (inventory.getSize() == Integer.MAX_VALUE) {
             return true;
         }
@@ -331,7 +346,9 @@ public class InventoryUtil {
      *
      * @param items Items to merge
      * @return Merged stack array
+     * @deprecated This produces items that are larger than the max stack size, use either {@link #getItemsStacked(ItemStack...)} or {@link #getItemCounts(ItemStack...)} instead
      */
+    @Deprecated
     public static ItemStack[] mergeSimilarStacks(ItemStack... items) {
         if (items.length <= 1) {
             return items;
@@ -352,6 +369,41 @@ public class InventoryUtil {
         }
 
         return itemList.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * If items in arguments are similar, this function counts them
+     *
+     * @param items Items to count
+     * @return The map of items and their amounts. The keys are clones of the original items with their amounts set to 1.
+     */
+    public static Map<ItemStack, Integer> getItemCounts(ItemStack... items) {
+        if (items == null || items.length == 0) {
+            return Collections.emptyMap();
+        }
+        if (items.length == 1) {
+            ItemStack itemClone = items[0].clone();
+            itemClone.setAmount(1);
+            return ImmutableMap.of(itemClone, items[0].getAmount());
+        }
+
+        Map<ItemStack, Integer> counts = new LinkedHashMap<>();
+
+        Iterating:
+        for (ItemStack item : items) {
+            for (Map.Entry<ItemStack, Integer> entry : counts.entrySet()) {
+                if (MaterialUtil.equals(item, entry.getKey())) {
+                    entry.setValue(entry.getValue() + item.getAmount());
+                    continue Iterating;
+                }
+            }
+
+            ItemStack itemClone = item.clone();
+            itemClone.setAmount(1);
+            counts.put(itemClone, item.getAmount());
+        }
+
+        return counts;
     }
 
     /**
@@ -405,25 +457,61 @@ public class InventoryUtil {
     public static ItemStack[] getItemsStacked(ItemStack... items) {
         List<ItemStack> stackedItems = new LinkedList<>();
         for (ItemStack item : items) {
-            int maxStackSize = getMaxStackSize(item);
-            if (maxStackSize == 0) {
-                continue;
-            }
-            if (item.getAmount() <= maxStackSize) {
-                stackedItems.add(item.clone());
-                continue;
-            }
-            for (int i = 0; i < Math.floor((double) item.getAmount() / maxStackSize); i++) {
-                ItemStack itemClone = item.clone();
-                itemClone.setAmount(maxStackSize);
-                stackedItems.add(itemClone);
-            }
-            if (item.getAmount() % maxStackSize != 0) {
-                ItemStack rest = item.clone();
-                rest.setAmount(item.getAmount() % maxStackSize);
-                stackedItems.add(rest);
-            }
+            stackItems(stackedItems, item, item.getAmount());
         }
         return stackedItems.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Get an array of different item stacks that are properly stacked to their max stack size
+     *
+     * @param item      The item to stack
+     * @param amount    The amount of the item to stack
+     * @return An array of item stacks which's amount is a maximum of the allowed stack size
+     */
+    public static ItemStack[] getItemStacked(ItemStack item, int amount) {
+        return stackItems(new LinkedList<>(), item, amount).toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Add properly stacked items to a collection
+     *
+     * @param stackedItems The collection to add the items to
+     * @param item      The item to stack
+     * @param amount    The amount of the item to stack
+     * @return The input collection
+     */
+    private static Collection<ItemStack> stackItems(Collection<ItemStack> stackedItems, ItemStack item, int amount) {
+        int maxStackSize = getMaxStackSize(item);
+        if (maxStackSize == 0) {
+            return stackedItems;
+        }
+
+        ItemStack itemClone = item.clone();
+
+        for (ItemStack stackedItem : stackedItems) {
+            if (MaterialUtil.equals(stackedItem, itemClone) && stackedItem.getAmount() < getMaxStackSize(stackedItem)) {
+                int amountToAdd = Math.min(getMaxStackSize(stackedItem) - stackedItem.getAmount(), amount);
+                stackedItem.setAmount(stackedItem.getAmount() + amountToAdd);
+                amount = amount - amountToAdd;
+                if (amount <= 0) {
+                    break;
+                }
+
+            }
+        }
+        if (amount > maxStackSize || amount <= 0) {
+            for (int i = 0; i < Math.floor((double) amount / maxStackSize); i++) {
+                ItemStack itemAddClone = itemClone.clone();
+                itemAddClone.setAmount(maxStackSize);
+                stackedItems.add(itemAddClone);
+            }
+            amount = amount % maxStackSize;
+        }
+        if (amount > 0) {
+            itemClone.setAmount(amount);
+            stackedItems.add(itemClone);
+        }
+        return stackedItems;
     }
 }

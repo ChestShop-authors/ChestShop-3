@@ -22,6 +22,7 @@ import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome.*;
@@ -217,11 +218,11 @@ public class PartialTransactionModule implements Listener {
     private static ItemStack[] getItems(ItemStack[] stock, Inventory inventory) {
         List<ItemStack> toReturn = new LinkedList<>();
 
-        for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
-            int amount = InventoryUtil.getAmount(item, inventory);
+        for (Map.Entry<ItemStack, Integer> entry : InventoryUtil.getItemCounts(stock).entrySet()) {
+            int amount = InventoryUtil.getAmount(entry.getKey(), inventory);
 
-            Collections.addAll(toReturn, getCountedItemStack(new ItemStack[]{item},
-                    Math.min(amount, item.getAmount())));
+            Collections.addAll(toReturn, getCountedItemStack(new ItemStack[]{entry.getKey()},
+                    Math.min(amount, entry.getValue())));
         }
 
         return toReturn.toArray(new ItemStack[0]);
@@ -288,7 +289,9 @@ public class PartialTransactionModule implements Listener {
 
         int emptySlots = InventoryUtil.countEmpty(inventory);
 
-        for (ItemStack item : InventoryUtil.mergeSimilarStacks(stock)) {
+        for (Map.Entry<ItemStack, Integer> entry : InventoryUtil.getItemCounts(stock).entrySet()) {
+            ItemStack item = entry.getKey();
+            int amount = entry.getValue();
             int maxStackSize = InventoryUtil.getMaxStackSize(item);
             int free = 0;
             for (ItemStack itemInInventory : inventory.getContents()) {
@@ -303,20 +306,20 @@ public class PartialTransactionModule implements Listener {
                 continue;
             }
 
-            if (item.getAmount() > free) {
+            if (amount > free) {
                 if (emptySlots > 0) {
-                    int requiredSlots = (int) Math.ceil(((double) item.getAmount() - free) / maxStackSize);
+                    int requiredSlots = (int) Math.ceil(((double) amount - free) / maxStackSize);
                     if (requiredSlots <= emptySlots) {
                         emptySlots = emptySlots - requiredSlots;
                     } else {
-                        item.setAmount(free + maxStackSize * emptySlots);
+                        amount = free + maxStackSize * emptySlots;
                         emptySlots = 0;
                     }
                 } else {
-                    item.setAmount(free);
+                    amount = free;
                 }
             }
-            Collections.addAll(resultStock, InventoryUtil.getItemsStacked(item));
+            Collections.addAll(resultStock, InventoryUtil.getItemStacked(item, amount));
         }
 
         return resultStock.toArray(new ItemStack[0]);
