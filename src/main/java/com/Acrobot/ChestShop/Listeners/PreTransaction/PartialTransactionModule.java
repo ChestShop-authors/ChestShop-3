@@ -220,8 +220,7 @@ public class PartialTransactionModule implements Listener {
 
         for (Map.Entry<ItemStack, Integer> entry : InventoryUtil.getItemCounts(stock).entrySet()) {
             int amount = InventoryUtil.getAmount(entry.getKey(), inventory);
-
-            Collections.addAll(toReturn, getCountedItemStack(new ItemStack[]{entry.getKey()},
+            Collections.addAll(toReturn, InventoryUtil.getItemStacked(entry.getKey(),
                     Math.min(amount, entry.getValue())));
         }
 
