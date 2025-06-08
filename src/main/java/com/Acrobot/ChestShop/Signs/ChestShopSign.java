@@ -4,10 +4,12 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.ImplementationAdapter;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
+import com.Acrobot.ChestShop.Events.NameQueryEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -171,6 +173,13 @@ public class ChestShopSign {
 
     public static boolean isValidPreparedSign(String[] lines) {
         String playername = ChestShopSign.getOwner(lines);
+
+        NameQueryEvent nameEvent = new NameQueryEvent(playername);
+        ChestShop.callEvent(nameEvent);
+
+        if (nameEvent.isValid()) {
+            return true;
+        }
 
         // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
         if ((!isAdminShop(playername)) && (playername.length() > 0)) {
