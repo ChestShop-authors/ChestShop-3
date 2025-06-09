@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
+import com.Acrobot.ChestShop.Events.SignValidationEvent;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
@@ -62,7 +63,10 @@ public class SignCreate implements Listener {
 
         String[] lines = StringUtil.stripColourCodes(event.getLines());
 
-        if (!ChestShopSign.isValidPreparedSign(lines)) {
+        SignValidationEvent signValidationEvent = new SignValidationEvent(lines);
+        ChestShop.callEvent(signValidationEvent);
+
+        if (!signValidationEvent.isValid()) {
             // Check if a valid shop already existed previously
             if (ChestShopSign.isValid(sign)) {
                 SignBreak.sendShopDestroyedEvent(sign, event.getPlayer());

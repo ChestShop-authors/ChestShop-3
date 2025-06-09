@@ -4,10 +4,12 @@ import com.Acrobot.Breeze.Utils.BlockUtil;
 import com.Acrobot.Breeze.Utils.ImplementationAdapter;
 import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Containers.AdminInventory;
 import com.Acrobot.ChestShop.Database.Account;
 import com.Acrobot.ChestShop.Events.AccountQueryEvent;
+import com.Acrobot.ChestShop.Events.SignValidationEvent;
 import com.Acrobot.ChestShop.Permission;
 import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
@@ -23,7 +25,6 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.Locale;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
@@ -72,7 +73,7 @@ public class ChestShopSign {
 
     public static boolean isValid(String[] lines) {
         lines = StringUtil.stripColourCodes(lines);
-        return isValidPreparedSign(lines)
+        return ChestShop.callEvent(new SignValidationEvent(lines)).isValid()
                 && (getPrice(lines).toUpperCase(Locale.ROOT).contains("B")
                         || getPrice(lines).toUpperCase(Locale.ROOT).contains("S"))
                 && !getOwner(lines).isEmpty();
@@ -169,44 +170,12 @@ public class ChestShopSign {
         return account.getUuid().equals(player.getUniqueId());
     }
 
+    /**
+     * @deprecated Use the {@link SignValidationEvent} instead!
+     */
+    @Deprecated
     public static boolean isValidPreparedSign(String[] lines) {
-        String playername = ChestShopSign.getOwner(lines);
-
-        // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
-        if ((!isAdminShop(playername)) && (playername.length() > 0)) {
-
-            // Prepare regexp patterns
-            Pattern playernamePattern = Pattern.compile(Properties.VALID_PLAYERNAME_REGEXP); // regexp from config file
-            Matcher playernameWithIdMatcher = Pattern.compile("^(.+):[A-Za-z0-9]+$").matcher(playername); // regexp to match ':' and a base62 encoded string
-            // Check if the playername has an ID. This can happen on duplicate or too long names
-            if (playernameWithIdMatcher.matches()) {
-                // Playername matches the id pattern, so validate everything before the last ':'
-                playername = playernameWithIdMatcher.group(1);
-            }
-
-            // If the playername doesn't match, this is not a valid sign, so return
-            if (!playernamePattern.matcher(playername).matches()) {
-                return false;
-            }
-        }
-
-        // The playername on the first line is valid. Now validate the last 3 lines against the predefined regexp patterns.
-        for (int i = 0; i < 3; i++) {
-            boolean matches = false;
-            for (Pattern pattern : SHOP_SIGN_PATTERN[i]) {
-                if (pattern.matcher(StringUtil.strip(StringUtil.stripColourCodes(lines[i+1]))).matches()) {
-                    matches = true;
-                    break;
-                }
-            }
-            if (!matches) {
-                return false;
-            }
-        }
-
-        // All lines are looking good. If the price line contains only one ':', then this is a valid prepared sign.
-        String priceLine = getPrice(lines);
-        return priceLine.indexOf(':') == priceLine.lastIndexOf(':');
+        return ChestShop.callEvent(new SignValidationEvent(lines)).isValid();
     }
 
     /**
