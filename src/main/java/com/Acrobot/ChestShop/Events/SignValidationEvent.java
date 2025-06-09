@@ -1,20 +1,19 @@
 package com.Acrobot.ChestShop.Events;
 
+import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Represents a request whether a name is allowed.
+ * Represents a request whether all sign lines are valid.
  */
 public class SignValidationEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final String[] lines;
-    private final String ownerName;
     private boolean valid;
 
-    public SignValidationEvent(String[] lines, String ownerName) {
+    public SignValidationEvent(String[] lines) {
         this.lines = lines;
-        this.ownerName = ownerName;
     }
 
     /**
@@ -27,12 +26,39 @@ public class SignValidationEvent extends Event {
     }
 
     /**
-     * The name of the owner to check for.
+     * Get the owner string of a shop sign.
      *
-     * @return The owner's name
+     * @return The owner string
      */
-    public String getOwnerName() {
-        return ownerName;
+    public String getOwner() {
+        return ChestShopSign.getOwner(lines);
+    }
+
+    /**
+     * Get the quantity and count line of the shop sign.
+     *
+     * @return The quantity line
+     */
+    public String getQuantity() {
+        return ChestShopSign.getQuantityLine(lines);
+    }
+
+    /**
+     * Get the price line of the shop sign
+     *
+     * @return The price line
+     */
+    public String getPrice() {
+        return ChestShopSign.getPrice(lines);
+    }
+
+    /**
+     * Get the item line of the shop sign
+     *
+     * @return The item line
+     */
+    public String getItem() {
+        return ChestShopSign.getItem(lines);
     }
 
     /**

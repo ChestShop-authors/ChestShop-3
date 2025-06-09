@@ -32,7 +32,7 @@ public class SignParseListener implements Listener {
 
     @EventHandler
     public void onSignValidation(SignValidationEvent event) {
-        String ownerName = event.getOwnerName();
+        String ownerName = event.getOwner();
         String[] lines = event.getLines();
 
         // If the shop owner is not blank (auto-filled) or the admin shop string, we need to validate it
@@ -50,6 +50,7 @@ public class SignParseListener implements Listener {
             // If the owner name doesn't match, this is not a valid sign
             if (!playernamePattern.matcher(ownerName).matches()) {
                 event.setValid(false);
+                return;
             }
         }
 
@@ -64,6 +65,7 @@ public class SignParseListener implements Listener {
             }
             if (!matches) {
                 event.setValid(false);
+                return;
             }
         }
 
