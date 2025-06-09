@@ -351,6 +351,24 @@
             <version>2.10-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.intellectualsites.plotsquared</groupId>
+            <artifactId>plotsquared-core</artifactId>
+            <version>7.5.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.intellectualsites.plotsquared</groupId>
+            <artifactId>plotsquared-bukkit</artifactId>
+            <version>7.5.3</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>plotsquared-core</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>

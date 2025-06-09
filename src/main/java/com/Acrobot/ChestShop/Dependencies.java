@@ -52,6 +52,11 @@ public class Dependencies implements Listener {
         }
 
         switch (dependency) {
+            //Protection plugins
+            case PlotSquared:
+                System.out.println("1");
+                ChestshopAllowShopFlag.ALLOW_SHOP_FLAG_TRUE.getName(); // force the static code to run
+                break;
             //Terrain protection plugins
             case WorldGuard:
                 WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
@@ -165,6 +170,9 @@ public class Dependencies implements Listener {
 
                 listener = new ResidenceChestProtection();
                 break;
+            case PlotSquared:
+                listener = new PlotSquared();
+                break;
 
             //Terrain protection plugins
             case WorldGuard:
@@ -244,7 +252,8 @@ public class Dependencies implements Listener {
 
         ItemBridge,
 
-        ShowItem;
+        ShowItem,
+        PlotSquared;
 
         private final String author;
 
