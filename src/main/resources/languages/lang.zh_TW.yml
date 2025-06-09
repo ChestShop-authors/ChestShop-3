@@ -16,6 +16,23 @@ iteminfo_book: |-
   &f書籍作者: &7%author
   &f書頁: &7%pages
 iteminfo_book_generation: "&f圖書世代: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_map_view: |-
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
+iteminfo_tropical_fish: |-
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &f知識:
   &r%lore
@@ -51,6 +68,7 @@ INVALID_SHOP_DETECTED: "這個商店無法使用!"
 INVALID_SHOP_PRICE: "該商店的價格無效!"
 INVALID_SHOP_QUANTITY: "商店有無效的數量！"
 CANNOT_ACCESS_THE_CHEST: "你沒有許可權開啟這個箱子!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
 SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
 SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "您將不再收到來自您商店的消息."
 TOGGLE_MESSAGES_ON: "您現在將收到來自您商店的消息."
 TOGGLE_ACCESS_ON: "您不能再在您有權訪問的商店進行交易"
 TOGGLE_ACCESS_OFF: "您現在可以在您可以訪問的商店進行交易"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

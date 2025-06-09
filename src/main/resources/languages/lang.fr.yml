@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fAuteur du livre : &7%author
   &fNombre de pages: &7%pages
 iteminfo_book_generation: "&fGénération du livre: &7%generation"
+iteminfo_leather_color: "&fCouleur de Cuir : &7Rouge : %colorred, Vert : %colorgreen, Bleu : %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fLot de &7%itemcount &fobjets"
+iteminfo_axolotl_variant: "&fVariante Axolotl : &7%variant"
+iteminfo_armor_trim: "&fOrnement d'armure: &7%material %pattern"
+iteminfo_recipes: "&fConnaissance de la recette:"
+iteminfo_map_view: |-
+  &fID de la carte: &7%id
+  &fMonde: &7%world
+  &fCentre du monde: &7%x/%z
+  &fCarte: &7vérouillée
+iteminfo_map_location: "&fEmplacement de la carte: &7%location"
+iteminfo_tropical_fish: |-
+  &fSchéma de Poisson: &7%pattern
+  &fCouleur du motif de Poisson: &7%patterncolor
+  &fCouleur du corps du poisson: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fProjectile d'arbalète chargé:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -51,7 +68,8 @@ INVALID_SHOP_DETECTED: "Ce magasin ne peut pas être utilisé."
 INVALID_SHOP_PRICE: "Ce magasin comporte un prix invalide!"
 INVALID_SHOP_QUANTITY: "Ce magasin propose une quantité invalide"
 CANNOT_ACCESS_THE_CHEST: "Vous n'avez pas la permission d'accéder a ce coffre !"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Vous ne pouvez pas changer le verso d'un panneau de boutique!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Le prix de vente est supérieur au prix d'achat!"
 SELL_PRICE_ABOVE_MAX: "Le prix de vente %price est supérieur au maximum %maxprice!"
 SELL_PRICE_BELOW_MIN: "Le prix de vente %price est inférieur au prix minimum %minprice!"
 BUY_PRICE_ABOVE_MAX: "Le prix d'achat %price est supérieur au maximum %maxprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Vous ne recevrez plus de messages en provenance de vos mag
 TOGGLE_MESSAGES_ON: "Vous pouvez maintenant recevoir des messages en provenance de vos magasins."
 TOGGLE_ACCESS_ON: "Vous ne pouvez pas commercer avec des boutiques auxquelles vous avez accès"
 TOGGLE_ACCESS_OFF: "Vous pouvez commercer avec des boutiques auxquelles vous avez accès"
+ERROR_OCCURRED: "[Une erreur est survenuered!](red) [%error](yellow)"

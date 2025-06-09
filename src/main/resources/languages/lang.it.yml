@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fAutore del libro: &7%author
   &fNumero pagine: &7%pages
 iteminfo_book_generation: "&fGenerazione libro: &7%generation"
+iteminfo_leather_color: "&fColore pelle: &7Rosso: %colorred, Verde: %colorgreen, Blu: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fOggetti pacchetto: &7%itemcount"
+iteminfo_axolotl_variant: "&fVariante Axolotl: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fConoscenza ricetta:"
+iteminfo_map_view: |-
+  &fID Mappa: &7%id
+  &fMappa del mondo: &7%world
+  &fCentro mappa: &7%x/%z
+  &fMappa bloccata: &7locked
+iteminfo_map_location: "&fPosizione nella mappa: &7%location"
+iteminfo_tropical_fish: |-
+  &fMotivo pesce: &7%pattern
+  &fColore motivo pesce: &7%patterncolor
+  &fColore corpo pesce: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fProiettile balestra carica:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -51,7 +68,8 @@ INVALID_SHOP_DETECTED: "Il negozio non può essere utilizzato!"
 INVALID_SHOP_PRICE: "Il prezzo inserito non è valido!"
 INVALID_SHOP_QUANTITY: "La quantità inserita non è valida!"
 CANNOT_ACCESS_THE_CHEST: "Non hai il permesso per accedere a questa chest!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Il prezzo di vendita è superiore a quello di acquisto!"
 SELL_PRICE_ABOVE_MAX: "Il prezzo di vendita %price è superiore al massimo %maxprice!"
 SELL_PRICE_BELOW_MIN: "Il prezzo di vendita %price è inferiore al minimo %minprice!"
 BUY_PRICE_ABOVE_MAX: "Il prezzo di acquisto %price è superiore al massimo %maxprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Non riceverai più messaggi dai tuoi shop."
 TOGGLE_MESSAGES_ON: "Da ora riceverai messaggi dai tuoi shop."
 TOGGLE_ACCESS_ON: "Non puoi più usare shop a cui hai accesso"
 TOGGLE_ACCESS_OFF: "Da ora puoi usare gli shop a cui hai accesso"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
