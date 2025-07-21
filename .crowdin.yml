@@ -1,6 +1,6 @@
 files:
-  - source: /plugin/src/main/resources/languages/lang.en.yml
-    translation: /plugin/src/main/resources/languages/lang.%two_letters_code%.yml
+  - source: /src/main/resources/languages/lang.en.yml
+    translation: /src/main/resources/languages/lang.%two_letters_code%.yml
     languages_mapping:
       two_letters_code:
         zh-TW: zh_TW

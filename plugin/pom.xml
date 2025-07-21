@@ -453,6 +453,9 @@
                 <filtering>true</filtering>
             </resource>
             <resource>
+                <directory>../src/main/resources</directory>
+            </resource>
+            <resource>
                 <directory>../</directory>
                 <includes>
                     <include>LICENSE</include>
