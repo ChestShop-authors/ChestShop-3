@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fBokens Författare: &7%author
   &fBokens Sidor: &7%pages
 iteminfo_book_generation: "&fBok-generation: &7%generation"
+iteminfo_leather_color: "&fLäderfärg: &7Röd: %colorred, Grön: %colorgreen, Blå: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBuntade Objekt: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fKända recept:"
+iteminfo_map_view: |-
+  &fKarta ID: &7%id
+  &fKarta Värld: &7%world
+  &fKarta Centret: &7%x/%z
+  &fKarta Låst: &7locked
+iteminfo_map_location: "&fKartposition: &7%location"
+iteminfo_tropical_fish: |-
+  &fFiskmönster: &7%pattern
+  &fFiskmönster Färg: &7%patterncolor
+  &fFisk kroppsfärg: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fLaddat Armborsts Projektil:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fBeskrivning:
   &r%lore
@@ -51,11 +68,12 @@ INVALID_SHOP_DETECTED: "Affären kan inte användas!"
 INVALID_SHOP_PRICE: "Affären har ett ogiltigt pris!"
 INVALID_SHOP_QUANTITY: "Affären har ett ogiltigt antal!"
 CANNOT_ACCESS_THE_CHEST: "Du har inte behörighet att komma åt denna kista!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
-SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
-SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
-BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
-BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Säljpriset är högre än köppriset!"
+SELL_PRICE_ABOVE_MAX: "Säljpris %price är högre än maxgränsen %maxprice!"
+SELL_PRICE_BELOW_MIN: "Säljpriset %price är under minimumgränsen %minprice!"
+BUY_PRICE_ABOVE_MAX: "Köppris %price är högre än maxgränsen %maxprice!"
+BUY_PRICE_BELOW_MIN: "Säljpris %price är lägre än minimumgränsen %minprice!"
 CLICK_TO_AUTOFILL_ITEM: "Klicka på skylten med det föremål som denna affär kommer sälja/köpa!"
 NO_ITEM_IN_HAND: "Du har inte ett föremål i handen för att autofylla!"
 PROTECTED_SHOP: "Affären lyckades bli skyddad med LWC!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Du kommer inte längre att få meddelanden från dina buti
 TOGGLE_MESSAGES_ON: "Du kommer nu att få meddelanden från dina butik(er)."
 TOGGLE_ACCESS_ON: "Du kan inte längre byteshandla med butiker som du har tillgång till"
 TOGGLE_ACCESS_OFF: "Du kan nu byteshandla med butiker som du har tillgång till"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

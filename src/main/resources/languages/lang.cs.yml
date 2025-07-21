@@ -16,6 +16,23 @@ iteminfo_book: |-
   &fAutor knihy: &7%author
   &fPočet stran: &7%pages
 iteminfo_book_generation: "&fGenerace knihy: &7%generation"
+iteminfo_leather_color: "&fBarva kůže: &7Červená: %colorred, Zelená: %colorgreen, Modrá: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBalík předmětů: &7%itemcount"
+iteminfo_axolotl_variant: "&fVarianta Axelotla: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fZnalost receptů:"
+iteminfo_map_view: |-
+  &fMapa ID: &7%id
+  &fMapa světa: &7%world
+  &fMapa středu: &7%x/%z
+  &fMapa uzamčena: &7locked
+iteminfo_map_location: "&fUmístění Mapy: &7%location"
+iteminfo_tropical_fish: |-
+  &fVzor ryby: &7%pattern
+  &fBarva vzoru ryby: &7%patterncolor
+  &fBarva těla ryby: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fNabitý projektil kuše:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -51,6 +68,7 @@ INVALID_SHOP_DETECTED: "Obchod není možné použít!"
 INVALID_SHOP_PRICE: "Obchod má neplatnou cenu!"
 INVALID_SHOP_QUANTITY: "Obchod má neplatné množství!"
 CANNOT_ACCESS_THE_CHEST: "Nemáš právo otevírat tuto truhlu!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Prodejní cena je vyšší než kupní cena!"
 SELL_PRICE_ABOVE_MAX: "Prodejní cena %price vyšší než maximální %maxprice!"
 SELL_PRICE_BELOW_MIN: "Prodejní cena %price je nižší než minimální %minprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Zprávy z tvých obchodů již nebudou nadále zobrazován
 TOGGLE_MESSAGES_ON: "Zprávy z tvých obchodů budou zase zobrazovány."
 TOGGLE_ACCESS_ON: "Nadále již nemůžeš obchodovat s obchody, do kterých máš přístup."
 TOGGLE_ACCESS_OFF: "Opět můžeš obchodovat s obchody, do kterých máš přístup."
+ERROR_OCCURRED: "[Nastal Problém!](red) [%error](yellow)"

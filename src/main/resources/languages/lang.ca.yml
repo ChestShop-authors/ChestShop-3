@@ -1,21 +1,38 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "&a[Botiga] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
+  &aInformació de la botiga:
+  &fPropietari: &7%owner
   &fStock: &7%stock
   &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+shopinfo_buy: "&fComprar &7%amount &fper &7%price"
+shopinfo_sell: "&fVendre &7%amount &fper &7%price"
+iteminfo: "&aInformació de l'item: &r"
+iteminfo_fullname: "&fNom Complet: &7%item"
+iteminfo_shopname: "&fCartell de Botiga: &7%item"
+iteminfo_repaircost: "&fCost per Reparar: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &fTítol del Llibre: &7%title
+  &fAutor del Llibre: &7%author
+  &fPàgines del Llibre: &7%pages
+iteminfo_book_generation: "&fGeneració del Llibre: &7%generation"
+iteminfo_leather_color: "&fColor del Cuir: &7Vermell: %colorred, Verd: %colorgreen, Blau: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPaquet d'Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fVariant d'Axolot: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fConeixement de Recepta:"
+iteminfo_map_view: |-
+  &fID de Mapa: &7%id
+  &fMón del Mapa: &7%world
+  &fCentre del Mapa: &7%x/%z
+  &fMapa Bloquejat: &7locked
+iteminfo_map_location: "&fLocalització del Mapa: &7%location"
+iteminfo_tropical_fish: |-
+  &fPatró del Peix: &7%pattern
+  &fColor del Patró del Peix: &7%patterncolor
+  &fColor del Cos del Peix: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCarregat el projectil de la ballesta:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
@@ -51,6 +68,7 @@ INVALID_SHOP_DETECTED: "The shop cannot be used!"
 INVALID_SHOP_PRICE: "The shop has an invalid price!"
 INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
 CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
 SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
 SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
@@ -76,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
 TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
 TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

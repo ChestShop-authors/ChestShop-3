@@ -16,8 +16,26 @@ iteminfo_book: |-
   &fAutor do Livro: &7%author
   &fPáginas do Livro: &7%pages
 iteminfo_book_generation: "&fGeração do livro: &7%generation"
+iteminfo_leather_color: "&fCor do Couro: &7Vermelho: %colorred, Verde: %colorgreen, Azul: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPacote de Itens: &7%itemcount"
+iteminfo_axolotl_variant: "&fVariante do Axolote: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fConhecimento de Receita:"
+iteminfo_map_view: |-
+  &fMapa ID: &7%id
+  &fMapa Mundo: &7%world
+  &fMapa localização: &7%x/%z
+  &fMapa bloqueado: &7locked
+iteminfo_map_location: "&fMapa localização: &7%location"
+iteminfo_tropical_fish: |-
+  &fPeixe padrão: &7%pattern
+  &fCor padrão de peixe: &7%patterncolor
+  &fCor do Corpo do Peixe: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fProjétil de Besta Carregada:"
+iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fDescrição:
+  &r%lore
 METRICS: |-
   &a[Shop] &fMetricas:
   &fContas: &7%contas
@@ -50,6 +68,7 @@ INVALID_SHOP_DETECTED: "Esta loja não pode ser usada!"
 INVALID_SHOP_PRICE: "A loja tem um preço invalido!"
 INVALID_SHOP_QUANTITY: "A loja tem uma quantidade invalida!"
 CANNOT_ACCESS_THE_CHEST: "Tu não tens permissão para abrir este baú!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Você não pode mudar o verso da placa de uma loja!"
 SELL_PRICE_HIGHER_THAN_BUY_PRICE: "O preço de venda está acima do preço de compra!"
 SELL_PRICE_ABOVE_MAX: "O preço de venda %price está acima do preço máximo %maxprice!"
 SELL_PRICE_BELOW_MIN: "O preço de venda %price está abaixo do preço mínimo %minprice!"
@@ -75,3 +94,4 @@ TOGGLE_MESSAGES_OFF: "Você não irá receber mais mensagens de sua(s) loja(s)."
 TOGGLE_MESSAGES_ON: "Você agora irá receber mensagens de sua(s) loja(s)."
 TOGGLE_ACCESS_ON: "Você não pode mais trocar em lojas às quais você tem acesso"
 TOGGLE_ACCESS_OFF: "Agora você pode trocar em lojas às quais você tem acesso"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
