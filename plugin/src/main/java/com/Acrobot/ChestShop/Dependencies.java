@@ -19,6 +19,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -29,6 +30,10 @@ import java.util.stream.Collectors;
 public class Dependencies implements Listener {
 
     private static final Map<String, String> versions = new HashMap<>();
+
+    private static boolean isLoaded(String plugin) {
+        return versions.containsKey(plugin.toLowerCase(Locale.ROOT));
+    }
 
     public static void initializePlugins() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -118,7 +123,10 @@ public class Dependencies implements Listener {
         return true;
     }
 
-    private static boolean loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+    public static boolean loadPlugin(String name, Plugin plugin) { //Really messy, right? But it's short and fast :)
+        if (isLoaded(name) || isLoaded(plugin.getName())) {
+            return true;
+        }
         Dependency dependency;
 
         try {
@@ -261,13 +269,7 @@ public class Dependencies implements Listener {
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
         try {
-            if (!loadPlugin(plugin.getName(), plugin)) {
-                for (String pluginAlias : plugin.getDescription().getProvides()) {
-                    if (loadPlugin(pluginAlias, plugin)) {
-                        break;
-                    }
-                }
-            }
+            loadPlugin(plugin.getName(), plugin);
         } catch (Exception e) {
             plugin.getLogger().log(Level.WARNING, "Unable to hook into " + plugin.getName() + " " + plugin.getDescription().getVersion(), e);
         }

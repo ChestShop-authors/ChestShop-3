@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.acrobot.chestshop</groupId>
+        <artifactId>chestshop-parent</artifactId>
+        <version>3.12.3-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>chestshop-assemble</artifactId>
+    <description>Build the ChestShop plugin jar</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-paper-1.13.2</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-paper-1.15.2</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-spigot-1.14</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-spigot-1.15.2</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-spigot-1.17</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-spigot-1.20</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>chestshop-spigot-1.20.5</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>ChestShop</finalName>
+        <directory>${project.basedir}/../target</directory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <forceCreation>true</forceCreation>
+                    <archive>
+                        <manifest>
+                            <addDefaultEntries>true</addDefaultEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Distribution-Type>${buildType}</Distribution-Type>
+                            <Built-At>${maven.build.timestamp}</Built-At>
+                            <Build-Jdk>${java.runtime.version}</Build-Jdk>
+                            <paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.acrobot.chestshop:*</include>
+                                    <include>de.themoep:*</include>
+                                    <include>de.themoep.utils:*</include>
+                                    <include>net.kyori:*</include>
+                                    <include>org.bstats:*</include>
+                                    <include>net.gravitydevelopment.updater</include>
+                                    <include>com.j256.ormlite</include>
+                                    <include>javax.persistence</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.themoep.utils.lang</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.Lang</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.themoep.minedown.adventure</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.MineDown</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.kyori</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.Kyori</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Metrics.BStats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.gravitydevelopment.updater</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Updater</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.j256.ormlite</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.ORMlite</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>javax.persistence</pattern>
+                                    <shadedPattern>com.Acrobot.ChestShop.Libs.javax.persistence</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>../plugin/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>../src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>../</directory>
+                <includes>
+                    <include>README.md</include>
+                    <include>SECURITY.md</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>

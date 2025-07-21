@@ -82,7 +82,11 @@ public class ShopInfoListener implements Listener {
             BigDecimal buyPrice = PriceUtil.getExactBuyPrice(pricesLine);
             BigDecimal sellPrice = PriceUtil.getExactSellPrice(pricesLine);
 
-            ChestShop.callEvent(new ItemInfoEvent(event.getSender(), item));
+            ItemInfoEvent itemInfoEvent = ChestShop.callEvent(new ItemInfoEvent(event.getSender(), item));
+
+            for (Map.Entry<Messages.Message, String[]> entry : itemInfoEvent.getMessages()) {
+                entry.getKey().send(event.getSender(), entry.getValue());
+            }
 
             if (!buyPrice.equals(PriceUtil.NO_PRICE)) {
                 CurrencyFormatEvent cfe = ChestShop.callEvent(new CurrencyFormatEvent(buyPrice));

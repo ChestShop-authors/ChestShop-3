@@ -58,8 +58,10 @@ public class ItemInfo implements CommandExecutor {
             return true;
         }
 
-        ItemInfoEvent event = new ItemInfoEvent(sender, item);
-        ChestShop.callEvent(event);
+        ItemInfoEvent event = ChestShop.callEvent(new ItemInfoEvent(sender, item));
+        for (Map.Entry<Messages.Message, String[]> entry : event.getMessages()) {
+            entry.getKey().send(sender, entry.getValue());
+        }
 
         return true;
     }

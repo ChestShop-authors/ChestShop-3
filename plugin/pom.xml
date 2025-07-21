@@ -8,7 +8,6 @@
         <groupId>com.acrobot.chestshop</groupId>
         <artifactId>chestshop-parent</artifactId>
         <version>3.12.3-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>chestshop</artifactId>
@@ -22,6 +21,10 @@
     </scm>
 
     <repositories>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+        </repository>
         <repository>
             <id>enginehub-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
@@ -65,6 +68,13 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -359,8 +369,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.name}</finalName>
-        <directory>${project.basedir}/../target</directory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -449,121 +457,12 @@
 
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
                 <directory>../</directory>
                 <includes>
                     <include>LICENSE</include>
-                    <include>README.md</include>
-                    <include>SECURITY.md</include>
                 </includes>
             </resource>
         </resources>
     </build>
-
-    <properties>
-        <bukkit.dependency.version>1.21.4-R0.1-SNAPSHOT</bukkit.dependency.version>
-    </properties>
-
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <property>
-                    <name>!testprofile</name>
-                </property>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>paper-repo</id>
-                    <url>https://repo.papermc.io/repository/maven-public/</url>
-                </repository>
-            </repositories>
-            <dependencies>
-                <dependency>
-                    <groupId>io.papermc.paper</groupId>
-                    <artifactId>paper-api</artifactId>
-                    <version>${bukkit.dependency.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>spigot</id>
-            <activation>
-                <property>
-                    <name>testprofile</name>
-                    <value>spigot</value>
-                </property>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>spigotmc-repo</id>
-                    <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
-                </repository>
-            </repositories>
-            <dependencies>
-                <dependency>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
-                    <version>${bukkit.dependency.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <finalName>${project.name}-Spigot</finalName>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/Paper*.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>backwards</id>
-            <activation>
-                <property>
-                    <name>testprofile</name>
-                    <value>backwards</value>
-                </property>
-            </activation>
-            <repositories>
-                <repository>
-                    <id>paper-repo</id>
-                    <url>https://repo.papermc.io/repository/maven-public/</url>
-                </repository>
-            </repositories>
-            <dependencies>
-                <dependency>
-                    <groupId>com.destroystokyo.paper</groupId>
-                    <artifactId>paper-api</artifactId>
-                    <version>1.13.2-R0.1-SNAPSHOT</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <finalName>${project.name}-1.13.2</finalName>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/PaperLatest*.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

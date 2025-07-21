@@ -6,7 +6,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.function.BiFunction;
 
-public class PaperLatestHolder {
+public class NonSnapshotInventoryHolder {
 
     public static final BiFunction<Inventory, Boolean, InventoryHolder> PROVIDER = Inventory::getHolder;
 

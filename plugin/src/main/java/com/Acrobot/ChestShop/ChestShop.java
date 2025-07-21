@@ -48,10 +48,12 @@ import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Updater.JenkinsBuildsNotifier;
 import com.Acrobot.ChestShop.Updater.Updater;
 
+import com.Acrobot.ChestShop.Utils.VersionAdapter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
+import com.google.common.reflect.ClassPath;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -168,6 +170,7 @@ public class ChestShop extends JavaPlugin {
         }
 
         registerEvents();
+        registerVersionedAdapters();
 
         registerPluginMessagingChannels();
 
@@ -440,6 +443,40 @@ public class ChestShop extends JavaPlugin {
     private void registerEconomicalModules() {
         registerEvent(new ServerAccountCorrector());
         registerEvent(new TaxModule());
+    }
+
+    private void registerVersionedAdapters() {
+        // Search jar file for version adapters
+        try (JarFile jarFile = new JarFile(this.getFile())) {
+            jarFile.stream()
+                    .filter(entry -> !entry.isDirectory())
+                    .filter(entry -> entry.getName().startsWith("com/Acrobot/ChestShop/Adapter/") && entry.getName().endsWith(".class"))
+                    .map(entry -> entry.getName().replace('/', '.').replace(".class", ""))
+                    .forEach(className -> {
+                        try {
+                            Class<?> clazz = getClassLoader().loadClass(className);
+                            if (VersionAdapter.class.isAssignableFrom(clazz)) {
+                                VersionAdapter adapterInstance = (VersionAdapter) clazz.getDeclaredConstructor().newInstance();
+                                if (adapterInstance.isSupported()) {
+                                    if (adapterInstance instanceof Listener) {
+                                        registerEvent((Listener) adapterInstance);
+                                        logDebug("Registered listener for "
+                                                + clazz.getSimpleName().replaceFirst("_", " ").replace('_', '.')
+                                                + " features.");
+                                    } else {
+                                        logDebug("Found adapter for "
+                                                + clazz.getSimpleName().replaceFirst("_", " ").replace('_', '.')
+                                                + " features.");
+                                    }
+                                }
+                            }
+                        } catch (ReflectiveOperationException e) {
+                            getLogger().log(java.util.logging.Level.WARNING, "Unable to register adapter " + className, e);
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void registerPluginMessagingChannels() {

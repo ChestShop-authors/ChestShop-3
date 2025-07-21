@@ -1,9 +1,9 @@
 package com.Acrobot.ChestShop.Listeners.Block;
 
 import com.Acrobot.Breeze.Utils.BlockUtil;
+import com.Acrobot.Breeze.Utils.ImplementationAdapter;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
 import com.Acrobot.ChestShop.Events.SignValidationEvent;
@@ -13,7 +13,6 @@ import com.Acrobot.ChestShop.UUIDs.NameManager;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -25,17 +24,6 @@ import static com.Acrobot.ChestShop.Permission.OTHER_NAME_DESTROY;
  */
 public class SignCreate implements Listener {
 
-    private static boolean HAS_SIGN_SIDES;
-
-    static {
-        try {
-            SignChangeEvent.class.getMethod("getSide");
-            HAS_SIGN_SIDES = true;
-        } catch (NoSuchMethodException e) {
-            HAS_SIGN_SIDES = false;
-        }
-    }
-
     @EventHandler(ignoreCancelled = true)
     public static void onSignChange(SignChangeEvent event) {
         Block signBlock = event.getBlock();
@@ -44,15 +32,7 @@ public class SignCreate implements Listener {
             return;
         }
 
-        Sign sign = (Sign) signBlock.getState();
-
-        if (HAS_SIGN_SIDES && event.getSide() != Side.FRONT) {
-            if (ChestShopSign.isValid(sign)) {
-                event.setCancelled(true);
-                Messages.CANNOT_CHANGE_SIGN_BACKSIDE.sendWithPrefix(event.getPlayer());
-            }
-            return;
-        }
+        Sign sign = (Sign) ImplementationAdapter.getState(signBlock, false);
 
         if (ChestShopSign.isValid(event.getLines()) && !NameManager.canUseName(event.getPlayer(), OTHER_NAME_DESTROY, ChestShopSign.getOwner(event.getLines()))) {
             event.setCancelled(true);

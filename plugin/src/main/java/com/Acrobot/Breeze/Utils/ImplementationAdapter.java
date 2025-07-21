@@ -18,7 +18,7 @@ public class ImplementationAdapter {
     static {
         try {
             Inventory.class.getMethod("getHolder", boolean.class);
-            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestHolder");
+            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.NonSnapshotInventoryHolder");
             HOLDER_PROVIDER = (BiFunction<Inventory, Boolean, InventoryHolder>) c.getDeclaredField("PROVIDER").get(null);
             LEFT_HOLDER_PROVIDER = (BiFunction<DoubleChest, Boolean, InventoryHolder>) c.getDeclaredField("LEFT_PROVIDER").get(null);
             RIGHT_HOLDER_PROVIDER = (BiFunction<DoubleChest, Boolean, InventoryHolder>) c.getDeclaredField("RIGHT_PROVIDER").get(null);
@@ -29,7 +29,7 @@ public class ImplementationAdapter {
         }
         try {
             Block.class.getMethod("getState", boolean.class);
-            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.PaperLatestState");
+            Class c = Class.forName("com.Acrobot.Breeze.Utils.ImplementationFeatures.NonSnapshotState");
             STATE_PROVIDER = (BiFunction<Block, Boolean, BlockState>) c.getDeclaredField("PROVIDER").get(null);
         } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             STATE_PROVIDER = (block, useSnapshot) -> block.getState();
