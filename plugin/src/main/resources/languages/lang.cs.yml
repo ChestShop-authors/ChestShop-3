@@ -1,97 +1,96 @@
----
 prefix: "&a[Shop] &r"
 shopinfo: |-
-  &aInformace o obchodu:
-  &fMajitel: &7%owner
-  &fSkladem: &7%stock
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
   &fItem: &7%item
-shopinfo_buy: "&fKoupit &7%amount &fza &7%price"
-shopinfo_sell: "&fProdat &7%amount &fza &7%price"
-iteminfo: "&aInformace o předmětu: &r"
-iteminfo_fullname: "&fCelý název: &7%item"
-iteminfo_shopname: "&fNákupní cedule: &7%item"
-iteminfo_repaircost: "&fCena opravy: &7%cost"
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+iteminfo: "&aItem Information: &r"
+iteminfo_fullname: "&fFull Name: &7%item"
+iteminfo_shopname: "&fShop Sign: &7%item"
+iteminfo_repaircost: "&fRepair Cost: &7%cost"
 iteminfo_book: |-
-  &fTitul knihy: &7%title
-  &fAutor knihy: &7%author
-  &fPočet stran: &7%pages
-iteminfo_book_generation: "&fGenerace knihy: &7%generation"
-iteminfo_leather_color: "&fBarva kůže: &7Červená: %colorred, Zelená: %colorgreen, Modrá: %colorblue (Hex: #%colorhex)"
-iteminfo_bundle_items: "&fBalík předmětů: &7%itemcount"
-iteminfo_axolotl_variant: "&fVarianta Axelotla: &7%variant"
+  &fBook Title: &7%title
+  &fBook Author: &7%author
+  &fBook Pages: &7%pages
+iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
 iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
-iteminfo_recipes: "&fZnalost receptů:"
+iteminfo_recipes: "&fRecipe Knowledge:"
 iteminfo_map_view: |-
-  &fMapa ID: &7%id
-  &fMapa světa: &7%world
-  &fMapa středu: &7%x/%z
-  &fMapa uzamčena: &7locked
-iteminfo_map_location: "&fUmístění Mapy: &7%location"
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
 iteminfo_tropical_fish: |-
-  &fVzor ryby: &7%pattern
-  &fBarva vzoru ryby: &7%patterncolor
-  &fBarva těla ryby: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fNabitý projektil kuše:"
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
   &fLore:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetriky:
-  &fPočet účtů: &7%accounts
-  &fPrůměrně transakcí: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fPrůměrně směněných předmětů: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
-ACCESS_DENIED: "Nemáš oprávnění k prohlížení obsahu tohoto kontejneru!"
-TRADE_DENIED: "Nemáš oprávnění nakupovat v tomto obchodě!"
-TRADE_DENIED_ACCESS_PERMS: "Nemůžete obchodovat s obchody, ke kterým máte přístup!"
-TRADE_DENIED_CREATIVE_MODE: "Nemůžete obchodovat s obchody, když jste v kreativním módu!"
-NOT_ENOUGH_MONEY: "Nemáš dostatek peněz!"
-NOT_ENOUGH_MONEY_SHOP: "Majitel obchodu již nemá dostatek peněz!"
-CLIENT_DEPOSIT_FAILED: "Připsání peněz na tvůj účet selhalo!"
-SHOP_DEPOSIT_FAILED: "Připsání peněz na účet prodejce selhalo!"
-NO_ECONOMY_ACCOUNT: "Economy účet majitele obchodu neexistuje!"
-NO_BUYING_HERE: "Zde není možné nakupovat!"
-NO_SELLING_HERE: "Zde není možné prodávat!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "Nemáš dost místa v inventáři!"
-NOT_ENOUGH_SPACE_IN_CHEST: "V truhle už není dost místa!"
-NOT_ENOUGH_ITEMS_TO_SELL: "Nemáš dostatek předmětů k prodeji!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 obchod přeplněn!](&f%seller&7 chtěl prodat\n&7Svět: &f%world\n&7Pozice: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "Obchod je vyprodaný."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 obchod vyprodán!](&f%buyer&7 chtěl nakoupit\n&7Svět: &f%world\n&7Pozice: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "Koupil jsi %item od hráče %owner za %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer koupil %item za %price.](&7Svět: &f%world\n&7Pozice: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "Prodal jsi %item hráči %buyer za %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller prodal %item za %price.](&7Svět: &f%world\n&7Pozice: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "Nemůžeš vytvořit tento typ obchodu!"
-NO_CHEST_DETECTED: "Truhla nenalezena!"
-INVALID_SHOP_DETECTED: "Obchod není možné použít!"
-INVALID_SHOP_PRICE: "Obchod má neplatnou cenu!"
-INVALID_SHOP_QUANTITY: "Obchod má neplatné množství!"
-CANNOT_ACCESS_THE_CHEST: "Nemáš právo otevírat tuto truhlu!"
+  &a[Shop] &fMetrics:
+  &fAccounts: &7%accounts
+  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
+TRADE_DENIED: "You don't have permission to trade with that shop!"
+TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
+TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+NOT_ENOUGH_MONEY: "You don't have enough money!"
+NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
+CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
+SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
+NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_BUYING_HERE: "You can't buy here!"
+NO_SELLING_HERE: "You can't sell here!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
+NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
+NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "This shop is out of stock."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
+NO_CHEST_DETECTED: "Couldn't find a chest!"
+INVALID_SHOP_DETECTED: "The shop cannot be used!"
+INVALID_SHOP_PRICE: "The shop has an invalid price!"
+INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
 CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Prodejní cena je vyšší než kupní cena!"
-SELL_PRICE_ABOVE_MAX: "Prodejní cena %price vyšší než maximální %maxprice!"
-SELL_PRICE_BELOW_MIN: "Prodejní cena %price je nižší než minimální %minprice!"
-BUY_PRICE_ABOVE_MAX: "Kupní cena %price vyšší než maximální %maxprice!"
-BUY_PRICE_BELOW_MIN: "Kupní cena %price je nižší než minimální %minprice!"
-CLICK_TO_AUTOFILL_ITEM: "Klikni na ceduli s předmětem, který chceš prodávat!"
-NO_ITEM_IN_HAND: "Nemáš v ruce předmět, automatické předvyplnění není možné!"
-PROTECTED_SHOP: "Obchod úspěšně ochráněn pomocí LWC!"
-PROTECTED_SHOP_SIGN: "Cedule obchodu úspěšně ochránění pomocí LWC!"
-SHOP_CREATED: "Obchod vytvořen!"
-SHOP_FEE_PAID: "Zaplatil jsi %amount"
-SHOP_REFUNDED: "Bylo ti vráceno %amount."
-ITEM_GIVEN: "Předmět %item dán hráči %player."
-RESTRICTED_SIGN_CREATED: "Cedule vytvořena!"
-PLAYER_NOT_FOUND: "Hráč nenalezen!"
-NO_PERMISSION: "Na tuto akci nemáš oprávnění!"
-INCORRECT_ITEM_ID: "Neplatný ID předmětu!"
-INVALID_CLIENT_NAME: "Vaše uživatelské jméno není platným uživatelským jménem Minecraftu!"
-NOT_ENOUGH_PROTECTIONS: "Ochrana nemohla být vytvořena!"
-NO_SHOP_FOUND: "Nebyl nalezen žádný obchod."
-CANNOT_CREATE_SHOP_HERE: "Zde není možné vytvořit obchod!"
-TOGGLE_MESSAGES_OFF: "Zprávy z tvých obchodů již nebudou nadále zobrazovány."
-TOGGLE_MESSAGES_ON: "Zprávy z tvých obchodů budou zase zobrazovány."
-TOGGLE_ACCESS_ON: "Nadále již nemůžeš obchodovat s obchody, do kterých máš přístup."
-TOGGLE_ACCESS_OFF: "Opět můžeš obchodovat s obchody, do kterých máš přístup."
-ERROR_OCCURRED: "[Nastal Problém!](red) [%error](yellow)"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
+SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
+BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
+BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
+CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
+NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+PROTECTED_SHOP: "Successfully protected the shop with LWC!"
+PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+SHOP_CREATED: "Shop successfully created!"
+SHOP_FEE_PAID: "You have been charged %amount"
+SHOP_REFUNDED: "You have been refunded %amount."
+ITEM_GIVEN: "Given %item to %player."
+RESTRICTED_SIGN_CREATED: "Sign successfully created!"
+PLAYER_NOT_FOUND: "Player not found!"
+NO_PERMISSION: "You don't have permissions to do that!"
+INCORRECT_ITEM_ID: "You have specified an invalid item id!"
+INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
+NO_SHOP_FOUND: "No shop found."
+CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
+TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
+TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
+TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
+TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
