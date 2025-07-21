@@ -1,97 +1,96 @@
----
 prefix: "&a[Shop] &r"
 shopinfo: |-
-  &aShop-Informationen:
-  &fBesitzer: &7%owner
-  &fVerfügbar: &7%stock
+  &aShop Information:
+  &fOwner: &7%owner
+  &fStock: &7%stock
   &fItem: &7%item
-shopinfo_buy: "&fKaufe &7%amount &ffür &7%price"
-shopinfo_sell: "&fVerkaufe &7%amount &ffür &7%price"
-iteminfo: "&aItem Info:&f"
-iteminfo_fullname: "&fVoller Name: &7%item"
-iteminfo_shopname: "&fShop Name: &7%item"
-iteminfo_repaircost: "&fReparaturkosten: &7%cost"
+shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
+shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+iteminfo: "&aItem Information: &r"
+iteminfo_fullname: "&fFull Name: &7%item"
+iteminfo_shopname: "&fShop Sign: &7%item"
+iteminfo_repaircost: "&fRepair Cost: &7%cost"
 iteminfo_book: |-
-  &fBuch Title: &7%title
-  &fAuthor: &7%author
-  &fSeitenanzahl: &7%pages
-iteminfo_book_generation: "&fBuch Ausgabe: &7%generation"
-iteminfo_leather_color: "&fLederfarbe: &7Rot: %colorred, Grün: %colorgreen, Blau: %colorblue (Hex: #%colorhex)"
-iteminfo_bundle_items: "&fBündelgegenstände: &7%itemcount"
-iteminfo_axolotl_variant: "&fAxolotl Variante: &7%variant"
-iteminfo_armor_trim: "&fRüstungsbesatz: &7%material %pattern"
-iteminfo_recipes: "&fRezeptwissen:"
+  &fBook Title: &7%title
+  &fBook Author: &7%author
+  &fBook Pages: &7%pages
+iteminfo_book_generation: "&fBook Generation: &7%generation"
+iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
+iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
+iteminfo_recipes: "&fRecipe Knowledge:"
 iteminfo_map_view: |-
-  &fNummer der Karte: &7%id
-  &fWelt der Karte: &7%world
-  &fMitte der Karte: &7%x/%z
-  &fIst Karte gesperrt: &7locked
-iteminfo_map_location: "&fOrt der Karte: &7%location"
+  &fMap ID: &7%id
+  &fMap World: &7%world
+  &fMap Center: &7%x/%z
+  &fMap Locked: &7locked
+iteminfo_map_location: "&fMap Location: &7%location"
 iteminfo_tropical_fish: |-
-  &fFischmuster: &7%pattern
-  &fFarbe des Fischmusters: &7%patterncolor
-  &fFarbe des Fischkörpers: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fAufgeladenes Armbrustprojektil:"
+  &fFish Pattern: &7%pattern
+  &fFish Pattern Color: &7%patterncolor
+  &fFish Body Color: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
-  &fBeschreibung:
+  &fLore:
   &r%lore
 METRICS: |-
-  &a[Shop] &fStatistik:
-  &fShopbesitzer: &7%accounts
-  &fTransaktionen in den letzten 30 Minuten: &7%totalTransactions &f(Käufe: &7%buyTransactions &fVerkäufe: &7%sellTransactions&f)
-  &fGehandelte Items in den letzten 30 Minuten: &7%totalItems &f(gekauft: &7%boughtItems &fverkauft: &7%soldItems&f)
-ACCESS_DENIED: "Du kannst diese Kiste nicht öffnen da dir der Shop nicht gehört!"
-TRADE_DENIED: "Du hast keine Berechtigung, um mit diesem Shop zu handeln!"
-TRADE_DENIED_ACCESS_PERMS: "Du darfst nicht mit Shops handeln auf die du zugreifen kannst!"
-TRADE_DENIED_CREATIVE_MODE: "Du darfst nicht mit Shops handeln während du im Kreativmodus bist!"
-NOT_ENOUGH_MONEY: "Du hast zu wenig Geld!"
-NOT_ENOUGH_MONEY_SHOP: "Der Shop Besitzer hat zu wenig Geld!"
-CLIENT_DEPOSIT_FAILED: "Einzahlung auf dein Konto fehlgeschlagen!"
-SHOP_DEPOSIT_FAILED: "Einzahlung auf das Konto des Shop Inhabers fehlgeschlagen!"
-NO_ECONOMY_ACCOUNT: "Der Shopbesitzer hat keinen Economy Account!"
-NO_BUYING_HERE: "Du kannst an diesem Shop nichts kaufen!"
-NO_SELLING_HERE: "Du kannst an diesem Shop nichts verkaufen!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "Du hast nicht genug Platz in deinem Inventar!"
-NOT_ENOUGH_SPACE_IN_CHEST: "Die Truhe ist voll!"
-NOT_ENOUGH_ITEMS_TO_SELL: "Du hast nicht ausreichend Items zum verkaufen!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[&7Dein &f%item&7 Shop ist &fvoll&7! &8(Mehr Infos)](&7Verkäufer: &f%seller\n&7Price: &f%price\n&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "Dieses Item ist ausverkauft."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[&7Dein &f%item&7 Shop ist &fleer&7! &8(Mehr Infos)](&7Käufer: &f%buyer\n&7Preis: &f%price\n&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "&7Du hast &f%item&7 von &f%owner&7 zum Preis von &f%price&7 gekauft."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[&f%buyer&7 hat &f%item&7 zum Preis von &f%price&7 gekauft.](&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "&7Du hast &f%item&7 an &f%buyer&7 zum Preis von &f%price&7 verkauft."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[&f%seller&7 hat dir &f%item&7 zum Preis von &f%price&7 verkauft.](&7In Welt: &f%world\n&7Position: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "Du kannst diesen Shop nicht erstellen!"
-NO_CHEST_DETECTED: "Keine Truhe gefunden!"
-INVALID_SHOP_DETECTED: "Der Shop kann nicht genutzt werden!"
-INVALID_SHOP_PRICE: "Der Shop hat einen Preis der nicht genutzt werden kann!"
-INVALID_SHOP_QUANTITY: "Der Shop hat eine Mengenangabe die nicht genutzt werden kann!"
-CANNOT_ACCESS_THE_CHEST: "Du hast keine Berechtigung, um auf diese Truhe zuzugreifen!"
-CANNOT_CHANGE_SIGN_BACKSIDE: "Du kannst die Rückseite eines Shop-Schildes nicht ändern!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Der Verkaufspreis liegt über dem Kaufpreis!"
-SELL_PRICE_ABOVE_MAX: "Verkaufspreis %price liegt über dem Maximum von %maxprice!"
-SELL_PRICE_BELOW_MIN: "Verkaufspreis %price liegt unter dem Minimum von %minprice!"
-BUY_PRICE_ABOVE_MAX: "Kaufpreis %price liegt über dem Maximum von %maxprice!"
-BUY_PRICE_BELOW_MIN: "Kaufpreis %price liegt unter dem Minimum von %minprice!"
-CLICK_TO_AUTOFILL_ITEM: "Klicke das Schild mit dem Item welches in dem Shop verkauft werden soll!"
-NO_ITEM_IN_HAND: "Du hast kein Item in deiner Hand um das Schild zu beschreiben!"
-PROTECTED_SHOP: "Truhe erfolgreich mit LWC gesichert!"
-PROTECTED_SHOP_SIGN: "Schild erfolgreich mit LWC gesichert!"
-SHOP_CREATED: "Shop erfolgreich erstellt!"
-SHOP_FEE_PAID: "Dir wurden %amount berechnet."
-SHOP_REFUNDED: "Dir wurden %amount erstattet."
-ITEM_GIVEN: "%player hat %item erhalten."
-RESTRICTED_SIGN_CREATED: "Schild erfolgreich erstellt!"
-PLAYER_NOT_FOUND: "Spieler nicht gefunden!"
-NO_PERMISSION: "Du hast dazu keine Rechte!"
-INCORRECT_ITEM_ID: "Die Item ID ist nicht in Ordnung!"
-INVALID_CLIENT_NAME: "Dein Benutzername ist kein gültiger Minecraft Benutzername!"
-NOT_ENOUGH_PROTECTIONS: "Sicherung konnte nicht erstellt werden!"
-NO_SHOP_FOUND: "Kein Shop gefunden."
-CANNOT_CREATE_SHOP_HERE: "Du kannst hier keinen Shop erstellen!"
-TOGGLE_MESSAGES_OFF: "Du wirst keine Nachrichten mehr von deinen Shops erhalten."
-TOGGLE_MESSAGES_ON: "Du wirst wieder Nachrichten von deinen Shops erhalten."
-TOGGLE_ACCESS_ON: "Du kannst nicht mehr mit Shops handeln auf die du zugreifen kannst"
-TOGGLE_ACCESS_OFF: "Du kannst nun mit Shops handeln auf die du zugreifen kannst"
-ERROR_OCCURRED: "[Es ist ein Fehler passiert!](red) [%error](yellow)"
+  &a[Shop] &fMetrics:
+  &fAccounts: &7%accounts
+  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
+  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
+ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
+TRADE_DENIED: "You don't have permission to trade with that shop!"
+TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
+TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
+NOT_ENOUGH_MONEY: "You don't have enough money!"
+NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
+CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
+SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
+NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
+NO_BUYING_HERE: "You can't buy here!"
+NO_SELLING_HERE: "You can't sell here!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
+NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
+NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "This shop is out of stock."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
+NO_CHEST_DETECTED: "Couldn't find a chest!"
+INVALID_SHOP_DETECTED: "The shop cannot be used!"
+INVALID_SHOP_PRICE: "The shop has an invalid price!"
+INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
+CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
+SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
+SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
+BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
+BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
+CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
+NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+PROTECTED_SHOP: "Successfully protected the shop with LWC!"
+PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+SHOP_CREATED: "Shop successfully created!"
+SHOP_FEE_PAID: "You have been charged %amount"
+SHOP_REFUNDED: "You have been refunded %amount."
+ITEM_GIVEN: "Given %item to %player."
+RESTRICTED_SIGN_CREATED: "Sign successfully created!"
+PLAYER_NOT_FOUND: "Player not found!"
+NO_PERMISSION: "You don't have permissions to do that!"
+INCORRECT_ITEM_ID: "You have specified an invalid item id!"
+INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
+NO_SHOP_FOUND: "No shop found."
+CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
+TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
+TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
+TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
+TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
