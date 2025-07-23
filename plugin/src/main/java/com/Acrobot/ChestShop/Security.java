@@ -35,8 +35,7 @@ public class Security {
     }
 
     public static boolean protect(Player player, Block block, UUID protectionOwner, Type type) {
-        ProtectBlockEvent event = new ProtectBlockEvent(block, player, protectionOwner, type);
-        ChestShop.callEvent(event);
+        ProtectBlockEvent event = ChestShop.callEvent(new ProtectBlockEvent(block, player, protectionOwner, type));
 
         return event.isProtected();
     }
@@ -46,15 +45,13 @@ public class Security {
     }
 
     public static boolean canAccess(Player player, Block block, boolean ignoreDefaultProtection) {
-        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefaultProtection);
-        ChestShop.callEvent(event);
+        ProtectionCheckEvent event = ChestShop.callEvent(new ProtectionCheckEvent(block, player, ignoreDefaultProtection));
 
         return event.getResult() != Event.Result.DENY;
     }
 
     public static boolean canView(Player player, Block block, boolean ignoreDefaultProtection) {
-        ProtectionCheckEvent event = new ProtectionCheckEvent(block, player, ignoreDefaultProtection, false);
-        ChestShop.callEvent(event);
+        ProtectionCheckEvent event = ChestShop.callEvent(new ProtectionCheckEvent(block, player, ignoreDefaultProtection, false));
 
         return event.getResult() != Event.Result.DENY;
     }
@@ -98,10 +95,7 @@ public class Security {
                 continue;
             }
 
-            AccountQueryEvent accountQueryEvent = new AccountQueryEvent(ChestShopSign.getOwner(sign));
-            Bukkit.getPluginManager().callEvent(accountQueryEvent);
-            Account account = accountQueryEvent.getAccount();
-            if (account != null && !account.getUuid().equals(player.getUniqueId())) {
+            if (!ChestShopSign.isOwner(player, sign)) {
                 return true;
             }
         }

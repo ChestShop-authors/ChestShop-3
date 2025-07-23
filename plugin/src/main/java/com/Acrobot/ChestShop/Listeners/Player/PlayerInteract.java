@@ -124,37 +124,38 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        if (!AccessToggle.isIgnoring(player) && ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
-            if (Properties.IGNORE_ACCESS_PERMS || ChestShopSign.isOwner(player, sign)) {
-                if (player.getInventory().getItemInMainHand().getType().name().contains("SIGN") && action == RIGHT_CLICK_BLOCK) {
-                    // Allow editing of sign (if supported)
-                    return;
-                } else if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
-                        || player.getInventory().getItemInMainHand().getType().name().endsWith("INK_SAC"))
-                        && action == RIGHT_CLICK_BLOCK) {
-                    if (Properties.SIGN_DYING) {
-                        return;
-                    } else {
-                        event.setCancelled(true);
-                    }
-                }
-                if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
-                    if (player.isSneaking() || player.isInsideVehicle()
-                            || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK)) {
-                        return;
-                    }
-                    event.setCancelled(true);
-                    showChestGUI(player, block, sign);
+        boolean notAllowedToTrade = ChestShopSign.isOwner(player, sign)
+                || (Properties.IGNORE_ACCESS_PERMS && ChestShopSign.canAccess(player, sign) && !AccessToggle.isIgnoring(player));
+        if (notAllowedToTrade && player.getInventory().getItemInMainHand().getType().name().contains("SIGN") && action == RIGHT_CLICK_BLOCK) {
+            // Allow editing of sign (if supported)
+            return;
+        } else if ((player.getInventory().getItemInMainHand().getType().name().endsWith("DYE")
+                || player.getInventory().getItemInMainHand().getType().name().endsWith("INK_SAC"))
+                && action == RIGHT_CLICK_BLOCK) {
+            if (notAllowedToTrade && Properties.SIGN_DYING) {
+                return;
+            } else {
+                event.setCancelled(true);
+            }
+        }
+
+        if (notAllowedToTrade && ChestShopSign.canAccess(player, sign) && !ChestShopSign.isAdminShop(sign)) {
+            if (Properties.ALLOW_SIGN_CHEST_OPEN && !(Properties.IGNORE_CREATIVE_MODE && player.getGameMode() == GameMode.CREATIVE)) {
+                if (player.isSneaking() || player.isInsideVehicle()
+                        || (Properties.ALLOW_LEFT_CLICK_DESTROYING && action == LEFT_CLICK_BLOCK)) {
                     return;
                 }
-                // don't allow owners or people with access to buy/sell at this shop
-                Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
-                if (action == RIGHT_CLICK_BLOCK) {
-                    // don't allow editing
-                    event.setCancelled(true);
-                }
+                event.setCancelled(true);
+                showChestGUI(player, block, sign);
                 return;
             }
+            // don't allow owners or people with access to buy/sell at this shop
+            Messages.TRADE_DENIED_ACCESS_PERMS.sendWithPrefix(player);
+            if (action == RIGHT_CLICK_BLOCK) {
+                // don't allow editing
+                event.setCancelled(true);
+            }
+            return;
         }
 
         if (action == RIGHT_CLICK_BLOCK) {

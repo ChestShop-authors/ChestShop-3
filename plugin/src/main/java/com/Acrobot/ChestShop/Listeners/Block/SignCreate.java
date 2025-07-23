@@ -34,6 +34,14 @@ public class SignCreate implements Listener {
 
         Sign sign = (Sign) ImplementationAdapter.getState(signBlock, false);
 
+        if (ChestShopSign.isValid(sign) && !ChestShopSign.canAccess(event.getPlayer(), sign)) {
+            // There was already a shop here, but the player does not have permission to change it
+            event.setCancelled(true);
+            sign.update();
+            ChestShop.logDebug("Shop sign creation at " + sign.getLocation() + " by " + event.getPlayer().getName() + " was cancelled as there already was a shop here and the player did not have permission to change it");
+            return;
+        }
+
         if (ChestShopSign.isValid(event.getLines()) && !NameManager.canUseName(event.getPlayer(), OTHER_NAME_DESTROY, ChestShopSign.getOwner(event.getLines()))) {
             event.setCancelled(true);
             sign.update();
