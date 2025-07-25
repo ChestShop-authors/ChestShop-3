@@ -45,7 +45,7 @@ public class ChestShopSign {
                 Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?([KM])?)|free))( *: *([BS] *((\\d*([.e]\\d+)?([KM])?)|free)))?$"),
                 Pattern.compile("(?i)^(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])( *: *([BS] *((\\d*([.e]\\d+)?([KM])?)|free)))?$"),
                 Pattern.compile("(?i)^(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS]) *: *(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])$"),
-                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?([KM])?)|free)) *: *(((\\d*([.e]\\d+)?([KM] ?)|free) *[BS])$"),
+                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?([KM])?)|free)) *: *(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])$"),
             },
             { Pattern.compile("^[\\p{L}\\d_? #:\\-]+$") }
     };
