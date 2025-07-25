@@ -8,8 +8,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 import static com.Acrobot.ChestShop.Listeners.PreShopCreation.PriceChecker.onPreShopCreation;
+import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -20,7 +22,7 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class PriceCheckerTest {
 
-    String[] getPriceString(String prices) {
+    static String[] getPriceString(String prices) {
         return new String[]{null, null, prices, null};
     }
 
@@ -35,6 +37,30 @@ public class PriceCheckerTest {
         assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), PriceUtil.FREE);
 
         assertFalse(event.isCancelled());
+    }
+
+    @Test
+    public void testLegalBuyPriceWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("B 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactBuyPrice(event));
+
+        event = createEventFromString("B 10M");
+        assertEquals(BigDecimal.valueOf(10_000_000), getExactBuyPrice(event));
+
+        event = createEventFromString("1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactBuyPrice(event));
+    }
+
+    @Test
+    public void testLegalSellPriceWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("S 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
+
+        event = createEventFromString("S 10M");
+        assertEquals(BigDecimal.valueOf(10_000_000), getExactSellPrice(event));
+
+        event = createEventFromString("1K S");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
     }
 
     @Test
@@ -85,6 +111,46 @@ public class PriceCheckerTest {
     }
 
     @Test
+    public void testLegalBuyAndSellPricesWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("B 2M:S 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2_000_000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+
+        event = createEventFromString("2K B:S 1M");
+        assertEquals(BigDecimal.valueOf(1_000_000), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+
+        event = createEventFromString("2K B:1 S");
+        assertEquals(BigDecimal.valueOf(1), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+    }
+
+    @Test
+    public void testIllegalBuyAndSellPricesWithMultipliers() {
+        assertFalse(validatePriceLine("1 B:S -1M"));
+        assertFalse(validatePriceLine("S 1MK"));
+        assertFalse(validatePriceLine("10KB"));
+        assertFalse(validatePriceLine("B -1K : S10K"));
+        assertFalse(validatePriceLine("B1Z"));
+    }
+
+    private static boolean validatePriceLine(String priceLine) {
+        if (createEventFromString(priceLine).isCancelled()) {
+            return false;
+        }
+
+        for (Pattern pattern : ChestShopSign.SHOP_SIGN_PATTERN[PRICE_LINE - 1]) {
+            if (pattern.matcher(priceLine).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Test
     public void testIllegalPrices() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("BS 1"));
         onPreShopCreation(event);
@@ -127,4 +193,20 @@ public class PriceCheckerTest {
         onPreShopCreation(event);
         assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S75000:B.75");
     }
+
+    private static BigDecimal getExactSellPrice(PreShopCreationEvent event) {
+        return PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines()));
+    }
+
+    private static BigDecimal getExactBuyPrice(PreShopCreationEvent event) {
+        return PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines()));
+    }
+
+    private static PreShopCreationEvent createEventFromString(String priceString) {
+        PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString(priceString));
+        onPreShopCreation(event);
+
+        return event;
+    }
+
 }
