@@ -146,7 +146,7 @@ public class PriceCheckerTest {
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
 
-        event = new PreShopCreationEvent(null, null, getPriceString("S -100"));
+        event = new PreShopCreationEvent(null, null, getPriceString("B -100"));
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
 
