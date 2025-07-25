@@ -65,7 +65,7 @@ public class PriceUtil {
     }
 
     /**
-     * Utility method to remove all defined suffix multipliers (as defined in {@link PriceUtil#MULTIPLIERS}
+     * Utility method to remove all defined suffix multipliers (as defined in {@link PriceUtil#MULTIPLIERS})
      * @param part String to modify
      * @return The string with all defined multiplier suffixes removed
      */
