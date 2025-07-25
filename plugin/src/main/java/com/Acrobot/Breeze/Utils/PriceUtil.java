@@ -1,7 +1,10 @@
 package com.Acrobot.Breeze.Utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Acrobot
@@ -15,6 +18,11 @@ public class PriceUtil {
 
     public static final char BUY_INDICATOR = 'b';
     public static final char SELL_INDICATOR = 's';
+
+    private static final Map<Character, Integer> MULTIPLIERS = Map.of(
+            'k', 1000,
+            'm', 1000000
+    );
 
     /**
      * Gets the exact price from the text
@@ -38,8 +46,12 @@ public class PriceUtil {
                 return FREE;
             }
 
+            BigDecimal amountMultiplier = getMultiplier(part);
+            part = stripMultiplierSuffix(part);
+
+
             try {
-                BigDecimal price = new BigDecimal(part);
+                BigDecimal price = new BigDecimal(part).multiply(amountMultiplier);
 
                 if (price.compareTo(MAX) > 0 || price.compareTo(BigDecimal.ZERO) < 0) {
                     return NO_PRICE;
@@ -50,6 +62,48 @@ public class PriceUtil {
         }
 
         return NO_PRICE;
+    }
+
+    /**
+     * Utility method to remove all defined suffix multipliers (as defined in {@link PriceUtil#MULTIPLIERS}
+     * @param part String to modify
+     * @return The string with all defined multiplier suffixes removed
+     */
+    public static String stripMultiplierSuffix(String part) {
+        for (Character c : MULTIPLIERS.keySet()) {
+            part = StringUtils.stripEnd(part, c.toString());
+        }
+
+        return part;
+    }
+
+    /**
+     * Determines how much to multiply the amount based on the last character, as mapped in {@link PriceUtil#MULTIPLIERS}
+     * @param part A string that can be parsed as BigDecimal, with an optional suffix (like 100M, 15.5K, 32)
+     * @return BigDecimal
+     */
+    public static BigDecimal getMultiplier(String part) {
+        char suffix = part.charAt(part.length()-1);
+
+        return new BigDecimal(MULTIPLIERS.getOrDefault(suffix, 1));
+    }
+
+    /**
+     * Tests if a string contains only a single multiplier character,
+     * as defined in {@link PriceUtil#MULTIPLIERS}
+     * @param part String to text
+     * @return true if the given string has 0 or 1 multiplier characters
+     */
+    public static boolean hasSingleMultiplier(String part) {
+        int count = 0;
+
+        for (Character c : MULTIPLIERS.keySet()) {
+            if (part.contains(c.toString())) count++;
+
+            if (count > 1) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -147,6 +201,8 @@ public class PriceUtil {
      * @return Is the string a valid price
      */
     public static boolean isPrice(String text) {
+        text = PriceUtil.stripMultiplierSuffix(text.toLowerCase(Locale.ROOT));
+
         if (NumberUtil.isDouble(text)) {
             return true;
         }

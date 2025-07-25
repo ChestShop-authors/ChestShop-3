@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class PriceCheckerTest {
 
-    String[] getPriceString(String prices) {
+    static String[] getPriceString(String prices) {
         return new String[]{null, null, prices, null};
     }
 
@@ -35,6 +35,30 @@ public class PriceCheckerTest {
         assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), PriceUtil.FREE);
 
         assertFalse(event.isCancelled());
+    }
+
+    @Test
+    public void testLegalBuyPriceWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("B 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactBuyPrice(event));
+
+        event = createEventFromString("B 10M");
+        assertEquals(BigDecimal.valueOf(10_000_000), getExactBuyPrice(event));
+
+        event = createEventFromString("1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactBuyPrice(event));
+    }
+
+    @Test
+    public void testLegalSellPriceWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("S 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
+
+        event = createEventFromString("S 10M");
+        assertEquals(BigDecimal.valueOf(10_000_000), getExactSellPrice(event));
+
+        event = createEventFromString("1K S");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
     }
 
     @Test
@@ -85,6 +109,34 @@ public class PriceCheckerTest {
     }
 
     @Test
+    public void testLegalBuyAndSellPricesWithMultipliers() {
+        PreShopCreationEvent event = createEventFromString("B 2M:S 1K");
+        assertEquals(BigDecimal.valueOf(1000), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2_000_000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+
+        event = createEventFromString("2K B:S 1M");
+        assertEquals(BigDecimal.valueOf(1_000_000), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+
+        event = createEventFromString("2K B:1 S");
+        assertEquals(BigDecimal.valueOf(1), getExactSellPrice(event));
+        assertEquals(BigDecimal.valueOf(2000), getExactBuyPrice(event));
+        assertFalse(event.isCancelled());
+    }
+
+    @Test
+    public void testIllegalBuyAndSellPricesWithMultipliers() {
+        assertTrue(createEventFromString("1 B:S -1M").isCancelled());
+        assertTrue(createEventFromString("S 1MK").isCancelled());
+        assertTrue(createEventFromString("10KB").isCancelled());
+        assertTrue(createEventFromString("B -1K : S10K").isCancelled());
+        assertTrue(createEventFromString("B1Z").isCancelled());
+    }
+
+
+    @Test
     public void testIllegalPrices() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("BS 1"));
         onPreShopCreation(event);
@@ -94,7 +146,7 @@ public class PriceCheckerTest {
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
 
-        event = new PreShopCreationEvent(null, null, getPriceString("B -100"));
+        event = new PreShopCreationEvent(null, null, getPriceString("S -100"));
         onPreShopCreation(event);
         assertTrue(event.isCancelled());
 
@@ -127,4 +179,20 @@ public class PriceCheckerTest {
         onPreShopCreation(event);
         assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S75000:B.75");
     }
+
+    private static BigDecimal getExactSellPrice(PreShopCreationEvent event) {
+        return PriceUtil.getExactSellPrice(ChestShopSign.getPrice(event.getSignLines()));
+    }
+
+    private static BigDecimal getExactBuyPrice(PreShopCreationEvent event) {
+        return PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines()));
+    }
+
+    private static PreShopCreationEvent createEventFromString(String priceString) {
+        PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString(priceString));
+        onPreShopCreation(event);
+
+        return event;
+    }
+
 }

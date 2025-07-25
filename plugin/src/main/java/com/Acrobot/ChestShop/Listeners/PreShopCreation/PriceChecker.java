@@ -30,14 +30,14 @@ public class PriceChecker implements Listener {
         line = line.replaceAll("(\\.\\d*[1-9])0+", "$1"); //remove trailing zeroes
         line = line.replaceAll("(\\d)\\.0+(\\D|$)", "$1$2"); //remove point and zeroes from strings that only have trailing zeros
 
-        String[] part = line.split(":");
+        String[] parts = line.split(":");
 
-        if (part.length > 1 && (isInvalid(part[0]) ^ isInvalid(part[1]))) {
+        if (parts.length > 1 && (isInvalid(parts[0]) ^ isInvalid(parts[1]))) {
             line = line.replace(':', ' ');
-            part = new String[]{line};
+            parts = new String[]{line};
         }
 
-        if (part[0].split(" ").length > 2) {
+        if (parts[0].split(" ").length > 2) {
             event.setOutcome(INVALID_PRICE);
             return;
         }
@@ -47,11 +47,11 @@ public class PriceChecker implements Listener {
             return;
         }
 
-        if (isPrice(part[0])) {
+        if (isPrice(parts[0])) {
             line = "B " + line;
         }
 
-        if (part.length > 1 && isPrice(part[1])) {
+        if (parts.length > 1 && isPrice(parts[1])) {
             line += " S";
         }
 
@@ -63,6 +63,14 @@ public class PriceChecker implements Listener {
             event.setOutcome(INVALID_PRICE);
             return;
         }
+
+        for (String part : parts) {
+            if (!PriceUtil.hasSingleMultiplier(part)) {
+                event.setOutcome(INVALID_PRICE);
+                return;
+            }
+        }
+
 
         event.setSignLine(PRICE_LINE, line);
 
