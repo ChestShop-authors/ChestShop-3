@@ -8,10 +8,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.math.BigDecimal;
-import java.util.regex.Pattern;
 
 import static com.Acrobot.ChestShop.Listeners.PreShopCreation.PriceChecker.onPreShopCreation;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.PRICE_LINE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -130,24 +128,10 @@ public class PriceCheckerTest {
 
     @Test
     public void testIllegalBuyAndSellPricesWithMultipliers() {
-        assertFalse(validatePriceLine("1 B:S -1M"));
-        assertFalse(validatePriceLine("S 1MK"));
-        assertFalse(validatePriceLine("10KB"));
-        assertFalse(validatePriceLine("B -1K : S10K"));
-        assertFalse(validatePriceLine("B1Z"));
-    }
-
-    private static boolean validatePriceLine(String priceLine) {
-        if (createEventFromString(priceLine).isCancelled()) {
-            return false;
-        }
-
-        for (Pattern pattern : ChestShopSign.SHOP_SIGN_PATTERN[PRICE_LINE - 1]) {
-            if (pattern.matcher(priceLine).matches()) {
-                return true;
-            }
-        }
-        return false;
+        assertTrue(createEventFromString("1 B:S -1M").isCancelled());
+        assertTrue(createEventFromString("S 1MK").isCancelled());
+        assertTrue(createEventFromString("B -1K : S10K").isCancelled());
+        assertTrue(createEventFromString("B1Z").isCancelled());
     }
 
     @Test

@@ -89,12 +89,14 @@ public class PriceUtil {
     public static boolean hasSingleMultiplier(String part) {
         boolean foundMultiplier = false;
 
+        part = part.toLowerCase(Locale.ROOT);
         for (Character c : MULTIPLIERS.keySet()) {
-            if (foundMultiplier) {
-                return false;
+            if (part.contains(c.toString())) {
+                if (foundMultiplier) {
+                    return false;
+                }
+                foundMultiplier = true;
             }
-
-            foundMultiplier = part.contains(c.toString());
         }
 
         return true;
