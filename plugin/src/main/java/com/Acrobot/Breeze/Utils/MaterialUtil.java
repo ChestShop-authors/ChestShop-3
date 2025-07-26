@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -40,10 +41,12 @@ import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
  * @author Acrobot
  */
 public class MaterialUtil {
-    public static final Pattern DURABILITY = Pattern.compile(":(\\d)*");
-    public static final Pattern METADATA = Pattern.compile("#([0-9a-zA-Z])*");
+    public static final Pattern DURABILITY = Pattern.compile(":\\d+");
+    public static final Pattern METADATA = Pattern.compile("#[0-9a-zA-Z]+");
 
+    @Deprecated
     public static final boolean LONG_NAME = true;
+    @Deprecated
     public static final boolean SHORT_NAME = false;
     /**
      * @deprecated Use {@link MaterialUtil#MAXIMUM_SIGN_WIDTH}
@@ -414,7 +417,7 @@ public class MaterialUtil {
      * @return ItemStack
      */
     public static ItemStack getItem(String itemName) {
-        String[] split = itemName.split("[:\\-#]");
+        String[] split = itemName.split("[:#]");
         for (int i = 0; i < split.length; i++) {
             split[i] = split[i].trim();
         }
@@ -481,15 +484,26 @@ public class MaterialUtil {
      * @param itemName Item name
      * @return Metadata found
      */
-    public static ItemMeta getMetadata(String itemName) {
+    @VisibleForTesting
+    static String parseMetadata(String itemName) {
         Matcher m = METADATA.matcher(itemName);
 
         if (!m.find()) {
             return null;
         }
 
-        String group = m.group().substring(1);
-        return Metadata.getFromCode(group);
+        return m.group().substring(1);
+    }
+
+    /**
+     * Returns metadata from a string
+     *
+     * @param itemName Item name
+     * @return Metadata found
+     */
+    public static ItemMeta getMetadata(String itemName) {
+        String group = parseMetadata(itemName);
+        return group != null ? Metadata.getFromCode(group) : null;
     }
 
     private static class EnumParser<E extends Enum<E>> {

@@ -28,6 +28,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getState;
+import static com.Acrobot.Breeze.Utils.MaterialUtil.DURABILITY;
+import static com.Acrobot.Breeze.Utils.MaterialUtil.METADATA;
 
 /**
  * @author Acrobot
@@ -47,7 +49,11 @@ public class ChestShopSign {
                 Pattern.compile("(?i)^(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS]) *: *(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS])$"),
                 Pattern.compile("(?i)^([BS] *((\\d+([.e]\\d+)?([KM])?)|free)) *: *(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS])$"),
             },
-            { Pattern.compile("^[\\p{L}\\d_? #:\\-]+$") }
+            {
+                Pattern.compile("^\\?$"),
+                Pattern.compile("^[\\p{L}\\d_ \\-]+(" + DURABILITY.pattern() + ")?(" + METADATA.pattern() + ")?$"),
+                Pattern.compile("^[\\p{L}\\d_ \\-]+" + METADATA.pattern() + "(" + DURABILITY.pattern() + ")?$")
+            }
     };
     public static final String AUTOFILL_CODE = "?";
 
