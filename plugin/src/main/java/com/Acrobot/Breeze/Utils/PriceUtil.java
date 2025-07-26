@@ -87,14 +87,12 @@ public class PriceUtil {
      * @return true if the given string has 0 or 1 multiplier characters
      */
     public static boolean hasSingleMultiplier(String part) {
-        boolean foundMultiplier = false;
+        int count = 0;
 
         for (Character c : MULTIPLIERS.keySet()) {
-            if (foundMultiplier) {
-                return false;
-            }
+            if (part.toLowerCase(Locale.ROOT).contains(c.toString())) count++;
 
-            foundMultiplier = part.contains(c.toString());
+            if (count > 1) return false;
         }
 
         return true;
