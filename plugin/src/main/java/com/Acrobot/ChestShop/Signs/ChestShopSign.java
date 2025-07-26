@@ -42,10 +42,10 @@ public class ChestShopSign {
             { Pattern.compile("^[1-9][0-9]{0,5}$"), QuantityUtil.QUANTITY_LINE_WITH_COUNTER_PATTERN },
             {
                 Pattern.compile("(?i)^((\\d*([.e]\\d+)?)([KM])?|free)$"),
-                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?([KM])?)|free))( *: *([BS] *((\\d*([.e]\\d+)?([KM])?)|free)))?$"),
-                Pattern.compile("(?i)^(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])( *: *([BS] *((\\d*([.e]\\d+)?([KM])?)|free)))?$"),
-                Pattern.compile("(?i)^(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS]) *: *(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])$"),
-                Pattern.compile("(?i)^([BS] *((\\d*([.e]\\d+)?([KM])?)|free)) *: *(((\\d*([.e]\\d+)?([KM] )?)|free) *[BS])$"),
+                Pattern.compile("(?i)^([BS] *((\\d+([.e]\\d+)?([KM])?)|free))( *: *([BS] *((\\d+([.e]\\d+)?([KM])?)|free)))?$"),
+                Pattern.compile("(?i)^(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS])( *: *([BS] *((\\d+([.e]\\d+)?([KM])?)|free)))?$"),
+                Pattern.compile("(?i)^(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS]) *: *(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS])$"),
+                Pattern.compile("(?i)^([BS] *((\\d+([.e]\\d+)?([KM])?)|free)) *: *(((\\d+([.e]\\d+)?([KM] )?)|free) *[BS])$"),
             },
             { Pattern.compile("^[\\p{L}\\d_? #:\\-]+$") }
     };

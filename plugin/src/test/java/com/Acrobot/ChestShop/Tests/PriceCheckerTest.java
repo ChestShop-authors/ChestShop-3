@@ -3,21 +3,20 @@ package com.Acrobot.ChestShop.Tests;
 import com.Acrobot.Breeze.Utils.PriceUtil;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
 import static com.Acrobot.ChestShop.Listeners.PreShopCreation.PriceChecker.onPreShopCreation;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by Andrzej Pomirski (Acrobot)
  */
-@RunWith(JUnit4.class)
 public class PriceCheckerTest {
 
     static String[] getPriceString(String prices) {
@@ -32,7 +31,7 @@ public class PriceCheckerTest {
 
         event = new PreShopCreationEvent(null, null, getPriceString("B FREE"));
         onPreShopCreation(event);
-        assertEquals(PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())), PriceUtil.FREE);
+        assertEquals(PriceUtil.FREE, PriceUtil.getExactBuyPrice(ChestShopSign.getPrice(event.getSignLines())));
 
         assertFalse(event.isCancelled());
     }
@@ -126,12 +125,15 @@ public class PriceCheckerTest {
         assertFalse(event.isCancelled());
     }
 
-    @Test
-    public void testIllegalBuyAndSellPricesWithMultipliers() {
-        assertTrue(createEventFromString("1 B:S -1M").isCancelled());
-        assertTrue(createEventFromString("S 1MK").isCancelled());
-        assertTrue(createEventFromString("B -1K : S10K").isCancelled());
-        assertTrue(createEventFromString("B1Z").isCancelled());
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "1 B:S -1M",
+            "S 1MK",
+            "B -1K : S10K",
+            "B1Z"
+    })
+    public void testIllegalBuyAndSellPricesWithMultipliers(String line) {
+        assertTrue(createEventFromString(line).isCancelled());
     }
 
     @Test
@@ -149,33 +151,33 @@ public class PriceCheckerTest {
         assertTrue(event.isCancelled());
 
         String priceString = "5 B 5";
-        assertEquals(PriceUtil.getExactBuyPrice(priceString), PriceUtil.NO_PRICE);
+        assertEquals(PriceUtil.NO_PRICE, PriceUtil.getExactBuyPrice(priceString));
 
         priceString = "5 S 5";
-        assertEquals(PriceUtil.getExactSellPrice(priceString), PriceUtil.NO_PRICE);
+        assertEquals(PriceUtil.NO_PRICE, PriceUtil.getExactSellPrice(priceString));
 
         priceString = "5 B 5:5 S 5";
-        assertEquals(PriceUtil.getExactBuyPrice(priceString), PriceUtil.NO_PRICE);
-        assertEquals(PriceUtil.getExactSellPrice(priceString), PriceUtil.NO_PRICE);
+        assertEquals(PriceUtil.NO_PRICE, PriceUtil.getExactBuyPrice(priceString));
+        assertEquals(PriceUtil.NO_PRICE, PriceUtil.getExactSellPrice(priceString));
     }
 
     @Test
     public void testRemovingTrailingZeroes() {
         PreShopCreationEvent event = new PreShopCreationEvent(null, null, getPriceString("S.7500000000"));
         onPreShopCreation(event);
-        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S.75");
+        assertEquals("S.75", ChestShopSign.getPrice(event.getSignLines()));
 
         event = new PreShopCreationEvent(null, null, getPriceString("S7500000000"));
         onPreShopCreation(event);
-        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S7500000000");
+        assertEquals("S7500000000", ChestShopSign.getPrice(event.getSignLines()));
 
         event = new PreShopCreationEvent(null, null, getPriceString("S.75000:B.75000"));
         onPreShopCreation(event);
-        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S.75:B.75");
+        assertEquals("S.75:B.75", ChestShopSign.getPrice(event.getSignLines()));
 
         event = new PreShopCreationEvent(null, null, getPriceString("S75000:B.75000"));
         onPreShopCreation(event);
-        assertEquals(ChestShopSign.getPrice(event.getSignLines()), "S75000:B.75");
+        assertEquals("S75000:B.75", ChestShopSign.getPrice(event.getSignLines()));
     }
 
     private static BigDecimal getExactSellPrice(PreShopCreationEvent event) {

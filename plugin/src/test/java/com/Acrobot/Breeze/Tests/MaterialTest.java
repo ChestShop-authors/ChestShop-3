@@ -3,19 +3,17 @@ package com.Acrobot.Breeze.Tests;
 import com.Acrobot.Breeze.Utils.MaterialUtil;
 import com.Acrobot.Breeze.Utils.StringUtil;
 import org.bukkit.Material;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Tests for {@link com.Acrobot.Breeze.Utils.MaterialUtil}
  *
  * @author Acrobot
  */
-@RunWith(JUnit4.class)
 public class MaterialTest {
     
     @Test
@@ -25,7 +23,7 @@ public class MaterialTest {
                 continue;
             }
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_WIDTH);
-            assertSame(shortenedName + " did not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
+            assertSame(material, MaterialUtil.getMaterial(shortenedName), shortenedName + " did not produce " + material);
         }
     }
 
@@ -37,15 +35,18 @@ public class MaterialTest {
                 continue;
             }
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
-            assertSame(shortenedName + " did not produce " + material, material, MaterialUtil.getMaterial(shortenedName));
+            assertSame(material, MaterialUtil.getMaterial(shortenedName), shortenedName + " did not produce " + material);
         }
     }
 
-    @Test
-    public void testCodesWithAndWithoutSpace() {
-        assertNotNull(MaterialUtil.getMaterial("DiamonPicka"));
-        assertNotNull(MaterialUtil.getMaterial("Diamon Picka"));
-        assertNotNull(MaterialUtil.getMaterial("ExpBottle"));
-        assertNotNull(MaterialUtil.getMaterial("Exp Bottle"));
+    @ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {
+            "DiamonPicka",
+            "Diamon Picka",
+            "ExpBottle",
+            "Exp Bottle"
+    })
+    public void testCodesWithAndWithoutSpace(String materialName) {
+        assertNotNull(MaterialUtil.getMaterial(materialName));
     }
 }
