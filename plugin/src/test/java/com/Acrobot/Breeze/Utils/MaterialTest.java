@@ -19,7 +19,7 @@ public class MaterialTest {
     @Test
     public void testCodes() {
         for (Material material : Material.values()) {
-            if (material.isLegacy()) {
+            if (material.name().startsWith("LEGACY_")) {
                 continue;
             }
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), MaterialUtil.MAXIMUM_SIGN_WIDTH);
@@ -31,7 +31,7 @@ public class MaterialTest {
     public void testCodesWithMeta() {
         int maxWidth = MaterialUtil.MAXIMUM_SIGN_WIDTH - StringUtil.getMinecraftStringWidth("#AAA");
         for (Material material : Material.values()) {
-            if (material.isLegacy()) {
+            if (material.name().startsWith("LEGACY_")) {
                 continue;
             }
             String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
