@@ -372,7 +372,7 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new RestrictedSign());
 
-        if (!Properties.TURN_OFF_HOPPER_PROTECTION) {
+        if (!Properties.TURN_OFF_HOPPER_PROTECTION || Properties.USE_STOCK_COUNTER) {
             registerEvent(new ItemMoveListener());
         }
     }

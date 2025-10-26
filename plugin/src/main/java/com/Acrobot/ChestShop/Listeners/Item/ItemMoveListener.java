@@ -4,7 +4,6 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Listeners.Modules.StockCounterModule;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,11 +20,15 @@ public class ItemMoveListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public static void onItemMove(InventoryMoveItemEvent event) {
         InventoryHolder destinationHolder = getHolder(event.getDestination(), false);
-        InventoryHolder sourceHolder = getHolder(event.getSource(), false);
 
-        if (!(destinationHolder instanceof BlockState) && ChestShopSign.isShopBlock(sourceHolder)) {
-            event.setCancelled(true);
-        } else if (Properties.USE_STOCK_COUNTER && ChestShopSign.isShopBlock(destinationHolder) && sourceHolder instanceof Hopper) {
+        if (!Properties.TURN_OFF_HOPPER_PROTECTION && !(destinationHolder instanceof BlockState)) {
+            InventoryHolder sourceHolder = getHolder(event.getSource(), false);
+            if (ChestShopSign.isShopBlock(sourceHolder)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+        if (Properties.USE_STOCK_COUNTER && ChestShopSign.isShopBlock(destinationHolder)) {
             StockCounterModule.updateCounterOnItemMoveEvent(event.getItem(), destinationHolder);
         }
     }
