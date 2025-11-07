@@ -4,11 +4,8 @@ import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.StockUpdateEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
-import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -36,8 +33,6 @@ public class ItemMoveListener implements Listener {
         }
 
         if (StockUpdateEvent.hasHandlers() && ChestShopSign.isShopBlock(destinationHolder)) {
-            Block shopBlock = ChestShopSign.getShopBlock(destinationHolder);
-
             Bukkit.getScheduler().runTask(ChestShop.getPlugin(), () ->
                     fireStockUpdateEvents(event.getDestination()));
         }
