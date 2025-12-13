@@ -17,7 +17,7 @@ import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
-import com.Acrobot.ChestShop.Listeners.AuthMeChestShopListener;
+import com.Acrobot.ChestShop.Plugins.AuthMe;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemStringListener;
@@ -53,7 +53,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import com.google.common.reflect.ClassPath;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -83,7 +82,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -364,11 +362,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new ItemInfoListener());
         registerEvent(new ShopInfoListener());
         registerEvent(new GarbageTextListener());
-
-        Plugin authMe = getServer().getPluginManager().getPlugin("AuthMe");
-        if (authMe != null && authMe.isEnabled()) {
-            registerEvent(new AuthMeChestShopListener());
-        }
 
         registerEvent(new RestrictedSign());
 

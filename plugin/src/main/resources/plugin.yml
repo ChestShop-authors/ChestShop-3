@@ -4,7 +4,7 @@ version: '${bukkit.plugin.version}'
 author: Acrobot
 authors: ['https://github.com/ChestShop-authors/ChestShop-3/contributors']
 description: A chest shop for economy plugins.
-softdepend: [Vault, Reserve, LWC, Lockette, LockettePro, Deadbolt, BlockLocker, OddItem, WorldGuard, GriefPrevention, RedProtect, Heroes, SimpleChestLock, Residence, ShowItem, ItemBridge]
+softdepend: [Vault, Reserve, LWC, Lockette, LockettePro, Deadbolt, BlockLocker, OddItem, WorldGuard, GriefPrevention, RedProtect, Heroes, SimpleChestLock, Residence, ShowItem, ItemBridge, AuthMe]
 api-version: '1.13'
 folia-supported: true
 

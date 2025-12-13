@@ -207,6 +207,9 @@ public class Dependencies implements Listener {
                 break;
 
             //Other plugins
+            case AuthMe:
+                listener = new AuthMe();
+                break;
             case Heroes:
                 Heroes heroes = Heroes.getHeroes(plugin);
 
@@ -247,6 +250,8 @@ public class Dependencies implements Listener {
         WorldGuard,
         GriefPrevention,
         RedProtect,
+
+        AuthMe,
 
         Heroes,
 

@@ -1,4 +1,4 @@
-package com.Acrobot.ChestShop.Listeners;
+package com.Acrobot.ChestShop.Plugins;
 
 import fr.xephi.authme.api.v3.AuthMeApi;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent;
 import com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome;
 
-public class AuthMeChestShopListener implements Listener {
+public class AuthMe implements Listener {
 
     private AuthMeApi authmeApi = AuthMeApi.getInstance();
 
