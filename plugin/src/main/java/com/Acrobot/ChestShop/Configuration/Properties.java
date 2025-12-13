@@ -342,8 +342,7 @@ public class Properties {
     public static boolean USE_STOCK_COUNTER = false;
 
     @PrecededBySpace
-    @ConfigurationComment("Exclude these enchantments from the similarity check when comparing items")
+    @ConfigurationComment("Exclude these item meta attributes from the similarity check when comparing items")
     @Parser("StringSet")
     public static Set<String> EXCLUDED_ITEM_ATTRIBUTES = new LinkedHashSet<>();
-
 }

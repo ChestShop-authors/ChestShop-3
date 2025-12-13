@@ -26,6 +26,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +34,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashMap;
 
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftCharWidth;
 import static com.Acrobot.Breeze.Utils.StringUtil.getMinecraftStringWidth;
@@ -131,11 +131,10 @@ public class MaterialUtil {
 
         Map<String, Object> oneSerMeta = new HashMap<>(oneMeta.serialize());
         Map<String, Object> twoSerMeta = new HashMap<>(twoMeta.serialize());
-        if (!Properties.EXCLUDED_ITEM_ATTRIBUTES.isEmpty()) {
-            for (String ignoreKey : Properties.EXCLUDED_ITEM_ATTRIBUTES) {
-                oneSerMeta.remove(ignoreKey);
-                twoSerMeta.remove(ignoreKey);
-            }
+
+        for (String ignoreKey : Properties.EXCLUDED_ITEM_ATTRIBUTES) {
+            oneSerMeta.remove(ignoreKey);
+            twoSerMeta.remove(ignoreKey);
         }
 
         if (oneSerMeta.equals(twoSerMeta)) {
@@ -165,8 +164,18 @@ public class MaterialUtil {
         }
 
         ItemMeta twoDumpedMeta = twoDumped.getItemMeta();
-        if (oneDumpedMeta != null && twoDumpedMeta != null && oneDumpedMeta.serialize().equals(twoDumpedMeta.serialize())) {
-            return true;
+        if (oneDumpedMeta != null && twoDumpedMeta != null) {
+            Map<String, Object> oneSerDumpedMeta = new HashMap<>(oneDumpedMeta.serialize());
+            Map<String, Object> twoSerDumpedMeta = new HashMap<>(twoDumpedMeta.serialize());
+
+            for (String ignoreKey : Properties.EXCLUDED_ITEM_ATTRIBUTES) {
+                oneSerDumpedMeta.remove(ignoreKey);
+                twoSerDumpedMeta.remove(ignoreKey);
+            }
+
+            if (oneSerDumpedMeta.equals(twoSerDumpedMeta)) {
+                return true;
+            }
         }
 
         // return true if both are null or same, false otherwise
