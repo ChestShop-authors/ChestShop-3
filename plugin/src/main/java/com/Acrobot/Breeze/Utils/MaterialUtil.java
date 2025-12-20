@@ -132,10 +132,8 @@ public class MaterialUtil {
         Map<String, Object> oneSerMeta = new HashMap<>(oneMeta.serialize());
         Map<String, Object> twoSerMeta = new HashMap<>(twoMeta.serialize());
 
-        for (String ignoreKey : Properties.EXCLUDED_ITEM_ATTRIBUTES) {
-            oneSerMeta.remove(ignoreKey);
-            twoSerMeta.remove(ignoreKey);
-        }
+        removeExcludedKeys(oneSerMeta);
+        removeExcludedKeys(twoSerMeta);
 
         if (oneSerMeta.equals(twoSerMeta)) {
             return true;
@@ -168,10 +166,8 @@ public class MaterialUtil {
             Map<String, Object> oneSerDumpedMeta = new HashMap<>(oneDumpedMeta.serialize());
             Map<String, Object> twoSerDumpedMeta = new HashMap<>(twoDumpedMeta.serialize());
 
-            for (String ignoreKey : Properties.EXCLUDED_ITEM_ATTRIBUTES) {
-                oneSerDumpedMeta.remove(ignoreKey);
-                twoSerDumpedMeta.remove(ignoreKey);
-            }
+            removeExcludedKeys(oneSerDumpedMeta);
+            removeExcludedKeys(twoSerDumpedMeta);
 
             if (oneSerDumpedMeta.equals(twoSerDumpedMeta)) {
                 return true;
@@ -180,6 +176,15 @@ public class MaterialUtil {
 
         // return true if both are null or same, false otherwise
         return oneDumpedMeta == twoDumpedMeta;
+    }
+
+    /**
+     * Remove all keys included in the {@link Properties#EXCLUDED_ITEM_ATTRIBUTES} config option from a serialized
+     * meta map
+     * @param map The serialized item data to modify
+     */
+    private static void removeExcludedKeys(Map<String, Object> map) {
+        map.keySet().removeAll(Properties.EXCLUDED_ITEM_ATTRIBUTES);
     }
 
     /**
