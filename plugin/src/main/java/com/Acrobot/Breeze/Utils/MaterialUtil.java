@@ -66,6 +66,9 @@ public class MaterialUtil {
     );
 
     private static final Map<String, String> UNIDIRECTIONAL_ABBREVIATIONS = StringUtil.map(
+            "Chestplate", "Chestplt",
+            "Chestplt", "Chstplt",
+            "Chstplt", "Chstpl",
             "Endermite", "Endmite",
             "Endmite", "Endmit",
             "Wayfinder", "Wayfndr",

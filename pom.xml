@@ -33,11 +33,22 @@
         <build.number>${buildNumber}</build.number>
         <user.name>${buildType}</user.name>
         <bukkit.plugin.version>${project.version} ${buildDescription}</bukkit.plugin.version>
+        <spigot.version>1.13.2-R0.1-SNAPSHOT</spigot.version>
         <maven.compiler.target>8</maven.compiler.target>
         <maven.compiler.source>8</maven.compiler.source>
     </properties>
 
     <profiles>
+        <profile>
+            <id>spigot_version_latest</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <spigot.version>1.21.11-R0.1-SNAPSHOT</spigot.version>
+            </properties>
+        </profile>
+
         <profile>
             <id>static_build_number</id>
             <activation>
