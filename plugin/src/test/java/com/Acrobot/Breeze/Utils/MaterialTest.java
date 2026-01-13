@@ -4,6 +4,8 @@ import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -29,13 +31,17 @@ public class MaterialTest {
 
     @Test
     public void testCodesWithMeta() {
-        int maxWidth = MaterialUtil.MAXIMUM_SIGN_WIDTH - StringUtil.getMinecraftStringWidth("#AAA");
-        for (Material material : Material.values()) {
-            if (material.name().startsWith("LEGACY_")) {
-                continue;
+        String metaData = "#";
+        for (int i = 0; i < 3; i++) {
+            metaData += "A";
+            int maxWidth = MaterialUtil.MAXIMUM_SIGN_WIDTH - StringUtil.getMinecraftStringWidth(metaData);
+            for (Material material : Material.values()) {
+                if (material.name().startsWith("LEGACY_")) {
+                    continue;
+                }
+                String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
+                assertSame(material, MaterialUtil.getMaterial(shortenedName), shortenedName + " with " + metaData + " meta did not produce " + material);
             }
-            String shortenedName = MaterialUtil.getShortenedName(material.toString(), maxWidth);
-            assertSame(material, MaterialUtil.getMaterial(shortenedName), shortenedName + " did not produce " + material);
         }
     }
 

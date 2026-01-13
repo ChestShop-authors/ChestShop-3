@@ -202,7 +202,7 @@ public class MaterialUtil {
         List<Map.Entry<String, String>> abbreviations = new ArrayList<>(UNIDIRECTIONAL_ABBREVIATIONS.entrySet());
         for (int i = abbreviations.size() - 1; i >= 0; i--) {
             Map.Entry<String, String> entry = abbreviations.get(i);
-            replacedName = replacedName.replaceAll(entry.getValue() + "(_|$)?", entry.getKey() + "$1");
+            replacedName = replacedName.replaceAll(entry.getValue() + "(_|$|[A-Z\\d])", entry.getKey() + "$1");
         }
 
         String formatted = name.replaceAll("(?<!^)(?>\\s?)([A-Z1-9])", "_$1").replace(' ', '_').toUpperCase(Locale.ROOT);
