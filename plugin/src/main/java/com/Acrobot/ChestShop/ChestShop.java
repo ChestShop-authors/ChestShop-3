@@ -10,6 +10,7 @@ import com.Acrobot.ChestShop.Commands.AccessToggle;
 import com.Acrobot.ChestShop.Configuration.Messages;
 import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Database.Migrations;
+import com.Acrobot.ChestShop.Events.StockUpdateEvent;
 import com.Acrobot.ChestShop.Listeners.Block.BlockPlace;
 import com.Acrobot.ChestShop.Listeners.Block.Break.ChestBreak;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
@@ -41,6 +42,7 @@ import com.Acrobot.ChestShop.Listeners.PreTransaction.ErrorMessageSender;
 import com.Acrobot.ChestShop.Listeners.PreTransaction.PermissionChecker;
 import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRefundListener;
 import com.Acrobot.ChestShop.Listeners.ShopRemoval.ShopRemovalLogger;
+import com.Acrobot.ChestShop.Listeners.StockUpdateListener;
 import com.Acrobot.ChestShop.Logging.FileFormatter;
 import com.Acrobot.ChestShop.Metadata.ItemDatabase;
 import com.Acrobot.ChestShop.Signs.RestrictedSign;
@@ -365,9 +367,12 @@ public class ChestShop extends JavaPlugin {
 
         registerEvent(new RestrictedSign());
 
-        if (!Properties.TURN_OFF_HOPPER_PROTECTION || Properties.USE_STOCK_COUNTER) {
-            registerEvent(new ItemMoveListener());
+        if (Properties.USE_STOCK_COUNTER) {
+            registerEvent(new StockUpdateListener());
         }
+
+        // Register after init, so that we can check if someone is listening.
+        getServer().getScheduler().runTask(this, this::registerStockListeners);
     }
 
     private void registerShopRemovalEvents() {
@@ -428,7 +433,6 @@ public class ChestShop extends JavaPlugin {
         registerEvent(new DiscountModule());
         registerEvent(new MetricsModule());
         registerEvent(new PriceRestrictionModule());
-        registerEvent(new StockCounterModule());
 
         registerEconomicalModules();
     }
@@ -436,6 +440,15 @@ public class ChestShop extends JavaPlugin {
     private void registerEconomicalModules() {
         registerEvent(new ServerAccountCorrector());
         registerEvent(new TaxModule());
+    }
+
+    private void registerStockListeners() {
+        if ( StockUpdateEvent.hasHandlers()) {
+            registerEvent(new ItemMoveListener());
+            registerEvent(new StockCounterModule());
+        } else if ( !Properties.TURN_OFF_HOPPER_PROTECTION  ) {
+            registerEvent(new ItemMoveListener());
+        }
     }
 
     private void registerVersionedAdapters() {

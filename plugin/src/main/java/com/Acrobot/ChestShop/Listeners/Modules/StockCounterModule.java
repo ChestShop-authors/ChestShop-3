@@ -1,17 +1,14 @@
 package com.Acrobot.ChestShop.Listeners.Modules;
 
 import com.Acrobot.Breeze.Utils.InventoryUtil;
-import com.Acrobot.Breeze.Utils.MaterialUtil;
-import com.Acrobot.Breeze.Utils.QuantityUtil;
 import com.Acrobot.ChestShop.ChestShop;
-import com.Acrobot.ChestShop.Configuration.Properties;
 import com.Acrobot.ChestShop.Events.ItemParseEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
+import com.Acrobot.ChestShop.Events.StockUpdateEvent;
 import com.Acrobot.ChestShop.Events.TransactionEvent;
 import com.Acrobot.ChestShop.Signs.ChestShopSign;
 import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -23,165 +20,55 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.IllegalFormatException;
-
 import static com.Acrobot.Breeze.Utils.ImplementationAdapter.getHolder;
-import static com.Acrobot.ChestShop.Signs.ChestShopSign.QUANTITY_LINE;
+import static org.bukkit.Bukkit.getServer;
 
 
 /**
  * @author bricefrisco
  */
 public class StockCounterModule implements Listener {
-    private static final String PRICE_LINE_WITH_COUNT = "Q %d : C %d";
-
     @EventHandler(priority = EventPriority.HIGH)
     public static void onPreShopCreation(PreShopCreationEvent event) {
-        int quantity;
-        try {
-            quantity = ChestShopSign.getQuantity(event.getSignLines());
-        } catch (IllegalArgumentException invalidQuantity) {
-            return;
-        }
+        if (!StockUpdateEvent.hasHandlers()) { return; }
+        Container container = uBlock.findConnectedContainer(event.getSign());
+        if (container == null) { return; }
 
-        if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(event.getSignLines()))) {
-            event.setSignLine(QUANTITY_LINE, Integer.toString(quantity));
-        }
-
-        if (!Properties.USE_STOCK_COUNTER
-                || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSignLines()))) {
-            return;
-        }
-
-        if (Properties.MAX_SHOP_AMOUNT > 99999) {
-            ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-            return;
-        }
-
-        ItemStack itemTradedByShop = determineItemTradedByShop(ChestShopSign.getItem(event.getSignLines()));
-        if (itemTradedByShop != null) {
-            Container container = uBlock.findConnectedContainer(event.getSign());
-            if (container != null) {
-                event.setSignLine(QUANTITY_LINE, getQuantityLineWithCounter(quantity, itemTradedByShop, container.getInventory()));
-            }
-        }
+        Bukkit.getScheduler().runTask(ChestShop.getPlugin(), () ->
+                fireStockUpdateEvents(container.getInventory()));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public static void onInventoryClose(InventoryCloseEvent event) {
+        if (!StockUpdateEvent.hasHandlers()) { return; }
+
         if (event.getInventory().getType() == InventoryType.ENDER_CHEST || event.getInventory().getLocation() == null) {
             return;
         }
 
         InventoryHolder holder = getHolder(event.getInventory(), false);
-        if (!uBlock.couldBeShopContainer(holder)) {
-            return;
-        }
+        if (!uBlock.couldBeShopContainer(holder)) { return; }
 
-        for (Sign shopSign : uBlock.findConnectedShopSigns(holder)) {
-            if (!Properties.USE_STOCK_COUNTER
-                    || (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(shopSign))) {
-                if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(shopSign))) {
-                    removeCounterFromQuantityLine(shopSign);
-                }
-                continue;
-            }
+        fireStockUpdateEvents(event.getInventory());
+    }
 
-            if (Properties.MAX_SHOP_AMOUNT > 99999) {
-                ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-                if (QuantityUtil.quantityLineContainsCounter(ChestShopSign.getQuantityLine(shopSign))) {
-                    removeCounterFromQuantityLine(shopSign);
-                }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public static void onTransaction(final TransactionEvent event) {
+        if (!StockUpdateEvent.hasHandlers()) { return; }
+        fireStockUpdateEvents(event.getOwnerInventory());
+    }
+
+    public static void fireStockUpdateEvents(Inventory inventory) {
+        for (Sign sign : uBlock.findConnectedShopSigns( getHolder(inventory, false))) {
+            ItemStack itemTradedByShop = determineItemTradedByShop(sign);
+            if (itemTradedByShop == null) {
                 return;
             }
+            int stock = InventoryUtil.getAmount(itemTradedByShop, inventory);
 
-            updateCounterOnQuantityLine(shopSign, event.getInventory());
+            StockUpdateEvent updateEvent = new StockUpdateEvent(stock, sign);
+            getServer().getPluginManager().callEvent(updateEvent);
         }
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public static void onTransaction(final TransactionEvent event) {
-        String quantityLine = ChestShopSign.getQuantityLine(event.getSign());
-        if (!Properties.USE_STOCK_COUNTER) {
-            if (QuantityUtil.quantityLineContainsCounter(quantityLine)) {
-                removeCounterFromQuantityLine(event.getSign());
-            }
-            return;
-        }
-
-        if (Properties.MAX_SHOP_AMOUNT > 99999) {
-            ChestShop.getBukkitLogger().warning("Stock counter cannot be used if MAX_SHOP_AMOUNT is over 5 digits");
-            if (QuantityUtil.quantityLineContainsCounter(quantityLine)) {
-                removeCounterFromQuantityLine(event.getSign());
-            }
-            return;
-        }
-
-        if (Properties.FORCE_UNLIMITED_ADMIN_SHOP && ChestShopSign.isAdminShop(event.getSign())) {
-            return;
-        }
-
-        for (Sign shopSign : uBlock.findConnectedShopSigns( getHolder(event.getOwnerInventory(), false))) {
-            updateCounterOnQuantityLine(shopSign, event.getOwnerInventory());
-        }
-    }
-
-    /**
-     * Update the stock counter on the sign's quantity line
-     * @param sign               The sign to update
-     * @param chestShopInventory The inventory to search in
-     * @param extraItems         The extra items to add in the search
-     */
-    public static void updateCounterOnQuantityLine(Sign sign, Inventory chestShopInventory, ItemStack... extraItems) {
-        ItemStack itemTradedByShop = determineItemTradedByShop(sign);
-        if (itemTradedByShop == null) {
-            return;
-        }
-
-        int quantity;
-        try {
-            quantity = ChestShopSign.getQuantity(sign);
-        } catch (IllegalFormatException invalidQuantity) {
-            return;
-        }
-
-        int numTradedItemsInChest = InventoryUtil.getAmount(itemTradedByShop, chestShopInventory);
-
-        for (ItemStack extraStack : extraItems) {
-            if (!MaterialUtil.equals(extraStack, itemTradedByShop)) {
-                continue;
-            }
-
-            numTradedItemsInChest += extraStack.getAmount();
-        }
-
-        sign.setLine(QUANTITY_LINE, String.format(PRICE_LINE_WITH_COUNT, quantity, numTradedItemsInChest));
-        sign.update(true);
-    }
-
-    public static void updateCounterOnItemMoveEvent(ItemStack toAdd, InventoryHolder destinationHolder) {
-        Block shopBlock = ChestShopSign.getShopBlock(destinationHolder);
-        Sign connectedSign = uBlock.getConnectedSign(shopBlock);
-
-        updateCounterOnQuantityLine(connectedSign, destinationHolder.getInventory(), toAdd);
-    }
-
-    public static void removeCounterFromQuantityLine(Sign sign) {
-        int quantity;
-        try {
-            quantity = ChestShopSign.getQuantity(sign);
-        } catch (IllegalFormatException invalidQuantity) {
-            return;
-        }
-
-        sign.setLine(QUANTITY_LINE, Integer.toString(quantity));
-        sign.update(true);
-    }
-
-    public static String getQuantityLineWithCounter(int amount, ItemStack itemTransacted, Inventory chestShopInventory) {
-        int numTransactionItemsInChest = InventoryUtil.getAmount(itemTransacted, chestShopInventory);
-
-        return String.format(PRICE_LINE_WITH_COUNT, amount, numTransactionItemsInChest);
     }
 
     public static ItemStack determineItemTradedByShop(Sign sign) {
