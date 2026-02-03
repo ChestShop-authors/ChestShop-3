@@ -24,8 +24,12 @@ public class ValueParser {
             return String.valueOf(object);
         } else if (object instanceof Collection) {
             StringBuilder sb = new StringBuilder();
-            for (Object o : (Collection) object) {
-                sb.append("\n- ").append(parseToYAML(o));
+            if (((Collection) object).isEmpty()) {
+                sb.append("[]");
+            } else {
+                for (Object o : (Collection) object) {
+                    sb.append("\n- ").append(parseToYAML(o));
+                }
             }
             return sb.toString();
         } else if (object instanceof String) {
