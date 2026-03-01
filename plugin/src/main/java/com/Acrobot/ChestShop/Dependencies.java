@@ -57,6 +57,10 @@ public class Dependencies implements Listener {
         }
 
         switch (dependency) {
+            //Protection plugins
+            case PlotSquared:
+                ChestshopAllowShopFlag.ALLOW_SHOP_FLAG_TRUE.getName(); // force the static code to run
+                break;
             //Terrain protection plugins
             case WorldGuard:
                 WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
@@ -163,6 +167,9 @@ public class Dependencies implements Listener {
             case BlockLocker:
                 listener = new BlockLocker();
                 break;
+            case PlotSquared:
+                listener = new PlotSquared();
+                break;
             case Residence:
                 if (plugin.getDescription().getVersion().startsWith("2")) {
                     ChestShop.getBukkitLogger().severe("You are using an old version of Residence! " +
@@ -245,6 +252,7 @@ public class Dependencies implements Listener {
         Deadbolt,
         SimpleChestLock,
         BlockLocker,
+        PlotSquared,
         Residence,
 
         WorldGuard,
