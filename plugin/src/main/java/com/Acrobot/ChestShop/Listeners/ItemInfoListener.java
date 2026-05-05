@@ -1,6 +1,7 @@
 package com.Acrobot.ChestShop.Listeners;
 
 import com.Acrobot.Breeze.Utils.StringUtil;
+import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.ItemInfoEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -47,7 +48,7 @@ public class ItemInfoListener implements Listener {
     public static void addRepairCost(ItemInfoEvent event) {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
-            if (meta instanceof Repairable && ((Repairable) meta).getRepairCost() > 0) {
+            if (meta instanceof Repairable && ((Repairable) meta).hasRepairCost() && ((Repairable) meta).getRepairCost() > 0) {
                 event.addMessage(iteminfo_repaircost, "cost", String.valueOf(((Repairable) meta).getRepairCost()));
             }
         }
@@ -65,7 +66,7 @@ public class ItemInfoListener implements Listener {
 
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
-            if (meta instanceof EnchantmentStorageMeta) {
+            if (meta instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta) meta).hasStoredEnchants()) {
                 for (Map.Entry<Enchantment, Integer> enchantment : ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet()) {
                     lines.add(ChatColor.YELLOW + capitalizeFirstLetter(enchantment.getKey().getName(), '_') + ' ' + toRoman(enchantment.getValue()));
                 }
@@ -79,7 +80,7 @@ public class ItemInfoListener implements Listener {
     public static void addLeatherColor(ItemInfoEvent event) {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
-            if (meta instanceof LeatherArmorMeta) {
+            if (meta instanceof LeatherArmorMeta && !((LeatherArmorMeta) meta).getColor().equals(ChestShop.getBukkitServer().getItemFactory().getDefaultLeatherColor())) {
                 Color color = ((LeatherArmorMeta) meta).getColor();
                 event.addMessage(iteminfo_leather_color,
                         "colorred", String.valueOf(color.getRed()),
@@ -95,7 +96,7 @@ public class ItemInfoListener implements Listener {
     public static void addRecipes(ItemInfoEvent event) {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
-            if (meta instanceof KnowledgeBookMeta && !((KnowledgeBookMeta) meta).getRecipes().isEmpty()) {
+            if (meta instanceof KnowledgeBookMeta && ((KnowledgeBookMeta) meta).hasRecipes() && !((KnowledgeBookMeta) meta).getRecipes().isEmpty()) {
                 event.addMessage(iteminfo_recipes);
                 for (NamespacedKey recipe : ((KnowledgeBookMeta) meta).getRecipes()) {
                     event.getSender().sendMessage(ChatColor.GRAY + recipe.toString());
@@ -123,7 +124,7 @@ public class ItemInfoListener implements Listener {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
             if (meta instanceof MapMeta) {
-                if (((MapMeta) meta).getMapView() != null) {
+                if (((MapMeta) meta).hasMapView() && ((MapMeta) meta).getMapView() != null) {
                     MapView mapView = ((MapMeta) meta).getMapView();
                     event.addMessage(iteminfo_map_view,
                             "id", String.valueOf(mapView.getId()),
@@ -167,8 +168,10 @@ public class ItemInfoListener implements Listener {
             message.append("+");
         }
 
-        for (PotionEffect effect : potionMeta.getCustomEffects()) {
-            message.append("\n" + ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
+        if (potionMeta.hasCustomEffects()) {
+            for (PotionEffect effect : potionMeta.getCustomEffects()) {
+                message.append("\n" + ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
+            }
         }
         event.addRawMessage("iteminfo_potion", message.toString());
     }
@@ -182,8 +185,8 @@ public class ItemInfoListener implements Listener {
         if (meta instanceof BookMeta) {
             BookMeta book = (BookMeta) meta;
             event.addMessage(iteminfo_book,
-                    "title", book.getTitle(),
-                    "author", book.getAuthor(),
+                    "title", book.hasTitle() ? book.getTitle() : "-",
+                    "author", book.hasAuthor() ? book.getAuthor() : "-",
                     "pages", String.valueOf(book.getPageCount())
             );
             if (book.hasGeneration()) {

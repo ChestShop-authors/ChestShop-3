@@ -32,7 +32,7 @@ public class Spigot_1_20_5 implements Listener, VersionAdapter {
         PotionMeta potionMeta = (PotionMeta) meta;
 
         StringBuilder message = new StringBuilder();
-        if (potionMeta.getBasePotionType() != null) {
+        if (potionMeta.hasBasePotionType() && potionMeta.getBasePotionType() != null) {
 
             message.append(ChatColor.GRAY);
 
@@ -41,12 +41,14 @@ public class Spigot_1_20_5 implements Listener, VersionAdapter {
 
         }
 
-        for (PotionEffect effect : potionMeta.getCustomEffects()) {
-            if (message.length() > 0) {
-                message.append('\n');
+        if (potionMeta.hasCustomEffects()) {
+            for (PotionEffect effect : potionMeta.getCustomEffects()) {
+                if (message.length() > 0) {
+                    message.append('\n');
+                }
+                message.append(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getKey().getKey(), '_')
+                        + ' ' + (effect.getAmplifier() + 1) + ' ' + toTime(effect.getDuration() / 20));
             }
-            message.append(ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getKey().getKey(), '_')
-                    + ' ' + (effect.getAmplifier() + 1) + ' ' + toTime(effect.getDuration() / 20));
         }
         if (message.length() > 0) {
             event.addRawMessage("iteminfo_potion", message.toString());

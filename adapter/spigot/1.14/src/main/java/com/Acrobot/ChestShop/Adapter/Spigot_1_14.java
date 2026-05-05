@@ -30,7 +30,7 @@ public class Spigot_1_14 implements Listener, VersionAdapter {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
             if (meta instanceof MapMeta) {
-                if (((MapMeta) meta).getMapView() != null) {
+                if (((MapMeta) meta).hasMapView() && ((MapMeta) meta).getMapView() != null) {
                     MapView mapView = ((MapMeta) meta).getMapView();
                     event.addMessage(iteminfo_map_view,
                             "id", String.valueOf(mapView.getId()),

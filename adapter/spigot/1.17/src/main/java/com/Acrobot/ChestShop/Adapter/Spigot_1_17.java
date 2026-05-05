@@ -18,7 +18,7 @@ public class Spigot_1_17 implements Listener, VersionAdapter {
     public void addAxolotlInfo(ItemInfoEvent event) {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
-            if (meta instanceof AxolotlBucketMeta) {
+            if (meta instanceof AxolotlBucketMeta && ((AxolotlBucketMeta) meta).hasVariant()) {
                 event.addMessage(iteminfo_axolotl_variant, "variant", capitalizeFirstLetter(((AxolotlBucketMeta) meta).getVariant().name(), '_'));
             }
         }
@@ -28,7 +28,7 @@ public class Spigot_1_17 implements Listener, VersionAdapter {
     public void addBundleInfo(ItemInfoEvent event) {
         if (event.getItem().hasItemMeta()) {
             ItemMeta meta = event.getItem().getItemMeta();
-            if (meta instanceof BundleMeta) {
+            if (meta instanceof BundleMeta && ((BundleMeta) meta).hasItems()) {
                 event.addMessage(iteminfo_bundle_items, "itemcount", String.valueOf(((BundleMeta) meta).getItems().size()));
             }
         }
