@@ -662,17 +662,22 @@ public class MaterialUtil {
 
             TextComponent.Builder itemComponent = Component.text();
             for (Map.Entry<ItemStack, Integer> entry : InventoryUtil.getItemCounts(stock).entrySet()) {
+                ItemStack item = entry.getKey();
+                if (item == null || item.getType() == Material.AIR || entry.getValue() <= 0) {
+                    continue;
+                }
+                if (entry.getValue() < item.getMaxStackSize()) {
+                    item.setAmount(entry.getValue());
+                }
                 try {
-                    ItemStack item = entry.getKey();
-                    if (item == null || item.getType() == Material.AIR || entry.getValue() <= 0) {
-                        continue;
+                    String jsonString = showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player);
+                    try {
+                        itemComponent.append(GsonComponentSerializer.gson().deserialize(jsonString));
+                    } catch (Exception e1) {
+                        ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + jsonString + "' to player " + playerName + ": " + e1.getMessage());
                     }
-                    if (entry.getValue() < item.getMaxStackSize()) {
-                        item.setAmount(entry.getValue());
-                    }
-                    itemComponent.append(GsonComponentSerializer.gson().deserialize(showItem.getItemConverter().createComponent(item, Level.FINE).toJsonString(player)));
-                } catch (Exception e) {
-                    ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message '" + message + "' to player " + player.getName() + ": " + e.getMessage());
+                } catch (Exception e2) {
+                    ChestShop.getPlugin().getLogger().log(Level.WARNING, "Error while trying to send message for item '" + item + "' to player " + playerName + ": " + e2.getMessage());
                     return false;
                 }
             }
