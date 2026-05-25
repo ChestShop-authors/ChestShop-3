@@ -61,10 +61,6 @@
             <id>redprotect-repo</id>
             <url>https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/</url>
         </repository>
-        <repository>
-            <id>adventure-repo</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -129,14 +125,14 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.4.1-SNAPSHOT</version>
+            <version>4.4.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.21.0</version>
+            <version>4.26.1</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
