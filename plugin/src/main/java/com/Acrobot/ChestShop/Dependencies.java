@@ -59,7 +59,9 @@ public class Dependencies implements Listener {
         switch (dependency) {
             //Terrain protection plugins
             case WorldGuard:
-                WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
+                if (Properties.WORLDGUARD_INTEGRATION) {
+                    WorldGuardFlags.ENABLE_SHOP.getName();  // force the static code to run
+                }
                 break;
         }
 

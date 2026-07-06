@@ -305,8 +305,11 @@ public class Properties {
     public static boolean LWC_LIMITS_BLOCK_CREATION = true;
 
     @PrecededBySpace
-    @ConfigurationComment("Do you want to only let people build inside WorldGuard regions?")
+    @ConfigurationComment("Do you want ChestShop to integrate with WorldGuard?")
     public static boolean WORLDGUARD_INTEGRATION = false;
+
+    @ConfigurationComment("Do you want to only let people build inside WorldGuard regions?")
+    public static boolean WORLDGUARD_ONLY_IN_REGION = true;
 
     @ConfigurationComment("Do you want to only let people build inside region flagged by doing /region regionName flag allow-shop allow?")
     public static boolean WORLDGUARD_USE_FLAG = false;

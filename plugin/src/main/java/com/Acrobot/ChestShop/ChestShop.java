@@ -17,7 +17,6 @@ import com.Acrobot.ChestShop.Listeners.Block.SignCreate;
 import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.ServerAccountCorrector;
 import com.Acrobot.ChestShop.Listeners.Economy.TaxModule;
-import com.Acrobot.ChestShop.Plugins.AuthMe;
 import com.Acrobot.ChestShop.Listeners.GarbageTextListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemMoveListener;
 import com.Acrobot.ChestShop.Listeners.Item.ItemStringListener;
@@ -138,6 +137,7 @@ public class ChestShop extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        loadConfig();
         Dependencies.initializePlugins();
     }
 
@@ -158,7 +158,7 @@ public class ChestShop extends JavaPlugin {
         registerCommand("cstoggle", new Toggle(), Permission.NOTIFY_TOGGLE);
         registerCommand("csaccess", new AccessToggle(), Permission.ACCESS_TOGGLE);
 
-        loadConfig();
+        loadManager();
 
         itemDatabase = new ItemDatabase();
 
@@ -188,7 +188,9 @@ public class ChestShop extends JavaPlugin {
 
     public void loadConfig() {
         Configuration.pairFileAndClass(loadFile("config.yml"), Properties.class, getBukkitLogger());
+    }
 
+    public void loadManager() {
         Messages.load();
 
         NameManager.load();

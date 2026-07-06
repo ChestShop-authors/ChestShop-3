@@ -23,6 +23,7 @@ public class ChestShop implements Listener {
     @EventHandler
     public static void onReload(ChestShopReloadEvent event) {
         com.Acrobot.ChestShop.ChestShop.getPlugin().loadConfig();
+        com.Acrobot.ChestShop.ChestShop.getPlugin().loadManager();
     }
 
     @EventHandler
