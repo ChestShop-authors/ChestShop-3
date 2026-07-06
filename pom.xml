@@ -45,7 +45,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <spigot.version>1.21.11-R0.1-SNAPSHOT</spigot.version>
+                <spigot.version>26.2-R0.1-SNAPSHOT</spigot.version>
             </properties>
         </profile>
 

@@ -23,7 +23,7 @@
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
             <id>enginehub-repo</id>
