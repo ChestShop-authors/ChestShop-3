@@ -52,7 +52,6 @@ To install new external dependencies that aren't available in a maven repo, plac
 Development Links
 --------------------------------
 * [Dev Builds](https://ci.minebench.de/job/ChestShop-3/)
-* [Bounties via IssueHunt](https://issuehunt.io/r/ChestShop-authors/ChestShop-3?tab=idle)
 * [Localization](https://crowdin.com/project/chestshop-3)
 * [Qodana code quality](https://qodana.cloud/projects/zxDG5/)
 * [Old bug Tracker](http://dev.bukkit.org/server-mods/chestshop/tickets/?status=+) (please use GitHub issues!)
