@@ -6,6 +6,7 @@ import com.Acrobot.ChestShop.Listeners.Economy.EconomyAdapter;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.ReserveListener;
 import com.Acrobot.ChestShop.Listeners.Economy.Plugins.VaultListener;
 import com.Acrobot.ChestShop.Plugins.*;
+import com.Acrobot.ChestShop.Plugins.PlotSquared.PlotSquaredBuilding;
 import com.google.common.collect.ImmutableMap;
 import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
@@ -208,6 +209,13 @@ public class Dependencies implements Listener {
                 listener = new RedProtectBuilding(plugin);
                 break;
 
+            case PlotSquared:
+                if (!Properties.PLOTSQUARED_INTEGRATION) {
+                    return false;
+                }
+                listener = new PlotSquaredBuilding();
+                break;
+
             //Other plugins
             case AuthMe:
                 listener = new AuthMe();
@@ -252,6 +260,7 @@ public class Dependencies implements Listener {
         WorldGuard,
         GriefPrevention,
         RedProtect,
+        PlotSquared,
 
         AuthMe,
 

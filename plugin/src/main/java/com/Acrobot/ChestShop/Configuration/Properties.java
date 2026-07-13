@@ -326,6 +326,14 @@ public class Properties {
     public static boolean REDPROTECT_INTEGRATION = false;
 
     @PrecededBySpace
+    @ConfigurationComment("Do you want ChestShop to integrate with PlotSquared?")
+    public static boolean PLOTSQUARED_INTEGRATION = false;
+    @ConfigurationComment("Do you want to only let people build inside PlotSquared plots?")
+    public static boolean PLOTSQUARED_ONLY_IN_PLOT = true;
+    @ConfigurationComment("Do you want to only let people build inside plots flagged by doing /p flag set allow-chestshop?")
+    public static boolean PLOTSQUARED_USE_FLAG = false;
+
+    @PrecededBySpace
     @ConfigurationComment("Do you want to deny shop access to unlogged users?")
     public static boolean AUTHME_HOOK = true;
 
