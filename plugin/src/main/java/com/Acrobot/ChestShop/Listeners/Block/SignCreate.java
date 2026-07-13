@@ -6,6 +6,7 @@ import com.Acrobot.Breeze.Utils.StringUtil;
 import com.Acrobot.ChestShop.ChestShop;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.ShopCreatedEvent;
+import com.Acrobot.ChestShop.Events.ShopDestroyedEvent;
 import com.Acrobot.ChestShop.Events.ShopEditedEvent;
 import com.Acrobot.ChestShop.Events.SignValidationEvent;
 import com.Acrobot.ChestShop.Listeners.Block.Break.SignBreak;
@@ -15,6 +16,7 @@ import com.Acrobot.ChestShop.Utils.uBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
@@ -95,6 +97,7 @@ public class SignCreate implements Listener {
         Container container = uBlock.findConnectedContainer(preEvent.getSign());
 
         if (shopExisted) {
+            ChestShop.callEvent(new ShopDestroyedEvent(preEvent.getPlayer(), sign, container));
             ChestShop.callEvent(new ShopEditedEvent(preEvent.getPlayer(), preEvent.getSign(), container, sign.getLines(), preEvent.getSignLines(), preEvent.getOwnerAccount()));
         }
 
