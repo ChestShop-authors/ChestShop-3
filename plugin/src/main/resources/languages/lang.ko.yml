@@ -1,26 +1,26 @@
 ---
 prefix: "&a[상점] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
+  &a상점 정보:
+  &f주인: &7%owner
+  &f재고: &7%stock
+  &f아이템: &7%item
+shopinfo_buy: "&7%price &f가격으로 &7%amount 구매"
+shopinfo_sell: "&7%price &f가격으로 &7%amount 판매"
 iteminfo: "&a아이템 정보: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+iteminfo_fullname: "&f이름: &7%item"
+iteminfo_shopname: "&f상점 표지판: &7%item"
+iteminfo_repaircost: "&f수리 가격: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
+  &f책 제목: &7%title
+  &f책 주인: &7%author
+  &f책 페이지: &7%pages
+iteminfo_book_generation: "&f책 생성: &7%generation"
 iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
 iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
 iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
 iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
-iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_recipes: "&f레시피 지식:"
 iteminfo_map_view: |-
   &fMap ID: &7%id
   &fMap World: &7%world
@@ -75,23 +75,23 @@ SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
 BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
 BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
 CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
+NO_ITEM_IN_HAND: "자동으로 채울 수 있는 아이템이 없습니다!"
 PROTECTED_SHOP: "성공적으로 상점이 LWC로 보호되었습니다!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
+PROTECTED_SHOP_SIGN: "LWC로 매장 표지판을 성공적으로 보호했습니다!"
 SHOP_CREATED: "상점이 성공적으로 만들어졌습니다!"
 SHOP_FEE_PAID: "당신은 %amount 만큼 수수료를 지불했습니다."
 SHOP_REFUNDED: "당신은 %amount 만큼 환불받았습니다."
-ITEM_GIVEN: "Given %item to %player."
+ITEM_GIVEN: "%item을 %player에게 전달했습니다."
 RESTRICTED_SIGN_CREATED: "표지판이 성공적으로 만들어졌습니다!"
-PLAYER_NOT_FOUND: "Player not found!"
+PLAYER_NOT_FOUND: "플레이어를 찾을 수 없습니다."
 NO_PERMISSION: "당신은 그것을 할 권한을 가지고 있지 않습니다!"
 INCORRECT_ITEM_ID: "잘못된 아이템 ID를 입력하였습니다!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
+INVALID_CLIENT_NAME: "귀하의 사용자 이름은 유효한 Minecraft 사용자 이름이 아닙니다!"
 NOT_ENOUGH_PROTECTIONS: "보호를 만들 수 없습니다!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "상점을 찾을 수 없습니다."
 CANNOT_CREATE_SHOP_HERE: "당신은 여기에 상점을 만들 수 없습니다!"
 TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
 TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
 TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
-ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
+ERROR_OCCURRED: "[알 수 없는 에러!](red) [%error](yellow)"

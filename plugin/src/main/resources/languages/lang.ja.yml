@@ -1,10 +1,10 @@
 ---
 prefix: "&a[ショップ] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
-  &fStock: &7%stock
-  &fItem: &7%item
+  &aショップ情報:
+  &f所有者: &7%owner
+  &f在庫: &7%stock
+  &fアイテム: &7%item
 shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
 shopinfo_sell: "&fSell &7%amount &ffor &7%price"
 iteminfo: "アイテムの情報"
@@ -83,15 +83,15 @@ SHOP_FEE_PAID: "あなたは %amount 請求されました。"
 SHOP_REFUNDED: "あなたに %amount 返金されました。"
 ITEM_GIVEN: "Given %item to %player."
 RESTRICTED_SIGN_CREATED: "正常に作成しました!"
-PLAYER_NOT_FOUND: "Player not found!"
+PLAYER_NOT_FOUND: "プレイヤーが見つかりません!"
 NO_PERMISSION: "それを行う権限がありません!"
 INCORRECT_ITEM_ID: "ID名が不正です!"
 INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
 NOT_ENOUGH_PROTECTIONS: "保護を作成できませんでした!"
-NO_SHOP_FOUND: "No shop found."
+NO_SHOP_FOUND: "ショップが見つかりません。"
 CANNOT_CREATE_SHOP_HERE: "あなたがショップを作ることは出来ません!"
 TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
 TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
 TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+TOGGLE_ACCESS_OFF: "アクセスできるお店で取引が可能になりました。"
 ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"

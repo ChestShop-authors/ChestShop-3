@@ -1,97 +1,97 @@
 ---
-prefix: "&a[Shop] &r"
+prefix: "&a[Loja] &r"
 shopinfo: |-
-  &aShop Information:
-  &fOwner: &7%owner
+  &aInformações da Loja:
+  &fDono: &7%owner
   &fStock: &7%stock
   &fItem: &7%item
-shopinfo_buy: "&fBuy &7%amount &ffor &7%price"
-shopinfo_sell: "&fSell &7%amount &ffor &7%price"
-iteminfo: "&aItem Information: &r"
-iteminfo_fullname: "&fFull Name: &7%item"
-iteminfo_shopname: "&fShop Sign: &7%item"
-iteminfo_repaircost: "&fRepair Cost: &7%cost"
+shopinfo_buy: "&fCompre &7%amount &fpor &7%price"
+shopinfo_sell: "&fVende &7%amount &fpor &7%price"
+iteminfo: "&aInformação do item: &r"
+iteminfo_fullname: "&fNome completo: &7%item"
+iteminfo_shopname: "&fSimbolo da Loja: &7%item"
+iteminfo_repaircost: "&fCusto da reparação: &7%cost"
 iteminfo_book: |-
-  &fBook Title: &7%title
-  &fBook Author: &7%author
-  &fBook Pages: &7%pages
-iteminfo_book_generation: "&fBook Generation: &7%generation"
-iteminfo_leather_color: "&fLeather Color: &7Red: %colorred, Green: %colorgreen, Blue: %colorblue (Hex: #%colorhex)"
-iteminfo_bundle_items: "&fBundle Items: &7%itemcount"
-iteminfo_axolotl_variant: "&fAxolotl Variant: &7%variant"
+  &fTitlo do Livro: &7%title
+  &fAutor do Livro: &7%author
+  &fPáginas do Livro: &7%pages
+iteminfo_book_generation: "&fGerar o livro: &7%generation"
+iteminfo_leather_color: "&fCor do couro: &7Vermelho: %colorred, Verde: %colorgreen, Azul: %colorblue (Hex: #%colorhex)"
+iteminfo_bundle_items: "&fPacote de itens: &7%itemcount"
+iteminfo_axolotl_variant: "&fVariante Axolotl: &7%variant"
 iteminfo_armor_trim: "&fArmor Trim: &7%material %pattern"
-iteminfo_recipes: "&fRecipe Knowledge:"
+iteminfo_recipes: "&fConhecimento de receitas:"
 iteminfo_map_view: |-
-  &fMap ID: &7%id
-  &fMap World: &7%world
-  &fMap Center: &7%x/%z
-  &fMap Locked: &7locked
-iteminfo_map_location: "&fMap Location: &7%location"
+  &fID do mapa: &7%id
+  &fMapa do Mundo: &7%world
+  &fCentro do Mapa: &7%x/%z
+  &fBloquei do Mapa: &7locked
+iteminfo_map_location: "&fLocalização do Mapa: &7%location"
 iteminfo_tropical_fish: |-
-  &fFish Pattern: &7%pattern
-  &fFish Pattern Color: &7%patterncolor
-  &fFish Body Color: &7%bodycolor
-iteminfo_crossbow_projectiles: "&fCharged Crossbow Projectile:"
+  &fPeixe padrão: &7%pattern
+  &fCor do peixe padrão: &7%patterncolor
+  &fCor do corpo do peixe: &7%bodycolor
+iteminfo_crossbow_projectiles: "&fProjétil de besta carregado:"
 iteminfo_crossbow_projectile: "&f%item"
 iteminfo_lore: |-
-  &fLore:
+  &fDescrição do item:
   &r%lore
 METRICS: |-
-  &a[Shop] &fMetrics:
-  &fAccounts: &7%accounts
-  &fAverage transactions: &7%totalTransactions &f(buy: &7%buyTransactions &fsell: &7%sellTransactions&f)
-  &fAverage items traded: &7%totalItems &f(bought: &7%boughtItems &fsold: &7%soldItems&f)
-ACCESS_DENIED: "You don't have permission to access that shop's storage container!"
-TRADE_DENIED: "You don't have permission to trade with that shop!"
-TRADE_DENIED_ACCESS_PERMS: "You cannot trade with shops that you have access to!"
-TRADE_DENIED_CREATIVE_MODE: "You cannot trade with shops while you are in creative mode!"
-NOT_ENOUGH_MONEY: "You don't have enough money!"
-NOT_ENOUGH_MONEY_SHOP: "Shop owner doesn't have enough money!"
-CLIENT_DEPOSIT_FAILED: "Money deposit to your account failed!"
-SHOP_DEPOSIT_FAILED: "Money deposit to shop owner failed!"
-NO_ECONOMY_ACCOUNT: "Economy account from shop owner doesn't exist!"
-NO_BUYING_HERE: "You can't buy here!"
-NO_SELLING_HERE: "You can't sell here!"
-NOT_ENOUGH_SPACE_IN_INVENTORY: "You haven't got enough space in inventory!"
-NOT_ENOUGH_SPACE_IN_CHEST: "There isn't enough space in chest!"
-NOT_ENOUGH_ITEMS_TO_SELL: "You don't have enough items to sell!"
-NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 shop is full!](&f%seller&7 tried to sell\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-NOT_ENOUGH_STOCK: "This shop is out of stock."
-NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 shop is out of stock!](&f%buyer&7 tried to buy\n&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_BOUGHT_FROM_SHOP: "You bought %item from %owner for %price."
-SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer bought %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_SOLD_TO_SHOP: "You sold %item to %buyer for %price."
-SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller sold %item for %price.](&7In world: &f%world\n&7At position: &f%x/%y/%z)"
-YOU_CANNOT_CREATE_SHOP: "You can't create this type of shop!"
-NO_CHEST_DETECTED: "Couldn't find a chest!"
-INVALID_SHOP_DETECTED: "The shop cannot be used!"
-INVALID_SHOP_PRICE: "The shop has an invalid price!"
-INVALID_SHOP_QUANTITY: "The shop has an invalid quantity!"
-CANNOT_ACCESS_THE_CHEST: "You don't have permissions to access this chest!"
-CANNOT_CHANGE_SIGN_BACKSIDE: "You can't change the back side of a shop sign!"
-SELL_PRICE_HIGHER_THAN_BUY_PRICE: "Sell price is above the buy price!"
-SELL_PRICE_ABOVE_MAX: "Sell price %price is above maximum %maxprice!"
-SELL_PRICE_BELOW_MIN: "Sell price %price is below minimum %minprice!"
-BUY_PRICE_ABOVE_MAX: "Buy price %price is above maximum %maxprice!"
-BUY_PRICE_BELOW_MIN: "Buy price %price is below minimum %minprice!"
-CLICK_TO_AUTOFILL_ITEM: "Click the sign with the item that this shop is for!"
-NO_ITEM_IN_HAND: "You don't have an item in your hand to autofill!"
-PROTECTED_SHOP: "Successfully protected the shop with LWC!"
-PROTECTED_SHOP_SIGN: "Successfully protected the shop sign with LWC!"
-SHOP_CREATED: "Shop successfully created!"
-SHOP_FEE_PAID: "You have been charged %amount"
-SHOP_REFUNDED: "You have been refunded %amount."
-ITEM_GIVEN: "Given %item to %player."
-RESTRICTED_SIGN_CREATED: "Sign successfully created!"
-PLAYER_NOT_FOUND: "Player not found!"
-NO_PERMISSION: "You don't have permissions to do that!"
-INCORRECT_ITEM_ID: "You have specified an invalid item id!"
-INVALID_CLIENT_NAME: "Your username is not a valid Minecraft username!"
-NOT_ENOUGH_PROTECTIONS: "Could not create a protection!"
-NO_SHOP_FOUND: "No shop found."
-CANNOT_CREATE_SHOP_HERE: "You can't create shop here!"
-TOGGLE_MESSAGES_OFF: "You will no longer receive messages from your shop(s)."
-TOGGLE_MESSAGES_ON: "You will now receive messages from your shop(s)."
-TOGGLE_ACCESS_ON: "You can no longer trade at shops that you have access to"
-TOGGLE_ACCESS_OFF: "You can now trade at shops that you have access to"
+  &a[Loja] &fMétricas:
+  &fContas: &7%accounts
+  &fTransações médias: &7%totalTransactions &f(Compra: &7%buyTransactions &fVenda: &7%sellTransactions&f)
+  &fMédia de itens negociados: &7%totalItems &f(comprados: &7%boughtItems &fvendidos: &7%soldItems&f)
+ACCESS_DENIED: "Não tem permissão para acessar o armazenamento dessa loja!"
+TRADE_DENIED: "Não tem permissão para negociar com esta loja!"
+TRADE_DENIED_ACCESS_PERMS: "Não pode negociar com lojas que tem acesso!"
+TRADE_DENIED_CREATIVE_MODE: "Não pode negociar com lojas enquanto estiver no modo criativo!"
+NOT_ENOUGH_MONEY: "Não tem dinheiro suficiente!"
+NOT_ENOUGH_MONEY_SHOP: "O dono da loja não tem dinheiro suficiente!"
+CLIENT_DEPOSIT_FAILED: "Falha a depositar o dinheiro na sua conta!"
+SHOP_DEPOSIT_FAILED: "Falha a depositar o dinheiro ao dono da loja!"
+NO_ECONOMY_ACCOUNT: "A conta econômica de dono de loja não existe!"
+NO_BUYING_HERE: "Não pode comprar aqui!"
+NO_SELLING_HERE: "Não pode vender aqui!"
+NOT_ENOUGH_SPACE_IN_INVENTORY: "Não tem espaço suficiente no inventário!"
+NOT_ENOUGH_SPACE_IN_CHEST: "Não há espaço suficiente no baú!"
+NOT_ENOUGH_ITEMS_TO_SELL: "Não tem itens suficientes para vender!"
+NOT_ENOUGH_SPACE_IN_YOUR_SHOP: "[%price %item&7 loja cheia!](&f%seller&7 tentei vender\n&7No mundo: &f%world\n&7Na posição: &f%x/%y/%z)"
+NOT_ENOUGH_STOCK: "Esta loja está sem stock."
+NOT_ENOUGH_STOCK_IN_YOUR_SHOP: "[%price %item&7 loja sem stock!](&f%buyer&7 tentou comprar\n&7No mundo: &f%world\n&7Na posição: &f%x/%y/%z)"
+YOU_BOUGHT_FROM_SHOP: "Comprou %item de %owner por %price."
+SOMEBODY_BOUGHT_FROM_YOUR_SHOP: "[%buyer comprou %item por %price.](&7No Mundo: &f%world\n&7Na posição: &f%x/%y/%z)"
+YOU_SOLD_TO_SHOP: "Vendeu %item a %buyer por %price."
+SOMEBODY_SOLD_TO_YOUR_SHOP: "[%seller vendeu %item por %price.](&7No Mundo: &f%world\n&7Na posição: &f%x/%y/%z)"
+YOU_CANNOT_CREATE_SHOP: "Não pode criar esse tipo de loja!"
+NO_CHEST_DETECTED: "Não foi possível encontrar o baú!"
+INVALID_SHOP_DETECTED: "A loja não pode ser usada!"
+INVALID_SHOP_PRICE: "A loja tem um preço inválido!"
+INVALID_SHOP_QUANTITY: "A loja tem uma quantidade inválida!"
+CANNOT_ACCESS_THE_CHEST: "Não tem permissão para acessar este baú!"
+CANNOT_CHANGE_SIGN_BACKSIDE: "Não pode mudar a parte de trás da placa de loja!"
+SELL_PRICE_HIGHER_THAN_BUY_PRICE: "O preço de venda está acima do preço de compra!"
+SELL_PRICE_ABOVE_MAX: "O preço de venda %price está acima do preço máximo %maxprice!"
+SELL_PRICE_BELOW_MIN: "Preço de venda %price está abaixo do mínimo %minprice!"
+BUY_PRICE_ABOVE_MAX: "O preço de compra %price está acima do máximo %maxprice!"
+BUY_PRICE_BELOW_MIN: "O preço %price está abaixo do mínimo %minprice!"
+CLICK_TO_AUTOFILL_ITEM: "Clique na placa com o item para adicionará loja!"
+NO_ITEM_IN_HAND: "Não tem um item em mão para abastecer o stock da loja!"
+PROTECTED_SHOP: "Protegeu a loja com LWC!"
+PROTECTED_SHOP_SIGN: "Protegeu a placa da loja com LWC!"
+SHOP_CREATED: "Loja criada com sucesso!"
+SHOP_FEE_PAID: "Fez um pagamento de %amount"
+SHOP_REFUNDED: "Recebeu um pagamento de %amount."
+ITEM_GIVEN: "%item dado a %player. "
+RESTRICTED_SIGN_CREATED: "Placa criada com sucesso!"
+PLAYER_NOT_FOUND: "Jogador não encontrado!"
+NO_PERMISSION: "Não tem permissão para fazer isso!"
+INCORRECT_ITEM_ID: "Especificou um ID de item inválido!"
+INVALID_CLIENT_NAME: "O seu nome de usuário não é um nome de usuário válido do Minecraft!"
+NOT_ENOUGH_PROTECTIONS: "Não foi possível criar uma proteção!"
+NO_SHOP_FOUND: "Nenhuma loja encontrada."
+CANNOT_CREATE_SHOP_HERE: "Não pode criar uma loja aqui!"
+TOGGLE_MESSAGES_OFF: "Não receberá mais mensagens da(s) sua(s) loja(s)."
+TOGGLE_MESSAGES_ON: "Agora receberá mensagens de sua(s) loja(s)."
+TOGGLE_ACCESS_ON: "Não pode mais negociar em lojas que tem acesso."
+TOGGLE_ACCESS_OFF: "Pode agora negociar em lojas que tem acesso."
 ERROR_OCCURRED: "[An error occurred!](red) [%error](yellow)"
