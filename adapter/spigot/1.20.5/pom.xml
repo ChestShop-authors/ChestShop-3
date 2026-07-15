@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.acrobot.chestshop</groupId>
 		<artifactId>chestshop-parent</artifactId>
-		<version>3.13-SNAPSHOT</version>
+		<version>3.13-pre-1</version>
 		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
