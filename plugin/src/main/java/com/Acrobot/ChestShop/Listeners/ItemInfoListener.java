@@ -158,14 +158,16 @@ public class ItemInfoListener implements Listener {
 
         StringBuilder message = new StringBuilder();
 
-        message.append(ChatColor.GRAY);
+        if (potionMeta.getBasePotionData() != null) {
+            message.append(ChatColor.GRAY);
 
-        message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
-        message.append(capitalizeFirstLetter(potionMeta.getBasePotionData().getType().name(), '_')).append(' ');
-        if (potionMeta.getBasePotionData().isUpgraded()) {
-            message.append("II");
-        } else if (potionMeta.getBasePotionData().isExtended()) {
-            message.append("+");
+            message.append(capitalizeFirstLetter(item.getType().name(), '_')).append(" of ");
+            message.append(capitalizeFirstLetter(potionMeta.getBasePotionData().getType().name(), '_')).append(' ');
+            if (potionMeta.getBasePotionData().isUpgraded()) {
+                message.append("II");
+            } else if (potionMeta.getBasePotionData().isExtended()) {
+                message.append("+");
+            }
         }
 
         if (potionMeta.hasCustomEffects()) {
@@ -173,7 +175,10 @@ public class ItemInfoListener implements Listener {
                 message.append("\n" + ChatColor.DARK_GRAY + capitalizeFirstLetter(effect.getType().getName(), '_') + ' ' + toTime(effect.getDuration() / 20));
             }
         }
-        event.addRawMessage("iteminfo_potion", message.toString());
+
+        if (message.length() > 0) {
+            event.addRawMessage("iteminfo_potion", message.toString());
+        }
     }
 
     @EventHandler
