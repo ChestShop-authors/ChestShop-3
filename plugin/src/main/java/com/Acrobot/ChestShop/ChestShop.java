@@ -491,6 +491,10 @@ public class ChestShop extends JavaPlugin {
         } catch (IOException ignored) {}
 
         String serverVersion = getServer().getBukkitVersion().split("-")[0];
+        // Check for and remove Paper's included build number
+        if (serverVersion.contains(".build.")) {
+            serverVersion = serverVersion.split("\\.build\\.")[0];
+        }
         bStats.addCustomChart(createStaticDrilldownStat("versionMcSelf", serverVersion, getDescription().getVersion()));
         bStats.addCustomChart(createStaticDrilldownStat("versionSelfMc", getDescription().getVersion(), serverVersion));
 
